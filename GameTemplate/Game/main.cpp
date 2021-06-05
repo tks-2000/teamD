@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "system/system.h"
+#include "Light.h"
+#include "Game.h"
 
 
 ///////////////////////////////////////////////////////////////////
@@ -14,9 +16,12 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	// ここから初期化を行うコードを記述する。
 	//////////////////////////////////////
 
+
 	//ゲームオブジェクトマネージャーのインスタンスを作成する。
 	GameObjectManager::CreateInstance();
 	PhysicsWorld::CreateInstance();
+
+	NewGO<Game>(0, "game");
 	
 	//////////////////////////////////////
 	// 初期化を行うコードを書くのはここまで！！！
