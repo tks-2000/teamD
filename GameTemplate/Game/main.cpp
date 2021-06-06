@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "system/system.h"
-#include "Light.h"
 #include "Game.h"
 
 

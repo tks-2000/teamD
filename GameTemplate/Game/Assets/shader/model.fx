@@ -1,25 +1,6 @@
 /*!
  * @brief	シンプルなモデルシェーダー。
  */
-
-
-////////////////////////////////////////////////
-// 定数バッファ。
-////////////////////////////////////////////////
-//モデル用の定数バッファ
-cbuffer ModelCb : register(b0){
-	float4x4 mWorld;
-	float4x4 mView;
-	float4x4 mProj;
-};
-
-cbuffer DirectionLightCb : register(b1)
-{
-	float3 ligDirection;	//ライトの方向
-	float3 ligColor;		//ライトのカラー
-	float3 eyePos;			//視点の位置
-}
-
 ////////////////////////////////////////////////
 // 構造体
 ////////////////////////////////////////////////
@@ -43,6 +24,28 @@ struct SPSIn{
 	float3 worldPos 	: TEXCOORD1;
 };
 
+struct DirectionLight
+{
+	float3 direction;
+	float3 color;
+};
+
+////////////////////////////////////////////////
+// 定数バッファ。
+////////////////////////////////////////////////
+//モデル用の定数バッファ
+cbuffer ModelCb : register(b0){
+	float4x4 mWorld;
+	float4x4 mView;
+	float4x4 mProj;
+};
+
+cbuffer DirectionLightCb : register(b1)
+{
+	DirectionLight directionLight;
+	float3 eyePos;			//視点の位置
+	float3 ambientLight;
+};
 
 ////////////////////////////////////////////////
 // グローバル変数。
@@ -117,7 +120,7 @@ SPSIn VSSkinMain( SVSIn vsIn )
 float4 PSMain( SPSIn psIn ) : SV_Target0
 {
 	//ピクセルの法線とライトの方向の内積を計算する。
-	float t = dot( psIn.normal,ligDirection);
+	float t = dot( psIn.normal,directionLight.direction);
 
 	//内積の結果に-1を乗算する。
 	t *= -1.0f;
@@ -128,10 +131,10 @@ float4 PSMain( SPSIn psIn ) : SV_Target0
 	}
 
 	//拡散反射光を求める。
-	float3 diffuseLig  = ligColor * t;
+	float3 diffuseLig  = directionLight.color * t;
 
 	//反射ベクトルを求める。
-	float3 refVec = reflect(ligDirection,psIn.normal);
+	float3 refVec = reflect(directionLight.direction,psIn.normal);
 
 	//光が当たったサーフェイスから視点に伸びるベクトルを求める。
 	float3 toEye = eyePos - psIn.worldPos;
@@ -150,15 +153,10 @@ float4 PSMain( SPSIn psIn ) : SV_Target0
 	t = pow(t,5.0f);
 
 	//鏡面反射光を求める。
-	float3 specularLig = ligColor * t;
+	float3 specularLig = directionLight.color * t;
 
-	//拡散反射光と鏡面反射光を加算して最終的な光を求める。
-	float3 lig = diffuseLig + specularLig;
-
-	//ライトの効果を一律で底上げする
-	lig.x += 0.3f;
-	lig.y += 0.3f;
-	lig.z += 0.3f;
+	//拡散反射光・鏡面反射光・環境光を加算して最終的な光を求める。
+	float3 lig = diffuseLig + specularLig + ambientLight;
 
 	float4 albedoColor = g_albedo.Sample(g_sampler, psIn.uv);
 
