@@ -33,11 +33,10 @@ void SkinModelRender::Init(const char* modelFilePath)
 
 void SkinModelRender::Update()
 {
-	Quaternion qRot;
-	qRot.SetRotationDegY(-g_pad[0]->GetLStickXF());
-	qRot.Apply(m_lighting.m_light.directionLight.direction);
-	qRot.SetRotationDegX(-g_pad[0]->GetLStickYF());
-	qRot.Apply(m_lighting.m_light.directionLight.direction);
+
+	m_lighting.RotationDirectionLight();
+	m_lighting.MovePointLight();
+
 	auto& renderContext = g_graphicsEngine->GetRenderContext();
 	m_model.Draw(renderContext);
 }

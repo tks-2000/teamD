@@ -15,7 +15,8 @@ private:
 	Vector3 m_scale = Vector3::One;				//拡大率
 	Quaternion m_rot = Quaternion::Identity;	//回転
 
-	Lighting m_lighting;						//ライティング
+	//ライティング
+	Lighting m_lighting;
 
 public:
 	SkinModelRender();

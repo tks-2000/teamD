@@ -12,9 +12,21 @@ struct DirectionLight
 	
 };
 
+//ポイントライトの構造体
+struct PointLight
+{
+	Vector3 position = Vector3::Zero;	//位置
+	float pad0 = 0.0f;					//パディング
+	Vector3 color = Vector3::Zero;		//カラー
+	float Range = 0.0f;					//影響範囲
+
+};
+
+//ライトをまとめた構造体
 struct Light
 {
 	DirectionLight directionLight;		//ディレクションライト
+	PointLight pointLight;				//ポイントライト
 	Vector3 eyePos = Vector3::Zero;		//視点の位置
 	float pad0 = 0.0f;
 	Vector3 ambientlight = Vector3::Zero; //環境光
@@ -35,10 +47,18 @@ public:
 	Light* GetLightAddress() { return &m_light; }
 
 	Vector3 GetDirectionLightDirection() { return m_light.directionLight.direction; }
-	Light m_light;		//ライト
+
+	void SetDirectionLightDirection(Vector3 dirLigVec) { m_light.directionLight.direction = dirLigVec; }
+
+	void RotationDirectionLight();
+
+	void InitPointLight();
+
+	void MovePointLight();
+	
 
 private:
-	
+	Light m_light;		//ライト
 
 };
 
