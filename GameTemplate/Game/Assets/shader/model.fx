@@ -24,18 +24,30 @@ struct SPSIn{
 	float3 worldPos 	: TEXCOORD1;
 };
 
+//ディレクションライト
 struct DirectionLight
 {
-	float3 direction;
-	float3 color;
+	float3 direction;	//方向
+	float3 color;		//カラー
 };
 
+//ポイントライト
 struct PointLight
 {
 	float3 position;	//位置
 	float3 color;		//カラー
 	float Range;		//影響範囲
 
+};
+
+//スポットライト
+struct SpotLight
+{
+	float3 position;	//位置
+	float3 color;		//カラー
+	float Range;		//射出範囲
+	float3 direction;	//射出方向
+	float angle;		//射出角度
 };
 
 ////////////////////////////////////////////////
@@ -50,10 +62,11 @@ cbuffer ModelCb : register(b0){
 
 cbuffer LightCb : register(b1)
 {
-	DirectionLight directionLight;
-	PointLight pointLight;
-	float3 eyePos;			//視点の位置
-	float3 ambientLight;
+	DirectionLight directionLight;	//ディレクションライト
+	PointLight pointLight;			//ポイントライト
+	SpotLight spotLight;			//スポットライト
+	float3 eyePos;					//視点の位置
+	float3 ambientLight;			//環境光
 };
 
 ////////////////////////////////////////////////
@@ -61,6 +74,7 @@ cbuffer LightCb : register(b1)
 ////////////////////////////////////////////////
 float3 CalculateLambertDiffuse(float3 lightDirection, float3 lightColor, float3 normal);
 float3 CalculatePhoneSpecular(float3 lightDirection, float3 lightColor, float3 worldPos, float3 normal);
+float CalculateImpactRate(float3 ligPos, float ligRange, float3 worldPos);
 
 ////////////////////////////////////////////////
 // グローバル変数。
@@ -105,7 +119,7 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 		m = mWorld;
 	}
 	psIn.pos = mul(m, vsIn.pos);
-	psIn.worldPos = vsIn.pos;
+	psIn.worldPos = psIn.pos;
 	psIn.pos = mul(mView, psIn.pos);
 	psIn.pos = mul(mProj, psIn.pos);
 	
@@ -168,26 +182,61 @@ float4 PSMain( SPSIn psIn ) : SV_Target0
 	);
 
 	//距離による影響率を計算する。
-	//ポイントライトとの距離を計算する。
-	float3 distance = length(psIn.worldPos - pointLight.position);
-
-	//影響率は距離に比例して小さくなっていく。
-	float affect = 1.0f - 1.0f / pointLight.Range * distance;
-
-	//影響力がマイナスにならないように補正をかける。
-	affect = max(0.0, affect);
-
-	//影響を指数関数的にする。
-	affect = pow(affect,3.0f);
+	float pAffect = CalculateImpactRate(pointLight.position,pointLight.Range,psIn.worldPos);
 
 	//拡散反射光と鏡面反射光に減衰率を乗算して影響を弱める。
-	diffPoint *= affect;
-	specPoint *= affect;
+	diffPoint *= pAffect;
+	specPoint *= pAffect;
 
+	//スポットライト用
+	//サーフェイスに入射するポイントライトの光の向きを計算する。
+	float3 sLigDir = psIn.worldPos - spotLight.position;
+	//正規化する。
+	sLigDir = normalize(sLigDir);
+
+	//減衰なしのランバート拡散反射光を計算する。
+	float3 diffSpot =  CalculateLambertDiffuse(
+		sLigDir,
+		spotLight.color,
+		psIn.normal
+	);
+
+	//減衰なしのフォン鏡面反射光を計算する。
+	float3 specSpot = CalculatePhoneSpecular(
+		sLigDir,
+		spotLight.color,
+		psIn.worldPos,
+		psIn.normal
+	);
+
+	//距離による影響率を計算する。
+	float sAffect = CalculateImpactRate(spotLight.position,spotLight.Range,psIn.worldPos);
+
+	//拡散反射光と鏡面反射光に減衰率を乗算して影響を弱める。
+	diffSpot *= sAffect;
+	specSpot *= sAffect;
+
+	//入射光と射出方向の角度を求める。
+	//dot()を利用して内積を求める。
+	float sAngle = dot(sLigDir,spotLight.direction);
+	//dot()で求めた値をacosに渡して角度を求める。
+	sAngle = acos(sAngle);
+
+	//角度による影響率を求める。
+	//角度に比例して小さくなっていく影響率を計算する。
+	float aAffect = 1.0f - 1.0f / spotLight.angle * sAngle;
+	//影響力がマイナスにならないように補正をかける。
+	aAffect = max(0.0f,aAffect);
+	//影響の仕方を指数関数的にする。
+	aAffect = pow(aAffect,0.5f);
+
+	diffSpot *= aAffect;
+	specSpot *= aAffect;
+
+	
 	//二つの反射光を合算して最終的な反射光を求める。
-	float3 diffuseLig = diffPoint + diffDirection;
-	float3 specularLig = specPoint + specDirection;
-
+	float3 diffuseLig = diffPoint + diffDirection + diffSpot;
+	float3 specularLig = specPoint + specDirection + specSpot;
 
 	//拡散反射光・鏡面反射光・環境光を加算して最終的な光を求める。
 	float3 lig = diffuseLig + specularLig + ambientLight;
@@ -236,4 +285,21 @@ float3 CalculatePhoneSpecular(float3 lightDirection, float3 lightColor, float3 w
 
 	//鏡面反射光を求める。
 	return directionLight.color * t;
+}
+
+float CalculateImpactRate(float3 ligPos, float ligRange, float3 worldPos)
+{
+	//距離による影響率を計算する。
+	//ポイントライトとの距離を計算する。
+	float3 lDistance = length(worldPos - ligPos);
+
+	//影響率は距離に比例して小さくなっていく。
+	float lAffect = 1.0f - 1.0f / ligRange * lDistance;
+
+	//影響力がマイナスにならないように補正をかける。
+	lAffect = max(0.0, lAffect);
+
+	//影響を指数関数的にする。
+	lAffect = pow(lAffect,3.0f);
+	return lAffect;
 }

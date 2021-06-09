@@ -13,10 +13,7 @@ private:
 
 	Vector3 m_position = Vector3::Zero;			//座標
 	Vector3 m_scale = Vector3::One;				//拡大率
-	Quaternion m_rot = Quaternion::Identity;	//回転
-
-	//ライティング
-	Lighting m_lighting;
+	Quaternion m_qRot = Quaternion::Identity;	//回転
 
 public:
 	SkinModelRender();
@@ -27,14 +24,14 @@ public:
 
 	void SetPosition(Vector3 pos) { m_position = pos; }
 	void SetScale(Vector3 scale) { m_scale = scale; }
-	void SetRotation(Quaternion rot) { m_rot = rot; }
+	void SetRotation(Quaternion rot) { m_qRot = rot; }
 	void SetNewModel() { m_model.Init(m_modelInitData); }
 
 	Vector3 GetPosition() { return m_position; }
 	Vector3 GetScale() { return m_scale; }
 	
 
-	void Init(const char* modelFilePath);
+	void Init(const char* modelFilePath,Light* lig);
 	
 };
 
