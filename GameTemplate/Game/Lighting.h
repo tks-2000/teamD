@@ -79,10 +79,10 @@ public:
 
 	Vector3 GetSpotLightPos() { return m_light.spotLight.position; }
 
-	Light m_light;		//ライト
+	
 
 private:
-	
+	Light m_light;		//ライト
 
 };
 

@@ -44,8 +44,8 @@ void Lighting::Update()
 void Lighting::InitDirectionLight()
 {
 	//ディレクションライトの方向
-	m_light.directionLight.direction.x = 1.0f;
-	m_light.directionLight.direction.y = -1.0f;
+	m_light.directionLight.direction.x = 0.0f;
+	m_light.directionLight.direction.y = 0.0f;
 	m_light.directionLight.direction.z = -1.0f;
 	//正規化する
 	m_light.directionLight.direction.Normalize();
@@ -105,9 +105,9 @@ void Lighting::InitSpotLight()
 	m_light.spotLight.position.z = 50.0f;
 
 	//スポットライトのカラー
-	m_light.spotLight.color.x = 10.0f;
-	m_light.spotLight.color.y = 10.0f;
-	m_light.spotLight.color.z = 10.0f;
+	m_light.spotLight.color.x = 1.0f;
+	m_light.spotLight.color.y = 1.0f;
+	m_light.spotLight.color.z = 1.0f;
 
 	//スポットライトの方向
 	m_light.spotLight.direction.x = 1.0f;
