@@ -34,14 +34,26 @@ struct SpotLight
 
 };
 
+//半球ライトの構造体
+struct HemiSphereLight
+{
+	Vector3 groundColor = Vector3::Zero;	//地面色
+	float pad0 = 0.0f;						//パディング
+	Vector3 skyColor = Vector3::Zero;		//天球色
+	float pad1 = 0.0f;						//パディング
+	Vector3 groundNormal = Vector3::Zero;	//地面の法線
+	float pad2 = 0.0f;						//パディング
+};
+
 //ライトをまとめた構造体
 struct Light
 {
 	DirectionLight directionLight;			//ディレクションライト
 	PointLight pointLight;					//ポイントライト
 	SpotLight spotLight;					//スポットライト
+	HemiSphereLight hemiSphereLight;		//半球ライト
 	Vector3 eyePos = Vector3::Zero;			//視点の位置
-	float pad0 = 0.0f;
+	float pad0 = 0.0f;						//パディング
 	Vector3 ambientlight = Vector3::Zero;	//環境光
 };
 
@@ -79,7 +91,7 @@ public:
 
 	Vector3 GetSpotLightPos() { return m_light.spotLight.position; }
 
-	
+	void InitHemiSphereLight();
 
 private:
 	Light m_light;		//ライト

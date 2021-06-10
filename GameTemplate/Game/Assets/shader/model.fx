@@ -51,6 +51,14 @@ struct SpotLight
 	float angle;		//射出角度
 };
 
+//半球ライト
+struct HemiSphereLight
+{
+	float3 groundColor;		//照り返しのライト
+	float3 skyColor;		//天球ライト
+	float3 groundNormal;	//地面の法線
+};
+
 ////////////////////////////////////////////////
 // 定数バッファ。
 ////////////////////////////////////////////////
@@ -63,11 +71,12 @@ cbuffer ModelCb : register(b0){
 
 cbuffer LightCb : register(b1)
 {
-	DirectionLight directionLight;	//ディレクションライト
-	PointLight pointLight;			//ポイントライト
-	SpotLight spotLight;			//スポットライト
-	float3 eyePos;					//視点の位置
-	float3 ambientLight;			//環境光
+	DirectionLight directionLight;		//ディレクションライト
+	PointLight pointLight;				//ポイントライト
+	SpotLight spotLight;				//スポットライト
+	HemiSphereLight hemiSphereLight;	//半球ライト
+	float3 eyePos;						//視点の位置
+	float3 ambientLight;				//環境光
 };
 
 ////////////////////////////////////////////////
@@ -245,9 +254,8 @@ float4 PSMain( SPSIn psIn ) : SV_Target0
 
 	float3 finalSpotLig = diffSpot + specSpot;
 	
-	//二つの反射光を合算して最終的な反射光を求める。
-	// float3 diffuseLig = diffPoint + diffDirection + diffSpot;
-	// float3 specularLig = specPoint + specDirection + specSpot;
+
+
 
 	//拡散反射光・鏡面反射光・環境光を加算して最終的な光を求める。
 	float3 lig = finalDirectionLig + finalPointLig + finalSpotLig + ambientLight;
@@ -272,6 +280,18 @@ float4 PSMain( SPSIn psIn ) : SV_Target0
 	spotLim *= aAffect;
 	lig += spotLim;
 
+	//半球ライトを計算する。
+	//サーフェイスの法線と地面の法線との内積を計算する。
+	float hLigT = dot(psIn.normal,hemiSphereLight.groundNormal);
+
+	//内積の結果を0~1の範囲に変換する。
+	hLigT = (hLigT + 1.0f) / 2.0f;
+
+	//地面色と天球色を補完率hLigTで線形補完する。
+	float3 hemiLight = lerp(hemiSphereLight.groundColor,hemiSphereLight.skyColor,hLigT);
+
+	//半球ライトを最終的な反射光に加算する。
+	lig += hemiLight;
 
 	//最終的なカラーを確定。
 	float4 albedoColor = g_albedo.Sample(g_sampler, psIn.uv);
