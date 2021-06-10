@@ -3,6 +3,7 @@
 class Lighting;
 class SkinModelRender;
 class Player;
+class GameCamera;
 
 class Game : public IGameObject
 {
@@ -15,6 +16,8 @@ public:
 private:
 	Lighting* m_lighting = nullptr;
 	Player* m_player = nullptr;
+	GameCamera* m_gameCamera = nullptr;
+
 	SkinModelRender* m_skinModelRender = nullptr;
 	SkinModelRender* m_skinModelRender2 = nullptr;
 	SkinModelRender* m_skinModelRender3 = nullptr;

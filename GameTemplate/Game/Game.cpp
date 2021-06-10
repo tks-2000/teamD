@@ -5,6 +5,7 @@ Game::Game()
 {
 	m_lighting = NewGO<Lighting>(0,"Lighting");
 	m_player = NewGO<Player>(0, "Player");
+	m_gameCamera = NewGO<GameCamera>(0,"GameCamera");
 
 	m_skinModelRender2 = NewGO<SkinModelRender>(0);
 	m_skinModelRender2->Init("Assets/modelData/unityChan.tkm", m_lighting->GetLightAddress());

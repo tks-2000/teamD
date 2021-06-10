@@ -7,3 +7,4 @@
 #include "Lighting.h"
 #include "SkinModelRender.h"
 #include "Player.h"
+#include "GameCamera.h"
