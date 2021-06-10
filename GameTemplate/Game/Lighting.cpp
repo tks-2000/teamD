@@ -31,14 +31,14 @@ bool Lighting::Start()
 
 void Lighting::Update()
 {
-	if (g_pad[0]->IsPress(enButtonSelect)) {
+	/*if (g_pad[1]->IsPress(enButtonSelect)) {
 		RotationDirectionLight();
 		MovePointLight();
 	}
 	else {
 		RotationSpotLight();
 		MoveSpotLight();
-	}
+	}*/
 	
 }
 
@@ -61,9 +61,9 @@ void Lighting::RotationDirectionLight()
 {
 	//右スティック入力でディレクションライトの方向を操作
 	Quaternion qRot;
-	qRot.SetRotationDegY(-g_pad[0]->GetRStickXF());
+	qRot.SetRotationDegY(-g_pad[1]->GetRStickXF());
 	qRot.Apply(m_light.directionLight.direction);
-	qRot.SetRotationDegX(-g_pad[0]->GetRStickYF());
+	qRot.SetRotationDegX(-g_pad[1]->GetRStickYF());
 	qRot.Apply(m_light.directionLight.direction);
 }
 
@@ -86,12 +86,12 @@ void Lighting::InitPointLight()
 void Lighting::MovePointLight()
 {
 	//左スティック入力でポイントライトの座標を操作
-	m_light.pointLight.position.x -= g_pad[0]->GetLStickXF();
+	m_light.pointLight.position.x -= g_pad[1]->GetLStickXF();
 	if (g_pad[0]->IsPress(enButtonB)) {
-		m_light.pointLight.position.y += g_pad[0]->GetLStickYF();
+		m_light.pointLight.position.y += g_pad[1]->GetLStickYF();
 	}
 	else {
-		m_light.pointLight.position.z -= g_pad[0]->GetLStickYF();
+		m_light.pointLight.position.z -= g_pad[1]->GetLStickYF();
 	}
 	if (g_pad[0]->IsPress(enButtonA)) {
 		m_light.pointLight.position = Vector3::Zero;
@@ -127,12 +127,12 @@ void Lighting::InitSpotLight()
 void Lighting::MoveSpotLight()
 {
 	//左スティック入力でスポットライトの座標を操作
-	m_light.spotLight.position.x -= g_pad[0]->GetLStickXF();
+	m_light.spotLight.position.x -= g_pad[1]->GetLStickXF();
 	if (g_pad[0]->IsPress(enButtonB)) {
-		m_light.spotLight.position.y += g_pad[0]->GetLStickYF();
+		m_light.spotLight.position.y += g_pad[1]->GetLStickYF();
 	}
 	else {
-		m_light.spotLight.position.z -= g_pad[0]->GetLStickYF();
+		m_light.spotLight.position.z -= g_pad[1]->GetLStickYF();
 	}
 	if (g_pad[0]->IsPress(enButtonA)) {
 		m_light.spotLight.position = Vector3::Zero;
@@ -143,12 +143,12 @@ void Lighting::RotationSpotLight()
 {
 	//右スティック入力でスポットライトの方向を操作
 	Quaternion qRotY;
-	qRotY.SetRotationY(g_pad[0]->GetRStickXF() * 0.01f);
+	qRotY.SetRotationY(g_pad[1]->GetRStickXF() * 0.01f);
 	qRotY.Apply(m_light.spotLight.direction);
 	Vector3 rotAxis;
 	rotAxis.Cross(g_vec3AxisY, m_light.spotLight.direction);
 	Quaternion qRotX;
-	qRotX.SetRotation(rotAxis,-g_pad[0]->GetRStickYF() * 0.01f);
+	qRotX.SetRotation(rotAxis,-g_pad[1]->GetRStickYF() * 0.01f);
 	qRotX.Apply(m_light.spotLight.direction);
 }
 

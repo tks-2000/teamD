@@ -3,3 +3,7 @@
 
 #include "MiniEngine.h"
 #include "ExEngine.h"
+#include "Game.h"
+#include "Lighting.h"
+#include "SkinModelRender.h"
+#include "Player.h"

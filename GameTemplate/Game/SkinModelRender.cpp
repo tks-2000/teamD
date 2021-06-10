@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "SkinModelRender.h"
-#include "Lighting.h"
 
 SkinModelRender::SkinModelRender()
 {

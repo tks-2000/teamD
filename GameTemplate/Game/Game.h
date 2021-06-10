@@ -1,7 +1,8 @@
 #pragma once
-#include "Lighting.h"
 
+class Lighting;
 class SkinModelRender;
+class Player;
 
 class Game : public IGameObject
 {
@@ -10,11 +11,10 @@ public:
 	~Game();
 	bool Start();
 	void Update();
-	Light GetLighting(){ return *m_light; }
 
 private:
-	Lighting* m_lighting;
-	Light* m_light;
+	Lighting* m_lighting = nullptr;
+	Player* m_player = nullptr;
 	SkinModelRender* m_skinModelRender = nullptr;
 	SkinModelRender* m_skinModelRender2 = nullptr;
 	SkinModelRender* m_skinModelRender3 = nullptr;
