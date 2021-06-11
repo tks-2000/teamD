@@ -31,8 +31,9 @@ bool Lighting::Start()
 
 void Lighting::Update()
 {
+	RotationDirectionLight();
 	/*if (g_pad[1]->IsPress(enButtonSelect)) {
-		RotationDirectionLight();
+		
 		MovePointLight();
 	}
 	else {
@@ -61,9 +62,19 @@ void Lighting::RotationDirectionLight()
 {
 	//右スティック入力でディレクションライトの方向を操作
 	Quaternion qRot;
-	qRot.SetRotationDegY(-g_pad[1]->GetRStickXF());
+	if (g_pad[0]->IsPress(enButtonRB1)) {
+		qRot.SetRotationDegY(1.0f);
+	}
+	if (g_pad[0]->IsPress(enButtonLB1)) {
+		qRot.SetRotationDegY(-1.0f);
+	}
 	qRot.Apply(m_light.directionLight.direction);
-	qRot.SetRotationDegX(-g_pad[1]->GetRStickYF());
+	if (g_pad[0]->IsPress(enButtonRB2)) {
+		qRot.SetRotationDegX(1.0f);
+	}
+	if (g_pad[0]->IsPress(enButtonLB2)) {
+		qRot.SetRotationDegX(-1.0f);
+	}
 	qRot.Apply(m_light.directionLight.direction);
 }
 
@@ -157,11 +168,11 @@ void Lighting::InitHemiSphereLight()
 	//地面の照り返しカラー
 	m_light.hemiSphereLight.groundColor.x = 0.3f;
 	m_light.hemiSphereLight.groundColor.y = 0.3f;
-	m_light.hemiSphereLight.groundColor.z = 0.0f;
+	m_light.hemiSphereLight.groundColor.z = 0.3f;
 
 	//天球ライトのカラー
-	m_light.hemiSphereLight.skyColor.x = 0.0f;
-	m_light.hemiSphereLight.skyColor.y = 0.0f;
+	m_light.hemiSphereLight.skyColor.x = 0.3f;
+	m_light.hemiSphereLight.skyColor.y = 0.3f;
 	m_light.hemiSphereLight.skyColor.z = 0.3f;
 
 	//地面の法線を設定

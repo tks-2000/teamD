@@ -27,10 +27,11 @@ void GameCamera::Move()
 
 void GameCamera::Rotation()
 {
-	m_qRot.SetRotationDegY(g_pad[0]->GetRStickXF());
-	m_qRot.Apply(m_toPosition);
-	m_qRot.SetRotationDegX(g_pad[0]->GetRStickYF());
-	m_qRot.Apply(m_toPosition);
+	m_qRotY.SetRotation(Vector3::AxisY,g_pad[0]->GetRStickXF()* 0.01f);
+	m_qRotY.Apply(m_toPosition);
+
+	m_qRotX.SetRotation(g_camera3D->GetRight(), g_pad[0]->GetRStickYF()* 0.01f);
+	m_qRotX.Apply(m_toPosition);
 }
 
 void GameCamera::Update()

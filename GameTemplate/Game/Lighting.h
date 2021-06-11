@@ -2,7 +2,7 @@
 #include "math.h"
 #include "stdafx.h"
 
-//ディレクションライトの構造体
+/// @brief ディレクションライト構造体
 struct DirectionLight
 {
 	Vector3 direction = Vector3::Zero;	//ライトの方向
@@ -12,7 +12,7 @@ struct DirectionLight
 	
 };
 
-//ポイントライトの構造体
+/// @brief ポイントライト構造体
 struct PointLight
 {
 	Vector3 position = Vector3::Zero;	//位置
@@ -22,7 +22,7 @@ struct PointLight
 
 };
 
-//スポットライトの構造体
+/// @brief スポットライト構造体
 struct SpotLight
 {
 	Vector3 position = Vector3::Zero;	//位置
@@ -34,7 +34,7 @@ struct SpotLight
 
 };
 
-//半球ライトの構造体
+/// @brief 半球ライト構造体
 struct HemiSphereLight
 {
 	Vector3 groundColor = Vector3::Zero;	//地面色
@@ -45,7 +45,7 @@ struct HemiSphereLight
 	float pad2 = 0.0f;						//パディング
 };
 
-//ライトをまとめた構造体
+/// @brief ライト全ての構造体
 struct Light
 {
 	DirectionLight directionLight;			//ディレクションライト
@@ -69,10 +69,16 @@ public:
 
 	Light& GetLight() { return m_light; }
 
+	/// @brief ライトの構造体を入手
+	/// @return ライト構造体のアドレス
 	Light* GetLightAddress() { return &m_light; }
 
+	/// @brief ディレクションライトの方向を入手
+	/// @return 方向
 	Vector3 GetDirectionLightDirection() { return m_light.directionLight.direction; }
 
+	/// @brief ディレクションライトの方向を設定
+	/// @param dirLigVec 正規化された方向
 	void SetDirectionLightDirection(Vector3 dirLigVec) { m_light.directionLight.direction = dirLigVec; }
 
 	void RotationDirectionLight();
@@ -81,6 +87,8 @@ public:
 
 	void MovePointLight();
 
+	/// @brief ポイントライトの座標を入手
+	/// @return ポイントライトの座標
 	Vector3 GetPointLightPos() { return m_light.pointLight.position; }
 	
 	void InitSpotLight();
@@ -89,6 +97,8 @@ public:
 
 	void RotationSpotLight();
 
+	/// @brief スポットライトの座標を入手
+	/// @return スポットライトの座標
 	Vector3 GetSpotLightPos() { return m_light.spotLight.position; }
 
 	void InitHemiSphereLight();

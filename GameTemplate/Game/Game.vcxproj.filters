@@ -425,4 +425,12 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\modelData\bg\testmap_s.tkm" />
+    <None Include="Assets\modelData\sphere\sphere.tkm" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assets\modelData\bg\testmap_tex.DDS" />
+    <Image Include="Assets\modelData\sphere\sphere_tex.DDS" />
+  </ItemGroup>
 </Project>

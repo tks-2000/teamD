@@ -8,7 +8,7 @@ Game::Game()
 	m_gameCamera = NewGO<GameCamera>(0,"GameCamera");
 
 	m_skinModelRender2 = NewGO<SkinModelRender>(0);
-	m_skinModelRender2->Init("Assets/modelData/unityChan.tkm", m_lighting->GetLightAddress());
+	m_skinModelRender2->Init("Assets/modelData/sphere/sphere.tkm", m_lighting->GetLightAddress());
 	m_skinModelRender2->SetScale({ 0.3f,0.3f,0.3f });
 
 	m_skinModelRender3 = NewGO<SkinModelRender>(0);
@@ -16,7 +16,7 @@ Game::Game()
 	m_skinModelRender3->SetScale({ 0.3f,0.3f,0.3f });
 
 	m_bg = NewGO<SkinModelRender>(0);
-	m_bg->Init("Assets/modelData/bg/bg.tkm", m_lighting->GetLightAddress());
+	m_bg->Init("Assets/modelData/bg/testmap_s.tkm", m_lighting->GetLightAddress());
 }
 
 Game::~Game()
@@ -26,8 +26,7 @@ Game::~Game()
 
 bool Game::Start()
 {
-	/*m_skinModelRender = NewGO<SkinModelRender>(0);
-	m_skinModelRender->Init("Assets/modelData/unityChan.tkm", m_lighting->GetLightAddress());*/
+	
 	
 	return true;
 }

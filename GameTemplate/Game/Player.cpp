@@ -3,7 +3,7 @@
 
 Player::Player()
 {
-	
+	m_position.y = 50.0f;
 }
 
 Player::~Player()
@@ -21,11 +21,22 @@ bool Player::Start()
 
 void Player::Move()
 {
-	m_moveSpeed.x = m_Lstickx;
-	m_moveSpeed.z = m_Lsticky;
+	
+	m_moveSpeed = g_camera3D->GetRight()* m_Lstickx;
+	m_moveSpeed += g_camera3D->GetForward()* m_Lsticky;
+	
+	m_moveSpeed.y = 0.0f;
 
+	m_position += m_moveSpeed * 2.0f;
+	
+}
 
-	m_position += m_moveSpeed;
+void Player::Rotation()
+{
+	if (m_moveSpeed.x == 0.0f && m_moveSpeed.z == 0.0f) {
+		return;
+	}
+	m_qRot.SetRotation(Vector3::AxisY, atan2(m_moveSpeed.x, m_moveSpeed.z));
 }
 
 void Player::Update()
@@ -34,6 +45,8 @@ void Player::Update()
 	m_Lsticky = g_pad[0]->GetLStickYF();
 
 	Move();
+	Rotation();
 
 	m_skinModelRender->SetPosition(m_position);
+	m_skinModelRender->SetRotation(m_qRot);
 }
