@@ -2,6 +2,7 @@
 
 class Lighting;
 class SkinModelRender;
+class Ball;
 
 class Player : public IGameObject
 {
@@ -21,6 +22,10 @@ public:
 	/// @return 座標
 	Vector3 GetPosition() { return m_position; }
 
+	void KickBall();
+
+	void BallDistanceCalculation();
+
 private:
 	/// @brief プレイヤーの座標
 	Vector3 m_position = Vector3::Zero;
@@ -30,6 +35,8 @@ private:
 	Vector3 m_scale = Vector3::One;
 	/// @brief プレイヤーの移動速度
 	Vector3 m_moveSpeed = Vector3::Zero;
+	
+	float m_ballDistance = 0.0f;
 
 	/// @brief Lスティックの横入力
 	float m_Lstickx = 0.0f;
@@ -40,5 +47,7 @@ private:
 	Lighting* m_lig = nullptr;
 	/// @brief スキンモデルレンダラー
 	SkinModelRender* m_skinModelRender = nullptr;
+	/// @brief ボール
+	Ball* m_ball = nullptr;
 };
 

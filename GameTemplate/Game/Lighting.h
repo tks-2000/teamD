@@ -67,8 +67,6 @@ public:
 
 	void InitDirectionLight();
 
-	Light& GetLight() { return m_light; }
-
 	/// @brief ライトの構造体を入手
 	/// @return ライト構造体のアドレス
 	Light* GetLightAddress() { return &m_light; }

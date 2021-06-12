@@ -14,6 +14,7 @@ Player::~Player()
 bool Player::Start()
 {
 	m_lig = FindGO<Lighting>("Lighting");
+	m_ball = FindGO<Ball>("Ball");
 	m_skinModelRender = NewGO<SkinModelRender>(0);
 	m_skinModelRender->Init("Assets/modelData/unityChan.tkm", m_lig->GetLightAddress());
 	return true;
@@ -27,7 +28,20 @@ void Player::Move()
 	
 	m_moveSpeed.y = 0.0f;
 
-	m_position += m_moveSpeed * 2.0f;
+	m_position += m_moveSpeed * 5.0f;
+
+	if (m_position.x > 700.0f) {
+		m_position.x = 700.0f;
+	}
+	if (m_position.x < -700.0f) {
+		m_position.x = -700.0f;
+	}
+	if (m_position.z > 700.0f) {
+		m_position.z = 700.0f;
+	}
+	if (m_position.z < -700.0f) {
+		m_position.z = -700.0f;
+	}
 	
 }
 
@@ -39,6 +53,15 @@ void Player::Rotation()
 	m_qRot.SetRotation(Vector3::AxisY, atan2(m_moveSpeed.x, m_moveSpeed.z));
 }
 
+void Player::KickBall()
+{
+	if (m_ballDistance < 100.0f) {
+		m_ball->SetMoveDirection(m_ball->GetPosition() - m_position);
+		m_ball->MoveStart();
+	}
+
+}
+
 void Player::Update()
 {
 	m_Lstickx = g_pad[0]->GetLStickXF();
@@ -46,7 +69,17 @@ void Player::Update()
 
 	Move();
 	Rotation();
+	if (g_pad[0]->IsTrigger(enButtonA)) {
+		BallDistanceCalculation();
+		KickBall();
+	}
 
 	m_skinModelRender->SetPosition(m_position);
 	m_skinModelRender->SetRotation(m_qRot);
+}
+
+void Player::BallDistanceCalculation()
+{
+	Vector3 vec = m_ball->GetPosition() - m_position;
+	m_ballDistance = vec.Length();
 }

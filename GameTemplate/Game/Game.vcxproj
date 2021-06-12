@@ -288,6 +288,8 @@
     <ClCompile Include="..\..\MiniEngine\tkFile\TkmFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\tkFile\TksFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
+    <ClCompile Include="BackGround.cpp" />
+    <ClCompile Include="Ball.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="Lighting.cpp" />
@@ -364,6 +366,8 @@
     <ClInclude Include="..\..\MiniEngine\tkFile\TkmFile.h" />
     <ClInclude Include="..\..\MiniEngine\tkFile\TksFile.h" />
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
+    <ClInclude Include="BackGround.h" />
+    <ClInclude Include="Ball.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="Lighting.h" />
@@ -373,6 +377,7 @@
     <ClInclude Include="system\system.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\modelData\bg\testmap.tkm" />
     <None Include="Assets\modelData\bg\testmap_s.tkm" />
     <None Include="Assets\modelData\sphere\sphere.tkm" />
   </ItemGroup>
