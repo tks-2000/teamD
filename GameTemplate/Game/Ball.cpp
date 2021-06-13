@@ -16,17 +16,42 @@ bool Ball::Start()
 	m_lig = FindGO<Lighting>("Lighting");
 	m_skinModelRender = NewGO<SkinModelRender>(0);
 	m_skinModelRender->Init("Assets/modelData/sphere/sphere.tkm", m_lig->GetLightAddress());
+	m_position.y += 40.0f;
 	
 	return true;
 }
 
 void Ball::Move()
 {
-	m_moveSpeed = m_moveDirection * 10.0f;
-
-	m_moveSpeed.y = 0.0f;
+	m_moveSpeed = m_moveDirection * m_moveVelocity;
 
 	m_position += m_moveSpeed;
+
+	if (m_position.x > 650.0f) {
+		m_position.x = 650.0f;
+		m_moveDirection.x *= -1.0f;
+	}
+	if (m_position.x < -650.0f) {
+		m_position.x = -650.0f;
+		m_moveDirection.x *= -1.0f;
+	}
+	if (m_position.z > 650.0f) {
+		m_position.z = 650.0f;
+		m_moveDirection.z *= -1.0f;
+	}
+	if (m_position.z < -650.0f) {
+		m_position.z = -650.0f;
+		m_moveDirection.z *= -1.0f;
+	}
+
+	m_moveVelocity -= m_moveVelocity * 0.001f;
+
+	if (m_moveVelocity < 0.0f)
+	{
+		m_moveFlag = false;
+	}
+
+	
 }
 
 void Ball::Update()
@@ -35,4 +60,6 @@ void Ball::Update()
 		Move();
 	}
 	m_skinModelRender->SetPosition(m_position);
+
+	m_lig->SetPointLighitPos(m_position);
 }

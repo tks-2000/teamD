@@ -88,6 +88,8 @@ public:
 	/// @brief ポイントライトの座標を入手
 	/// @return ポイントライトの座標
 	Vector3 GetPointLightPos() { return m_light.pointLight.position; }
+
+	void SetPointLighitPos(Vector3 pos) { m_light.pointLight.position = pos; }
 	
 	void InitSpotLight();
 

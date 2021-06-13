@@ -91,7 +91,7 @@ void Lighting::InitPointLight()
 	m_light.pointLight.color.z = 0.0f;
 
 	//ポイントライトの影響範囲
-	m_light.pointLight.Range = 100.0f;
+	m_light.pointLight.Range = 1000.0f;
 }
 
 void Lighting::MovePointLight()
@@ -166,14 +166,14 @@ void Lighting::RotationSpotLight()
 void Lighting::InitHemiSphereLight()
 {
 	//地面の照り返しカラー
-	m_light.hemiSphereLight.groundColor.x = 0.3f;
-	m_light.hemiSphereLight.groundColor.y = 0.3f;
+	m_light.hemiSphereLight.groundColor.x = 0.1f;
+	m_light.hemiSphereLight.groundColor.y = 0.1f;
 	m_light.hemiSphereLight.groundColor.z = 0.3f;
 
 	//天球ライトのカラー
-	m_light.hemiSphereLight.skyColor.x = 0.3f;
+	m_light.hemiSphereLight.skyColor.x = 0.1f;
 	m_light.hemiSphereLight.skyColor.y = 0.3f;
-	m_light.hemiSphereLight.skyColor.z = 0.3f;
+	m_light.hemiSphereLight.skyColor.z = 0.1f;
 
 	//地面の法線を設定
 	m_light.hemiSphereLight.groundNormal.x = 0.0f;

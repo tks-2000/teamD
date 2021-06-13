@@ -57,6 +57,7 @@ void Player::KickBall()
 {
 	if (m_ballDistance < 100.0f) {
 		m_ball->SetMoveDirection(m_ball->GetPosition() - m_position);
+		m_ball->Acceleration();
 		m_ball->MoveStart();
 	}
 
