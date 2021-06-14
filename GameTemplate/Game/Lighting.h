@@ -65,22 +65,27 @@ public:
 	bool Start();
 	void Update();
 
-	void InitDirectionLight();
 
+	
 	/// @brief ライトの構造体を入手
 	/// @return ライト構造体のアドレス
 	Light* GetLightAddress() { return &m_light; }
 
+
+	/// @brief ディレクションライトの初期化
+	void InitDirectionLight();
+
 	/// @brief ディレクションライトの方向を入手
-	/// @return 方向
+	/// @return ディレクションライトの方向
 	Vector3 GetDirectionLightDirection() { return m_light.directionLight.direction; }
 
 	/// @brief ディレクションライトの方向を設定
-	/// @param dirLigVec 正規化された方向
-	void SetDirectionLightDirection(Vector3 dirLigVec) { m_light.directionLight.direction = dirLigVec; }
+	/// @param dirLigVec ディレクションライトに設定したい方向
+	void SetDirectionLightDirection(Vector3 dirLigVec) { m_light.directionLight.direction = dirLigVec; m_light.directionLight.direction.Normalize(); }
 
 	void RotationDirectionLight();
 
+	/// @brief ポイントライトの初期化
 	void InitPointLight();
 
 	void MovePointLight();
@@ -89,8 +94,14 @@ public:
 	/// @return ポイントライトの座標
 	Vector3 GetPointLightPos() { return m_light.pointLight.position; }
 
+	/// @brief ポイントライトの座標を設定
+	/// @param pos ポイントライトに設定したい座標
 	void SetPointLighitPos(Vector3 pos) { m_light.pointLight.position = pos; }
+
+
+	void SetPointLightColor(Vector3 color) { m_light.pointLight.color = color; }
 	
+	/// @brief スポットライトの初期化
 	void InitSpotLight();
 
 	void MoveSpotLight();
@@ -101,10 +112,18 @@ public:
 	/// @return スポットライトの座標
 	Vector3 GetSpotLightPos() { return m_light.spotLight.position; }
 
+	/// @brief スポットライトの座標を設定
+	/// @param pos スポットライトに設定したい座標
+	void SetSpotLightPos(Vector3 pos) { m_light.spotLight.position = pos; }
+
+	void SetSpotLightDirection(Vector3 dir) { m_light.spotLight.direction = dir; m_light.spotLight.direction.Normalize(); }
+
+	/// @brief 半球ライトの初期化
 	void InitHemiSphereLight();
 
 private:
-	Light m_light;		//ライト
+	/// @brief ライティング全てのデータ
+	Light m_light;
 
 };
 

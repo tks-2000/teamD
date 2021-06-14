@@ -30,24 +30,29 @@ void Ball::Move()
 	if (m_position.x > 650.0f) {
 		m_position.x = 650.0f;
 		m_moveDirection.x *= -1.0f;
+		m_moveVelocity -= m_moveVelocity * 0.001f;
 	}
 	if (m_position.x < -650.0f) {
 		m_position.x = -650.0f;
 		m_moveDirection.x *= -1.0f;
+		m_moveVelocity -= m_moveVelocity * 0.001f;
 	}
 	if (m_position.z > 650.0f) {
 		m_position.z = 650.0f;
 		m_moveDirection.z *= -1.0f;
+		m_moveVelocity -= m_moveVelocity * 0.001f;
 	}
 	if (m_position.z < -650.0f) {
 		m_position.z = -650.0f;
 		m_moveDirection.z *= -1.0f;
+		m_moveVelocity -= m_moveVelocity * 0.001f;
 	}
 
 	m_moveVelocity -= m_moveVelocity * 0.001f;
 
 	if (m_moveVelocity < 0.0f)
 	{
+		m_moveSpeed = Vector3::Zero;
 		m_moveFlag = false;
 	}
 
@@ -59,6 +64,7 @@ void Ball::Update()
 	if (m_moveFlag == true) {
 		Move();
 	}
+	
 	m_skinModelRender->SetPosition(m_position);
 
 	m_lig->SetPointLighitPos(m_position);

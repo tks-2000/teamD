@@ -1,9 +1,22 @@
 #include "stdafx.h"
 #include "Player.h"
 
+namespace {
+	float KICK_POSSIBLE_DISTANCE = 150.0f;
+	float COLLIDE_DISTANCE = 100.0f;
+}
+
 Player::Player()
 {
 	m_position.y = 50.0f;
+	m_kickPower = 10.0f;
+}
+
+Player::Player(int num)
+{
+	m_myNumber = num;
+	m_position.y = 50.0f;
+	m_kickPower = 10.0f;
 }
 
 Player::~Player()
@@ -22,14 +35,22 @@ bool Player::Start()
 
 void Player::Move()
 {
-	
-	m_moveSpeed = g_camera3D->GetRight()* m_Lstickx;
+	//スティック入力でカメラ方向に移動
+	m_moveSpeed += g_camera3D->GetRight()* m_Lstickx;
 	m_moveSpeed += g_camera3D->GetForward()* m_Lsticky;
 	
 	m_moveSpeed.y = 0.0f;
 
-	m_position += m_moveSpeed * 5.0f;
+	m_moveSpeed -= m_moveSpeed * 0.05f;
 
+	if (m_moveSpeed.x != 0.0f || m_moveSpeed.z != 0.0f) {
+		m_direction = m_moveSpeed;
+	}
+
+	m_position += m_moveSpeed * 0.5f;
+
+
+	//座標で移動制限
 	if (m_position.x > 700.0f) {
 		m_position.x = 700.0f;
 	}
@@ -55,25 +76,53 @@ void Player::Rotation()
 
 void Player::KickBall()
 {
-	if (m_ballDistance < 100.0f) {
-		m_ball->SetMoveDirection(m_ball->GetPosition() - m_position);
-		m_ball->Acceleration();
-		m_ball->MoveStart();
-	}
 
+	m_ball->SetMoveDirection(m_direction);
+	m_ball->Acceleration(m_kickPower);
+	m_ball->MoveStart();
+
+
+}
+
+void Player::BallCollide()
+{
+	Vector3 repulsiveForce = m_position - m_ball->GetPosition();
+	repulsiveForce.Normalize();
+	repulsiveForce *= m_ball->GetVelocity();
+	m_moveSpeed += repulsiveForce;
+	m_ball->BounceX();
+	m_ball->BounceZ();
 }
 
 void Player::Update()
 {
-	m_Lstickx = g_pad[0]->GetLStickXF();
-	m_Lsticky = g_pad[0]->GetLStickYF();
+	m_Lstickx = g_pad[m_myNumber]->GetLStickXF();
+	m_Lsticky = g_pad[m_myNumber]->GetLStickYF();
 
 	Move();
 	Rotation();
-	if (g_pad[0]->IsTrigger(enButtonA)) {
-		BallDistanceCalculation();
-		KickBall();
+	BallDistanceCalculation();
+	if (m_ballDistance < KICK_POSSIBLE_DISTANCE) {
+		m_lig->SetPointLightColor({ 10.0f,0.0f,0.0f });
+		if (g_pad[m_myNumber]->IsTrigger(enButtonA)) {
+			KickBall();
+		}
 	}
+	else {
+		if (m_ball->IsMove() == true) {
+			m_lig->SetPointLightColor({ 5.0f,0.0f,0.0f });
+		}
+		else {
+			m_lig->SetPointLightColor({ 0.0f,0.0f,0.0f });
+		}
+	}
+	if (m_ballDistance < COLLIDE_DISTANCE && m_ball->IsMove() == true) {
+		BallCollide();
+	}
+	
+
+	Vector3 vec = m_position - m_lig->GetSpotLightPos();
+	m_lig->SetSpotLightDirection(vec);
 
 	m_skinModelRender->SetPosition(m_position);
 	m_skinModelRender->SetRotation(m_qRot);

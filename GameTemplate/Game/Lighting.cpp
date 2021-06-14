@@ -112,9 +112,9 @@ void Lighting::MovePointLight()
 void Lighting::InitSpotLight()
 {
 	//スポットライトの座標
-	m_light.spotLight.position.x = -50.0f;
-	m_light.spotLight.position.y = 50.0f;
-	m_light.spotLight.position.z = 50.0f;
+	m_light.spotLight.position.x = 0.0f;
+	m_light.spotLight.position.y = 1000.0f;
+	m_light.spotLight.position.z = 0.0f;
 
 	//スポットライトのカラー
 	m_light.spotLight.color.x = 1.0f;
@@ -122,9 +122,9 @@ void Lighting::InitSpotLight()
 	m_light.spotLight.color.z = 1.0f;
 
 	//スポットライトの方向
-	m_light.spotLight.direction.x = 1.0f;
+	m_light.spotLight.direction.x = 0.0f;
 	m_light.spotLight.direction.y = -1.0f;
-	m_light.spotLight.direction.z = 1.0f;
+	m_light.spotLight.direction.z = 0.0f;
 	//正規化する。
 	m_light.spotLight.direction.Normalize();
 
@@ -132,7 +132,7 @@ void Lighting::InitSpotLight()
 	m_light.spotLight.Range = 300.0f;
 
 	//射出角度を設定
-	m_light.spotLight.angle = Math::DegToRad(25.0f);
+	m_light.spotLight.angle = Math::DegToRad(10.0f);
 }
 
 void Lighting::MoveSpotLight()

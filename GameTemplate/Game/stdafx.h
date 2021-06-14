@@ -10,9 +10,3 @@
 #include "GameCamera.h"
 #include "BackGround.h"
 #include "Ball.h"
-
-float DistanceToCalculation(Vector3 vec1, Vector3 vec2)
-{
-	Vector3 vec3 = vec1 - vec2;
-	return vec3.Length();
-}
