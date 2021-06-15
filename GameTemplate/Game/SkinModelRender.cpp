@@ -32,8 +32,6 @@ void SkinModelRender::Init(const char* modelFilePath, Light* lig)
 void SkinModelRender::Update()
 {
 	m_model.UpdateWorldMatrix(m_position,m_qRot,m_scale);
-	//auto& renderContext = g_graphicsEngine->GetRenderContext();
-	//m_model.Draw(renderContext);
 }
 
 void SkinModelRender::Render(RenderContext& rd)

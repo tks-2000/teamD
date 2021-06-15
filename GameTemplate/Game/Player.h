@@ -32,6 +32,8 @@ public:
 	/// @brief ボールとぶつかる処理
 	void BallCollide();
 
+	void Guard();
+
 private:
 	/// @brief プレイヤーの番号
 	int m_myNumber = 0;
@@ -53,6 +55,8 @@ private:
 	/// @brief キック力
 	float m_kickPower = 0.0f;
 
+	bool m_guard = false;
+
 	/// @brief Lスティックの横入力
 	float m_Lstickx = 0.0f;
 	/// @brief Lスティックの縦入力
@@ -64,5 +68,6 @@ private:
 	SkinModelRender* m_skinModelRender = nullptr;
 	/// @brief ボール
 	Ball* m_ball = nullptr;
+
 };
 

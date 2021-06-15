@@ -445,5 +445,6 @@
   <ItemGroup>
     <Image Include="Assets\modelData\bg\testmap_tex.DDS" />
     <Image Include="Assets\modelData\sphere\sphere_tex.DDS" />
+    <Image Include="Assets\modelData\sphere\sphere_tex_01.DDS" />
   </ItemGroup>
 </Project>

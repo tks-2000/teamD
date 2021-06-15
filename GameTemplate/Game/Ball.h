@@ -14,6 +14,8 @@ public:
 	/// @brief 移動の処理
 	void Move();
 
+	void Rotation();
+
 	/// @brief ボールの移動を開始する
 	void MoveStart() { m_moveFlag = true; }
 
@@ -41,6 +43,11 @@ public:
 	/// @return ボールの速度
 	float GetVelocity() { return m_moveVelocity; }
 
+
+	void SetVelocity(float vel) { m_moveVelocity = vel; }
+
+	Vector3 GetMoveDirection() { return m_moveDirection; }
+
 	/// @brief ボールの移動方向を設定
 	/// @param dir ボールを進ませたい方向
 	void SetMoveDirection(Vector3 dir) { m_moveDirection = dir; m_moveDirection.y = 0.0f; m_moveDirection.Normalize(); }
@@ -50,6 +57,10 @@ private:
 	Vector3 m_position = Vector3::Zero;
 	/// @brief ボールの回転
 	Quaternion m_qRot = Quaternion::Identity;
+
+	Vector3 m_scale = Vector3::One;
+
+	Vector3 m_axisRotation = Vector3::Zero;
 	/// @brief ボールの移動速度
 	Vector3 m_moveSpeed = Vector3::Zero;
 	/// @brief ボールの移動方向
@@ -58,6 +69,8 @@ private:
 	float m_moveVelocity = 0.0f;
 	/// @brief ボールの移動フラグ
 	bool m_moveFlag = false;
+
+	float m_angle = 0.0f;
 
 	Lighting* m_lig = nullptr;
 	SkinModelRender* m_skinModelRender = nullptr;

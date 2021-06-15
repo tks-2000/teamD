@@ -2,7 +2,6 @@
 #include "system/system.h"
 #include "Game.h"
 
-
 ///////////////////////////////////////////////////////////////////
 // ウィンドウプログラムのメイン関数。
 ///////////////////////////////////////////////////////////////////
@@ -19,6 +18,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//ゲームオブジェクトマネージャーのインスタンスを作成する。
 	GameObjectManager::CreateInstance();
 	PhysicsWorld::CreateInstance();
+
+	//EffectEngine::CreateInstance();
 
 	NewGO<Game>(0, "game");
 	
@@ -40,6 +41,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		
 		GameObjectManager::GetInstance()->ExecuteUpdate();
 		GameObjectManager::GetInstance()->ExecuteRender(renderContext);
+
+		//EffectEngine::GetInstance()->Update(g_gameTime->GetFrameDeltaTime());
+
+		//EffectEngine::GetInstance()->Draw();
 		
 		//////////////////////////////////////
 		//絵を描くコードを書くのはここまで！！！

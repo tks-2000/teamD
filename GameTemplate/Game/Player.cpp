@@ -1,9 +1,11 @@
 #include "stdafx.h"
 #include "Player.h"
+//#include "effect/effect.h"
 
 namespace {
 	float KICK_POSSIBLE_DISTANCE = 150.0f;
-	float COLLIDE_DISTANCE = 100.0f;
+	float GUARD_DISTANCE = 100.0f;
+	float COLLIDE_DISTANCE = 50.0f;
 }
 
 Player::Player()
@@ -89,9 +91,24 @@ void Player::BallCollide()
 	Vector3 repulsiveForce = m_position - m_ball->GetPosition();
 	repulsiveForce.Normalize();
 	repulsiveForce *= m_ball->GetVelocity();
-	m_moveSpeed += repulsiveForce;
+	m_moveSpeed += repulsiveForce * 2.0f;
 	m_ball->BounceX();
 	m_ball->BounceZ();
+}
+
+void Player::Guard()
+{
+	m_moveSpeed /= 2.0f;
+	if (m_ballDistance < GUARD_DISTANCE) {
+		Vector3 repulsiveForce = m_position - m_ball->GetPosition();
+		repulsiveForce.Normalize();
+		repulsiveForce *= m_ball->GetVelocity();
+		m_moveSpeed += repulsiveForce;
+		float downVelocity = m_ball->GetVelocity();
+		m_ball->SetVelocity(m_ball->GetVelocity() / 2.0f);
+		m_ball->BounceX();
+		m_ball->BounceZ();
+	}
 }
 
 void Player::Update()
@@ -119,7 +136,16 @@ void Player::Update()
 	if (m_ballDistance < COLLIDE_DISTANCE && m_ball->IsMove() == true) {
 		BallCollide();
 	}
-	
+	if (g_pad[m_myNumber]->IsPress(enButtonLB1)) {
+		m_guard = true;
+	}
+	else {
+		m_guard = false;
+	}
+
+	if (m_guard == true) {
+		Guard();
+	}
 
 	Vector3 vec = m_position - m_lig->GetSpotLightPos();
 	m_lig->SetSpotLightDirection(vec);
