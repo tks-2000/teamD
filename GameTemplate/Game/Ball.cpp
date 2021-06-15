@@ -51,7 +51,7 @@ void Ball::Move()
 
 	m_moveVelocity -= m_moveVelocity * 0.001f;
 
-	if (m_moveVelocity <= 0.0f || m_moveDirection.x == 0.0f && m_moveDirection.z == 0.0f)
+	if (m_moveVelocity <= 0.1f || m_moveDirection.x == 0.0f && m_moveDirection.z == 0.0f)
 	{
 		m_moveDirection = Vector3::Zero;
 		m_moveSpeed = Vector3::Zero;

@@ -3,14 +3,15 @@
 //#include "effect/effect.h"
 
 namespace {
-	float KICK_POSSIBLE_DISTANCE = 150.0f;
-	float GUARD_DISTANCE = 100.0f;
-	float COLLIDE_DISTANCE = 50.0f;
+	float KICK_POSSIBLE_DISTANCE = 200.0f;
+	float GUARD_DISTANCE = 120.0f;
+	float COLLIDE_DISTANCE = 100.0f;
 }
 
 Player::Player()
 {
 	m_position.y = 50.0f;
+	m_position.z = -100.0f;
 	m_kickPower = 10.0f;
 }
 
@@ -37,6 +38,7 @@ bool Player::Start()
 
 void Player::Move()
 {
+	Vector3 returnPos = m_position;
 	//スティック入力でカメラ方向に移動
 	m_moveSpeed += g_camera3D->GetRight()* m_Lstickx;
 	m_moveSpeed += g_camera3D->GetForward()* m_Lsticky;
@@ -48,7 +50,7 @@ void Player::Move()
 	if (m_moveSpeed.x != 0.0f || m_moveSpeed.z != 0.0f) {
 		m_direction = m_moveSpeed;
 	}
-
+	
 	m_position += m_moveSpeed * 0.5f;
 
 
@@ -65,6 +67,7 @@ void Player::Move()
 	if (m_position.z < -700.0f) {
 		m_position.z = -700.0f;
 	}
+
 	
 }
 
@@ -89,11 +92,20 @@ void Player::KickBall()
 void Player::BallCollide()
 {
 	Vector3 repulsiveForce = m_position - m_ball->GetPosition();
+	repulsiveForce.y = 0.0f;
 	repulsiveForce.Normalize();
-	repulsiveForce *= m_ball->GetVelocity();
-	m_moveSpeed += repulsiveForce * 2.0f;
-	m_ball->BounceX();
-	m_ball->BounceZ();
+	if (m_ball->IsMove() == true) {
+		repulsiveForce *= m_ball->GetVelocity();
+		m_moveSpeed += repulsiveForce * 2.0f;
+		m_ball->BounceX();
+		m_ball->BounceZ();
+	}
+	else {
+		repulsiveForce *= COLLIDE_DISTANCE;
+		m_moveSpeed = Vector3::Zero;
+		m_position = m_ball->GetPosition() + repulsiveForce;
+		m_position.y = 50.0f;
+	}
 }
 
 void Player::Guard()
@@ -116,9 +128,10 @@ void Player::Update()
 	m_Lstickx = g_pad[m_myNumber]->GetLStickXF();
 	m_Lsticky = g_pad[m_myNumber]->GetLStickYF();
 
+	BallDistanceCalculation();
 	Move();
 	Rotation();
-	BallDistanceCalculation();
+	
 	if (m_ballDistance < KICK_POSSIBLE_DISTANCE) {
 		m_lig->SetPointLightColor({ 10.0f,0.0f,0.0f });
 		if (g_pad[m_myNumber]->IsTrigger(enButtonA)) {
@@ -133,7 +146,7 @@ void Player::Update()
 			m_lig->SetPointLightColor({ 0.0f,0.0f,0.0f });
 		}
 	}
-	if (m_ballDistance < COLLIDE_DISTANCE && m_ball->IsMove() == true) {
+	if (m_ballDistance < COLLIDE_DISTANCE) {
 		BallCollide();
 	}
 	if (g_pad[m_myNumber]->IsPress(enButtonLB1)) {
