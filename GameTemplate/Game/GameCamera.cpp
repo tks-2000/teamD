@@ -3,8 +3,8 @@
 
 GameCamera::GameCamera()
 {
-	m_toPosition = { 0.0f,700.0f,-1300.0f };
-	m_angleX = 0.07f;
+	m_toPosition = { 0.0f,700.0f,-1400.0f };
+	m_angleX = 0.4f;
 	m_qRotX.SetRotation(g_camera3D->GetRight(), m_angleX);
 	m_qRotX.Apply(m_toPosition);
 }

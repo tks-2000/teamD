@@ -57,11 +57,14 @@ private:
 
 	bool m_guard = false;
 
+	float m_gravity = 0.0f;
+
 	/// @brief Lスティックの横入力
 	float m_Lstickx = 0.0f;
 	/// @brief Lスティックの縦入力
 	float m_Lsticky = 0.0f;
 
+	CharacterController m_charaCon;
 	/// @brief ライティング
 	Lighting* m_lig = nullptr;
 	/// @brief スキンモデルレンダラー

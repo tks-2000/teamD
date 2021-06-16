@@ -14,10 +14,12 @@ public:
 	Vector3 GetPosition() { return m_position; }
 private:
 	Vector3 m_position = Vector3::Zero;
-	Vector3 m_scale = Vector3::Zero;
+	Vector3 m_scale = Vector3::One;
 	Quaternion m_qRot = Quaternion::Identity;
 
 	Lighting* m_lig = nullptr;
 	SkinModelRender* m_skinModelRender = nullptr;
+	PhysicsStaticObject m_paysicsStaticObject;
+	Matrix m_world;
 };
 

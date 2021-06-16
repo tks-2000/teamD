@@ -3,7 +3,9 @@
 
 SkinModelRender::SkinModelRender()
 {
-
+	m_matrix.MakeTranslation(m_position);
+	m_matrix.MakeRotationFromQuaternion(m_qRot);
+	m_matrix.MakeScaling(m_scale);
 }
 
 SkinModelRender::~SkinModelRender()
@@ -32,6 +34,8 @@ void SkinModelRender::Init(const char* modelFilePath, Light* lig)
 void SkinModelRender::Update()
 {
 	m_model.UpdateWorldMatrix(m_position,m_qRot,m_scale);
+	
+
 }
 
 void SkinModelRender::Render(RenderContext& rd)

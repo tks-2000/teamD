@@ -72,6 +72,9 @@ private:
 
 	float m_angle = 0.0f;
 
+	float m_gravity = 0.0f;
+
+	CharacterController m_charaCon;
 	Lighting* m_lig = nullptr;
 	SkinModelRender* m_skinModelRender = nullptr;
 };

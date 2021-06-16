@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "system/system.h"
 #include "Game.h"
+#include "effect/Effect.h";
 
 ///////////////////////////////////////////////////////////////////
 // ウィンドウプログラムのメイン関数。
