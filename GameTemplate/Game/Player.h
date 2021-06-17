@@ -8,10 +8,13 @@ class Player : public IGameObject
 {
 public:
 	Player();
-	Player(int num);
 	~Player();
 	bool Start();
 	void Update();
+
+	/// @brief プレイヤーが何番かを設定
+	/// @param num プレイヤー番号
+	void SetPlayerNumber(int num);
 
 	/// @brief 移動の処理
 	void Move();
@@ -32,7 +35,11 @@ public:
 	/// @brief ボールとぶつかる処理
 	void BallCollide();
 
+	/// @brief ガードの処理
 	void Guard();
+
+	/// @brief リスポーンの処理
+	void ReSpawn() { m_position = m_startPos; m_charaCon.SetPosition(m_position); };
 
 private:
 	/// @brief プレイヤーの番号
@@ -49,19 +56,33 @@ private:
 	Vector3 m_moveSpeed = Vector3::Zero;
 	/// @brief プレイヤーの向いている方向
 	Vector3 m_direction = Vector3::Zero;
+	/// @brief プレイヤーのスタート時の座標
+	Vector3 m_startPos = Vector3::Zero;
+
+	Vector3 m_playerColor = Vector3::Zero;
+
+	float m_friction = 0.0f;
 	
 	/// @brief ボールとの距離
 	float m_ballDistance = 0.0f;
 	/// @brief キック力
 	float m_kickPower = 0.0f;
-
+	/// @brief ガードフラグ
 	bool m_guard = false;
+	/// @brief 重力
+	float m_gravity = 0.0f;
+	/// @brief ダメージフラグ
+	bool m_damage = false;
+	/// @brief ダメージを受けて動けるようになるまでのタイマー
+	float m_damageTime = 0.0f;
 
 	/// @brief Lスティックの横入力
 	float m_Lstickx = 0.0f;
 	/// @brief Lスティックの縦入力
 	float m_Lsticky = 0.0f;
 
+	/// @brief キャラクターコントローラー
+	CharacterController m_charaCon;
 	/// @brief ライティング
 	Lighting* m_lig = nullptr;
 	/// @brief スキンモデルレンダラー

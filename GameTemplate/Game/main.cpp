@@ -22,7 +22,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	EffectEngine::CreateInstance();
 
-	NewGO<Game>(0, "game");
+	//NewGO<Title>(0, "Title");
 	
 	//////////////////////////////////////
 	// 初期化を行うコードを書くのはここまで！！！

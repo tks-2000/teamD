@@ -57,6 +57,8 @@ public:
 	/// @param dir ボールを進ませたい方向
 	void SetMoveDirection(Vector3 dir) { m_moveDirection = dir; m_moveDirection.y = 0.0f; m_moveDirection.Normalize(); }
 
+	void SetBallLightColor(Vector3 color) { m_pointLigColor = color; }
+
 private:
 	/// @brief ボールの座標
 	Vector3 m_position = Vector3::Zero;
@@ -77,6 +79,11 @@ private:
 
 	float m_angle = 0.0f;
 
+	float m_gravity = 0.0f;
+
+	Vector3 m_pointLigColor = Vector3::Zero;
+
+	CharacterController m_charaCon;
 	Lighting* m_lig = nullptr;
 	SkinModelRender* m_skinModelRender = nullptr;
 	

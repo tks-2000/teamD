@@ -3,21 +3,22 @@
 
 GameCamera::GameCamera()
 {
-	m_toPosition = { 0.0f,700.0f,-1300.0f };
-	m_angleX = 0.07f;
-	m_qRotX.SetRotation(g_camera3D->GetRight(), m_angleX);
-	m_qRotX.Apply(m_toPosition);
+	
 }
 
 GameCamera::~GameCamera()
 {
-
+	m_angleX = 0.4f;
+	m_qRotX.SetRotation(g_camera3D->GetRight(), m_angleX);
+	m_qRotX.Apply(m_toPosition);
 }
 
 bool GameCamera::Start()
 {
 	m_player = FindGO<Player>("Player");
 	m_backGround = FindGO<BackGround>("BackGround");
+	m_toPosition = { 0.0f,1400.0f,-800.0f };
+	
 	return true;
 }
 
@@ -33,8 +34,6 @@ void GameCamera::Rotation()
 {
 	m_qRotY.SetRotation(Vector3::AxisY,g_pad[0]->GetRStickXF()* 0.01f);
 	m_qRotY.Apply(m_toPosition);
-
-	
 	
 }
 

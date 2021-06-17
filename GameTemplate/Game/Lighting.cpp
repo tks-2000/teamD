@@ -31,7 +31,7 @@ bool Lighting::Start()
 
 void Lighting::Update()
 {
-	RotationDirectionLight();
+	//RotationDirectionLight();
 	/*if (g_pad[1]->IsPress(enButtonSelect)) {
 		
 		MovePointLight();
