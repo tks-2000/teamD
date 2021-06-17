@@ -21,7 +21,16 @@ Game::Game()
 
 Game::~Game()
 {
-	DeleteGO(m_skinModelRender);
+	
+	DeleteGO(m_gameCamera);
+	DeleteGO(m_backGround);
+	DeleteGO(m_ball);
+	DeleteGO(m_skinModelRender3);
+	for (int i = 0; i < m_playerNum; i++) {
+		DeleteGO(m_player[i]);
+	}
+	DeleteGO(m_lighting);
+	NewGO<Title>(0, "Title");
 }
 
 bool Game::Start()
@@ -34,5 +43,8 @@ bool Game::Start()
 
 void Game::Update()
 {
+	if (g_pad[0]->IsTrigger(enButtonSelect)) {
+		DeleteGO(this);
+	}
 	m_skinModelRender3->SetPosition(m_lighting->GetSpotLightPos());
 }

@@ -305,6 +305,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="system\system.cpp" />
+    <ClCompile Include="Title.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\ExEngine\ExEngine.h" />
@@ -375,6 +376,7 @@
     <ClInclude Include="SkinModelRender.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
+    <ClInclude Include="Title.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\modelData\bg\testmap.tkm" />

@@ -48,13 +48,11 @@ public:
 private:
 	Model m_model;								//モデル
 	ModelInitData m_modelInitData;				//モデルの初期化情報
-	Skeleton m_skeleton;						//スケルトン
-	CharacterController m_charaCon;				//キャラクターコントローラー
+	
 
 	Vector3 m_position = Vector3::Zero;			//座標
 	Vector3 m_scale = Vector3::One;				//拡大率
 	Quaternion m_qRot = Quaternion::Identity;	//回転
 
-	Matrix m_matrix;
 };
 

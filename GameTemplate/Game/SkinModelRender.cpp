@@ -3,14 +3,12 @@
 
 SkinModelRender::SkinModelRender()
 {
-	m_matrix.MakeTranslation(m_position);
-	m_matrix.MakeRotationFromQuaternion(m_qRot);
-	m_matrix.MakeScaling(m_scale);
+	
 }
 
 SkinModelRender::~SkinModelRender()
 {
-
+	
 }
 
 bool SkinModelRender::Start()

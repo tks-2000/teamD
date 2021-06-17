@@ -11,7 +11,7 @@ Ball::Ball()
 
 Ball::~Ball()
 {
-
+	DeleteGO(m_skinModelRender);
 }
 
 bool Ball::Start()
