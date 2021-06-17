@@ -1,8 +1,21 @@
 #include "stdafx.h"
 #include "Ball.h"
 
+namespace
+{
+	//軌跡エフェクト関係
+	const char16_t* TRACKEFFECT_PL01_FILEPATH = u"Assets/effect/balltrack.efk";	//軌跡エフェクトのファイルパス
+	const Vector3 TRACKEFFECT_SCALE_MAX = { 30.0f,30.0f,1.0f };				//エフェクトの最大サイズ
+	const Vector3 TRACKEFFECT_SCALE_MIN = { 3.0f,3.0f,1.0f };					//エフェクトの最小サイズ	
+	const float TRACKEFFECT_BASE_MAX = 30.0f;									//補間率を決めるための最大基準値
+	const float TRACKEFFECT_PLAY_MIN = 10.0f;									//軌跡を表示し始める速度
+}
+
 Ball::Ball()
 {
+	//軌跡用エフェクトのロード
+	ballTrack.Init(TRACKEFFECT_PL01_FILEPATH);
+
 	m_position.y += 50.0f;
 	m_scale = { 0.5f,0.5f,0.5f };
 }
@@ -68,11 +81,45 @@ void Ball::Rotation()
 	m_angle -= 0.1f;
 }
 
+void Ball::PlayTrackEffect()
+{
+	//軌跡用エフェクト再生処理//
+	//エフェクト拡大率
+	Vector3 efcScale = Vector3::One;
+	//拡大の補間率
+	float scaleRate = 0.0f;
+
+	//エフェクト拡大率を最大にする際の基準値
+	float rateBase = TRACKEFFECT_BASE_MAX;
+	//現在の速度が最大値に対してどれくらいの割合なのかを計算
+	float maxRate = m_moveVelocity / rateBase;
+
+	//1.0を超えるときは1.0にする
+	if (maxRate >= 1.0f) {
+		maxRate = 1.0f;
+	}
+
+	//得られた割合を補間率に反映(2乗している)
+	scaleRate = maxRate * maxRate;
+
+	//scaleRateの値に応じてエフェクト拡大率を線形補完する
+	efcScale.Lerp(scaleRate, TRACKEFFECT_SCALE_MIN, TRACKEFFECT_SCALE_MAX);
+
+	//速度が一定値以上のとき軌跡エフェクトを発生
+	if (m_moveVelocity > TRACKEFFECT_PLAY_MIN) {
+		ballTrack.Play();
+
+		ballTrack.SetScale(efcScale);
+	}
+
+}
+
 void Ball::Update()
 {
 	if (m_moveFlag == true) {
 		Move();
 		Rotation();
+		PlayTrackEffect();
 	}
 
 	
@@ -81,4 +128,9 @@ void Ball::Update()
 	m_skinModelRender->SetScale(m_scale);
 
 	m_lig->SetPointLighitPos(m_position);
+	
+	//軌跡用エフェクト座標をボールに合わせる
+	ballTrack.SetPosition(m_position);
+	//軌跡用エフェクトの更新
+	ballTrack.Update();
 }

@@ -1,7 +1,10 @@
 #pragma once
+#include "effect/Effect.h"
+
 
 class Lighting;
 class SkinModelRender;
+class Effect;
 
 class Ball : public IGameObject
 {
@@ -15,6 +18,8 @@ public:
 	void Move();
 
 	void Rotation();
+
+	void PlayTrackEffect();
 
 	/// @brief ボールの移動を開始する
 	void MoveStart() { m_moveFlag = true; }
@@ -74,5 +79,8 @@ private:
 
 	Lighting* m_lig = nullptr;
 	SkinModelRender* m_skinModelRender = nullptr;
+	
+	/// @brief 軌跡用エフェクト
+	Effect ballTrack;
 };
 

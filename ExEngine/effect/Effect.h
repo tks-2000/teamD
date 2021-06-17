@@ -26,7 +26,8 @@ public:
 	/// <remark>
 	/// この関数を呼び出すとエフェクトの再生が開始されます。
 	/// </remark>
-	void Play();
+	/// <param name="isStopAndPlay">エフェクト再生を中断して新たに再生しなおすかどうか。デフォルト値はfalse(=中断しない)</param>
+	void Play(const bool& isStopAndPlay = false );
 	/*!
 	*@brief	座標を設定。
 	*/

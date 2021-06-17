@@ -48,6 +48,9 @@
     <Filter Include="ExEngine\level2D">
       <UniqueIdentifier>{80abc458-e4b9-4836-89c7-3eb842072871}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ExEngine\effect">
+      <UniqueIdentifier>{c16dc936-39db-42a3-8841-b08857ac3874}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -229,6 +232,12 @@
     </ClCompile>
     <ClCompile Include="Ball.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ExEngine\effect\Effect.cpp">
+      <Filter>ExEngine\effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ExEngine\effect\EffectEngine.cpp">
+      <Filter>ExEngine\effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -436,11 +445,18 @@
     <ClInclude Include="Ball.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\ExEngine\effect\Effect.h">
+      <Filter>ExEngine\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ExEngine\effect\EffectEngine.h">
+      <Filter>ExEngine\effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\modelData\bg\testmap_s.tkm" />
     <None Include="Assets\modelData\sphere\sphere.tkm" />
     <None Include="Assets\modelData\bg\testmap.tkm" />
+    <None Include="Assets\effect\kick.efk" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\modelData\bg\testmap_tex.DDS" />
