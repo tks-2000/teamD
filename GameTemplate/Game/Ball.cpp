@@ -146,7 +146,7 @@ void Ball::Update()
 	//m_lig->SetPointLighitPos(m_position);
 	
 	//軌跡用エフェクト座標をボールに合わせる
-	ballTrack.SetPosition(m_position);
+	ballTrack.SetPosition(modelpos);
 	//軌跡用エフェクトの更新
 	ballTrack.Update();
 

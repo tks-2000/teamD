@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Game.h"
+#include "Title.h"
 
 Game::Game()
 {
@@ -30,7 +31,7 @@ Game::~Game()
 		DeleteGO(m_player[i]);
 	}
 	DeleteGO(m_lighting);
-	//NewGO<Title>(0, "Title");
+	NewGO<Title>(0, "Title");
 }
 
 bool Game::Start()

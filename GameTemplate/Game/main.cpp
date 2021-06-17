@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "system/system.h"
 #include "Game.h"
+#include "Title.h"
 #include "effect/Effect.h"
 
 ///////////////////////////////////////////////////////////////////
@@ -22,7 +23,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	EffectEngine::CreateInstance();
 
-	//NewGO<Title>(0, "Title");
+	NewGO<Title>(0, "Title");
 	
 	//////////////////////////////////////
 	// 初期化を行うコードを書くのはここまで！！！
