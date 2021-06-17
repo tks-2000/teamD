@@ -3,8 +3,11 @@
 
 Game::Game()
 {
+	m_playerNum = 4;
 	m_lighting = NewGO<Lighting>(0,"Lighting");
-	m_player = NewGO<Player>(0, "Player");
+	for (int i = 0; i < m_playerNum; i++) {
+		m_player[i] = NewGO<Player>(0);
+	}
 	m_gameCamera = NewGO<GameCamera>(0,"GameCamera");
 	m_backGround = NewGO<BackGround>(0, "BackGround");
 	m_ball = NewGO<Ball>(0, "Ball");
@@ -23,8 +26,9 @@ Game::~Game()
 
 bool Game::Start()
 {
-	
-	
+	for (int i = 0; i < m_playerNum; i++) {
+		m_player[i]->SetPlayerNumber(i);
+	}
 	return true;
 }
 

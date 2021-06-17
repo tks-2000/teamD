@@ -16,8 +16,9 @@ public:
 	void Update();
 
 private:
+	int m_playerNum = 0;
 	Lighting* m_lighting = nullptr;
-	Player* m_player = nullptr;
+	Player* m_player[4] = { nullptr };
 	GameCamera* m_gameCamera = nullptr;
 	BackGround* m_backGround = nullptr;
 	Ball* m_ball = nullptr;
