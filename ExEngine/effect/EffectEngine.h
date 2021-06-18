@@ -94,6 +94,8 @@ public:
 	/// </summary>
 	/// <param name="effectHandle"></param>
 	void Stop(int effectHandle);
+	/// @brief 全てのエフェクトを停止
+	void AllStop();
 	/// <summary>
 	/// エフェクトをロード。
 	/// </summary>

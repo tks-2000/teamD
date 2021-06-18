@@ -10,10 +10,21 @@ namespace {
 	Vector3 PLAYER2_STARTPOS = { 600.0f,200.0f,600.0f };
 	Vector3 PLAYER3_STARTPOS = { -600.0f,200.0f,-600.0f };
 	Vector3 PLAYER4_STARTPOS = { 600.0f,200.0f,-600.0f };
+	
+	//キック時のエフェクト用定数
+	const char16_t* KICKEFFECT_FILEPATH = u"Assets/effect/kick.efk";				//キックエフェクトのファイルパス
+	//ガード時のエフェクト
+	const char16_t* GUARDEFFECT_FILEPATH = u"Assets/effect/shield.efk";				//ガード時のエフェクトファイルパス
+
 }
 
 Player::Player()
 {
+	//キック時のエフェクトを初期化
+	m_kickEffect.Init(KICKEFFECT_FILEPATH);
+	//ガード時のエフェクトを初期化
+	m_guardEffect.Init(GUARDEFFECT_FILEPATH);
+
 	m_kickPower = 10.0f;
 	m_gravity = 5.0f;
 	m_charaCon.Init(20.0f, 50.0f, m_position);
@@ -164,6 +175,18 @@ void Player::Update()
 	if (m_ballDistance < KICK_POSSIBLE_DISTANCE) {
 		m_lig->SetPointLightColor(m_playerColor * 2.0f);
 		if (g_pad[m_myNumber]->IsTrigger(enButtonA)) {
+			
+			//キックエフェクト再生処理//
+			
+			//キックエフェクト拡大率の設定
+			Vector3 efcScale = { 25.0f,25.0f,1.0f };
+			m_kickEffect.Play();
+			m_kickEffect.SetPosition(m_position);
+			m_kickEffect.SetRotation(m_qRot);
+			m_kickEffect.SetScale(efcScale);
+
+			m_kickEffect.Update();
+
 			KickBall();
 		}
 	}
@@ -177,10 +200,23 @@ void Player::Update()
 	}
 	else {
 		m_guard = false;
+		m_guardEffectCouter = 0;
 	}
 
 	if (m_guard == true) {
 		Guard();
+		
+		//シールドエフェクト発生処理//
+		//カウンターに値を加算
+		m_guardEffectCouter += 1;
+		//規定フレーム毎にエフェクトを発生
+		if (m_guardEffectCouter == 1) {
+			m_guardEffect.Play();
+		}
+		if (m_guardEffectCouter % 20 == 19) {
+			m_guardEffect.Play();
+		}
+
 	}
 
 	Vector3 vec = m_position - m_lig->GetSpotLightPos();
@@ -191,6 +227,15 @@ void Player::Update()
 
 	m_skinModelRender->SetPosition(m_position);
 	m_skinModelRender->SetRotation(m_qRot);
+
+
+	//ガード時のエフェクトの座標などを反映
+	Vector3 efcGuardPos = m_position;
+	efcGuardPos.y += 80.0f;
+	m_guardEffect.SetPosition(efcGuardPos);
+	m_guardEffect.SetScale({ 60.0f,60.0f,60.0f });
+	m_guardEffect.Update();
+
 }
 
 void Player::BallDistanceCalculation()
