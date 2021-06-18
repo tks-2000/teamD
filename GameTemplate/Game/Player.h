@@ -43,7 +43,9 @@ public:
 	void Guard();
 
 	/// @brief リスポーンの処理
-	void ReSpawn() { m_position = m_startPos; m_charaCon.SetPosition(m_position); };
+	void ReSpawn();
+
+	void Muteki();
 
 private:
 	/// @brief プレイヤーの番号
@@ -68,7 +70,10 @@ private:
 	float m_friction = 0.0f;
 	/// @brief プレイヤーからボールへのベクトル
 	Vector3 m_toBallVec = Vector3::Zero;
-	
+	/// @brief プレイヤーが死んだかどうかのフラグ
+	bool m_dieFlag = false;
+	/// @brief プレイヤーがリスポーンした時の無敵時間
+	float m_mutekiTime = 0.0f;
 	/// @brief ボールとの距離
 	float m_ballDistance = 0.0f;
 	/// @brief キック可能かどうかのフラグ

@@ -198,6 +198,24 @@ void Player::Guard()
 	}
 }
 
+void Player::ReSpawn() {
+	m_position = m_startPos;
+	m_charaCon.SetPosition(m_position);
+	m_dieFlag = true;
+	
+
+}
+
+void Player::Muteki()
+{
+	m_mutekiTime++;
+
+	if (m_mutekiTime == 150) {
+		m_dieFlag = false;
+		m_mutekiTime = 0;
+	}
+}
+
 void Player::Update()
 {
 	/// @brief スティック入力を受け取る
@@ -242,7 +260,7 @@ void Player::Update()
 	}
 
 	/// @brief ボールとの距離が一定以下で吹き飛ぶ
-	if (m_ballDistance < COLLIDE_DISTANCE) {
+	if (m_ballDistance < COLLIDE_DISTANCE && m_dieFlag == false) {
 		BallCollide();
 	}
 
@@ -270,6 +288,9 @@ void Player::Update()
 			m_guardEffect.Play();
 		}
 
+	}
+	if (m_dieFlag == true) {
+		Muteki();
 	}
 
 	/// @brief 自分に当たるスポットライトの位置と方向を設定
