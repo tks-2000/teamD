@@ -161,6 +161,7 @@ void Player::KickBall()
 	m_ball->SetMoveDirection(m_direction);
 	m_ball->Acceleration(m_kickPower);
 	m_ball->SetBallLightColor(m_playerColor);
+	m_ball->SetPlayerInformation(m_myNumber);
 	m_ball->MoveStart();
 
 
