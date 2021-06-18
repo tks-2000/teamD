@@ -143,6 +143,18 @@ void Player::Rotation()
 	m_qRot.SetRotation(Vector3::AxisY, atan2(m_moveSpeed.x, m_moveSpeed.z));
 }
 
+void Player::IsKick()
+{
+	m_direction.Normalize();
+	float matchRate = Dot(m_direction, m_toBallVec);
+	if (matchRate > 0.7f) {
+		m_kickFlag = true;
+	}
+	else {
+		m_kickFlag = false;
+	}
+}
+
 void Player::KickBall()
 {
 	/// @brief ボールにキック方向とキック力を伝えて動かす
@@ -209,10 +221,13 @@ void Player::Update()
 	
 	/// @brief ボールとの距離が一定以下で蹴れる
 	if (m_ballDistance < KICK_POSSIBLE_DISTANCE) {
+		IsKick();
+	}
+	if (m_kickFlag == true) {
 		if (g_pad[m_myNumber]->IsTrigger(enButtonA)) {
-			
+
 			//キックエフェクト再生処理//
-			
+
 			//キックエフェクト拡大率の設定
 			Vector3 efcScale = { 25.0f,25.0f,1.0f };
 			m_kickEffect.Play();
@@ -224,8 +239,6 @@ void Player::Update()
 
 			KickBall();
 		}
-	}
-	else {
 	}
 
 	/// @brief ボールとの距離が一定以下で吹き飛ぶ
@@ -286,6 +299,6 @@ void Player::Update()
 
 void Player::BallDistanceCalculation()
 {
-	Vector3 vec = m_ball->GetPosition() - m_position;
-	m_ballDistance = vec.Length();
+	m_toBallVec = m_ball->GetPosition() - m_position;
+	m_ballDistance = m_toBallVec.Length();
 }
