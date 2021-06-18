@@ -2,6 +2,11 @@
 #include "Player.h"
 
 namespace {
+	//キック時のエフェクト用定数
+	const char16_t* KICKEFFECT_FILEPATH = u"Assets/effect/kick.efk";				//キックエフェクトのファイルパス
+	//ガード時のエフェクト
+	const char16_t* GUARDEFFECT_FILEPATH = u"Assets/effect/shield.efk";				//ガード時のエフェクトファイルパス
+
 	/// @brief キック可能な距離
 	const float KICK_POSSIBLE_DISTANCE = 200.0f;
 	/// @brief ガード可能な距離
@@ -36,7 +41,12 @@ namespace {
 
 Player::Player()
 {
+
 	//プレイヤーの初期状態を設定
+	//キック時のエフェクトを初期化
+	m_kickEffect.Init(KICKEFFECT_FILEPATH);
+	//ガード時のエフェクトを初期化
+	m_guardEffect.Init(GUARDEFFECT_FILEPATH);
 	m_moveVelocity = 0.9f;
 	m_kickPower = 5.0f;
 	m_gravity = 5.0f;
@@ -200,6 +210,18 @@ void Player::Update()
 	/// @brief ボールとの距離が一定以下で蹴れる
 	if (m_ballDistance < KICK_POSSIBLE_DISTANCE) {
 		if (g_pad[m_myNumber]->IsTrigger(enButtonA)) {
+			
+			//キックエフェクト再生処理//
+			
+			//キックエフェクト拡大率の設定
+			Vector3 efcScale = { 25.0f,25.0f,1.0f };
+			m_kickEffect.Play();
+			m_kickEffect.SetPosition(m_position);
+			m_kickEffect.SetRotation(m_qRot);
+			m_kickEffect.SetScale(efcScale);
+
+			m_kickEffect.Update();
+
 			KickBall();
 		}
 	}
@@ -217,11 +239,24 @@ void Player::Update()
 	}
 	else {
 		m_guard = false;
+		m_guardEffectCouter = 0;
 	}
 
 	/// @brief ガード可能ならガードの処理
 	if (m_guard == true) {
 		Guard();
+		
+		//シールドエフェクト発生処理//
+		//カウンターに値を加算
+		m_guardEffectCouter += 1;
+		//規定フレーム毎にエフェクトを発生
+		if (m_guardEffectCouter == 1) {
+			m_guardEffect.Play();
+		}
+		if (m_guardEffectCouter % 20 == 19) {
+			m_guardEffect.Play();
+		}
+
 	}
 
 	/// @brief 自分に当たるスポットライトの位置と方向を設定
@@ -238,6 +273,15 @@ void Player::Update()
 
 	m_skinModelRender->SetPosition(m_position);
 	m_skinModelRender->SetRotation(m_qRot);
+
+
+	//ガード時のエフェクトの座標などを反映
+	Vector3 efcGuardPos = m_position;
+	efcGuardPos.y += 80.0f;
+	m_guardEffect.SetPosition(efcGuardPos);
+	m_guardEffect.SetScale({ 60.0f,60.0f,60.0f });
+	m_guardEffect.Update();
+
 }
 
 void Player::BallDistanceCalculation()

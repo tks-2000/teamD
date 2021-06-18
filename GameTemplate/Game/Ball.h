@@ -19,7 +19,7 @@ public:
 
 	/// @brief 回転の処理
 	void Rotation();
-
+	/// @brief 軌跡用エフェクトの再生処理
 	void PlayTrackEffect();
 
 	/// @brief ボールの移動を開始する
@@ -101,6 +101,6 @@ private:
 	SkinModelRender* m_skinModelRender = nullptr;
 	
 	/// @brief 軌跡用エフェクト
-	Effect ballTrack;
+	Effect m_ballTrack;
 };
 

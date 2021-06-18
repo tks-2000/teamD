@@ -70,6 +70,11 @@ void EffectEngine::Stop(int effectHandle)
 	m_manager->StopEffect(effectHandle);
 }
 
+void EffectEngine::AllStop()
+{
+	m_manager->StopAllEffects();
+}
+
 
 void EffectEngine::Update(float deltaTime)
 {

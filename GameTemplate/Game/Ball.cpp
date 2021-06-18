@@ -5,22 +5,23 @@ namespace
 {
 	//軌跡エフェクト関係
 	const char16_t* TRACKEFFECT_PL01_FILEPATH = u"Assets/effect/balltrack.efk";	//軌跡エフェクトのファイルパス
-	const Vector3 TRACKEFFECT_SCALE_MAX = { 30.0f,30.0f,1.0f };				//エフェクトの最大サイズ
+	const Vector3 TRACKEFFECT_SCALE_MAX = { 30.0f,30.0f,1.0f };					//エフェクトの最大サイズ
 	const Vector3 TRACKEFFECT_SCALE_MIN = { 3.0f,3.0f,1.0f };					//エフェクトの最小サイズ	
 	const float TRACKEFFECT_BASE_MAX = 30.0f;									//補間率を決めるための最大基準値
 	const float TRACKEFFECT_PLAY_MIN = 10.0f;									//軌跡を表示し始める速度
+	const int TRACKEFFECT_LERP_POW = 2;											//この値が大きくなるとボールの速度低下時に軌跡エフェクトが小さくなりやすい
 }
 
 Ball::Ball()
 {
-
 	//軌跡用エフェクトのロード
-	ballTrack.Init(TRACKEFFECT_PL01_FILEPATH);
+	m_ballTrack.Init(TRACKEFFECT_PL01_FILEPATH);
 
 	m_position.y += 50.0f;
 
 	m_moveFlag = true;
 	m_position.y = 1000.0f;
+
 
 	m_scale = { 0.5f,0.5f,0.5f };
 	m_gravity = 5.0f;
@@ -43,8 +44,8 @@ bool Ball::Start()
 
 void Ball::Move()
 {
-	m_moveSpeed += m_moveDirection * m_moveVelocity;
-	m_moveSpeed = m_moveSpeed * m_friction;
+	m_moveSpeed = m_moveDirection * m_moveVelocity;
+	
 	m_moveSpeed.y -= m_gravity;
 
 	m_position = m_charaCon.Execute(m_moveSpeed,1.0f);
@@ -111,17 +112,19 @@ void Ball::PlayTrackEffect()
 		maxRate = 1.0f;
 	}
 
-	//得られた割合を補間率に反映(2乗している)
-	scaleRate = maxRate * maxRate;
+	//得られた割合を補間率に反映(累乗している)
+	for (int pow = 1; pow < TRACKEFFECT_LERP_POW; pow++) {
+		maxRate *= maxRate;
+	}
+	scaleRate = maxRate;
 
 	//scaleRateの値に応じてエフェクト拡大率を線形補完する
 	efcScale.Lerp(scaleRate, TRACKEFFECT_SCALE_MIN, TRACKEFFECT_SCALE_MAX);
 
 	//速度が一定値以上のとき軌跡エフェクトを発生
 	if (m_moveVelocity > TRACKEFFECT_PLAY_MIN) {
-		ballTrack.Play();
-
-		ballTrack.SetScale(efcScale);
+		m_ballTrack.Play();
+		m_ballTrack.SetScale(efcScale);
 	}
 
 }
@@ -144,12 +147,12 @@ void Ball::Update()
 	m_skinModelRender->SetRotation(m_qRot);
 	m_skinModelRender->SetScale(m_scale);
 
-	//m_lig->SetPointLighitPos(m_position);
+	m_lig->SetPointLighitPos(m_position);
 	
 	//軌跡用エフェクト座標をボールに合わせる
-	ballTrack.SetPosition(modelpos);
+	m_ballTrack.SetPosition(modelpos);
 	//軌跡用エフェクトの更新
-	ballTrack.Update();
+	m_ballTrack.Update();
 
 	m_lig->SetPointLighitPos(modelpos);
 

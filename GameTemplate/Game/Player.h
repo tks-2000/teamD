@@ -1,8 +1,10 @@
 #pragma once
+#include "effect/Effect.h"
 
 class Lighting;
 class SkinModelRender;
 class Ball;
+class Effect;
 
 class Player : public IGameObject
 {
@@ -89,6 +91,10 @@ private:
 	SkinModelRender* m_skinModelRender = nullptr;
 	/// @brief ボール
 	Ball* m_ball = nullptr;
-
+	/// @brief ボールをキックした時のエフェクト
+	Effect m_kickEffect;
+	/// @brief ガード時のエフェクト
+	Effect m_guardEffect;
+	int m_guardEffectCouter = 0;
 };
 
