@@ -6,7 +6,9 @@ Lighting::Lighting()
 {
 	InitDirectionLight();
 	InitPointLight();
-	InitSpotLight();
+	for (int spotLigNo = 0; spotLigNo < SPOT_LIGHT_SUM; spotLigNo++) {
+		InitSpotLight(spotLigNo);
+	}
 	InitHemiSphereLight();
 
 	//視点の位置
@@ -109,58 +111,58 @@ void Lighting::MovePointLight()
 	}
 }
 
-void Lighting::InitSpotLight()
+void Lighting::InitSpotLight(int num)
 {
 	//スポットライトの座標
-	m_light.spotLight.position.x = 0.0f;
-	m_light.spotLight.position.y = 1000.0f;
-	m_light.spotLight.position.z = 0.0f;
+	m_light.spotLight[num].position.x = 0.0f;
+	m_light.spotLight[num].position.y = 1000.0f;
+	m_light.spotLight[num].position.z = 0.0f;
 
 	//スポットライトのカラー
-	m_light.spotLight.color.x = 1.0f;
-	m_light.spotLight.color.y = 1.0f;
-	m_light.spotLight.color.z = 1.0f;
+	m_light.spotLight[num].color.x = 1.0f;
+	m_light.spotLight[num].color.y = 1.0f;
+	m_light.spotLight[num].color.z = 1.0f;
 
 	//スポットライトの方向
-	m_light.spotLight.direction.x = 0.0f;
-	m_light.spotLight.direction.y = -1.0f;
-	m_light.spotLight.direction.z = 0.0f;
+	m_light.spotLight[num].direction.x = 0.0f;
+	m_light.spotLight[num].direction.y = -1.0f;
+	m_light.spotLight[num].direction.z = 0.0f;
 	//正規化する。
-	m_light.spotLight.direction.Normalize();
+	m_light.spotLight[num].direction.Normalize();
 
 	//射出範囲を設定
-	m_light.spotLight.Range = 300.0f;
+	m_light.spotLight[num].Range = 300.0f;
 
 	//射出角度を設定
-	m_light.spotLight.angle = Math::DegToRad(10.0f);
+	m_light.spotLight[num].angle = Math::DegToRad(10.0f);
 }
 
-void Lighting::MoveSpotLight()
+void Lighting::MoveSpotLight(int num)
 {
 	//左スティック入力でスポットライトの座標を操作
-	m_light.spotLight.position.x -= g_pad[1]->GetLStickXF();
+	m_light.spotLight[num].position.x -= g_pad[1]->GetLStickXF();
 	if (g_pad[0]->IsPress(enButtonB)) {
-		m_light.spotLight.position.y += g_pad[1]->GetLStickYF();
+		m_light.spotLight[num].position.y += g_pad[1]->GetLStickYF();
 	}
 	else {
-		m_light.spotLight.position.z -= g_pad[1]->GetLStickYF();
+		m_light.spotLight[num].position.z -= g_pad[1]->GetLStickYF();
 	}
 	if (g_pad[0]->IsPress(enButtonA)) {
-		m_light.spotLight.position = Vector3::Zero;
+		m_light.spotLight[num].position = Vector3::Zero;
 	}
 }
 
-void Lighting::RotationSpotLight()
+void Lighting::RotationSpotLight(int num)
 {
 	//右スティック入力でスポットライトの方向を操作
 	Quaternion qRotY;
-	qRotY.SetRotationY(g_pad[1]->GetRStickXF() * 0.01f);
-	qRotY.Apply(m_light.spotLight.direction);
+	qRotY.SetRotationY(g_pad[num]->GetRStickXF() * 0.01f);
+	qRotY.Apply(m_light.spotLight[num].direction);
 	Vector3 rotAxis;
-	rotAxis.Cross(g_vec3AxisY, m_light.spotLight.direction);
+	rotAxis.Cross(g_vec3AxisY, m_light.spotLight[num].direction);
 	Quaternion qRotX;
 	qRotX.SetRotation(rotAxis,-g_pad[1]->GetRStickYF() * 0.01f);
-	qRotX.Apply(m_light.spotLight.direction);
+	qRotX.Apply(m_light.spotLight[num].direction);
 }
 
 void Lighting::InitHemiSphereLight()

@@ -1,6 +1,10 @@
 /*!
  * @brief	シンプルなモデルシェーダー。
  */
+ ///////////////////////////////////////////////
+ //定数
+ ///////////////////////////////////////////////
+static const int NUM_SPOT_LIGHT = 4;
 ////////////////////////////////////////////////
 // 構造体
 ////////////////////////////////////////////////
@@ -73,7 +77,7 @@ cbuffer LightCb : register(b1)
 {
 	DirectionLight directionLight;		//ディレクションライト
 	PointLight pointLight;				//ポイントライト
-	SpotLight spotLight;				//スポットライト
+	SpotLight spotLight[NUM_SPOT_LIGHT];				//スポットライト
 	HemiSphereLight hemiSphereLight;	//半球ライト
 	float3 eyePos;						//視点の位置
 	float3 ambientLight;				//環境光
@@ -206,28 +210,32 @@ float4 PSMain( SPSIn psIn ) : SV_Target0
 	float3 finalPointLig = diffPoint + specPoint;
 
 	//スポットライト用
+
+	float3 finalSpotLig = {0.0f,0.0f,0.0f};
+	float aAffect[NUM_SPOT_LIGHT];
+	for(int spLigNo = 0; spLigNo < NUM_SPOT_LIGHT; spLigNo++){
 	//サーフェイスに入射するポイントライトの光の向きを計算する。
-	float3 sLigDir = psIn.worldPos - spotLight.position;
+	float3 sLigDir = psIn.worldPos - spotLight[spLigNo].position;
 	//正規化する。
 	sLigDir = normalize(sLigDir);
 
 	//減衰なしのランバート拡散反射光を計算する。
 	float3 diffSpot =  CalculateLambertDiffuse(
 		sLigDir,
-		spotLight.color,
+		spotLight[spLigNo].color,
 		psIn.normal
 	);
 
 	//減衰なしのフォン鏡面反射光を計算する。
 	float3 specSpot = CalculatePhoneSpecular(
 		sLigDir,
-		spotLight.color,
+		spotLight[spLigNo].color,
 		psIn.worldPos,
 		psIn.normal
 	);
 
 	//距離による影響率を計算する。
-	float sAffect = CalculateImpactRate(spotLight.position,spotLight.Range,psIn.worldPos);
+	float sAffect = CalculateImpactRate(spotLight[spLigNo].position,spotLight[spLigNo].Range,psIn.worldPos);
 
 	//拡散反射光と鏡面反射光に減衰率を乗算して影響を弱める。
 	diffSpot *= sAffect;
@@ -237,23 +245,23 @@ float4 PSMain( SPSIn psIn ) : SV_Target0
 
 	//入射光と射出方向の角度を求める。
 	//dot()を利用して内積を求める。
-	float sAngle = dot(sLigDir,spotLight.direction);
+	float sAngle = dot(sLigDir,spotLight[spLigNo].direction);
 	//dot()で求めた値をacosに渡して角度を求める。
 	sAngle = acos(sAngle);
 
 	//角度による影響率を求める。
 	//角度に比例して小さくなっていく影響率を計算する。
-	float aAffect = 1.0f - 1.0f / spotLight.angle * sAngle;
+	aAffect[spLigNo] = 1.0f - 1.0f / spotLight[spLigNo].angle * sAngle;
 	//影響力がマイナスにならないように補正をかける。
-	aAffect = max(0.0f,aAffect);
+	aAffect[spLigNo] = max(0.0f,aAffect[spLigNo]);
 	//影響の仕方を指数関数的にする。
-	aAffect = pow(aAffect,0.5f);
+	aAffect[spLigNo] = pow(aAffect[spLigNo],0.5f);
 
-	diffSpot *= aAffect;
-	specSpot *= aAffect;
+	diffSpot *= aAffect[spLigNo];
+	specSpot *= aAffect[spLigNo];
 
-	float3 finalSpotLig = diffSpot + specSpot;
-	
+	finalSpotLig += diffSpot + specSpot;
+	}
 
 
 
@@ -268,17 +276,20 @@ float4 PSMain( SPSIn psIn ) : SV_Target0
 		psIn.normal,
 		psIn.normalInView.z
 	);
-
-	float3 spotLim = CalculateRimlight(
-		spotLight.direction,
-		spotLight.color,
-		psIn.normal,
-		psIn.normalInView.z
-	);
-
 	lig += dirLim;
-	spotLim *= aAffect;
-	lig += spotLim;
+
+	for(int spLigNo2 = 0; spLigNo2 < NUM_SPOT_LIGHT; spLigNo2++){
+		float3 spotLim = CalculateRimlight(
+			spotLight[spLigNo2].direction,
+			spotLight[spLigNo2].color,
+			psIn.normal,
+			psIn.normalInView.z
+		);
+		spotLim *= aAffect[spLigNo2];
+		lig += spotLim;
+	}
+	
+	
 
 	//半球ライトを計算する。
 	//サーフェイスの法線と地面の法線との内積を計算する。
