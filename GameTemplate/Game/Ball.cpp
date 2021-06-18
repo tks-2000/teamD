@@ -43,7 +43,8 @@ bool Ball::Start()
 
 void Ball::Move()
 {
-	m_moveSpeed = m_moveDirection * m_moveVelocity;
+	m_moveSpeed += m_moveDirection * m_moveVelocity;
+	m_moveSpeed = m_moveSpeed * m_friction;
 	m_moveSpeed.y -= m_gravity;
 
 	m_position = m_charaCon.Execute(m_moveSpeed,1.0f);

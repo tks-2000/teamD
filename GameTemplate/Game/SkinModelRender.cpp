@@ -3,7 +3,7 @@
 
 SkinModelRender::SkinModelRender()
 {
-	m_lig = FindGO<Lighting>("Lighting");
+	m_lig = FindGO<Lighting>(LIGHTING_NAME);
 }
 
 SkinModelRender::~SkinModelRender()

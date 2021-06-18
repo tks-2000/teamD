@@ -30,32 +30,38 @@ namespace {
 	const float DAMAGE_FRICYION = 0.001f;
 	/// @brief ダメージを受けて復帰するのにかかる時間
 	const float DAMAGE_RETURN_TIME = 100.0f;
+	/// @brief プレイヤーモデルの表示優先度
+	const int PRIORITY = 1;
 }
 
 Player::Player()
 {
+	//プレイヤーの初期状態を設定
 	m_moveVelocity = 0.9f;
-	m_kickPower = 10.0f;
+	m_kickPower = 5.0f;
 	m_gravity = 5.0f;
 	m_charaCon.Init(PLAYER_RADIUS, PLAYER_HEIGHT, m_position);
 }
 
 Player::~Player()
 {
+	//プレイヤーモデルを削除
 	DeleteGO(m_skinModelRender);
 }
 
 bool Player::Start()
 {
+	//必要なデータを取得
 	m_lig = FindGO<Lighting>(LIGHTING_NAME);
 	m_ball = FindGO<Ball>(BALL_NAME);
-	m_skinModelRender = NewGO<SkinModelRender>(0);
+	m_skinModelRender = NewGO<SkinModelRender>(PRIORITY);
 	m_skinModelRender->Init(UNITYCHAN_MODEL);
 	return true;
 }
 
 void Player::SetPlayerNumber(int num)
 {
+	//受け取った番号に応じて自分が何Pかを設定する
 	m_myNumber = num;
 	switch (num)
 	{
@@ -86,19 +92,22 @@ void Player::SetPlayerNumber(int num)
 
 void Player::Move()
 {
-	Vector3 m_returnPos = m_position;
-	//スティック入力でカメラ方向に移動
+	/// @brief スティック入力でカメラ方向に移動
 	m_moveSpeed += g_camera3D->GetRight()* m_Lstickx;
 	m_moveSpeed += g_camera3D->GetForward()* m_Lsticky;
 	
+	/// @brief 重力を加える
 	m_moveSpeed.y -= m_gravity;
-
+	
+	
+	/// @brief ダメージ中かどうかで摩擦力を変える
 	if (m_damage == false) {
 		m_friction = NORMAL_FRICTION;
 	}
 	else {
 		m_friction = DAMAGE_FRICYION;
 	}
+	/// @brief 移動速度に摩擦力を加える
 	m_moveSpeed -= m_moveSpeed * m_friction;
 
 	if (m_damage == false && m_guard == false && m_moveSpeed.x != FLOAT_0 || m_moveSpeed.z != FLOAT_0) {
@@ -107,6 +116,7 @@ void Player::Move()
 	
 	m_moveSpeed *= m_moveVelocity;
 
+	/// @brief プレイヤーが落下したらリスポーンする
 	if (m_position.y < FALLING_HEIGHT) {
 		ReSpawn();
 	}
@@ -116,6 +126,7 @@ void Player::Move()
 
 void Player::Rotation()
 {
+	/// @brief ダメージ中、ガード中、動いていないときは回転しない
 	if (m_damage == true || m_guard == true || m_moveSpeed.x == FLOAT_0 && m_moveSpeed.z == FLOAT_0) {
 		return;
 	}
@@ -124,7 +135,7 @@ void Player::Rotation()
 
 void Player::KickBall()
 {
-
+	/// @brief ボールにキック方向とキック力を伝えて動かす
 	m_ball->SetMoveDirection(m_direction);
 	m_ball->Acceleration(m_kickPower);
 	m_ball->SetBallLightColor(m_playerColor);
@@ -135,6 +146,7 @@ void Player::KickBall()
 
 void Player::BallCollide()
 {
+	/// @brief ボールと自分の位置から吹き飛ばされる方向を決める
 	Vector3 repulsiveForce = m_position - m_ball->GetPosition();
 	repulsiveForce.y = FLOAT_0;
 	repulsiveForce.Normalize();
@@ -142,8 +154,7 @@ void Player::BallCollide()
 		repulsiveForce *= m_ball->GetVelocity() * FLOAT_2;
 		repulsiveForce.y = m_ball->GetVelocity() * FLOAT_1;
 		m_moveSpeed = repulsiveForce * FLOAT_2;
-		m_ball->BounceX();
-		m_ball->BounceZ();
+		m_ball->SetMoveDirection(repulsiveForce * FLOAT_MINUS_1);
 		m_damage = true;
 	}
 	
@@ -151,25 +162,27 @@ void Player::BallCollide()
 
 void Player::Guard()
 {
+	/// @brief ガード中は移動速度を下げる
 	m_moveSpeed.x /= FLOAT_2;
 	m_moveSpeed.z /= FLOAT_2;
 	if (m_ballDistance < GUARD_DISTANCE) {
 		Vector3 repulsiveForce = m_position - m_ball->GetPosition();
 		repulsiveForce.Normalize();
 		repulsiveForce *= m_ball->GetVelocity();
+		repulsiveForce.y = m_ball->GetVelocity() * FLOAT_01;
 		m_moveSpeed += repulsiveForce;
-		float downVelocity = m_ball->GetVelocity();
 		m_ball->SetVelocity(m_ball->GetVelocity() / FLOAT_2);
-		m_ball->BounceX();
-		m_ball->BounceZ();
+		m_ball->SetMoveDirection(repulsiveForce * FLOAT_MINUS_1);
 	}
 }
 
 void Player::Update()
 {
+	/// @brief スティック入力を受け取る
 	m_Lstickx = g_pad[m_myNumber]->GetLStickXF();
 	m_Lsticky = g_pad[m_myNumber]->GetLStickYF();
 
+	/// @brief ダメージ中はスティック入力を受け付けない
 	if (m_damage == true) {
 		m_Lstickx = FLOAT_0;
 		m_Lsticky = FLOAT_0;
@@ -184,6 +197,7 @@ void Player::Update()
 	Move();
 	Rotation();
 	
+	/// @brief ボールとの距離が一定以下で蹴れる
 	if (m_ballDistance < KICK_POSSIBLE_DISTANCE) {
 		if (g_pad[m_myNumber]->IsTrigger(enButtonA)) {
 			KickBall();
@@ -191,9 +205,13 @@ void Player::Update()
 	}
 	else {
 	}
+
+	/// @brief ボールとの距離が一定以下で吹き飛ぶ
 	if (m_ballDistance < COLLIDE_DISTANCE) {
 		BallCollide();
 	}
+
+	/// @brief LB1を押している間ガード
 	if (g_pad[m_myNumber]->IsPress(enButtonLB1)) {
 		m_guard = true;
 	}
@@ -201,17 +219,20 @@ void Player::Update()
 		m_guard = false;
 	}
 
+	/// @brief ガード可能ならガードの処理
 	if (m_guard == true) {
 		Guard();
 	}
 
-	Vector3 pos = m_startPos;
+	/// @brief 自分に当たるスポットライトの位置と方向を設定
+	Vector3 pos = m_position;
 	pos.y = SPOT_LIGHT_HEIGHT;
 	m_lig->SetSpotLightPos(m_myNumber, pos);
 
 	Vector3 dir = m_position - m_lig->GetSpotLightPos(m_myNumber);
 	m_lig->SetSpotLightDirection(m_myNumber,dir);
 
+	/// @brief キャラクターコントローラーで座標を決める
 	m_position = m_charaCon.Execute(m_moveSpeed, FLOAT_1);
 	
 

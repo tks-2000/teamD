@@ -19,6 +19,7 @@ namespace {
 	const float FLOAT_0 = 0.0f;
 	const float FLOAT_1 = 1.0f;
 	const float FLOAT_2 = 2.0f;
+	const float FLOAT_01 = 0.1f;
 	const float FLOAT_MINUS_1 = -1.0f;
 
 	const Vector3 RED = { 5.0f,0.0f,0.0f };

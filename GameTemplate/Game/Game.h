@@ -29,9 +29,5 @@ private:
 	/// @brief É{Å[Éã
 	Ball* m_ball = nullptr;
 
-	SkinModelRender* m_skinModelRender = nullptr;
-	SkinModelRender* m_skinModelRender2 = nullptr;
-	SkinModelRender* m_skinModelRender3 = nullptr;
-	SkinModelRender* m_bg = nullptr;
 };
 

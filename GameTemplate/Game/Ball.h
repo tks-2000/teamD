@@ -82,6 +82,8 @@ private:
 	Vector3 m_moveDirection = Vector3::Zero;
 	/// @brief ボールの速度
 	float m_moveVelocity = 0.0f;
+
+	float m_friction = 0.0f;
 	/// @brief ボールの移動フラグ
 	bool m_moveFlag = false;
 	/// @brief ボールの回転角度
