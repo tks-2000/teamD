@@ -60,9 +60,9 @@ private:
 	Vector3 m_direction = Vector3::Zero;
 	/// @brief プレイヤーのスタート時の座標
 	Vector3 m_startPos = Vector3::Zero;
-
+	/// @brief プレイヤーのシンボルカラー
 	Vector3 m_playerColor = Vector3::Zero;
-
+	/// @brief プレイヤーにかかる摩擦力
 	float m_friction = 0.0f;
 	
 	/// @brief ボールとの距離

@@ -2,6 +2,8 @@
 #include "math.h"
 #include "stdafx.h"
 
+const int SPOT_LIGHT_SUM = 4;
+
 /// @brief ディレクションライト構造体
 struct DirectionLight
 {
@@ -50,7 +52,7 @@ struct Light
 {
 	DirectionLight directionLight;			//ディレクションライト
 	PointLight pointLight;					//ポイントライト
-	SpotLight spotLight;					//スポットライト
+	SpotLight spotLight[SPOT_LIGHT_SUM];					//スポットライト
 	HemiSphereLight hemiSphereLight;		//半球ライト
 	Vector3 eyePos = Vector3::Zero;			//視点の位置
 	float pad0 = 0.0f;						//パディング
@@ -66,6 +68,7 @@ public:
 	void Update();
 
 
+	Light GetLight() { return m_light; }
 	
 	/// @brief ライトの構造体を入手
 	/// @return ライト構造体のアドレス
@@ -80,7 +83,7 @@ public:
 	Vector3 GetDirectionLightDirection() { return m_light.directionLight.direction; }
 
 	/// @brief ディレクションライトの方向を設定
-	/// @param dirLigVec ディレクションライトに設定したい方向
+	/// @param dirLigVec ディレクションライトに設定する方向
 	void SetDirectionLightDirection(Vector3 dirLigVec) { m_light.directionLight.direction = dirLigVec; m_light.directionLight.direction.Normalize(); }
 
 	void RotationDirectionLight();
@@ -95,28 +98,39 @@ public:
 	Vector3 GetPointLightPos() { return m_light.pointLight.position; }
 
 	/// @brief ポイントライトの座標を設定
-	/// @param pos ポイントライトに設定したい座標
+	/// @param pos ポイントライトに設定する座標
 	void SetPointLighitPos(Vector3 pos) { m_light.pointLight.position = pos; }
 
-
+	/// @brief ポイントライトのカラーを設定
+	/// @param color ポイントライトに設定する座標
 	void SetPointLightColor(Vector3 color) { m_light.pointLight.color = color; }
 	
 	/// @brief スポットライトの初期化
-	void InitSpotLight();
+	void InitSpotLight(int num);
 
-	void MoveSpotLight();
+	void MoveSpotLight(int num);
 
-	void RotationSpotLight();
+	void RotationSpotLight(int num);
 
 	/// @brief スポットライトの座標を入手
+	/// @param num 入手するスポットライトの番号
 	/// @return スポットライトの座標
-	Vector3 GetSpotLightPos() { return m_light.spotLight.position; }
+	Vector3 GetSpotLightPos(int num) { return m_light.spotLight[num].position; }
 
 	/// @brief スポットライトの座標を設定
-	/// @param pos スポットライトに設定したい座標
-	void SetSpotLightPos(Vector3 pos) { m_light.spotLight.position = pos; }
+	/// @param num 設定したいスポットライトの番号
+	/// @param pos スポットライトに設定する座標
+	void SetSpotLightPos(int num,Vector3 pos) { m_light.spotLight[num].position = pos; }
 
-	void SetSpotLightDirection(Vector3 dir) { m_light.spotLight.direction = dir; m_light.spotLight.direction.Normalize(); }
+	/// @brief スポットライトのカラーを設定
+	/// @param num 設定したいスポットライトの番号
+	/// @param color スポットライトに設定するカラー
+	void SetSpotLightColor(int num, Vector3 color) { m_light.spotLight[num].color = color; }
+
+	/// @brief スポットライトの方向を設定
+	/// @param num 設定したいスポットライトの番号
+	/// @param dir スポットライトに設定する方向
+	void SetSpotLightDirection(int num,Vector3 dir) { m_light.spotLight[num].direction = dir; m_light.spotLight[num].direction.Normalize(); }
 
 	/// @brief 半球ライトの初期化
 	void InitHemiSphereLight();

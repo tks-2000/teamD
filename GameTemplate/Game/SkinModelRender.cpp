@@ -3,7 +3,7 @@
 
 SkinModelRender::SkinModelRender()
 {
-	
+	m_lig = FindGO<Lighting>("Lighting");
 }
 
 SkinModelRender::~SkinModelRender()
@@ -24,6 +24,18 @@ void SkinModelRender::Init(const char* modelFilePath, Light* lig)
 
 	m_modelInitData.m_expandConstantBuffer = lig;
 	m_modelInitData.m_expandConstantBufferSize = sizeof(*lig);
+
+	//‰Šú‰»î•ñ‚Åƒ‚ƒfƒ‹‚ğ‰Šú‰»‚·‚é
+	m_model.Init(m_modelInitData);
+}
+
+void SkinModelRender::Init(const char* modelFilePath)
+{
+	m_modelInitData.m_tkmFilePath = modelFilePath;
+	m_modelInitData.m_fxFilePath = "Assets/shader/model.fx";
+
+	m_modelInitData.m_expandConstantBuffer = m_lig->GetLightAddress();
+	m_modelInitData.m_expandConstantBufferSize = sizeof(m_lig->GetLight());
 
 	//‰Šú‰»î•ñ‚Åƒ‚ƒfƒ‹‚ğ‰Šú‰»‚·‚é
 	m_model.Init(m_modelInitData);

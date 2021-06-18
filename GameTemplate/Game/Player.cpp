@@ -2,20 +2,39 @@
 #include "Player.h"
 
 namespace {
-	float KICK_POSSIBLE_DISTANCE = 200.0f;
-	float GUARD_DISTANCE = 120.0f;
-	float COLLIDE_DISTANCE = 80.0f;
-	float FALLING_HEIGHT = -1000.0f;
-	Vector3 PLAYER1_STARTPOS = { -600.0f,200.0f,600.0f };
-	Vector3 PLAYER2_STARTPOS = { 600.0f,200.0f,600.0f };
-	Vector3 PLAYER3_STARTPOS = { -600.0f,200.0f,-600.0f };
-	Vector3 PLAYER4_STARTPOS = { 600.0f,200.0f,-600.0f };
-	
 	//キック時のエフェクト用定数
 	const char16_t* KICKEFFECT_FILEPATH = u"Assets/effect/kick.efk";				//キックエフェクトのファイルパス
 	//ガード時のエフェクト
 	const char16_t* GUARDEFFECT_FILEPATH = u"Assets/effect/shield.efk";				//ガード時のエフェクトファイルパス
 
+	/// @brief キック可能な距離
+	const float KICK_POSSIBLE_DISTANCE = 200.0f;
+	/// @brief ガード可能な距離
+	const float GUARD_DISTANCE = 120.0f;
+	/// @brief ボールと接触する距離
+	const float COLLIDE_DISTANCE = 80.0f;
+	/// @brief 落下扱いになる高さ
+	const float FALLING_HEIGHT = -1000.0f;
+	/// @brief 1Pの初期位置
+	const Vector3 PLAYER1_STARTPOS = { -600.0f,200.0f,600.0f };
+	/// @brief 2Pの初期位置
+	const Vector3 PLAYER2_STARTPOS = { 600.0f,200.0f,600.0f };
+	/// @brief 3Pの初期位置
+	const Vector3 PLAYER3_STARTPOS = { -600.0f,200.0f,-600.0f };
+	/// @brief 4Pの初期位置
+	const Vector3 PLAYER4_STARTPOS = { 600.0f,200.0f,-600.0f };
+	/// @brief スポットライトの高さ
+	const float SPOT_LIGHT_HEIGHT = 800.0f;
+	/// @brief プレイヤーの半径
+	const float PLAYER_RADIUS = 20.0f;
+	/// @brief プレイヤーの高さ
+	const float PLAYER_HEIGHT = 50.0f;
+	/// @brief 通常時の摩擦力
+	const float NORMAL_FRICTION = 0.01f;
+	/// @brief ダメージ中の摩擦力
+	const float DAMAGE_FRICYION = 0.001f;
+	/// @brief ダメージを受けて復帰するのにかかる時間
+	const float DAMAGE_RETURN_TIME = 100.0f;
 }
 
 Player::Player()
@@ -24,10 +43,11 @@ Player::Player()
 	m_kickEffect.Init(KICKEFFECT_FILEPATH);
 	//ガード時のエフェクトを初期化
 	m_guardEffect.Init(GUARDEFFECT_FILEPATH);
-
+	
+	m_moveVelocity = 0.9f;
 	m_kickPower = 10.0f;
 	m_gravity = 5.0f;
-	m_charaCon.Init(20.0f, 50.0f, m_position);
+	m_charaCon.Init(PLAYER_RADIUS, PLAYER_HEIGHT, m_position);
 }
 
 Player::~Player()
@@ -37,10 +57,10 @@ Player::~Player()
 
 bool Player::Start()
 {
-	m_lig = FindGO<Lighting>("Lighting");
-	m_ball = FindGO<Ball>("Ball");
+	m_lig = FindGO<Lighting>(LIGHTING_NAME);
+	m_ball = FindGO<Ball>(BALL_NAME);
 	m_skinModelRender = NewGO<SkinModelRender>(0);
-	m_skinModelRender->Init("Assets/modelData/unityChan.tkm", m_lig->GetLightAddress());
+	m_skinModelRender->Init(UNITYCHAN_MODEL);
 	return true;
 }
 
@@ -70,6 +90,8 @@ void Player::SetPlayerNumber(int num)
 	m_position = m_startPos;
 	m_charaCon.SetPosition(m_position);
 	
+	m_lig->SetSpotLightColor(m_myNumber, m_playerColor);
+	
 }
 
 void Player::Move()
@@ -82,18 +104,18 @@ void Player::Move()
 	m_moveSpeed.y -= m_gravity;
 
 	if (m_damage == false) {
-		m_friction = 0.01f;
+		m_friction = NORMAL_FRICTION;
 	}
 	else {
-		m_friction = 0.001f;
+		m_friction = DAMAGE_FRICYION;
 	}
 	m_moveSpeed -= m_moveSpeed * m_friction;
 
-	if (m_moveSpeed.x != 0.0f || m_moveSpeed.z != 0.0f) {
+	if (m_damage == false && m_guard == false && m_moveSpeed.x != FLOAT_0 || m_moveSpeed.z != FLOAT_0) {
 		m_direction = m_moveSpeed;
 	}
 	
-	m_moveSpeed *= 0.9f;
+	m_moveSpeed *= m_moveVelocity;
 
 	if (m_position.y < FALLING_HEIGHT) {
 		ReSpawn();
@@ -104,7 +126,7 @@ void Player::Move()
 
 void Player::Rotation()
 {
-	if (m_damage == true || m_guard == true || m_moveSpeed.x == 0.0f && m_moveSpeed.z == 0.0f) {
+	if (m_damage == true || m_guard == true || m_moveSpeed.x == FLOAT_0 && m_moveSpeed.z == FLOAT_0) {
 		return;
 	}
 	m_qRot.SetRotation(Vector3::AxisY, atan2(m_moveSpeed.x, m_moveSpeed.z));
@@ -124,12 +146,12 @@ void Player::KickBall()
 void Player::BallCollide()
 {
 	Vector3 repulsiveForce = m_position - m_ball->GetPosition();
-	repulsiveForce.y = 0.0f;
+	repulsiveForce.y = FLOAT_0;
 	repulsiveForce.Normalize();
 	if (m_ball->IsMove() == true) {
-		repulsiveForce *= m_ball->GetVelocity() * 2.0f;
-		repulsiveForce.y = m_ball->GetVelocity() * 1.0f;
-		m_moveSpeed = repulsiveForce * 2.0f;
+		repulsiveForce *= m_ball->GetVelocity() * FLOAT_2;
+		repulsiveForce.y = m_ball->GetVelocity() * FLOAT_1;
+		m_moveSpeed = repulsiveForce * FLOAT_2;
 		m_ball->BounceX();
 		m_ball->BounceZ();
 		m_damage = true;
@@ -139,15 +161,15 @@ void Player::BallCollide()
 
 void Player::Guard()
 {
-	m_moveSpeed.x /= 2.0f;
-	m_moveSpeed.z /= 2.0f;
+	m_moveSpeed.x /= FLOAT_2;
+	m_moveSpeed.z /= FLOAT_2;
 	if (m_ballDistance < GUARD_DISTANCE) {
 		Vector3 repulsiveForce = m_position - m_ball->GetPosition();
 		repulsiveForce.Normalize();
 		repulsiveForce *= m_ball->GetVelocity();
 		m_moveSpeed += repulsiveForce;
 		float downVelocity = m_ball->GetVelocity();
-		m_ball->SetVelocity(m_ball->GetVelocity() / 2.0f);
+		m_ball->SetVelocity(m_ball->GetVelocity() / FLOAT_2);
 		m_ball->BounceX();
 		m_ball->BounceZ();
 	}
@@ -159,12 +181,12 @@ void Player::Update()
 	m_Lsticky = g_pad[m_myNumber]->GetLStickYF();
 
 	if (m_damage == true) {
-		m_Lstickx = 0.0f;
-		m_Lsticky = 0.0f;
-		m_damageTime += 1.0f;
+		m_Lstickx = FLOAT_0;
+		m_Lsticky = FLOAT_0;
+		m_damageTime += FLOAT_1;
 	}
-	if (m_damageTime > 100.0f) {
-		m_damageTime = 0.0f;
+	if (m_damageTime > DAMAGE_RETURN_TIME) {
+		m_damageTime = FLOAT_1;
 		m_damage = false;
 	}
 
@@ -173,7 +195,6 @@ void Player::Update()
 	Rotation();
 	
 	if (m_ballDistance < KICK_POSSIBLE_DISTANCE) {
-		m_lig->SetPointLightColor(m_playerColor * 2.0f);
 		if (g_pad[m_myNumber]->IsTrigger(enButtonA)) {
 			
 			//キックエフェクト再生処理//
@@ -219,10 +240,14 @@ void Player::Update()
 
 	}
 
-	Vector3 vec = m_position - m_lig->GetSpotLightPos();
-	m_lig->SetSpotLightDirection(vec);
+	Vector3 pos = m_startPos;
+	pos.y = SPOT_LIGHT_HEIGHT;
+	m_lig->SetSpotLightPos(m_myNumber, pos);
 
-	m_position = m_charaCon.Execute(m_moveSpeed, 1.0f);
+	Vector3 dir = m_position - m_lig->GetSpotLightPos(m_myNumber);
+	m_lig->SetSpotLightDirection(m_myNumber,dir);
+
+	m_position = m_charaCon.Execute(m_moveSpeed, FLOAT_1);
 	
 
 	m_skinModelRender->SetPosition(m_position);

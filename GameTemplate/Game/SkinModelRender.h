@@ -43,12 +43,18 @@ public:
 	/// @param lig ライティング構造体のアドレス
 	void Init(const char* modelFilePath, Light* lig);
 
+	/// @brief モデルの初期化
+	/// @param modelFilePath モデルのファイルパス
+	void Init(const char* modelFilePath);
+
+	/// @brief スキンモデルレンダラーのワールド行列を取得
+	/// @return モデルのワールド行列
 	Matrix GetModelWorldMatrix() { return m_model.GetWorldMatrix(); }
 	
 private:
 	Model m_model;								//モデル
 	ModelInitData m_modelInitData;				//モデルの初期化情報
-	
+	Lighting* m_lig = nullptr;					//ライティング
 
 	Vector3 m_position = Vector3::Zero;			//座標
 	Vector3 m_scale = Vector3::One;				//拡大率

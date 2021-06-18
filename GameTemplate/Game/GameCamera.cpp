@@ -25,7 +25,6 @@ bool GameCamera::Start()
 void GameCamera::Move()
 {
 	m_targetPos = m_backGround->GetPosition();
-
 	m_position = m_targetPos + m_toPosition;
 	m_targetPos.y += 50.0f;
 }
