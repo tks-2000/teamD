@@ -65,6 +65,8 @@
     <ClCompile Include="system\system.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="SpriteRender.cpp" />
+    <ClCompile Include="FontRender.cpp" />
+    <ClCompile Include="GameUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\ExEngine\effect\Effect.h" />
@@ -139,6 +141,8 @@
     <ClInclude Include="system\system.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="SpriteRender.h" />
+    <ClInclude Include="FontRender.h" />
+    <ClInclude Include="GameUI.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\modelData\bg\testmap_tex.DDS" />

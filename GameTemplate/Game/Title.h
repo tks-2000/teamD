@@ -11,6 +11,7 @@ public:
 	void Update();
 
 private:
+	/// @brief ƒ^ƒCƒgƒ‹‚Ìˆê–‡‰æ‘œ
 	SpriteRender* m_titleSprite = nullptr;
 
 };

@@ -3,7 +3,7 @@
 
 Title::Title()
 {
-	m_titleSprite = NewGO<SpriteRender>(1);
+	m_titleSprite = NewGO<SpriteRender>(0);
 	m_titleSprite->Init("Assets/sprite/title.dds", 1280, 720);
 }
 
@@ -20,6 +20,7 @@ bool Title::Start()
 
 void Title::Update()
 {
+	/// @brief Aボタンでゲームスタート
 	if (g_pad[0]->IsTrigger(enButtonA)) {
 		DeleteGO(this);
 		NewGO<Game>(0, "Game");
