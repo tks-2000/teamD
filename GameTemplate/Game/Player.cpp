@@ -36,6 +36,8 @@ namespace {
 	const char16_t* GUARDEFFECT_HIT_FILEPATH = u"Assets/effect/shieldhit.efk";
 	//ガードヒットエフェクトの拡大率
 	const Vector3 GUARDEFFECT_HIT_SCALE = { 17.0f,17.0f,17.0f };
+	//ガードヒットエフェクト発生の距離
+	const float GUARDEFFECT_HIT_DISTANCE = 150.0f;
 
 
 	/// @brief キック可能な距離
@@ -263,7 +265,7 @@ void Player::Guard()
 		m_breakGuard = true;
 	}
 
-	if (m_ballDistance < 220.0f && m_ball->IsMove() == true) {
+	if (m_ballDistance < GUARDEFFECT_HIT_DISTANCE && m_ball->IsMove() == true) {
 		//ガードヒットエフェクトの発生
 		m_shieldHitEffectCounter++;
 		if (m_shieldHitEffectCounter % 30 == 1) {
@@ -323,6 +325,7 @@ void Player::Muteki()
 
 void Player::Update()
 {
+
 	/// @brief スティック入力を受け取る
 	m_Lstickx = g_pad[m_myNumber]->GetLStickXF();
 	m_Lsticky = g_pad[m_myNumber]->GetLStickYF();
@@ -388,7 +391,6 @@ void Player::Update()
 		m_guardDurability = 100.0f;
 	}
 	
-
 	/// @brief ボールとの距離が一定以下で吹き飛ぶ
 	if (m_ballDistance < COLLIDE_DISTANCE && m_dieFlag == false) {
 		BallCollide();
@@ -417,9 +419,33 @@ void Player::Update()
 		}
 	}
 
-	if (g_pad[m_myNumber]->IsTrigger(enButtonLB1)) {
+	//ガードブレイクエフェクト発生処理
+	if (m_breakGuardPrevFrame == false) {
+		if (m_breakGuard == true) {
+			m_guardBreakEffect.Play();
+			Vector3 breakPos = m_position;
+			breakPos.y += 80.0f;
+
+			m_guardBreakEffect.SetPosition(breakPos);
+			m_guardBreakEffect.SetScale(GUARDEFFECT_BREAK_SCALE);
+			m_guardBreakEffect.Update();
+			
+		}
+	}
+	//シールド回復エフェクト発生処理
+	if (m_breakGuardPrevFrame == true) {
+		if (m_breakGuard == false) {
+			m_shieldRepairEffect.Play();
+		}
+	}
+
+
+	//ガード開始時のエフェクト発生処理
+	//ボタン押下時かつガードブレイクしていないときに実行
+	if (g_pad[m_myNumber]->IsTrigger(enButtonLB1) && m_breakGuard == false) {
 		m_guardBeginEffect.Play();
 	}
+
 	if (m_dieFlag == true) {
 		Muteki();
 	}
@@ -452,27 +478,14 @@ void Player::Update()
 	m_guardBeginEffect.SetPosition(efcGuardPos);
 	m_guardBeginEffect.SetScale(GUARDEFFECT_BEGIN_SCALE);
 	m_guardBeginEffect.Update();
+	
+	//シールド回復エフェクトの更新
+	m_shieldRepairEffect.SetPosition(efcGuardPos);
+	m_shieldRepairEffect.SetScale(GUARDEFFECT_REPAIR_SCALE);
+	m_shieldRepairEffect.Update();	
 
-
-	////テスト：シールド破壊エフェクトの発生・更新
-	//if (g_pad[m_myNumber]->IsTrigger(enButtonLeft)) {
-	//	m_guardBreakEffect.Play();
-	//}
-	//m_guardBreakEffect.SetPosition(efcGuardPos);
-	//m_guardBreakEffect.SetScale(GUARDEFFECT_BREAK_SCALE);
-	//m_guardBreakEffect.Update();
-	//
-	////テスト：シールド回復エフェクトの発生・更新
-	//if (g_pad[m_myNumber]->IsTrigger(enButtonRight)) {
-	//	m_shieldRepairEffect.Play();
-	//}
-	//m_shieldRepairEffect.SetPosition(efcGuardPos);
-	//m_shieldRepairEffect.SetScale(GUARDEFFECT_REPAIR_SCALE);
-	//m_shieldRepairEffect.Update();	
-
-	if (g_pad[m_myNumber]->IsTrigger(enButtonRight)) {
-		
-	}
+	//現フレームのガードブレイク状態を記録
+	m_breakGuardPrevFrame = m_breakGuard;
 
 }
 
