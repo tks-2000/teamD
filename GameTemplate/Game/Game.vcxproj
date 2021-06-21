@@ -292,12 +292,15 @@
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
     <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="Ball.cpp" />
+    <ClCompile Include="FontRender.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCamera.cpp" />
+    <ClCompile Include="GameUI.cpp" />
     <ClCompile Include="Lighting.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SkinModelRender.cpp" />
+    <ClCompile Include="SpriteRender.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -373,11 +376,14 @@
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="Ball.h" />
+    <ClInclude Include="FontRender.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameCamera.h" />
+    <ClInclude Include="GameUI.h" />
     <ClInclude Include="Lighting.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="SkinModelRender.h" />
+    <ClInclude Include="SpriteRender.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
     <ClInclude Include="Title.h" />
@@ -392,6 +398,8 @@
     <Image Include="Assets\modelData\bg\testmap_tex.DDS" />
     <Image Include="Assets\modelData\sphere\sphere_tex.DDS" />
     <Image Include="Assets\modelData\sphere\sphere_tex_01.DDS" />
+    <Image Include="Assets\sprite\title.dds" />
+    <Image Include="Assets\sprite\title.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

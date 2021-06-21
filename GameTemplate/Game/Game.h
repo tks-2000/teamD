@@ -1,7 +1,7 @@
 #pragma once
 
 class Lighting;
-class SkinModelRender;
+class GameUI;
 class Player;
 class GameCamera;
 class BackGround;
@@ -20,6 +20,8 @@ private:
 	int m_playerNum = 0;
 	/// @brief ライティング
 	Lighting* m_lighting = nullptr;
+
+	GameUI* m_ui = nullptr;
 	/// @brief プレイヤー
 	Player* m_player[4] = { nullptr };
 	/// @brief ゲームカメラ

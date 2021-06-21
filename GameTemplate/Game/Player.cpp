@@ -2,10 +2,41 @@
 #include "Player.h"
 
 namespace {
-	//キック時のエフェクト用定数
-	const char16_t* KICKEFFECT_FILEPATH = u"Assets/effect/kick.efk";				//キックエフェクトのファイルパス
-	//ガード時のエフェクト
-	const char16_t* GUARDEFFECT_FILEPATH = u"Assets/effect/shield.efk";				//ガード時のエフェクトファイルパス
+	/// @brief エフェクト用定数
+	//キックエフェクトのファイルパス
+	const char16_t* KICKEFFECT_FILEPATH = u"Assets/effect/kick.efk";					
+	//キックエフェクト発生位置を決める値。0に近いほどプレイヤー寄り
+	const float KICKEFFECT_POSITION_RATE = 0.8f;
+	//キックエフェクトの拡大率
+	const Vector3 KICKEFFECT_SCALE = { 25.0f,25.0f,1.0f };
+
+	//ガードエフェクトファイルパス
+	const char16_t* GUARDEFFECT_FILEPATH = u"Assets/effect/shield.efk";
+	//ガードエフェクトの拡大率(立体なのでz軸方向にも拡大している)
+	const Vector3 GUARDEFFECT_SCALE = { 80.0f,80.0f,80.0f };
+	//ガードエフェクト発生位置のy座標を決めるための定数
+	const float GUARDEFFECT_POS_Y = 80.0f;
+
+	//ガード予兆エフェクトのファイルパス
+	const char16_t* GUARDEFFECT_BEGIN_FILEPATH = u"Assets/effect/shield_begin.efk";
+	//ガード予兆エフェクトの拡大率
+	const Vector3 GUARDEFFECT_BEGIN_SCALE = { 20.0f,20.0f,1.0f };
+	
+	//ガード破壊エフェクトのファイルパス
+	const char16_t* GUARDEFFECT_BREAK_FILEPATH = u"Assets/effect/shieldbreak.efk";
+	//ガード破壊エフェクトの拡大率
+	const Vector3 GUARDEFFECT_BREAK_SCALE = { 15.0f,15.0f,15.0f };
+
+	//シールド回復エフェクトのファイルパス
+	const char16_t* GUARDEFFECT_REPAIR_FILEPATH = u"Assets/effect/shieldrepair.efk";
+	//シールド回復エフェクトの拡大率
+	const Vector3 GUARDEFFECT_REPAIR_SCALE = { 12.5f,12.5f,12.5f };
+
+	//ガードヒットエフェクト
+	const char16_t* GUARDEFFECT_HIT_FILEPATH = u"Assets/effect/shieldhit.efk";
+	//ガードヒットエフェクトの拡大率
+	const Vector3 GUARDEFFECT_HIT_SCALE = { 17.0f,17.0f,17.0f };
+
 
 	/// @brief キック可能な距離
 	const float KICK_POSSIBLE_DISTANCE = 200.0f;
@@ -47,6 +78,16 @@ Player::Player()
 	m_kickEffect.Init(KICKEFFECT_FILEPATH);
 	//ガード時のエフェクトを初期化
 	m_guardEffect.Init(GUARDEFFECT_FILEPATH);
+	//ガード予兆エフェクトを初期化
+	m_guardBeginEffect.Init(GUARDEFFECT_BEGIN_FILEPATH);
+	//ガード破壊のエフェクトを初期化
+	m_guardBreakEffect.Init(GUARDEFFECT_BREAK_FILEPATH);
+	//シールド回復のエフェクトを初期化
+	m_shieldRepairEffect.Init(GUARDEFFECT_REPAIR_FILEPATH);
+	//ガードヒットエフェクトを初期化
+	m_shieldHitEffect.Init(GUARDEFFECT_HIT_FILEPATH);
+
+
 	m_moveVelocity = 0.9f;
 	m_kickPower = 5.0f;
 	m_gravity = 5.0f;
@@ -143,12 +184,31 @@ void Player::Rotation()
 	m_qRot.SetRotation(Vector3::AxisY, atan2(m_moveSpeed.x, m_moveSpeed.z));
 }
 
+void Player::IsKick()
+{
+	/// @brief ボールとの距離が一定以下の時のみ判定
+	if (m_ballDistance < KICK_POSSIBLE_DISTANCE) {
+		m_direction.Normalize();
+		float matchRate = Dot(m_direction, m_toBallVec);
+		if (matchRate > 0.7f) {
+			m_kickFlag = true;
+		}
+		else {
+			m_kickFlag = false;
+		}
+	}
+	else {
+		m_kickFlag = false;
+	}
+}
+
 void Player::KickBall()
 {
 	/// @brief ボールにキック方向とキック力を伝えて動かす
 	m_ball->SetMoveDirection(m_direction);
 	m_ball->Acceleration(m_kickPower);
 	m_ball->SetBallLightColor(m_playerColor);
+	m_ball->SetPlayerInformation(m_myNumber);
 	m_ball->MoveStart();
 
 
@@ -175,7 +235,9 @@ void Player::Guard()
 	/// @brief ガード中は移動速度を下げる
 	m_moveSpeed.x /= FLOAT_2;
 	m_moveSpeed.z /= FLOAT_2;
+	
 	if (m_ballDistance < GUARD_DISTANCE) {
+		
 		Vector3 repulsiveForce = m_position - m_ball->GetPosition();
 		repulsiveForce.Normalize();
 		repulsiveForce *= m_ball->GetVelocity();
@@ -199,6 +261,63 @@ void Player::Guard()
 	if (m_guardDurability <= 0.0f) {
 		m_guardDurability = 0.0f;
 		m_breakGuard = true;
+	}
+
+	if (m_ballDistance < 220.0f && m_ball->IsMove() == true) {
+		//ガードヒットエフェクトの発生
+		m_shieldHitEffectCounter++;
+		if (m_shieldHitEffectCounter % 30 == 1) {
+
+			//エフェクト発生位置を決めるためのベクトル
+			Vector3 shieldHitPos = Vector3::Zero;
+
+			float shieldHitAngle = 0.0f;
+
+			//自身からボールへのベクトル
+			Vector3 toBallDirection = m_ball->GetPosition() - m_position;
+			//y成分を0にする
+			toBallDirection.y = 0.0f;
+			//正規化
+			toBallDirection.Normalize();
+
+			//エフェクトの向きを決めるためのクォータニオン
+			Quaternion shieldHitRot = Quaternion::Identity;
+
+			//自身からボールへのベクトルのx,z成分から角度を出す
+			shieldHitAngle = atan2f(toBallDirection.x, toBallDirection.z);
+
+			shieldHitRot.SetRotation(Vector3::AxisY, shieldHitAngle);
+
+			//自身とボールの間にエフェクトを発生させる
+			shieldHitPos.Lerp(0.5f, m_position, m_ball->GetPosition());
+			//プレイヤーのy座標ちょっと上に発生
+			shieldHitPos.y += 80.0f;
+
+			m_shieldHitEffect.Play();
+			m_shieldHitEffect.SetPosition(shieldHitPos);
+			m_shieldHitEffect.SetRotation(shieldHitRot);
+			m_shieldHitEffect.SetScale(GUARDEFFECT_HIT_SCALE);
+			m_shieldHitEffect.Update();
+		}
+	}
+
+}
+
+void Player::ReSpawn() {
+	m_position = m_startPos;
+	m_charaCon.SetPosition(m_position);
+	m_dieFlag = true;
+	
+
+}
+
+void Player::Muteki()
+{
+	m_mutekiTime++;
+
+	if (m_mutekiTime == 150) {
+		m_dieFlag = false;
+		m_mutekiTime = 0;
 	}
 }
 
@@ -228,26 +347,29 @@ void Player::Update()
 	BallDistanceCalculation();
 	Move();
 	Rotation();
+	IsKick();
 	
-	/// @brief ボールとの距離が一定以下で蹴れる
-	if (m_ballDistance < KICK_POSSIBLE_DISTANCE) {
+	if (m_kickFlag == true) {
 		if (g_pad[m_myNumber]->IsTrigger(enButtonA)) {
-			
+
 			//キックエフェクト再生処理//
 			
-			//キックエフェクト拡大率の設定
-			Vector3 efcScale = { 25.0f,25.0f,1.0f };
-			m_kickEffect.Play();
-			m_kickEffect.SetPosition(m_position);
-			m_kickEffect.SetRotation(m_qRot);
-			m_kickEffect.SetScale(efcScale);
+			//エフェクト発生位置を決めるためのベクトル
+			Vector3 efcPos = Vector3::Zero;
+			
+			//プレイヤー座標とボール座標を線形補完し、発生位置を決定
+			//補間率が0に近ければプレイヤー側、1に近ければボール側に発生する
+			efcPos.Lerp(KICKEFFECT_POSITION_RATE, m_position, m_ball->GetPosition());
 
+			m_kickEffect.Play();
+			m_kickEffect.SetPosition(efcPos);
+			m_kickEffect.SetRotation(m_qRot);
+			m_kickEffect.SetScale(KICKEFFECT_SCALE);
+			//キックした時の座標を保持したいのでここで更新
 			m_kickEffect.Update();
 
 			KickBall();
 		}
-	}
-	else {
 	}
 
 	/// @brief 非ガード時、ガード耐久値を回復
@@ -268,7 +390,7 @@ void Player::Update()
 	
 
 	/// @brief ボールとの距離が一定以下で吹き飛ぶ
-	if (m_ballDistance < COLLIDE_DISTANCE) {
+	if (m_ballDistance < COLLIDE_DISTANCE && m_dieFlag == false) {
 		BallCollide();
 	}
 
@@ -279,6 +401,7 @@ void Player::Update()
 	else {
 		m_guard = false;
 		m_guardEffectCouter = 0;
+		m_shieldHitEffectCounter = 0;
 	}
 
 	/// @brief ガード可能ならガードの処理
@@ -289,13 +412,16 @@ void Player::Update()
 		//カウンターに値を加算
 		m_guardEffectCouter += 1;
 		//規定フレーム毎にエフェクトを発生
-		if (m_guardEffectCouter == 1) {
+		if (m_guardEffectCouter % 20 == 1) {
 			m_guardEffect.Play();
 		}
-		if (m_guardEffectCouter % 20 == 19) {
-			m_guardEffect.Play();
-		}
+	}
 
+	if (g_pad[m_myNumber]->IsTrigger(enButtonLB1)) {
+		m_guardBeginEffect.Play();
+	}
+	if (m_dieFlag == true) {
+		Muteki();
 	}
 
 	/// @brief 自分に当たるスポットライトの位置と方向を設定
@@ -314,17 +440,44 @@ void Player::Update()
 	m_skinModelRender->SetRotation(m_qRot);
 
 
-	//ガード時のエフェクトの座標などを反映
+	//ガードエフェクトの更新
 	Vector3 efcGuardPos = m_position;
-	efcGuardPos.y += 80.0f;
+	//プレイヤー座標よりちょっと上にする
+	efcGuardPos.y += GUARDEFFECT_POS_Y;
 	m_guardEffect.SetPosition(efcGuardPos);
-	m_guardEffect.SetScale({ 60.0f,60.0f,60.0f });
+	m_guardEffect.SetScale(GUARDEFFECT_SCALE);
 	m_guardEffect.Update();
+	
+	//ガード予兆エフェクトの更新
+	m_guardBeginEffect.SetPosition(efcGuardPos);
+	m_guardBeginEffect.SetScale(GUARDEFFECT_BEGIN_SCALE);
+	m_guardBeginEffect.Update();
+
+
+	////テスト：シールド破壊エフェクトの発生・更新
+	//if (g_pad[m_myNumber]->IsTrigger(enButtonLeft)) {
+	//	m_guardBreakEffect.Play();
+	//}
+	//m_guardBreakEffect.SetPosition(efcGuardPos);
+	//m_guardBreakEffect.SetScale(GUARDEFFECT_BREAK_SCALE);
+	//m_guardBreakEffect.Update();
+	//
+	////テスト：シールド回復エフェクトの発生・更新
+	//if (g_pad[m_myNumber]->IsTrigger(enButtonRight)) {
+	//	m_shieldRepairEffect.Play();
+	//}
+	//m_shieldRepairEffect.SetPosition(efcGuardPos);
+	//m_shieldRepairEffect.SetScale(GUARDEFFECT_REPAIR_SCALE);
+	//m_shieldRepairEffect.Update();	
+
+	if (g_pad[m_myNumber]->IsTrigger(enButtonRight)) {
+		
+	}
 
 }
 
 void Player::BallDistanceCalculation()
 {
-	Vector3 vec = m_ball->GetPosition() - m_position;
-	m_ballDistance = vec.Length();
+	m_toBallVec = m_ball->GetPosition() - m_position;
+	m_ballDistance = m_toBallVec.Length();
 }
