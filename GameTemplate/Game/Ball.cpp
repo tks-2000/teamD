@@ -140,6 +140,7 @@ void Ball::Update()
 	}
 	else {
 		m_lig->SetPointLightColor(COLORLESS);
+		m_playerNum = 4;
 	}
 
 	Vector3 modelpos = m_position;
