@@ -95,6 +95,17 @@ private:
 	Effect m_kickEffect;
 	/// @brief ガード時のエフェクト
 	Effect m_guardEffect;
+	//ガードエフェクトを一定間隔で発生させるためのカウンター
 	int m_guardEffectCouter = 0;
+	/// @brief ガード発生の予兆エフェクト
+	Effect m_guardBeginEffect;
+	/// @brief ガードブレイクエフェクト
+	Effect m_guardBreakEffect;
+	/// @brief シールド回復エフェクト
+	Effect m_shieldRepairEffect;
+	/// @brief ガードヒットエフェクト
+	Effect m_shieldHitEffect;
+	/// @brief ガードヒットエフェクトを一定間隔で発生させるためのカウンター
+	int m_shieldHitEffectCounter = 0;
 };
 
