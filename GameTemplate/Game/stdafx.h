@@ -7,6 +7,7 @@
 #include "Game.h"
 #include "Lighting.h"
 #include "SkinModelRender.h"
+#include "SpriteRender.h";
 #include "Player.h"
 #include "GameCamera.h"
 #include "BackGround.h"

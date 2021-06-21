@@ -3,16 +3,18 @@
 
 Title::Title()
 {
-	
+	m_titleSprite = NewGO<SpriteRender>(1);
+	m_titleSprite->Init("Assets/sprite/title.dds", 1280, 720);
 }
 
 Title::~Title()
 {
-
+	DeleteGO(m_titleSprite);
 }
 
 bool Title::Start()
 {
+	
 	return true;
 }
 

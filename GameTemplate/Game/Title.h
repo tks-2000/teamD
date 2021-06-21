@@ -1,4 +1,7 @@
 #pragma once
+
+class SpriteRender;
+
 class Title : public IGameObject
 {
 public:
@@ -8,6 +11,7 @@ public:
 	void Update();
 
 private:
+	SpriteRender* m_titleSprite = nullptr;
 
 };
 
