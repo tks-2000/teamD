@@ -145,10 +145,16 @@ void Player::Rotation()
 
 void Player::IsKick()
 {
-	m_direction.Normalize();
-	float matchRate = Dot(m_direction, m_toBallVec);
-	if (matchRate > 0.7f) {
-		m_kickFlag = true;
+	/// @brief ボールとの距離が一定以下の時のみ判定
+	if (m_ballDistance < KICK_POSSIBLE_DISTANCE) {
+		m_direction.Normalize();
+		float matchRate = Dot(m_direction, m_toBallVec);
+		if (matchRate > 0.7f) {
+			m_kickFlag = true;
+		}
+		else {
+			m_kickFlag = false;
+		}
 	}
 	else {
 		m_kickFlag = false;
@@ -237,11 +243,8 @@ void Player::Update()
 	BallDistanceCalculation();
 	Move();
 	Rotation();
+	IsKick();
 	
-	/// @brief ボールとの距離が一定以下で蹴れる
-	if (m_ballDistance < KICK_POSSIBLE_DISTANCE) {
-		IsKick();
-	}
 	if (m_kickFlag == true) {
 		if (g_pad[m_myNumber]->IsTrigger(enButtonA)) {
 
