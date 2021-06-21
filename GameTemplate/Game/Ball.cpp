@@ -21,9 +21,10 @@ Ball::Ball()
 
 	m_moveFlag = true;
 	m_position.y = 1000.0f;
+	m_friction = 0.001f;
 
 	m_scale = { 0.5f,0.5f,0.5f };
-	m_gravity = 5.0f;
+	m_gravity = 1.0f;
 }
 
 Ball::~Ball()
@@ -43,7 +44,9 @@ bool Ball::Start()
 
 void Ball::Move()
 {
-	m_moveSpeed = m_moveDirection * m_moveVelocity;
+	m_moveSpeed.x = m_moveDirection.x * m_moveVelocity;
+	m_moveSpeed.z = m_moveDirection.z * m_moveVelocity;
+
 	m_moveSpeed.y -= m_gravity;
 
 	m_position = m_charaCon.Execute(m_moveSpeed,1.0f);
@@ -52,28 +55,28 @@ void Ball::Move()
 		m_position.x = 650.0f;
 		m_charaCon.SetPosition(m_position);
 		m_moveDirection.x *= -1.0f;
-		m_moveVelocity -= m_moveVelocity * 0.001f;
+		m_moveVelocity -= m_moveVelocity * m_friction;
 	}
 	if (m_position.x < -650.0f) {
 		m_position.x = -650.0f;
 		m_charaCon.SetPosition(m_position);
 		m_moveDirection.x *= -1.0f;
-		m_moveVelocity -= m_moveVelocity * 0.001f;
+		m_moveVelocity -= m_moveVelocity * m_friction;
 	}
 	if (m_position.z > 650.0f) {
 		m_position.z = 650.0f;
 		m_charaCon.SetPosition(m_position);
 		m_moveDirection.z *= -1.0f;
-		m_moveVelocity -= m_moveVelocity * 0.001f;
+		m_moveVelocity -= m_moveVelocity * m_friction;
 	}
 	if (m_position.z < -650.0f) {
 		m_position.z = -650.0f;
 		m_charaCon.SetPosition(m_position);
 		m_moveDirection.z *= -1.0f;
-		m_moveVelocity -= m_moveVelocity * 0.001f;
+		m_moveVelocity -= m_moveVelocity * m_friction;
 	}
 
-	m_moveVelocity -= m_moveVelocity * 0.001f;
+	m_moveVelocity -= m_moveVelocity * m_friction;
 
 	if (m_moveSpeed.Length() < 1.0f)
 	{
@@ -137,6 +140,7 @@ void Ball::Update()
 	}
 	else {
 		m_lig->SetPointLightColor(COLORLESS);
+		m_playerNum = 4;
 	}
 
 	Vector3 modelpos = m_position;

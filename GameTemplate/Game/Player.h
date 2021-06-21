@@ -28,6 +28,8 @@ public:
 	/// @return プレイヤーの座標
 	Vector3 GetPosition() { return m_position; }
 
+	void IsKick();
+
 	/// @brief ボールを蹴る処理
 	void KickBall();
 
@@ -41,7 +43,9 @@ public:
 	void Guard();
 
 	/// @brief リスポーンの処理
-	void ReSpawn() { m_position = m_startPos; m_charaCon.SetPosition(m_position); };
+	void ReSpawn();
+
+	void Muteki();
 
 private:
 	/// @brief プレイヤーの番号
@@ -64,9 +68,16 @@ private:
 	Vector3 m_playerColor = Vector3::Zero;
 	/// @brief プレイヤーにかかる摩擦力
 	float m_friction = 0.0f;
-	
+	/// @brief プレイヤーからボールへのベクトル
+	Vector3 m_toBallVec = Vector3::Zero;
+	/// @brief プレイヤーが死んだかどうかのフラグ
+	bool m_dieFlag = false;
+	/// @brief プレイヤーがリスポーンした時の無敵時間
+	float m_mutekiTime = 0.0f;
 	/// @brief ボールとの距離
 	float m_ballDistance = 0.0f;
+	/// @brief キック可能かどうかのフラグ
+	bool m_kickFlag = false;
 	/// @brief キック力
 	float m_kickPower = 0.0f;
 	/// @brief ガードフラグ

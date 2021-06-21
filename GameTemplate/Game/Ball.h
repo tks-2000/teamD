@@ -66,6 +66,8 @@ public:
 	/// @brief ボールのポイントライトのカラーを設定
 	/// @param color ボールのポイントライトに設定したいカラー
 	void SetBallLightColor(Vector3 color) { m_pointLigColor = color; }
+	/// @brief ボールを蹴ったプレイヤー情報を設定
+	void SetPlayerInformation(int num) { m_playerNum = num; }
 
 private:
 	/// @brief ボールの座標
@@ -82,6 +84,8 @@ private:
 	Vector3 m_moveDirection = Vector3::Zero;
 	/// @brief ボールの速度
 	float m_moveVelocity = 0.0f;
+	/// @brief ボールの摩擦力
+	float m_friction = 0.0f;
 	/// @brief ボールの移動フラグ
 	bool m_moveFlag = false;
 	/// @brief ボールの回転角度
@@ -90,6 +94,8 @@ private:
 	float m_gravity = 0.0f;
 	/// @brief ボールの位置にあるポイントライトのカラー
 	Vector3 m_pointLigColor = Vector3::Zero;
+	/// @brief ボールにプレイヤー情報を渡すナンバー
+	int m_playerNum = 0;
 
 	/// @brief キャラクターコントローラー
 	CharacterController m_charaCon;

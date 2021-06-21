@@ -36,6 +36,7 @@ struct SpriteInitData {
 	int m_expandConstantBufferSize = 0;						//ユーザー拡張の定数バッファのサイズ。
 	IShaderResource* m_expandShaderResoruceView = nullptr;	//ユーザー拡張のシェーダーリソース。
 	AlphaBlendMode m_alphaBlendMode = AlphaBlendMode_None;	//アルファブレンディングモード。
+	DXGI_FORMAT m_colorBufferFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
 };
 /// <summary>
 /// スプライトクラス。
@@ -67,6 +68,8 @@ public:
 	/// 描画。
 	/// </summary>
 	/// <param name="renderContext">レンダリングコンテキスト/param>
+	/// 
+	void ColorUpdate(Vector4& color);
 	void Draw(RenderContext& renderContext);
 	/// <summary>
 	/// 初期化されているか判定。
@@ -116,6 +119,7 @@ private:
 	Vector2 m_size;						//サイズ。
 	Quaternion m_rotation ;			//回転。
 	Matrix m_world;					//ワールド行列。
+	Vector4 m_color = { 1.0f,1.0f,1.0f,1.0f };
 
 	struct LocalConstantBuffer {
 		Matrix mvp;

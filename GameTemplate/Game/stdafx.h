@@ -5,8 +5,11 @@
 #include "ExEngine.h"
 //#include "Title.h"
 #include "Game.h"
+#include "GameUI.h";
 #include "Lighting.h"
 #include "SkinModelRender.h"
+#include "SpriteRender.h";
+#include "FontRender.h";
 #include "Player.h"
 #include "GameCamera.h"
 #include "BackGround.h"
@@ -19,6 +22,7 @@ namespace {
 	const float FLOAT_0 = 0.0f;
 	const float FLOAT_1 = 1.0f;
 	const float FLOAT_2 = 2.0f;
+	const float FLOAT_01 = 0.1f;
 	const float FLOAT_MINUS_1 = -1.0f;
 
 	const Vector3 RED = { 5.0f,0.0f,0.0f };
@@ -29,6 +33,7 @@ namespace {
 
 	const char* TITLE_NAME = "Title";
 	const char* GAME_NAME = "Game";
+	const char* GAME_UI_NAME = "GameUI";
 	const char* LIGHTING_NAME = "Lighting";
 	const char* PLAYER_NAME[MAX_PLAYER_NUM] = { "Player1","Player2","Player3","Player4" };
 	const char* GAME_CAMERA_NAME = "GameCamera";
