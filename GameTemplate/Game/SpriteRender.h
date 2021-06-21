@@ -25,7 +25,24 @@ public:
 	void SetPivot(Vector2 pivot) { m_pivot = pivot; }
 	/// @brief スプライトに乗算するカラーを設定
 	/// @param color スプライトに乗算するカラー
-	void SetColor(Vector4 color) { m_sprite.ColorUpdate(color); }
+	void SetColor(Vector4 color) { m_color = color; }
+	/// @brief フェードの処理
+	void Fade();
+	/// @brief スプライトのフェードインを開始
+	/// @param rate フェードのレート
+	void FadeIn(float rate) { m_fadeInFlag = true; m_fadeRate = rate; }
+	/// @brief スプライトのフェードアウトを開始
+	/// @param rate フェードのレート
+	void FadeOut(float rate) { m_fadeOutFlag = true; m_fadeRate = rate; }
+	/// @brief スプライトの不透明度を入手
+	/// @return カラーのアルファ値
+	float GetOpacity() { return m_color.w; }
+	/// @brief スプライトが不透明か?
+	/// @return trueなら不透明 falseなら透明か半透明
+	bool IsOpacity();
+	/// @brief スプライトが透明か？
+	/// @return trueなら透明 falseなら不透明か半透明
+	bool IsTransparent();
 
 	void Render(RenderContext& rc) { m_sprite.Draw(rc); }
 
@@ -43,5 +60,14 @@ private:
 	Vector3 m_scale = Vector3::One;
 	/// @brief スプライトの中心
 	Vector2 m_pivot = { 0.5f,0.5f };
+	/// @brief スプライトのカラー
+	Vector4 m_color = Vector4::White;
+
+	/// @brief フェードインフラグ
+	bool m_fadeInFlag = false;
+	/// @brief フェードアウトフラグ
+	bool m_fadeOutFlag = false;
+	/// @brief フェードのレート
+	float m_fadeRate = 0.0f;
 };
 

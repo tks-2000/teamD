@@ -25,6 +25,23 @@ public:
 	/// @brief フォントの中心を設定
 	/// @param pivot フォントに設定する中心位置
 	void SetPivot(const Vector2 pivot) { m_pivot = pivot; }
+	/// @brief フェードの処理
+	void Fade();
+	/// @brief フォントのフェードインを開始
+	/// @param rate フェードのレート
+	void FadeIn(float rate) { m_fadeInFlag = true; m_fadeRate = rate; }
+	/// @brief フォントのフェードアウトを開始
+	/// @param rate フェードのレート
+	void FadeOut(float rate) { m_fadeOutFlag = true; m_fadeRate = rate; }
+	/// @brief フォントの不透明度を入手
+	/// @return カラーのアルファ値
+	float GetOpacity() { return m_color.w; }
+	/// @brief フォントが不透明か?
+	/// @return 不透明ならtrue 透明か半透明ならfalse
+	bool IsOpacity();
+	/// @brief フォントが透明か？
+	/// @return 透明ならtrue 不透明か半透明ならfalse
+	bool IsTransparent();
 	
 	void Render(RenderContext& rc);
 
@@ -43,6 +60,12 @@ private:
 	/// @brief フォントの拡大率
 	float m_scale = 1.0f;
 	/// @brief フォントの中心
-	Vector2 m_pivot;
+	Vector2 m_pivot = { 1.0f,1.0f };
+
+	bool m_fadeInFlag = false;
+
+	bool m_fadeOutFlag = false;
+
+	float m_fadeRate = 0.0f;
 };
 

@@ -1,6 +1,7 @@
 #pragma once
 
 class SpriteRender;
+class FontRender;
 
 class Title : public IGameObject
 {
@@ -13,6 +14,8 @@ public:
 private:
 	/// @brief タイトルの一枚画像
 	SpriteRender* m_titleSprite = nullptr;
+	/// @brief フォント
+	FontRender* m_font = nullptr;
 
 };
 
