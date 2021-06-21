@@ -83,6 +83,13 @@ private:
 	/// @brief Lスティックの縦入力
 	float m_Lsticky = 0.0f;
 
+	/// @brief ガード耐久力
+	float m_guardDurability = 100.0f;
+	/// @brief ガードの状態
+	bool m_breakGuard = false;
+	/// @brief ガード破壊によって起きるダウン状態
+	//bool m_breakDown = false;
+
 	/// @brief キャラクターコントローラー
 	CharacterController m_charaCon;
 	/// @brief ライティング

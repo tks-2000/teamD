@@ -183,6 +183,22 @@ void Player::Guard()
 		m_moveSpeed += repulsiveForce;
 		m_ball->SetVelocity(m_ball->GetVelocity() / FLOAT_2);
 		m_ball->SetMoveDirection(repulsiveForce * FLOAT_MINUS_1);
+		
+		/// @brief ボールの勢いに応じて耐久値を減らす
+		float shieldDamage = 10.0f * (m_ball->GetVelocity() / 1);
+		m_guardDurability -= shieldDamage;
+		if (m_guardDurability <= 0.0f)
+		{
+			m_guardDurability = 0.0f;
+			m_breakGuard = true;
+			return;
+		}
+	}
+	/// @brief ガード中は耐久値(guardDurability)が減り続ける
+	m_guardDurability -= 0.555f;
+	if (m_guardDurability <= 0.0f) {
+		m_guardDurability = 0.0f;
+		m_breakGuard = true;
 	}
 }
 
@@ -201,6 +217,12 @@ void Player::Update()
 	if (m_damageTime > DAMAGE_RETURN_TIME) {
 		m_damageTime = FLOAT_1;
 		m_damage = false;
+	}
+	if (m_breakGuard == true)
+	{
+		m_Lstickx = FLOAT_0;
+		m_Lsticky = FLOAT_0;
+		m_damageTime += FLOAT_1;
 	}
 
 	BallDistanceCalculation();
@@ -228,13 +250,30 @@ void Player::Update()
 	else {
 	}
 
+	/// @brief 非ガード時、ガード耐久値を回復
+	if (m_guard == false) {
+		m_guardDurability += 0.555f;
+	}
+	/// @brief 再展開可能まで
+	if (m_guardDurability >= 100.0f && m_breakGuard == true)
+	{
+		m_breakGuard = false;
+		
+	}
+	/// @brief ガード耐久値を100より上にならないようにする奴
+	if (m_guardDurability >= 100.0f)
+	{
+		m_guardDurability = 100.0f;
+	}
+	
+
 	/// @brief ボールとの距離が一定以下で吹き飛ぶ
 	if (m_ballDistance < COLLIDE_DISTANCE) {
 		BallCollide();
 	}
 
 	/// @brief LB1を押している間ガード
-	if (g_pad[m_myNumber]->IsPress(enButtonLB1)) {
+	if (g_pad[m_myNumber]->IsPress(enButtonLB1) && m_breakGuard == false) {
 		m_guard = true;
 	}
 	else {
@@ -243,7 +282,7 @@ void Player::Update()
 	}
 
 	/// @brief ガード可能ならガードの処理
-	if (m_guard == true) {
+	if (m_guard == true && m_breakGuard == false) {
 		Guard();
 		
 		//シールドエフェクト発生処理//
