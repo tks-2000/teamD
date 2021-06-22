@@ -32,13 +32,17 @@ namespace {
 	//シールド回復エフェクトの拡大率
 	const Vector3 GUARDEFFECT_REPAIR_SCALE = { 12.5f,12.5f,12.5f };
 
-	//ガードヒットエフェクト
+	//ガードヒットエフェクトのファイルパス
 	const char16_t* GUARDEFFECT_HIT_FILEPATH = u"Assets/effect/shieldhit.efk";
 	//ガードヒットエフェクトの拡大率
 	const Vector3 GUARDEFFECT_HIT_SCALE = { 17.0f,17.0f,17.0f };
 	//ガードヒットエフェクト発生の距離
 	const float GUARDEFFECT_HIT_DISTANCE = 150.0f;
 
+	//行動不能エフェクトのファイルパス
+	const char16_t* KNOCKOUTEFFECT_FILEPATH = u"Assets/effect/knockout.efk";
+	//行動不能エフェクトのスケール
+	const Vector3 KNOCKOUTEFFECT_SCALE = { 15.0f,15.0f,15.0f };
 
 	/// @brief キック可能な距離
 	const float KICK_POSSIBLE_DISTANCE = 200.0f;
@@ -88,6 +92,8 @@ Player::Player()
 	m_shieldRepairEffect.Init(GUARDEFFECT_REPAIR_FILEPATH);
 	//ガードヒットエフェクトを初期化
 	m_shieldHitEffect.Init(GUARDEFFECT_HIT_FILEPATH);
+	//行動不能エフェクトを初期化
+	m_knockOutEffect.Init(KNOCKOUTEFFECT_FILEPATH);
 
 
 	m_moveVelocity = 0.9f;
@@ -420,20 +426,25 @@ void Player::Update()
 	}
 
 	//ガードブレイクエフェクト発生処理
+	//前フレームにガードブレイクしておらず...
 	if (m_breakGuardPrevFrame == false) {
+		//現フレームでガードブレイクしていたらガードブレイクエフェクトを再生
 		if (m_breakGuard == true) {
 			m_guardBreakEffect.Play();
+			//行動不能エフェクトを再生
+			m_knockOutEffect.Play();
 			Vector3 breakPos = m_position;
 			breakPos.y += 80.0f;
 
 			m_guardBreakEffect.SetPosition(breakPos);
 			m_guardBreakEffect.SetScale(GUARDEFFECT_BREAK_SCALE);
 			m_guardBreakEffect.Update();
-			
 		}
 	}
 	//シールド回復エフェクト発生処理
+	//前フレームにガードブレイクしており...
 	if (m_breakGuardPrevFrame == true) {
+		//現フレームでガードブレイクしていなければ(シールドが回復していたら)回復エフェクトを再生
 		if (m_breakGuard == false) {
 			m_shieldRepairEffect.Play();
 		}
@@ -482,9 +493,14 @@ void Player::Update()
 	//シールド回復エフェクトの更新
 	m_shieldRepairEffect.SetPosition(efcGuardPos);
 	m_shieldRepairEffect.SetScale(GUARDEFFECT_REPAIR_SCALE);
-	m_shieldRepairEffect.Update();	
+	m_shieldRepairEffect.Update();
 
-	//現フレームのガードブレイク状態を記録
+	//行動不能エフェクトの更新
+	m_knockOutEffect.SetPosition(efcGuardPos);
+	m_knockOutEffect.SetScale(KNOCKOUTEFFECT_SCALE);
+	m_knockOutEffect.Update();
+
+	//現フレームのガード状態を記録
 	m_breakGuardPrevFrame = m_breakGuard;
 
 }
