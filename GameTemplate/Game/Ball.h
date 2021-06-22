@@ -69,6 +69,8 @@ public:
 	/// @brief ボールを蹴ったプレイヤー情報を設定
 	void SetPlayerInformation(int num) { m_playerNum = num; }
 
+	int GetPlayerInformation() { return m_playerNum; }
+
 private:
 	/// @brief ボールの座標
 	Vector3 m_position = Vector3::Zero;

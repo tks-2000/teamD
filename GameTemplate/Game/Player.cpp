@@ -74,6 +74,10 @@ namespace {
 	const float DAMAGE_RETURN_TIME = 100.0f;
 	/// @brief プレイヤーモデルの表示優先度
 	const int PRIORITY = 1;
+	/// @brief プレイヤーのリスポーン時の無敵時間
+	const float MUTEKI_TIME = 150.0f;
+	/// @brief リスポーン時の無敵時間の初期化
+	const float TIME_ZERO = 0.0f;
 }
 
 Player::Player()
@@ -95,6 +99,7 @@ Player::Player()
 	//行動不能エフェクトを初期化
 	m_knockOutEffect.Init(KNOCKOUTEFFECT_FILEPATH);
 
+	
 
 	m_moveVelocity = 0.9f;
 	m_kickPower = 5.0f;
@@ -113,8 +118,21 @@ bool Player::Start()
 	//必要なデータを取得
 	m_lig = FindGO<Lighting>(LIGHTING_NAME);
 	m_ball = FindGO<Ball>(BALL_NAME);
+
+	m_animationClips[enAnimation_Idle].Load("Assets/animData/idle.tka");
+	m_animationClips[enAnimation_Walk].Load("Assets/animData/walk.tka");
+
+	m_animationClips[enAnimation_Idle].SetLoopFlag(true);
+	m_animationClips[enAnimation_Walk].SetLoopFlag(true);
+
 	m_skinModelRender = NewGO<SkinModelRender>(PRIORITY);
-	m_skinModelRender->Init(UNITYCHAN_MODEL);
+
+	m_skinModelRender->InitA(UNITYCHAN_MODEL,"Assets/modelData/unityChan.tks",m_animationClips,enAnimation_Num);
+	m_skinModelRender->PlayAnimation(enAnimation_Idle, 1.0f);
+
+	
+	m_gameUI = FindGO<GameUI>(GAME_UI_NAME);
+
 	return true;
 }
 
@@ -175,8 +193,19 @@ void Player::Move()
 	
 	m_moveSpeed *= m_moveVelocity;
 
+	Vector3 moveSpeedXZ = m_moveSpeed;
+	moveSpeedXZ.y = 0.0f;
+	if (moveSpeedXZ.LengthSq() < 0.1f) {
+		m_moveSpeed.x = FLOAT_0;
+		m_moveSpeed.z = FLOAT_0;
+ 	}
+
 	/// @brief プレイヤーが落下したらリスポーンする
 	if (m_position.y < FALLING_HEIGHT) {
+		/// @brief リスポーン時にスコアの減算
+		m_gameUI->AddScore(m_myNumber, -100);
+		/// @brief 敵を倒したときにボールを蹴ったプレイヤーにスコアの加算
+		m_gameUI->AddScore(m_ball->GetPlayerInformation(), +100);
 		ReSpawn();
 	}
 	
@@ -187,9 +216,11 @@ void Player::Rotation()
 {
 	/// @brief ダメージ中、ガード中、動いていないときは回転しない
 	if (m_damage == true || m_guard == true || m_moveSpeed.x == FLOAT_0 && m_moveSpeed.z == FLOAT_0) {
+		m_anim = enAnimation_Idle;
 		return;
 	}
 	m_qRot.SetRotation(Vector3::AxisY, atan2(m_moveSpeed.x, m_moveSpeed.z));
+	m_anim = enAnimation_Walk;
 }
 
 void Player::IsKick()
@@ -215,8 +246,10 @@ void Player::KickBall()
 	/// @brief ボールにキック方向とキック力を伝えて動かす
 	m_ball->SetMoveDirection(m_direction);
 	m_ball->Acceleration(m_kickPower);
+	/// @brief ボールに蹴ったプレイヤーの色と数字を伝える
 	m_ball->SetBallLightColor(m_playerColor);
 	m_ball->SetPlayerInformation(m_myNumber);
+
 	m_ball->MoveStart();
 
 
@@ -234,6 +267,10 @@ void Player::BallCollide()
 		m_moveSpeed = repulsiveForce * FLOAT_2;
 		m_ball->SetMoveDirection(repulsiveForce * FLOAT_MINUS_1);
 		m_damage = true;
+		/// @brief 蹴ったプレイヤー以外に当たり、リスポーン時じゃない時にスコアの加算
+		if (m_myNumber != m_ball->GetPlayerInformation() && m_dieFlag == false) {
+			m_gameUI->AddScore(m_ball->GetPlayerInformation(), +100);
+		}
 	}
 	
 }
@@ -245,15 +282,7 @@ void Player::Guard()
 	m_moveSpeed.z /= FLOAT_2;
 	
 	if (m_ballDistance < GUARD_DISTANCE) {
-		
-		Vector3 repulsiveForce = m_position - m_ball->GetPosition();
-		repulsiveForce.Normalize();
-		repulsiveForce *= m_ball->GetVelocity();
-		repulsiveForce.y = m_ball->GetVelocity() * FLOAT_01;
-		m_moveSpeed += repulsiveForce;
-		m_ball->SetVelocity(m_ball->GetVelocity() / FLOAT_2);
-		m_ball->SetMoveDirection(repulsiveForce * FLOAT_MINUS_1);
-		
+
 		/// @brief ボールの勢いに応じて耐久値を減らす
 		float shieldDamage = 10.0f * (m_ball->GetVelocity() / 1);
 		m_guardDurability -= shieldDamage;
@@ -263,6 +292,16 @@ void Player::Guard()
 			m_breakGuard = true;
 			return;
 		}
+
+		Vector3 repulsiveForce = m_position - m_ball->GetPosition();
+		repulsiveForce.Normalize();
+		repulsiveForce *= m_ball->GetVelocity();
+		repulsiveForce.y = m_ball->GetVelocity() * FLOAT_01;
+		m_moveSpeed += repulsiveForce;
+		m_ball->SetVelocity(m_ball->GetVelocity() / FLOAT_2);
+		m_ball->SetMoveDirection(repulsiveForce * FLOAT_MINUS_1);
+		
+		
 	}
 	/// @brief ガード中は耐久値(guardDurability)が減り続ける
 	m_guardDurability -= 0.555f;
@@ -312,8 +351,11 @@ void Player::Guard()
 }
 
 void Player::ReSpawn() {
+	/// @brief スタート位置にリスポーンさせる
 	m_position = m_startPos;
 	m_charaCon.SetPosition(m_position);
+	
+	
 	m_dieFlag = true;
 	
 
@@ -322,10 +364,25 @@ void Player::ReSpawn() {
 void Player::Muteki()
 {
 	m_mutekiTime++;
-
-	if (m_mutekiTime == 150) {
+	/// @brief リスポーン時に少しの間ボールに当たらなくなる
+	if (m_mutekiTime == MUTEKI_TIME) {
 		m_dieFlag = false;
-		m_mutekiTime = 0;
+		m_mutekiTime = TIME_ZERO;
+	}
+}
+
+void Player::Animation()
+{
+	switch (m_anim)
+	{
+	case enAnimation_Idle: {
+		m_skinModelRender->PlayAnimation(enAnimation_Idle, 0.2f);
+	}break;
+	case enAnimation_Walk: {
+		m_skinModelRender->PlayAnimation(enAnimation_Walk, 0.2f);
+	}break;
+	default:
+		break;
 	}
 }
 
@@ -398,10 +455,16 @@ void Player::Update()
 	}
 	
 	/// @brief ボールとの距離が一定以下で吹き飛ぶ
-	if (m_ballDistance < COLLIDE_DISTANCE && m_dieFlag == false) {
-		BallCollide();
+	if (m_breakGuard == true) {
+		if (m_ballDistance < GUARD_DISTANCE && m_dieFlag == false) {
+			BallCollide();
+		}
 	}
-
+	else {
+		if (m_ballDistance < COLLIDE_DISTANCE && m_dieFlag == false) {
+			BallCollide();
+		}
+	}
 	/// @brief LB1を押している間ガード
 	if (g_pad[m_myNumber]->IsPress(enButtonLB1) && m_breakGuard == false) {
 		m_guard = true;
@@ -503,6 +566,12 @@ void Player::Update()
 	//現フレームのガード状態を記録
 	m_breakGuardPrevFrame = m_breakGuard;
 
+	/// @brief アニメーション
+	Animation();
+
+	if (g_pad[m_myNumber]->IsTrigger(enButtonStart)) {
+		ReSpawn();
+	}
 }
 
 void Player::BallDistanceCalculation()

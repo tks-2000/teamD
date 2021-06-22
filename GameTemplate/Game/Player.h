@@ -5,6 +5,7 @@ class Lighting;
 class SkinModelRender;
 class Ball;
 class Effect;
+class GameUI;
 
 class Player : public IGameObject
 {
@@ -46,6 +47,8 @@ public:
 	void ReSpawn();
 
 	void Muteki();
+
+	void Animation();
 
 private:
 	/// @brief プレイヤーの番号
@@ -133,5 +136,18 @@ private:
 	int m_shieldHitEffectCounter = 0;
 	//行動不能時エフェクト(ピヨり)
 	Effect m_knockOutEffect;
+
+	enum enAnimationClips
+	{
+		enAnimation_Idle,
+		enAnimation_Walk,
+		enAnimation_Num
+	};
+
+	enAnimationClips m_anim = enAnimation_Idle;
+
+	AnimationClip m_animationClips[enAnimation_Num];
+
+	GameUI* m_gameUI=nullptr;
 };
 
