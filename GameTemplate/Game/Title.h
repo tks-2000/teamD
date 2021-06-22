@@ -2,6 +2,7 @@
 
 class SpriteRender;
 class FontRender;
+class GameDirector;
 
 class Title : public IGameObject
 {
@@ -16,6 +17,8 @@ private:
 	SpriteRender* m_titleSprite = nullptr;
 	/// @brief ƒtƒHƒ“ƒg
 	FontRender* m_font = nullptr;
+
+	GameDirector* m_gameDirector = nullptr;
 
 };
 

@@ -6,7 +6,7 @@ Title::Title()
 	m_titleSprite = NewGO<SpriteRender>(0);
 	m_titleSprite->Init("Assets/sprite/title.dds", 1280, 720);
 	m_font = NewGO<FontRender>(1);
-	m_font->SetText(L"PUSH A BUTTON");
+	m_font->SetText(L"PUSH START BUTTON");
 	m_font->SetPivot({ 0.5f,0.5f });
 	m_font->SetPosition({ -125.0f,-250.0f });
 	m_font->SetColor({ 0.0f,0.0f,0.0f,1.0f });
@@ -20,6 +20,7 @@ Title::~Title()
 
 bool Title::Start()
 {
+	m_gameDirector = FindGO<GameDirector>(GAME_DIRECTOR_NAME);
 	return true;
 }
 
@@ -31,10 +32,11 @@ void Title::Update()
 	if (m_font->IsOpacity() == true) {
 		m_font->FadeOut(0.01f);
 	}
-
-	/// @brief Aボタンでゲームスタート
-	if (g_pad[0]->IsTrigger(enButtonA)) {
+	
+	/// @brief スタートボタンでゲームスタート
+	if (g_pad[0]->IsTrigger(enButtonStart)) {
 		DeleteGO(this);
 		NewGO<Game>(0, "Game");
+		m_gameDirector->GameStart();
 	}
 }

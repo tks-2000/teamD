@@ -5,6 +5,7 @@
 #include "ExEngine.h"
 //#include "Title.h"
 #include "Game.h"
+#include "GameDirector.h";
 #include "GameUI.h";
 #include "Lighting.h"
 #include "SkinModelRender.h"
@@ -32,6 +33,7 @@ namespace {
 	const Vector3 COLORLESS = { 0.0f,0.0f,0.0f };
 
 	const char* TITLE_NAME = "Title";
+	const char* GAME_DIRECTOR_NAME = "GameDirector";
 	const char* GAME_NAME = "Game";
 	const char* GAME_UI_NAME = "GameUI";
 	const char* LIGHTING_NAME = "Lighting";
