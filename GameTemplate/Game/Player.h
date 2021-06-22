@@ -5,6 +5,7 @@ class Lighting;
 class SkinModelRender;
 class Ball;
 class Effect;
+class GameUI;
 
 class Player : public IGameObject
 {
@@ -98,6 +99,7 @@ private:
 	float m_guardDurability = 100.0f;
 	/// @brief ガードの状態
 	bool m_breakGuard = false;
+	bool m_breakGuardPrevFrame = false;
 	/// @brief ガード破壊によって起きるダウン状態
 	//bool m_breakDown = false;
 
@@ -121,11 +123,14 @@ private:
 	Effect m_guardBreakEffect;
 	/// @brief シールド回復エフェクト
 	Effect m_shieldRepairEffect;
+	/// @brief シールド回復フラグ
+	bool m_isRepair = true;
 	/// @brief ガードヒットエフェクト
 	Effect m_shieldHitEffect;
 	/// @brief ガードヒットエフェクトを一定間隔で発生させるためのカウンター
 	int m_shieldHitEffectCounter = 0;
 
+<<<<<<< HEAD
 	enum enAnimationClips
 	{
 		enAnimation_Idle,
@@ -134,5 +139,8 @@ private:
 	};
 
 	AnimationClip m_animationClips[enAnimation_Num];
+=======
+	GameUI* m_gameUI=nullptr;
+>>>>>>> f48af62d70c280835733ee4d6f29280621186312
 };
 

@@ -36,6 +36,8 @@ namespace {
 	const char16_t* GUARDEFFECT_HIT_FILEPATH = u"Assets/effect/shieldhit.efk";
 	//ガードヒットエフェクトの拡大率
 	const Vector3 GUARDEFFECT_HIT_SCALE = { 17.0f,17.0f,17.0f };
+	//ガードヒットエフェクト発生の距離
+	const float GUARDEFFECT_HIT_DISTANCE = 150.0f;
 
 
 	/// @brief キック可能な距離
@@ -68,6 +70,10 @@ namespace {
 	const float DAMAGE_RETURN_TIME = 100.0f;
 	/// @brief プレイヤーモデルの表示優先度
 	const int PRIORITY = 1;
+	/// @brief プレイヤーのリスポーン時の無敵時間
+	const float MUTEKI_TIME = 150.0f;
+	/// @brief リスポーン時の無敵時間の初期化
+	const float TIME_ZERO = 0.0f;
 }
 
 Player::Player()
@@ -114,8 +120,13 @@ bool Player::Start()
 	m_animationClips[enAnimation_Walk].SetLoopFlag(true);
 
 	m_skinModelRender = NewGO<SkinModelRender>(PRIORITY);
+
 	m_skinModelRender->InitA(UNITYCHAN_MODEL,"Assets/modelData/unityChan.tks",m_animationClips,enAnimation_Num);
 	m_skinModelRender->PlayAnimation(enAnimation_Walk, 1.0f);
+
+	
+	m_gameUI = FindGO<GameUI>(GAME_UI_NAME);
+
 	return true;
 }
 
@@ -216,8 +227,10 @@ void Player::KickBall()
 	/// @brief ボールにキック方向とキック力を伝えて動かす
 	m_ball->SetMoveDirection(m_direction);
 	m_ball->Acceleration(m_kickPower);
+	/// @brief ボールに蹴ったプレイヤーの色と数字を伝える
 	m_ball->SetBallLightColor(m_playerColor);
 	m_ball->SetPlayerInformation(m_myNumber);
+
 	m_ball->MoveStart();
 
 
@@ -235,6 +248,10 @@ void Player::BallCollide()
 		m_moveSpeed = repulsiveForce * FLOAT_2;
 		m_ball->SetMoveDirection(repulsiveForce * FLOAT_MINUS_1);
 		m_damage = true;
+		/// @brief 蹴ったプレイヤー以外に当たり、リスポーン時じゃない時にスコアの加算
+		if (m_myNumber != m_ball->GetPlayerInformation() && m_dieFlag == false) {
+			m_gameUI->AddScore(m_ball->GetPlayerInformation(), +100);
+		}
 	}
 	
 }
@@ -272,7 +289,7 @@ void Player::Guard()
 		m_breakGuard = true;
 	}
 
-	if (m_ballDistance < 220.0f && m_ball->IsMove() == true) {
+	if (m_ballDistance < GUARDEFFECT_HIT_DISTANCE && m_ball->IsMove() == true) {
 		//ガードヒットエフェクトの発生
 		m_shieldHitEffectCounter++;
 		if (m_shieldHitEffectCounter % 30 == 1) {
@@ -313,8 +330,14 @@ void Player::Guard()
 }
 
 void Player::ReSpawn() {
+	/// @brief スタート位置にリスポーンさせる
 	m_position = m_startPos;
 	m_charaCon.SetPosition(m_position);
+	/// @brief リスポーン時にスコアの減算
+	m_gameUI->AddScore(m_myNumber, -100);
+	/// @brief 敵を倒したときにボールを蹴ったプレイヤーにスコアの加算
+	m_gameUI->AddScore(m_ball->GetPlayerInformation(), +100);
+	
 	m_dieFlag = true;
 	
 
@@ -323,15 +346,16 @@ void Player::ReSpawn() {
 void Player::Muteki()
 {
 	m_mutekiTime++;
-
-	if (m_mutekiTime == 150) {
+	/// @brief リスポーン時に少しの間ボールに当たらなくなる
+	if (m_mutekiTime == MUTEKI_TIME) {
 		m_dieFlag = false;
-		m_mutekiTime = 0;
+		m_mutekiTime = TIME_ZERO;
 	}
 }
 
 void Player::Update()
 {
+
 	/// @brief スティック入力を受け取る
 	m_Lstickx = g_pad[m_myNumber]->GetLStickXF();
 	m_Lsticky = g_pad[m_myNumber]->GetLStickYF();
@@ -397,7 +421,6 @@ void Player::Update()
 		m_guardDurability = 100.0f;
 	}
 	
-
 	/// @brief ボールとの距離が一定以下で吹き飛ぶ
 	if (m_ballDistance < COLLIDE_DISTANCE && m_dieFlag == false) {
 		BallCollide();
@@ -426,9 +449,33 @@ void Player::Update()
 		}
 	}
 
-	if (g_pad[m_myNumber]->IsTrigger(enButtonLB1)) {
+	//ガードブレイクエフェクト発生処理
+	if (m_breakGuardPrevFrame == false) {
+		if (m_breakGuard == true) {
+			m_guardBreakEffect.Play();
+			Vector3 breakPos = m_position;
+			breakPos.y += 80.0f;
+
+			m_guardBreakEffect.SetPosition(breakPos);
+			m_guardBreakEffect.SetScale(GUARDEFFECT_BREAK_SCALE);
+			m_guardBreakEffect.Update();
+			
+		}
+	}
+	//シールド回復エフェクト発生処理
+	if (m_breakGuardPrevFrame == true) {
+		if (m_breakGuard == false) {
+			m_shieldRepairEffect.Play();
+		}
+	}
+
+
+	//ガード開始時のエフェクト発生処理
+	//ボタン押下時かつガードブレイクしていないときに実行
+	if (g_pad[m_myNumber]->IsTrigger(enButtonLB1) && m_breakGuard == false) {
 		m_guardBeginEffect.Play();
 	}
+
 	if (m_dieFlag == true) {
 		Muteki();
 	}
@@ -461,27 +508,14 @@ void Player::Update()
 	m_guardBeginEffect.SetPosition(efcGuardPos);
 	m_guardBeginEffect.SetScale(GUARDEFFECT_BEGIN_SCALE);
 	m_guardBeginEffect.Update();
+	
+	//シールド回復エフェクトの更新
+	m_shieldRepairEffect.SetPosition(efcGuardPos);
+	m_shieldRepairEffect.SetScale(GUARDEFFECT_REPAIR_SCALE);
+	m_shieldRepairEffect.Update();	
 
-
-	////テスト：シールド破壊エフェクトの発生・更新
-	//if (g_pad[m_myNumber]->IsTrigger(enButtonLeft)) {
-	//	m_guardBreakEffect.Play();
-	//}
-	//m_guardBreakEffect.SetPosition(efcGuardPos);
-	//m_guardBreakEffect.SetScale(GUARDEFFECT_BREAK_SCALE);
-	//m_guardBreakEffect.Update();
-	//
-	////テスト：シールド回復エフェクトの発生・更新
-	//if (g_pad[m_myNumber]->IsTrigger(enButtonRight)) {
-	//	m_shieldRepairEffect.Play();
-	//}
-	//m_shieldRepairEffect.SetPosition(efcGuardPos);
-	//m_shieldRepairEffect.SetScale(GUARDEFFECT_REPAIR_SCALE);
-	//m_shieldRepairEffect.Update();	
-
-	if (g_pad[m_myNumber]->IsTrigger(enButtonRight)) {
-		
-	}
+	//現フレームのガードブレイク状態を記録
+	m_breakGuardPrevFrame = m_breakGuard;
 
 }
 
