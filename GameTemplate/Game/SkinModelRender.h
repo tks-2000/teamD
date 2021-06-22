@@ -47,6 +47,10 @@ public:
 	/// @param modelFilePath モデルのファイルパス
 	void Init(const char* modelFilePath);
 
+	void InitA(const char* modelFilePath, const char* skeletonPath, AnimationClip* animation, int animationNum);
+
+	void PlayAnimation(int animNo, float interpolateTime);
+
 	/// @brief スキンモデルレンダラーのワールド行列を取得
 	/// @return モデルのワールド行列
 	Matrix GetModelWorldMatrix() { return m_model.GetWorldMatrix(); }
@@ -60,5 +64,8 @@ private:
 	Vector3 m_scale = Vector3::One;				//拡大率
 	Quaternion m_qRot = Quaternion::Identity;	//回転
 
+	Skeleton m_skeleton;
+	Animation m_animation;
+	AnimationClip* m_animationClip;
 };
 

@@ -28,6 +28,10 @@ void Model::Init(const ModelInitData& initData)
 	
 	m_modelUpAxis = initData.m_modelUpAxis;
 
+
+	//auto tkmFile = g_engine->GetTkmFileFromBank(initData.m_tkmFilePath);
+
+
 	m_tkmFile.Load(initData.m_tkmFilePath);
 	m_meshParts.InitFromTkmFile(
 		m_tkmFile, 

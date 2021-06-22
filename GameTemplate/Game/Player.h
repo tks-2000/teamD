@@ -125,5 +125,14 @@ private:
 	Effect m_shieldHitEffect;
 	/// @brief ガードヒットエフェクトを一定間隔で発生させるためのカウンター
 	int m_shieldHitEffectCounter = 0;
+
+	enum enAnimationClips
+	{
+		enAnimation_Idle,
+		enAnimation_Walk,
+		enAnimation_Num
+	};
+
+	AnimationClip m_animationClips[enAnimation_Num];
 };
 

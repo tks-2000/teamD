@@ -87,6 +87,7 @@ Player::Player()
 	//ガードヒットエフェクトを初期化
 	m_shieldHitEffect.Init(GUARDEFFECT_HIT_FILEPATH);
 
+	
 
 	m_moveVelocity = 0.9f;
 	m_kickPower = 5.0f;
@@ -105,8 +106,16 @@ bool Player::Start()
 	//必要なデータを取得
 	m_lig = FindGO<Lighting>(LIGHTING_NAME);
 	m_ball = FindGO<Ball>(BALL_NAME);
+
+	m_animationClips[enAnimation_Idle].Load("Assets/animData/idle.tka");
+	m_animationClips[enAnimation_Walk].Load("Assets/animData/walk.tka");
+
+	m_animationClips[enAnimation_Idle].SetLoopFlag(true);
+	m_animationClips[enAnimation_Walk].SetLoopFlag(true);
+
 	m_skinModelRender = NewGO<SkinModelRender>(PRIORITY);
-	m_skinModelRender->Init(UNITYCHAN_MODEL);
+	m_skinModelRender->InitA(UNITYCHAN_MODEL,"Assets/modelData/unityChan.tks",m_animationClips,enAnimation_Num);
+	m_skinModelRender->PlayAnimation(enAnimation_Walk, 1.0f);
 	return true;
 }
 
