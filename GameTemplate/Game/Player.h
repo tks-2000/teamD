@@ -5,6 +5,7 @@ class Lighting;
 class SkinModelRender;
 class Ball;
 class Effect;
+class GameUI;
 
 class Player : public IGameObject
 {
@@ -118,5 +119,7 @@ private:
 	Effect m_shieldHitEffect;
 	/// @brief ガードヒットエフェクトを一定間隔で発生させるためのカウンター
 	int m_shieldHitEffectCounter = 0;
+
+	GameUI* m_gameUI=nullptr;
 };
 

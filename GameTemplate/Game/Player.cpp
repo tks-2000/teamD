@@ -68,6 +68,10 @@ namespace {
 	const float DAMAGE_RETURN_TIME = 100.0f;
 	/// @brief プレイヤーモデルの表示優先度
 	const int PRIORITY = 1;
+	/// @brief プレイヤーのリスポーン時の無敵時間
+	const float MUTEKI_TIME = 150.0f;
+	/// @brief リスポーン時の無敵時間の初期化
+	const float TIME_ZERO = 0.0f;
 }
 
 Player::Player()
@@ -107,6 +111,7 @@ bool Player::Start()
 	m_ball = FindGO<Ball>(BALL_NAME);
 	m_skinModelRender = NewGO<SkinModelRender>(PRIORITY);
 	m_skinModelRender->Init(UNITYCHAN_MODEL);
+	m_gameUI = FindGO<GameUI>(GAME_UI_NAME);
 	return true;
 }
 
@@ -207,8 +212,10 @@ void Player::KickBall()
 	/// @brief ボールにキック方向とキック力を伝えて動かす
 	m_ball->SetMoveDirection(m_direction);
 	m_ball->Acceleration(m_kickPower);
+	/// @brief ボールに蹴ったプレイヤーの色と数字を伝える
 	m_ball->SetBallLightColor(m_playerColor);
 	m_ball->SetPlayerInformation(m_myNumber);
+
 	m_ball->MoveStart();
 
 
@@ -226,6 +233,10 @@ void Player::BallCollide()
 		m_moveSpeed = repulsiveForce * FLOAT_2;
 		m_ball->SetMoveDirection(repulsiveForce * FLOAT_MINUS_1);
 		m_damage = true;
+		/// @brief 蹴ったプレイヤー以外に当たり、リスポーン時じゃない時にスコアの加算
+		if (m_myNumber != m_ball->GetPlayerInformation() && m_dieFlag == false) {
+			m_gameUI->AddScore(m_ball->GetPlayerInformation(), +100);
+		}
 	}
 	
 }
@@ -288,8 +299,14 @@ void Player::Guard()
 }
 
 void Player::ReSpawn() {
+	/// @brief スタート位置にリスポーンさせる
 	m_position = m_startPos;
 	m_charaCon.SetPosition(m_position);
+	/// @brief リスポーン時にスコアの減算
+	m_gameUI->AddScore(m_myNumber, -100);
+	/// @brief 敵を倒したときにボールを蹴ったプレイヤーにスコアの加算
+	m_gameUI->AddScore(m_ball->GetPlayerInformation(), +100);
+	
 	m_dieFlag = true;
 	
 
@@ -298,10 +315,10 @@ void Player::ReSpawn() {
 void Player::Muteki()
 {
 	m_mutekiTime++;
-
-	if (m_mutekiTime == 150) {
+	/// @brief リスポーン時に少しの間ボールに当たらなくなる
+	if (m_mutekiTime == MUTEKI_TIME) {
 		m_dieFlag = false;
-		m_mutekiTime = 0;
+		m_mutekiTime = TIME_ZERO;
 	}
 }
 
