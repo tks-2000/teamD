@@ -41,15 +41,19 @@ void SkinModelRender::Init(const char* modelFilePath)
 	m_model.Init(m_modelInitData);
 }
 
-void SkinModelRender::InitA(const char* modelFilePath, const char* skeletonPath, AnimationClip* animationClip, int animationNum)
+void SkinModelRender::InitA(const char* modelFilePath, const char* skeletonPath, AnimationClip* animationClip, int animationNum )
 {
 	m_modelInitData.m_tkmFilePath = modelFilePath;
 	m_modelInitData.m_fxFilePath = "Assets/shader/model.fx";
+	m_modelInitData.m_vsEntryPointFunc = "VSMain";
+	m_modelInitData.m_vsSkinEntryPointFunc = "VSSkinMain";
 
 	if (skeletonPath != nullptr) {
 		m_skeleton.Init(skeletonPath);
 		m_modelInitData.m_skeleton = &m_skeleton;
 	}
+
+	m_modelInitData.m_modelUpAxis = enModelUpAxisY;
 
 	m_modelInitData.m_expandConstantBuffer = m_lig->GetLightAddress();
 	m_modelInitData.m_expandConstantBufferSize = sizeof(m_lig->GetLight());

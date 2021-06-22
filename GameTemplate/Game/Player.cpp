@@ -122,7 +122,7 @@ bool Player::Start()
 	m_skinModelRender = NewGO<SkinModelRender>(PRIORITY);
 
 	m_skinModelRender->InitA(UNITYCHAN_MODEL,"Assets/modelData/unityChan.tks",m_animationClips,enAnimation_Num);
-	m_skinModelRender->PlayAnimation(enAnimation_Walk, 1.0f);
+	m_skinModelRender->PlayAnimation(enAnimation_Idle, 1.0f);
 
 	
 	m_gameUI = FindGO<GameUI>(GAME_UI_NAME);
@@ -187,6 +187,13 @@ void Player::Move()
 	
 	m_moveSpeed *= m_moveVelocity;
 
+	Vector3 moveSpeedXZ = m_moveSpeed;
+	moveSpeedXZ.y = 0.0f;
+	if (moveSpeedXZ.LengthSq() < 0.1f) {
+		m_moveSpeed.x = FLOAT_0;
+		m_moveSpeed.z = FLOAT_0;
+ 	}
+
 	/// @brief プレイヤーが落下したらリスポーンする
 	if (m_position.y < FALLING_HEIGHT) {
 		ReSpawn();
@@ -199,9 +206,11 @@ void Player::Rotation()
 {
 	/// @brief ダメージ中、ガード中、動いていないときは回転しない
 	if (m_damage == true || m_guard == true || m_moveSpeed.x == FLOAT_0 && m_moveSpeed.z == FLOAT_0) {
+		m_anim = enAnimation_Idle;
 		return;
 	}
 	m_qRot.SetRotation(Vector3::AxisY, atan2(m_moveSpeed.x, m_moveSpeed.z));
+	m_anim = enAnimation_Walk;
 }
 
 void Player::IsKick()
@@ -350,6 +359,21 @@ void Player::Muteki()
 	if (m_mutekiTime == MUTEKI_TIME) {
 		m_dieFlag = false;
 		m_mutekiTime = TIME_ZERO;
+	}
+}
+
+void Player::Animation()
+{
+	switch (m_anim)
+	{
+	case enAnimation_Idle: {
+		m_skinModelRender->PlayAnimation(enAnimation_Idle, 0.2f);
+	}break;
+	case enAnimation_Walk: {
+		m_skinModelRender->PlayAnimation(enAnimation_Walk, 0.2f);
+	}break;
+	default:
+		break;
 	}
 }
 
@@ -517,6 +541,8 @@ void Player::Update()
 	//現フレームのガードブレイク状態を記録
 	m_breakGuardPrevFrame = m_breakGuard;
 
+	/// @brief アニメーション
+	Animation();
 }
 
 void Player::BallDistanceCalculation()

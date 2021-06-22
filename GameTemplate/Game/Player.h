@@ -48,6 +48,8 @@ public:
 
 	void Muteki();
 
+	void Animation();
+
 private:
 	/// @brief プレイヤーの番号
 	int m_myNumber = 0;
@@ -130,7 +132,7 @@ private:
 	/// @brief ガードヒットエフェクトを一定間隔で発生させるためのカウンター
 	int m_shieldHitEffectCounter = 0;
 
-<<<<<<< HEAD
+
 	enum enAnimationClips
 	{
 		enAnimation_Idle,
@@ -138,9 +140,11 @@ private:
 		enAnimation_Num
 	};
 
+	enAnimationClips m_anim = enAnimation_Idle;
+
 	AnimationClip m_animationClips[enAnimation_Num];
-=======
+
 	GameUI* m_gameUI=nullptr;
->>>>>>> f48af62d70c280835733ee4d6f29280621186312
+
 };
 
