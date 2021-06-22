@@ -196,6 +196,10 @@ void Player::Move()
 
 	/// @brief プレイヤーが落下したらリスポーンする
 	if (m_position.y < FALLING_HEIGHT) {
+		/// @brief リスポーン時にスコアの減算
+		m_gameUI->AddScore(m_myNumber, -100);
+		/// @brief 敵を倒したときにボールを蹴ったプレイヤーにスコアの加算
+		m_gameUI->AddScore(m_ball->GetPlayerInformation(), +100);
 		ReSpawn();
 	}
 	
@@ -272,15 +276,7 @@ void Player::Guard()
 	m_moveSpeed.z /= FLOAT_2;
 	
 	if (m_ballDistance < GUARD_DISTANCE) {
-		
-		Vector3 repulsiveForce = m_position - m_ball->GetPosition();
-		repulsiveForce.Normalize();
-		repulsiveForce *= m_ball->GetVelocity();
-		repulsiveForce.y = m_ball->GetVelocity() * FLOAT_01;
-		m_moveSpeed += repulsiveForce;
-		m_ball->SetVelocity(m_ball->GetVelocity() / FLOAT_2);
-		m_ball->SetMoveDirection(repulsiveForce * FLOAT_MINUS_1);
-		
+
 		/// @brief ボールの勢いに応じて耐久値を減らす
 		float shieldDamage = 10.0f * (m_ball->GetVelocity() / 1);
 		m_guardDurability -= shieldDamage;
@@ -290,6 +286,16 @@ void Player::Guard()
 			m_breakGuard = true;
 			return;
 		}
+
+		Vector3 repulsiveForce = m_position - m_ball->GetPosition();
+		repulsiveForce.Normalize();
+		repulsiveForce *= m_ball->GetVelocity();
+		repulsiveForce.y = m_ball->GetVelocity() * FLOAT_01;
+		m_moveSpeed += repulsiveForce;
+		m_ball->SetVelocity(m_ball->GetVelocity() / FLOAT_2);
+		m_ball->SetMoveDirection(repulsiveForce * FLOAT_MINUS_1);
+		
+		
 	}
 	/// @brief ガード中は耐久値(guardDurability)が減り続ける
 	m_guardDurability -= 0.555f;
@@ -342,10 +348,7 @@ void Player::ReSpawn() {
 	/// @brief スタート位置にリスポーンさせる
 	m_position = m_startPos;
 	m_charaCon.SetPosition(m_position);
-	/// @brief リスポーン時にスコアの減算
-	m_gameUI->AddScore(m_myNumber, -100);
-	/// @brief 敵を倒したときにボールを蹴ったプレイヤーにスコアの加算
-	m_gameUI->AddScore(m_ball->GetPlayerInformation(), +100);
+	
 	
 	m_dieFlag = true;
 	
@@ -446,10 +449,16 @@ void Player::Update()
 	}
 	
 	/// @brief ボールとの距離が一定以下で吹き飛ぶ
-	if (m_ballDistance < COLLIDE_DISTANCE && m_dieFlag == false) {
-		BallCollide();
+	if (m_breakGuard == true) {
+		if (m_ballDistance < GUARD_DISTANCE && m_dieFlag == false) {
+			BallCollide();
+		}
 	}
-
+	else {
+		if (m_ballDistance < COLLIDE_DISTANCE && m_dieFlag == false) {
+			BallCollide();
+		}
+	}
 	/// @brief LB1を押している間ガード
 	if (g_pad[m_myNumber]->IsPress(enButtonLB1) && m_breakGuard == false) {
 		m_guard = true;
@@ -543,6 +552,10 @@ void Player::Update()
 
 	/// @brief アニメーション
 	Animation();
+
+	if (g_pad[m_myNumber]->IsTrigger(enButtonStart)) {
+		ReSpawn();
+	}
 }
 
 void Player::BallDistanceCalculation()
