@@ -422,14 +422,28 @@ void Player::Update()
 			
 			//エフェクト発生位置を決めるためのベクトル
 			Vector3 efcPos = Vector3::Zero;
+			//ボールへの方向
+			Vector3 toBallDir = m_ball->GetPosition() - m_position;
+			toBallDir.y = 0.0f;
+			//正規化
+			toBallDir.Normalize();
+			//回転方向を決めるためのクォータニオン
+			Quaternion efcRot = Quaternion::Identity;
+			//角度
+			float efcAngle = 0.0f;
+			//ボールへのベクトルから発生させる角度を計算
+			efcAngle = atan2(toBallDir.x, toBallDir.z);
+
+			efcRot.SetRotation(Vector3::AxisY, efcAngle);
 			
 			//プレイヤー座標とボール座標を線形補完し、発生位置を決定
 			//補間率が0に近ければプレイヤー側、1に近ければボール側に発生する
 			efcPos.Lerp(KICKEFFECT_POSITION_RATE, m_position, m_ball->GetPosition());
+			efcPos.y += 80.0f;
 
 			m_kickEffect.Play();
 			m_kickEffect.SetPosition(efcPos);
-			m_kickEffect.SetRotation(m_qRot);
+			m_kickEffect.SetRotation(efcRot);
 			m_kickEffect.SetScale(KICKEFFECT_SCALE);
 			//キックした時の座標を保持したいのでここで更新
 			m_kickEffect.Update();
@@ -488,14 +502,19 @@ void Player::Update()
 		}
 	}
 
-	//ガードブレイクエフェクト発生処理
+	//ガードブレイクエフェクト発生処理//
+	
 	//前フレームにガードブレイクしておらず...
 	if (m_breakGuardPrevFrame == false) {
 		//現フレームでガードブレイクしていたらガードブレイクエフェクトを再生
 		if (m_breakGuard == true) {
+			//ガードエフェクトの再生を停止
+			m_guardEffect.Stop();
+			//ガードブレイクエフェクトを再生
 			m_guardBreakEffect.Play();
-			//行動不能エフェクトを再生
-			m_knockOutEffect.Play();
+			////行動不能エフェクトを再生
+			//m_knockOutEffect.Play();
+			
 			Vector3 breakPos = m_position;
 			breakPos.y += 80.0f;
 
@@ -504,21 +523,66 @@ void Player::Update()
 			m_guardBreakEffect.Update();
 		}
 	}
-	//シールド回復エフェクト発生処理
+
+	//シールド回復エフェクト発生処理//
+	
 	//前フレームにガードブレイクしており...
 	if (m_breakGuardPrevFrame == true) {
 		//現フレームでガードブレイクしていなければ(シールドが回復していたら)回復エフェクトを再生
 		if (m_breakGuard == false) {
 			m_shieldRepairEffect.Play();
+			//行動不能エフェクトの再生を停止
+			m_knockOutEffect.Stop();
 		}
 	}
 
 
-	//ガード開始時のエフェクト発生処理
+	//ガード開始時のエフェクト発生処理//
+	
 	//ボタン押下時かつガードブレイクしていないときに実行
 	if (g_pad[m_myNumber]->IsTrigger(enButtonLB1) && m_breakGuard == false) {
 		m_guardBeginEffect.Play();
 	}
+
+	//行動不能エフェクトの発生,停止処理//
+	//行動不能エフェクトはガードブレイク時とダメージ時に発生する
+	
+	//前フレームでガードブレイクしてない時
+	if (m_breakGuardPrevFrame == false) {
+		//前フレームでダメージ状態でなく、現フレームでダメージ時
+		if (m_breakGuard == false && m_damagePrevFrame == false && m_damage == true) {
+			//再生
+			m_knockOutEffect.Play();
+		}
+		//前フレームでダメージ状態で、現フレームで非ダメージ時(=回復時)
+		else if (m_breakGuard == false && m_damagePrevFrame == true && m_damage == false) {
+			//再生を停止
+			m_knockOutEffect.Stop();
+		}
+		//現フレームでガードブレイクした時
+		else if (m_breakGuard == true) {
+			//再生
+			m_knockOutEffect.Play();
+		}
+		//吹っ飛ばされて死んだとき
+		else if (m_dieFlag == true) {
+			m_knockOutEffect.Stop();
+		}
+	}
+	//前フレームでガードブレイクしているとき
+	else {
+		//現フレームでガードブレイク状態でないとき(=回復時)
+		if (m_breakGuard == false) {
+			//再生を停止
+			m_knockOutEffect.Stop();
+		}
+		//吹っ飛ばされて死んだとき
+		else if (m_dieFlag == true) {
+			m_knockOutEffect.Stop();
+		}
+	}
+	
+
 
 	if (m_dieFlag == true) {
 		Muteki();
@@ -539,6 +603,7 @@ void Player::Update()
 	m_skinModelRender->SetPosition(m_position);
 	m_skinModelRender->SetRotation(m_qRot);
 
+	//エフェクト関係の更新処理//
 
 	//ガードエフェクトの更新
 	Vector3 efcGuardPos = m_position;
@@ -565,6 +630,8 @@ void Player::Update()
 
 	//現フレームのガード状態を記録
 	m_breakGuardPrevFrame = m_breakGuard;
+	//現フレームのダメージフラグ状態を記録
+	m_damagePrevFrame = m_damage;
 
 	/// @brief アニメーション
 	Animation();

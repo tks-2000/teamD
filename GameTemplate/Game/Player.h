@@ -89,6 +89,8 @@ private:
 	float m_gravity = 0.0f;
 	/// @brief ダメージフラグ
 	bool m_damage = false;
+	/// @brief 前フレームのダメージフラグ
+	bool m_damagePrevFrame = false;
 	/// @brief ダメージを受けて動けるようになるまでのタイマー
 	float m_damageTime = 0.0f;
 
