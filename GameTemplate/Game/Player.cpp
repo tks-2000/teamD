@@ -86,7 +86,6 @@ namespace {
 
 Player::Player()
 {
-
 	//プレイヤーの初期状態を設定
 	//キック時のエフェクトを初期化
 	m_kickEffect.Init(KICKEFFECT_FILEPATH);
@@ -371,8 +370,6 @@ void Player::ReSpawn() {
 	
 	
 	m_dieFlag = true;
-	
-
 }
 
 void Player::Muteki()

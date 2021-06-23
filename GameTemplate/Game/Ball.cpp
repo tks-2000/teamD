@@ -5,11 +5,11 @@ namespace
 {
 	//軌跡エフェクト関係
 	const char16_t* TRACKEFFECT_PL01_FILEPATH = u"Assets/effect/balltrack.efk";	//軌跡エフェクトのファイルパス
-	const Vector3 TRACKEFFECT_SCALE_MAX = { 30.0f,30.0f,1.0f };					//エフェクトの最大サイズ
+	const Vector3 TRACKEFFECT_SCALE_MAX = { 80.0f,80.0f,1.0f };					//エフェクトの最大サイズ
 	const Vector3 TRACKEFFECT_SCALE_MIN = { 3.0f,3.0f,1.0f };					//エフェクトの最小サイズ	
-	const float TRACKEFFECT_BASE_MAX = 30.0f;									//補間率を決めるための最大基準値
+	const float TRACKEFFECT_BASE_MAX = 40.0f;									//補間率を決めるための最大基準値
 	const float TRACKEFFECT_PLAY_MIN = 10.0f;									//軌跡を表示し始める速度
-	const int TRACKEFFECT_LERP_POW = 2;											//この値が大きくなるとボールの速度低下時に軌跡エフェクトが小さくなりやすい
+	const int TRACKEFFECT_LERP_POW = 1;											//この値が大きくなるとボールの速度低下時に軌跡エフェクトが小さくなりやすい
 
 	//反射エフェクト関係
 	const char16_t* REFLECTEFFECT_FILEPATH = u"Assets/effect/ballreflect.efk";
