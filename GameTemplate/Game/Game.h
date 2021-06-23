@@ -1,5 +1,6 @@
 #pragma once
 
+class GameDirector;
 class Lighting;
 class GameUI;
 class Player;
@@ -16,6 +17,8 @@ public:
 	void Update();
 
 private:
+
+	GameDirector* m_gameDirector = nullptr;
 	/// @brief プレイヤーの人数
 	int m_playerNum = 0;
 	/// @brief ライティング

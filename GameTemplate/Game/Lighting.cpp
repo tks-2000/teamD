@@ -119,9 +119,9 @@ void Lighting::InitSpotLight(int num)
 	m_light.spotLight[num].position.z = 0.0f;
 
 	//スポットライトのカラー
-	m_light.spotLight[num].color.x = 1.0f;
-	m_light.spotLight[num].color.y = 1.0f;
-	m_light.spotLight[num].color.z = 1.0f;
+	m_light.spotLight[num].color.x = 0.0f;
+	m_light.spotLight[num].color.y = 0.0f;
+	m_light.spotLight[num].color.z = 0.0f;
 
 	//スポットライトの方向
 	m_light.spotLight[num].direction.x = 0.0f;

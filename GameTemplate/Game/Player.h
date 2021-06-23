@@ -19,6 +19,12 @@ public:
 	/// @param num プレイヤー番号
 	void SetPlayerNumber(int num);
 
+	/// @brief 
+	void SetKillerPlayerNumber(int num) { m_killerPlayerNumber = num; }
+
+	/// @brief 
+	int GetKillerPlayerNumber() { return m_killerPlayerNumber; }
+
 	/// @brief 移動の処理
 	void Move();
 
@@ -53,6 +59,8 @@ public:
 private:
 	/// @brief プレイヤーの番号
 	int m_myNumber = 0;
+	/// @brief 
+	int m_killerPlayerNumber = 0;
 	/// @brief プレイヤーの座標
 	Vector3 m_position = Vector3::Zero;
 	/// @brief プレイやーの回転
@@ -150,6 +158,7 @@ private:
 
 	AnimationClip m_animationClips[enAnimation_Num];
 
-	GameUI* m_gameUI=nullptr;
+	GameUI* m_ui = nullptr;
+
 };
 

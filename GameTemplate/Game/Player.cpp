@@ -78,6 +78,10 @@ namespace {
 	const float MUTEKI_TIME = 150.0f;
 	/// @brief リスポーン時の無敵時間の初期化
 	const float TIME_ZERO = 0.0f;
+	/// @brief スコアの加算数値
+	const int SCORE_ADD = 100;
+	/// @brief スコアの減算数値
+	const int SCORE_PULL = -100;
 }
 
 Player::Player()
@@ -131,7 +135,7 @@ bool Player::Start()
 	m_skinModelRender->PlayAnimation(enAnimation_Idle, 1.0f);
 
 	
-	m_gameUI = FindGO<GameUI>(GAME_UI_NAME);
+	m_ui = FindGO<GameUI>(GAME_UI_NAME);
 
 	return true;
 }
@@ -203,9 +207,9 @@ void Player::Move()
 	/// @brief プレイヤーが落下したらリスポーンする
 	if (m_position.y < FALLING_HEIGHT) {
 		/// @brief リスポーン時にスコアの減算
-		m_gameUI->AddScore(m_myNumber, -100);
+		m_ui->AddScore(m_myNumber, SCORE_PULL);
 		/// @brief 敵を倒したときにボールを蹴ったプレイヤーにスコアの加算
-		m_gameUI->AddScore(m_ball->GetPlayerInformation(), +100);
+		m_ui->AddScore(GetKillerPlayerNumber(),SCORE_ADD);
 		ReSpawn();
 	}
 	
@@ -269,7 +273,8 @@ void Player::BallCollide()
 		m_damage = true;
 		/// @brief 蹴ったプレイヤー以外に当たり、リスポーン時じゃない時にスコアの加算
 		if (m_myNumber != m_ball->GetPlayerInformation() && m_dieFlag == false) {
-			m_gameUI->AddScore(m_ball->GetPlayerInformation(), +100);
+			m_ui->AddScore(m_ball->GetPlayerInformation(), SCORE_ADD);
+			SetKillerPlayerNumber(m_myNumber);
 		}
 	}
 	

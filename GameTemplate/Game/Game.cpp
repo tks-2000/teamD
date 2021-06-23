@@ -4,7 +4,9 @@
 
 Game::Game()
 {
-	m_playerNum = 4;
+	m_gameDirector = FindGO<GameDirector>(GAME_DIRECTOR_NAME);
+	m_playerNum = m_gameDirector->GetPlayerNum();
+	//m_playerNum = 4;
 	m_lighting = NewGO<Lighting>(0,LIGHTING_NAME);
 	for (int i = 0; i < m_playerNum; i++) {
 		m_player[i] = NewGO<Player>(0,PLAYER_NAME[i]);
@@ -25,6 +27,7 @@ Game::~Game()
 	DeleteGO(m_gameCamera);
 	DeleteGO(m_backGround);
 	DeleteGO(m_ball);
+	DeleteGO(m_ui);
 	
 	for (int i = 0; i < m_playerNum; i++) {
 		DeleteGO(m_player[i]);
@@ -47,5 +50,6 @@ void Game::Update()
 {
 	if (g_pad[0]->IsTrigger(enButtonSelect)) {
 		DeleteGO(this);
+		m_gameDirector->GameEnd();
 	}
 }
