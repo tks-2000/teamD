@@ -78,6 +78,8 @@ namespace {
 	const int SCORE_ADD = 100;
 	/// @brief スコアの減算数値
 	const int SCORE_PULL = -100;
+	/// @brief キックのクールタイム
+	const int KICK_COOLTIME = 20;
 }
 
 Player::Player()
@@ -414,7 +416,29 @@ void Player::Update()
 	Rotation();
 	IsKick();
 	
-	if (m_kickFlag == true) {
+	m_kickFlag = true;
+	/// @brief キッククールタイム
+	if (m_kickCooling == true)
+	{
+		m_kickCooler += 1;
+		if (m_kickCooler == KICK_COOLTIME) {
+			m_kickCooling = false;
+			m_kickCooler = 0;
+		}
+	}
+
+	/// @brief キックの不可避分岐
+	if (m_damage == true || m_guard == true || m_breakGuard == true || m_kickCooling == true)
+	{
+		//キック不可
+		m_readyKick = false;
+	}
+	else {
+		//キック可
+		m_readyKick = true;
+	}
+
+	if (m_kickFlag == true && m_readyKick == true) {
 		if (g_pad[m_myNumber]->IsTrigger(enButtonA)) {
 
 			//キックエフェクト再生処理//
@@ -437,6 +461,9 @@ void Player::Update()
 		}
 	}
 
+	if (g_pad[m_myNumber]->IsTrigger(enButtonA)) {
+		m_kickCooling = true;
+	}
 	/// @brief 非ガード時、ガード耐久値を回復
 	if (m_guard == false) {
 		m_guardDurability += 0.555f;

@@ -139,7 +139,12 @@ private:
 	Effect m_shieldHitEffect;
 	/// @brief ガードヒットエフェクトを一定間隔で発生させるためのカウンター
 	int m_shieldHitEffectCounter = 0;
-
+	/// @brief キックのクールタイムカウンター
+	int m_kickCooler = 0;
+	/// @brief キックのクールタイム中かの正負
+	bool m_kickCooling = false;
+	/// @brief m_kickFlagとは別の可不可フラグ
+	bool m_readyKick = true;
 
 	enum enAnimationClips
 	{
