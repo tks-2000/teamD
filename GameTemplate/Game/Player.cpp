@@ -278,7 +278,7 @@ void Player::Guard()
 	if (m_ballDistance < GUARD_DISTANCE) {
 
 		/// @brief ƒ{[ƒ‹‚Ì¨‚¢‚É‰ž‚¶‚Ä‘Ï‹v’l‚ðŒ¸‚ç‚·
-		float shieldDamage = 10.0f * (m_ball->GetVelocity() / 1);
+		float shieldDamage = 10.0f * (m_ball->GetVelocity() / 4.0f);
 		m_guardDurability -= shieldDamage;
 		if (m_guardDurability <= 0.0f)
 		{
