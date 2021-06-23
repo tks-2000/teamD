@@ -24,6 +24,7 @@ namespace {
 	const Vector4 PL3_COLOR = { 1.0f, 1.0f, 0.0f, 0.5f };
 	const Vector4 PL4_COLOR = { 0.0f, 1.0f, 0.0f, 0.5f };
 
+	const Vector2 GUARD_DURABILIYY[MAX_PLAYER_NUM] = { {-600.0f,200.0f},{400.0f,200.0f},{-600.0f,-300.0f},{400.0f,-300.0f} };
 	const float SCALE = 1.0f;
 }
 
@@ -44,6 +45,8 @@ GameUI::GameUI()
 	for (int plFontNum = 0; plFontNum < m_playerNum; plFontNum++) {
 		m_playerFont[plFontNum] = NewGO<FontRender>(2);
 		m_playerNumFont[plFontNum] = NewGO<FontRender>(2);
+		m_GuardDurability[plFontNum] = NewGO<FontRender>(2);
+		m_GuardDurability[plFontNum]->SetPosition(GUARD_DURABILIYY[plFontNum]);
 		switch (plFontNum)
 		{
 		case 0:
@@ -112,7 +115,7 @@ GameUI::~GameUI()
 	for (int playerNum = 0; playerNum < m_playerNum; playerNum++) {
 		DeleteGO(m_playerNumFont[playerNum]);
 		DeleteGO(m_playerFont[playerNum]);
-
+		DeleteGO(m_GuardDurability[playerNum]);
 	}
 	DeleteGO(m_ballSpeed);
 }
@@ -120,6 +123,9 @@ GameUI::~GameUI()
 bool GameUI::Start()
 {
 	m_ball = FindGO<Ball>(BALL_NAME);
+	for (int plFontNum = 0; plFontNum < m_playerNum; plFontNum++) {
+		m_player[plFontNum] = FindGO<Player>(PLAYER_NAME[plFontNum]);
+	}
 	return true;
 }
 
@@ -145,6 +151,11 @@ void GameUI::Update()
 	const wchar_t* speed = conv.c_str();
 	//swprintf(m_text, L"%2.1f", speed);
 	m_ballSpeed->SetText(speed);
+
+	for (int plFontNum = 0; plFontNum < m_playerNum; plFontNum++) {
+		std::wstring conv = std::to_wstring(m_player[plFontNum]->GetGuardDurability());
+		m_GuardDurability[plFontNum]->SetText(conv.c_str());
+	}
 }
 void GameUI::AddScore(int num, int score) {
 	/// @brief PL‚ÌƒXƒRƒA‚ð‰ÁŽZ‚·‚é

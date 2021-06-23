@@ -2,6 +2,7 @@
 
 class FontRender;
 class GameDirector;
+class Player;
 class Ball;
 
 const int PLAYER_NUMBER = 4;
@@ -41,6 +42,11 @@ private:
 
 	wchar_t* m_text;
 
+	FontRender* m_GuardDurability[PLAYER_NUMBER] = { nullptr };
+
+	float m_playerGuardDurability[PLAYER_NUMBER] = { 0.0f };
+
+	Player* m_player[PLAYER_NUMBER] = { nullptr };
 	Ball* m_ball = nullptr;
 };
 

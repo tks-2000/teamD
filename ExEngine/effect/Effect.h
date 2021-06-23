@@ -28,6 +28,10 @@ public:
 	/// </remark>
 	/// <param name="isStopAndPlay">エフェクト再生を中断して新たに再生しなおすかどうか。デフォルト値はfalse(=中断しない)</param>
 	void Play(const bool& isStopAndPlay = false );
+	
+	/// @brief エフェクトの再生を停止
+	void Stop();
+	
 	/*!
 	*@brief	座標を設定。
 	*/
