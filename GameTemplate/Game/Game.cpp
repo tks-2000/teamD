@@ -27,6 +27,7 @@ Game::~Game()
 	DeleteGO(m_gameCamera);
 	DeleteGO(m_backGround);
 	DeleteGO(m_ball);
+	DeleteGO(m_ui);
 	
 	for (int i = 0; i < m_playerNum; i++) {
 		DeleteGO(m_player[i]);

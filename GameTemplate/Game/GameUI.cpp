@@ -27,6 +27,10 @@ namespace {
 
 GameUI::GameUI()
 {
+	m_gameDirector = FindGO<GameDirector>(GAME_DIRECTOR_NAME);
+	m_playerNum = m_gameDirector->GetPlayerNum();
+
+
 	/// @brief テスト用フォント表示
 	//m_testFont = NewGO<FontRender>(2);
 	//m_testFont->SetText(L"test");
@@ -35,66 +39,76 @@ GameUI::GameUI()
 	//m_testFont->SetPosition({ 500.0f,0.0f });
 	//Vector4 color = { 1.0f,0.0f,0.0f,0.5f };
 	//m_testFont->SetColor(color);
+	for (int plFontNum = 0; plFontNum < m_playerNum; plFontNum++) {
+		m_playerFont[plFontNum] = NewGO<FontRender>(2);
+		m_playerNumFont[plFontNum] = NewGO<FontRender>(2);
+		switch (plFontNum)
+		{
+		case 0:
+			/// @brief PL1のフォント表示
+			//m_playerFont[PL1] = NewGO<FontRender>(2);
+			m_playerFont[plFontNum]->SetText(L"PLAYER1");
+			m_playerFont[plFontNum]->SetScale(SCALE);
+			m_playerFont[plFontNum]->SetPosition(PL1_FONT_POS);
+			m_playerFont[plFontNum]->SetColor(PL1_COLOR);
 
-	/// @brief PL1のフォント表示
-	m_playerFont = NewGO<FontRender>(2);
-	m_playerFont->SetText(L"PLAYER1");
-	m_playerFont->SetScale(SCALE);
-	m_playerFont->SetPosition(PL1_FONT_POS);
-	Vector4 PlColor1 = PL1_COLOR;
-	m_playerFont->SetColor(PlColor1);
+			/// @brief PL1の数値のフォント表示
+			//m_playerNumFont[PL1] = NewGO<FontRender>(2);
+			m_playerNumFont[plFontNum]->SetPosition(PL1_NUMFONT_POS);
+			break;
 
-	/// @brief PL2のフォント表示
-	m_playerFont = NewGO<FontRender>(2);
-	m_playerFont->SetText(L"PLAYER2");
-	m_playerFont->SetScale(SCALE);
-	m_playerFont->SetPosition(PL2_FONT_POS);
-	Vector4 PlColor2 = PL2_COLOR;
-	m_playerFont->SetColor(PlColor2);
+		case 1:
+			/// @brief PL2のフォント表示
+			//m_playerFont[PL2] = NewGO<FontRender>(2);
+			m_playerFont[plFontNum]->SetText(L"PLAYER2");
+			m_playerFont[plFontNum]->SetScale(SCALE);
+			m_playerFont[plFontNum]->SetPosition(PL2_FONT_POS);
+			m_playerFont[plFontNum]->SetColor(PL2_COLOR);
 
-	/// @brief PL3のフォント表示
-	m_playerFont = NewGO<FontRender>(2);
-	m_playerFont->SetText(L"PLAYER3");
-	m_playerFont->SetScale(SCALE);
-	m_playerFont->SetPosition(PL3_FONT_POS);
-	Vector4 PlColor3 = PL3_COLOR;
-	m_playerFont->SetColor(PlColor3);
+			/// @brief PL2の数値のフォント表示
+			//m_playerNumFont[PL2] = NewGO<FontRender>(2);
+			m_playerNumFont[plFontNum]->SetPosition(PL2_NUMFONT_POS);
+			break;
 
-	/// @brief PL4のフォント表示
-	m_playerFont = NewGO<FontRender>(2);
-	m_playerFont->SetText(L"PLAYER4");
-	m_playerFont->SetScale(SCALE);
-	m_playerFont->SetPosition(PL4_FONT_POS);
-	Vector4 PlColor4 = PL4_COLOR;
-	m_playerFont->SetColor(PlColor4);
+		case 2:
+			/// @brief PL3のフォント表示
+			//m_playerFont[PL3] = NewGO<FontRender>(2);
+			m_playerFont[plFontNum]->SetText(L"PLAYER3");
+			m_playerFont[plFontNum]->SetScale(SCALE);
+			m_playerFont[plFontNum]->SetPosition(PL3_FONT_POS);
+			m_playerFont[plFontNum]->SetColor(PL3_COLOR);
 
+			/// @brief PL3の数値のフォント表示
+			//m_playerNumFont[PL3] = NewGO<FontRender>(2);
+			m_playerNumFont[plFontNum]->SetPosition(PL3_NUMFONT_POS);
+			break;
 
+		case 3:
+			/// @brief PL4のフォント表示
+			//m_playerFont[PL4] = NewGO<FontRender>(2);
+			m_playerFont[plFontNum]->SetText(L"PLAYER4");
+			m_playerFont[plFontNum]->SetScale(SCALE);
+			m_playerFont[plFontNum]->SetPosition(PL4_FONT_POS);
+			m_playerFont[plFontNum]->SetColor(PL4_COLOR);
 
+			/// @brief PL4の数値のフォント表示
+			//m_playerNumFont[PL4] = NewGO<FontRender>(2);
+			m_playerNumFont[plFontNum]->SetPosition(PL4_NUMFONT_POS);
+			break;
+		}
+	}
 	/// @brief テスト用数値のフォント
 	//m_testNumFont = NewGO<FontRender>(2);
 	//m_testNumFont->SetPosition({ 500.0f,100.0f, });
-
-	/// @brief PL1の数値のフォント表示
-	m_playerNumFont[PL1] = NewGO<FontRender>(2);
-	m_playerNumFont[PL1]->SetPosition(PL1_NUMFONT_POS);
-
-	/// @brief PL2の数値のフォント表示
-	m_playerNumFont[PL2] = NewGO<FontRender>(2);
-	m_playerNumFont[PL2]->SetPosition(PL2_NUMFONT_POS);
-
-	/// @brief PL3の数値のフォント表示
-	m_playerNumFont[PL3] = NewGO<FontRender>(2);
-	m_playerNumFont[PL3]->SetPosition(PL3_NUMFONT_POS);
-
-	/// @brief PL4の数値のフォント表示
-	m_playerNumFont[PL4] = NewGO<FontRender>(2);
-	m_playerNumFont[PL4]->SetPosition(PL4_NUMFONT_POS);
-
 }
 
 GameUI::~GameUI()
 {
+	for (int playerNum = 0; playerNum < m_playerNum; playerNum++) {
+		DeleteGO(m_playerNumFont[playerNum]);
+		DeleteGO(m_playerFont[playerNum]);
 
+	}
 }
 
 bool GameUI::Start()
@@ -109,30 +123,13 @@ void GameUI::Update()
 	//std::wstring conversion;
 	//conversion = std::to_wstring(m_testNum);
 	//m_testNumFont->SetText(conversion.c_str());
-
-	/// @brief int型の数値を文字列に変換して出力
-	std::wstring conversion1;
-	/// @brief PL1のスコアの数値を入力
-	conversion1 = std::to_wstring(m_plNum[PL1]);
-	m_playerNumFont[PL1]->SetText(conversion1.c_str());
-
-	/// @brief int型の数値を文字列に変換して出力
-	std::wstring conversion2;
-	/// @brief PL2のスコアの数値を入力
-	conversion2 = std::to_wstring(m_plNum[PL2]);
-	m_playerNumFont[PL2]->SetText(conversion2.c_str());
-
-	/// @brief int型の数値を文字列に変換して出力
-	std::wstring conversion3;
-	/// @brief PL3のスコアの数値を入力
-	conversion3 = std::to_wstring(m_plNum[PL3]);
-	m_playerNumFont[PL3]->SetText(conversion3.c_str());
-
-	/// @brief int型の数値を文字列に変換して出力
-	std::wstring conversion4;
-	/// @brief PL4のスコアの数値を入力
-	conversion4 = std::to_wstring(m_plNum[PL4]);
-	m_playerNumFont[PL4]->SetText(conversion4.c_str());
+	for (int plFontNum = 0; plFontNum < m_playerNum; plFontNum++) {
+			/// @brief int型の数値を文字列に変換して出力
+			std::wstring conversion;
+			/// @brief PLのスコアの数値を入力
+			conversion = std::to_wstring(m_plNum[plFontNum]);
+			m_playerNumFont[plFontNum]->SetText(conversion.c_str());
+	}
 
 }
 void GameUI::AddScore(int num, int score) {
