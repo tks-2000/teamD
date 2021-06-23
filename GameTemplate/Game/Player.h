@@ -99,6 +99,8 @@ private:
 	float m_gravity = 0.0f;
 	/// @brief ダメージフラグ
 	bool m_damage = false;
+	/// @brief 前フレームのダメージフラグ
+	bool m_damagePrevFrame = false;
 	/// @brief ダメージを受けて動けるようになるまでのタイマー
 	float m_damageTime = 0.0f;
 
@@ -111,6 +113,7 @@ private:
 	float m_guardDurability = 100.0f;
 	/// @brief ガードの状態
 	bool m_breakGuard = false;
+	/// @brief 前フレームのガード状態フラグ記録用
 	bool m_breakGuardPrevFrame = false;
 	/// @brief ガード破壊によって起きるダウン状態
 	//bool m_breakDown = false;
@@ -123,6 +126,8 @@ private:
 	SkinModelRender* m_skinModelRender = nullptr;
 	/// @brief ボール
 	Ball* m_ball = nullptr;
+	
+	//エフェクト関連//
 	/// @brief ボールをキックした時のエフェクト
 	Effect m_kickEffect;
 	/// @brief ガード時のエフェクト
@@ -141,7 +146,8 @@ private:
 	Effect m_shieldHitEffect;
 	/// @brief ガードヒットエフェクトを一定間隔で発生させるためのカウンター
 	int m_shieldHitEffectCounter = 0;
-
+	//行動不能時エフェクト(ピヨり)
+	Effect m_knockOutEffect;
 
 	enum enAnimationClips
 	{

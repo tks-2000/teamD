@@ -108,5 +108,7 @@ private:
 	
 	/// @brief 軌跡用エフェクト
 	Effect m_ballTrack;
+	/// @brief 反射時エフェクト
+	Effect m_reflectEffect;
 };
 

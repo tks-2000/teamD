@@ -36,6 +36,12 @@ void Effect::Play(const bool& isStopAndPlay)
 	}
 
 }
+
+void Effect::Stop()
+{
+	EffectEngine::GetInstance()->Stop(m_handle);
+}
+
 void Effect::Update()
 {
 	EffectEngine::GetInstance()->UpdateEffectWorldMatrix(
