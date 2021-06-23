@@ -297,7 +297,7 @@ void Player::Guard()
 	if (m_ballDistance < GUARD_DISTANCE) {
 
 		/// @brief ボールの勢いに応じて耐久値を減らす
-		float shieldDamage = 10.0f * (m_ball->GetVelocity() / 4.0f);
+		float shieldDamage = 10.0f * (m_ball->GetVelocity() / 3.0f);
 		m_guardDurability -= shieldDamage;
 		if (m_guardDurability <= 0.0f)
 		{
@@ -491,7 +491,7 @@ void Player::Update()
 		}
 	}
 	/// @brief LB1を押している間ガード
-	if (g_pad[m_myNumber]->IsPress(enButtonLB1) && m_breakGuard == false) {
+	if (g_pad[m_myNumber]->IsPress(enButtonLB1) && m_breakGuard == false && m_damage == false) {
 		m_guard = true;
 	}
 	else {
