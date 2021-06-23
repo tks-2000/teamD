@@ -17,6 +17,8 @@ namespace {
 	const Vector2 PL3_NUMFONT_POS = { -550.0f,-250.0f };
 	const Vector2 PL4_NUMFONT_POS = { 500.0f,-250.0f };
 
+	const Vector2 BALL_SPEED_POS = { 500.0f,0.0f };
+
 	const Vector4 PL1_COLOR = { 1.0f, 0.0f, 0.0f, 0.5f };
 	const Vector4 PL2_COLOR = { 0.0f, 0.0f, 1.0f, 0.5f };
 	const Vector4 PL3_COLOR = { 1.0f, 1.0f, 0.0f, 0.5f };
@@ -100,6 +102,9 @@ GameUI::GameUI()
 	/// @brief テスト用数値のフォント
 	//m_testNumFont = NewGO<FontRender>(2);
 	//m_testNumFont->SetPosition({ 500.0f,100.0f, });
+
+	m_ballSpeed = NewGO<FontRender>(2);
+	m_ballSpeed->SetPosition(BALL_SPEED_POS);
 }
 
 GameUI::~GameUI()
@@ -109,11 +114,12 @@ GameUI::~GameUI()
 		DeleteGO(m_playerFont[playerNum]);
 
 	}
+	DeleteGO(m_ballSpeed);
 }
 
 bool GameUI::Start()
 {
-
+	m_ball = FindGO<Ball>(BALL_NAME);
 	return true;
 }
 
@@ -131,6 +137,14 @@ void GameUI::Update()
 			m_playerNumFont[plFontNum]->SetText(conversion.c_str());
 	}
 
+
+	/// @brief ボールの速度を入手
+	m_ballVelocity = m_ball->GetVelocity();
+	/// @brief 文字列に変換して出力
+	std::wstring conv = std::to_wstring(m_ballVelocity);
+	const wchar_t* speed = conv.c_str();
+	//swprintf(m_text, L"%2.1f", speed);
+	m_ballSpeed->SetText(speed);
 }
 void GameUI::AddScore(int num, int score) {
 	/// @brief PLのスコアを加算する

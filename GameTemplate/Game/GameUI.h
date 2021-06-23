@@ -2,6 +2,7 @@
 
 class FontRender;
 class GameDirector;
+class Ball;
 
 const int PLAYER_NUMBER = 4;
 
@@ -32,5 +33,14 @@ private:
 
 	GameDirector* m_gameDirector = nullptr;
 
+	/// @brief ボールの速度表示用のフォント
+	FontRender* m_ballSpeed = nullptr;
+
+	/// @brief ボールの速度
+	float m_ballVelocity = 0.0f;
+
+	wchar_t* m_text;
+
+	Ball* m_ball = nullptr;
 };
 

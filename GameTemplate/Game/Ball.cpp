@@ -82,6 +82,7 @@ void Ball::Move()
 	{
 		m_moveDirection = Vector3::Zero;
 		m_moveSpeed = Vector3::Zero;
+		m_moveVelocity = FLOAT_0;
 		m_moveFlag = false;
 	}
 
@@ -92,7 +93,7 @@ void Ball::Rotation()
 {
 	m_axisRotation = Cross(m_moveDirection, Vector3::AxisY);
 	m_qRot.SetRotation(m_axisRotation, m_angle);
-	m_angle -= 0.1f;
+	m_angle -= GetVelocity() * 0.1f / 5.5f;
 }
 
 void Ball::PlayTrackEffect()
