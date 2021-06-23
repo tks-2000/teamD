@@ -1,6 +1,7 @@
 #pragma once
 
 class FontRender;
+class Ball;
 
 const int PLAYER_NUMBER = 4;
 
@@ -26,5 +27,15 @@ private:
 	/// @brief テスト用の数値表示フォント
 	//FontRender* m_testNumFont;
 	FontRender* m_playerNumFont[PLAYER_NUMBER];
+
+	/// @brief ボールの速度表示用のフォント
+	FontRender* m_ballSpeed = nullptr;
+
+	/// @brief ボールの速度
+	float m_ballVelocity = 0.0f;
+
+	wchar_t* m_text;
+
+	Ball* m_ball = nullptr;
 };
 

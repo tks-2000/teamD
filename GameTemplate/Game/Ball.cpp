@@ -82,6 +82,7 @@ void Ball::Move()
 	{
 		m_moveDirection = Vector3::Zero;
 		m_moveSpeed = Vector3::Zero;
+		m_moveVelocity = FLOAT_0;
 		m_moveFlag = false;
 	}
 
