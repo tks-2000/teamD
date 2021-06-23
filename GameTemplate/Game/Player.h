@@ -49,6 +49,8 @@ public:
 	/// @brief ガードの処理
 	void Guard();
 
+	float GetGuardDurability() { return m_guardDurability; }
+
 	/// @brief リスポーンの処理
 	void ReSpawn();
 
