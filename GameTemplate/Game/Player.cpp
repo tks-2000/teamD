@@ -171,6 +171,9 @@ void Player::Move()
 	m_moveSpeed += g_camera3D->GetRight()* m_Lstickx;
 	m_moveSpeed += g_camera3D->GetForward()* m_Lsticky;
 	
+
+	m_moveSpeed *= m_moveVelocity;
+
 	/// @brief 重力を加える
 	m_moveSpeed.y -= m_gravity;
 	
@@ -185,14 +188,14 @@ void Player::Move()
 	/// @brief 移動速度に摩擦力を加える
 	m_moveSpeed -= m_moveSpeed * m_friction;
 
-	if (m_damage == false && m_guard == false && m_moveSpeed.x != FLOAT_0 || m_moveSpeed.z != FLOAT_0) {
+	if (m_damage == false && m_guard == false && m_breakGuard == false && m_moveSpeed.x != FLOAT_0 || m_moveSpeed.z != FLOAT_0) {
 		m_direction = m_moveSpeed;
+		m_direction.y = FLOAT_0;
+		m_direction.Normalize();
 	}
-	
-	m_moveSpeed *= m_moveVelocity;
 
 	Vector3 moveSpeedXZ = m_moveSpeed;
-	moveSpeedXZ.y = 0.0f;
+	moveSpeedXZ.y = FLOAT_0;
 	if (moveSpeedXZ.LengthSq() < 0.1f) {
 		m_moveSpeed.x = FLOAT_0;
 		m_moveSpeed.z = FLOAT_0;
@@ -213,11 +216,11 @@ void Player::Move()
 void Player::Rotation()
 {
 	/// @brief ダメージ中、ガード中、動いていないときは回転しない
-	if (m_damage == true || m_guard == true || m_moveSpeed.x == FLOAT_0 && m_moveSpeed.z == FLOAT_0) {
+	if (m_damage == true || m_guard == true || m_breakGuard == true || m_moveSpeed.x == FLOAT_0 && m_moveSpeed.z == FLOAT_0) {
 		m_anim = enAnimation_Idle;
 		return;
 	}
-	m_qRot.SetRotation(Vector3::AxisY, atan2(m_moveSpeed.x, m_moveSpeed.z));
+	m_qRot.SetRotation(Vector3::AxisY, atan2(m_direction.x, m_direction.z));
 	m_anim = enAnimation_Walk;
 }
 
@@ -225,9 +228,9 @@ void Player::IsKick()
 {
 	/// @brief ボールとの距離が一定以下の時のみ判定
 	if (m_ballDistance < KICK_POSSIBLE_DISTANCE) {
-		m_direction.Normalize();
+		/// @brief プレイヤーの向きとボールへのベクトルの内積で蹴れる角度を制限
 		float matchRate = Dot(m_direction, m_toBallVec);
-		if (matchRate > 0.7f) {
+		if (matchRate > 0.0f) {
 			m_kickFlag = true;
 		}
 		else {
@@ -255,6 +258,12 @@ void Player::KickBall()
 
 void Player::BallCollide()
 {
+	/// @brief ボールへのベクトルとボールの向きで当たる角度を決める
+	float matchRate = Dot(m_ball->GetMoveDirection(), m_toBallVec);
+	if (matchRate > 0.0f) {
+		return;
+	}
+
 	/// @brief ボールと自分の位置から吹き飛ばされる方向を決める
 	Vector3 repulsiveForce = m_position - m_ball->GetPosition();
 	repulsiveForce.y = FLOAT_0;
@@ -567,4 +576,6 @@ void Player::BallDistanceCalculation()
 {
 	m_toBallVec = m_ball->GetPosition() - m_position;
 	m_ballDistance = m_toBallVec.Length();
+	m_toBallVec.y = FLOAT_0;
+	m_toBallVec.Normalize();
 }

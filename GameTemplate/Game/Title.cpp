@@ -2,9 +2,9 @@
 #include "Title.h"
 
 namespace {
-	const wchar_t* PLAYER_SELECT_TEXT[4] = { L"1P PLAY" ,L"2P PLAY" ,L"3P PLAY" ,L"4P PLAY" };
+	const wchar_t* PLAYER_SELECT_TEXT[MAX_PLAYER_NUM] = { L"1P PLAY" ,L"2P PLAY" ,L"3P PLAY" ,L"4P PLAY" };
 	const wchar_t* PLAYER_START = L"PUSH START BUTTON";
-	const Vector2 PLAYER_SELECT_POS[4] = { { 400.0f,0.0f },{400.0f,-100.0f},{400.0f,-200.0f},{400.0f,-300.0f} };
+	const Vector2 PLAYER_SELECT_POS[MAX_PLAYER_NUM] = { { 400.0f,0.0f },{400.0f,-100.0f},{400.0f,-200.0f},{400.0f,-300.0f} };
 }
 
 Title::Title()
