@@ -16,7 +16,7 @@ Game::Game()
 	m_ball = NewGO<Ball>(0, BALL_NAME);
 	
 	m_ui = NewGO<GameUI>(0,GAME_UI_NAME);
-
+	m_sky = NewGO<Sky>(0, "Sky");
 }
 
 Game::~Game()
@@ -28,6 +28,7 @@ Game::~Game()
 	DeleteGO(m_backGround);
 	DeleteGO(m_ball);
 	DeleteGO(m_ui);
+	DeleteGO(m_sky);
 	
 	for (int i = 0; i < m_playerNum; i++) {
 		DeleteGO(m_player[i]);
