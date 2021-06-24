@@ -44,6 +44,11 @@ namespace {
 	//行動不能エフェクトのスケール
 	const Vector3 KNOCKOUTEFFECT_SCALE = { 15.0f,15.0f,15.0f };
 
+	//ジャストガードエフェクトのファイルパス
+	const char16_t* JUSTGUARDEFFECT_FILEPATH = u"Assets/effect/justguard.efk";
+	//ジャストガードエフェクトのスケール
+	const Vector3 JUSTGUARDEFFECT_SCALE = { 10.0f,10.0f,10.0f };
+
 	/// @brief キック可能な距離
 	const float KICK_POSSIBLE_DISTANCE = 200.0f;
 	/// @brief ガード可能な距離
@@ -109,8 +114,8 @@ Player::Player()
 	m_shieldHitEffect.Init(GUARDEFFECT_HIT_FILEPATH);
 	//行動不能エフェクトを初期化
 	m_knockOutEffect.Init(KNOCKOUTEFFECT_FILEPATH);
-
-	
+	//ジャストガードエフェクトを初期化
+	m_justGuardEffect.Init(JUSTGUARDEFFECT_FILEPATH);
 
 	m_moveVelocity = 0.9f;
 	m_kickPower = 5.0f;
@@ -305,6 +310,16 @@ void Player::Guard()
 	if (m_ballDistance < GUARD_DISTANCE) {
 		if(m_justGuardTime < POSSIBLE_JUST_GUARD_TIME){
 			m_ball->SetVelocity(FLOAT_0);
+			
+			//ジャストガードエフェクト再生処理//
+
+			m_justGuardEffect.Play();
+			Vector3 efcPos = m_position;
+			efcPos.y += 80.0f;
+			m_justGuardEffect.SetPosition(efcPos);
+			m_justGuardEffect.SetScale(JUSTGUARDEFFECT_SCALE);
+			m_justGuardEffect.Update();
+
 			m_kickPowerUp = true;
 		}
 		else {

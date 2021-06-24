@@ -160,6 +160,8 @@ private:
 	bool m_readyKick = true;
 	//行動不能時エフェクト(ピヨり)
 	Effect m_knockOutEffect;
+	//ジャストガードエフェクト
+	Effect m_justGuardEffect;
 
 	enum enAnimationClips
 	{
