@@ -160,5 +160,13 @@
     <None Include="Assets\modelData\bg\testmap.tkm" />
     <None Include="Assets\modelData\bg\testmap_s.tkm" />
     <None Include="Assets\modelData\sphere\sphere.tkm" />
+    <None Include="Assets\animData\unitychan\clear.tka" />
+    <None Include="Assets\animData\unitychan\damage.tka" />
+    <None Include="Assets\animData\unitychan\idle.tka" />
+    <None Include="Assets\animData\unitychan\jump.tka" />
+    <None Include="Assets\animData\unitychan\KneelDown.tka" />
+    <None Include="Assets\animData\unitychan\run.tka" />
+    <None Include="Assets\animData\unitychan\slash.tka" />
+    <None Include="Assets\animData\unitychan\walk.tka" />
   </ItemGroup>
 </Project>

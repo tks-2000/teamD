@@ -56,6 +56,8 @@ public:
 
 	void Muteki();
 
+	float GetStamina() { return m_stamina; }
+
 	void Animation();
 
 private:
@@ -73,6 +75,10 @@ private:
 	float m_moveVelocity = 0.0f;
 	/// @brief プレイヤーの移動速度
 	Vector3 m_moveSpeed = Vector3::Zero;
+	/// @brief ダッシュフラグ
+	bool m_dash = true;
+	/// @brief プレイヤーのスタミナ
+	float m_stamina = 0.0f;
 	/// @brief プレイヤーの向いている方向
 	Vector3 m_direction = Vector3::Zero;
 	/// @brief プレイヤーのスタート時の座標
@@ -167,6 +173,7 @@ private:
 	{
 		enAnimation_Idle,
 		enAnimation_Walk,
+		enAnimation_Run,
 		enAnimation_Num
 	};
 

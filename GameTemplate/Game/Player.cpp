@@ -95,6 +95,8 @@ namespace {
 	const float NORMAL_KICK_POWER = 5.0f;
 	/// @brief 強化状態のキック力
 	const float POWERFUlL_KICK_POWER = 30.0f;
+	/// @brief スタミナの最大値
+	const float MAX_STANIMA = 6.0f;
 }
 
 Player::Player()
@@ -118,6 +120,7 @@ Player::Player()
 	m_justGuardEffect.Init(JUSTGUARDEFFECT_FILEPATH);
 
 	m_moveVelocity = 0.9f;
+	m_stamina = MAX_STANIMA;
 	m_kickPower = 5.0f;
 	m_gravity = 5.0f;
 	m_charaCon.Init(PLAYER_RADIUS, PLAYER_HEIGHT, m_position);
@@ -137,9 +140,11 @@ bool Player::Start()
 
 	m_animationClips[enAnimation_Idle].Load("Assets/animData/idle.tka");
 	m_animationClips[enAnimation_Walk].Load("Assets/animData/walk.tka");
+	m_animationClips[enAnimation_Run].Load("Assets/animData/unitychan/run.tka");
 
 	m_animationClips[enAnimation_Idle].SetLoopFlag(true);
 	m_animationClips[enAnimation_Walk].SetLoopFlag(true);
+	m_animationClips[enAnimation_Run].SetLoopFlag(true);
 
 	m_skinModelRender = NewGO<SkinModelRender>(PRIORITY);
 
@@ -189,12 +194,31 @@ void Player::Move()
 	m_moveSpeed += g_camera3D->GetRight()* m_Lstickx;
 	m_moveSpeed += g_camera3D->GetForward()* m_Lsticky;
 	
+	if (m_dash == true && m_guard == false && g_pad[m_myNumber]->IsPress(enButtonRB1)) {
+		m_moveVelocity = 0.95f;
+		if (m_Lstickx != FLOAT_0 && m_Lsticky != FLOAT_0) {
+			m_stamina -= g_gameTime->GetFrameDeltaTime() * FLOAT_2;
+		}
+		m_anim = enAnimation_Run;
+	}
+	else {
+		m_moveVelocity = 0.9f;
+		m_stamina += g_gameTime->GetFrameDeltaTime() * FLOAT_1;
+		if (m_stamina > MAX_STANIMA) {
+			m_stamina = MAX_STANIMA;
+		}
+		m_anim = enAnimation_Walk;
+	}
 
 	m_moveSpeed *= m_moveVelocity;
 
 	/// @brief 重力を加える
-	m_moveSpeed.y -= m_gravity;
-	
+	if(m_damage == true){
+		m_moveSpeed.y -= m_gravity/2.0f;
+	}
+	else {
+		m_moveSpeed.y -= m_gravity;
+	}
 	
 	/// @brief ダメージ中かどうかで摩擦力を変える
 	if (m_damage == false) {
@@ -239,7 +263,7 @@ void Player::Rotation()
 		return;
 	}
 	m_qRot.SetRotation(Vector3::AxisY, atan2(m_direction.x, m_direction.z));
-	m_anim = enAnimation_Walk;
+	
 }
 
 void Player::IsKick()
@@ -288,7 +312,7 @@ void Player::BallCollide()
 	repulsiveForce.Normalize();
 	if (m_ball->IsMove() == true) {
 		repulsiveForce *= m_ball->GetVelocity() * FLOAT_2;
-		repulsiveForce.y = m_ball->GetVelocity() * FLOAT_2;
+		repulsiveForce.y = m_ball->GetVelocity() * 1.5f;
 		m_moveSpeed = repulsiveForce * FLOAT_2;
 		m_ball->SetMoveDirection(repulsiveForce * FLOAT_MINUS_1);
 		m_damage = true;
@@ -306,6 +330,19 @@ void Player::Guard()
 	/// @brief ガード中は移動速度を下げる
 	m_moveSpeed.x /= FLOAT_2;
 	m_moveSpeed.z /= FLOAT_2;
+
+	/// @brief ガード中は耐久値(guardDurability)が減り続ける
+	m_guardDurability -= 0.555f;
+
+	m_justGuardTime += g_gameTime->GetFrameDeltaTime() * FLOAT_01;
+	if (m_guardDurability <= 0.0f) {
+		m_guardDurability = 0.0f;
+		m_breakGuard = true;
+	}
+
+	if (m_ball->IsMove() == false) {
+		return;
+	}
 	
 	if (m_ballDistance < GUARD_DISTANCE) {
 		if(m_justGuardTime < POSSIBLE_JUST_GUARD_TIME){
@@ -343,14 +380,7 @@ void Player::Guard()
 		}
 		
 	}
-	/// @brief ガード中は耐久値(guardDurability)が減り続ける
-	m_guardDurability -= 0.555f;
-
-	m_justGuardTime += g_gameTime->GetFrameDeltaTime() * FLOAT_01;
-	if (m_guardDurability <= 0.0f) {
-		m_guardDurability = 0.0f;
-		m_breakGuard = true;
-	}
+	
 
 	if (m_ballDistance < GUARDEFFECT_HIT_DISTANCE && m_ball->IsMove() == true) {
 		//ガードヒットエフェクトの発生
@@ -421,6 +451,9 @@ void Player::Animation()
 	case enAnimation_Walk: {
 		m_skinModelRender->PlayAnimation(enAnimation_Walk, 0.2f);
 	}break;
+	case enAnimation_Run: {
+		m_skinModelRender->PlayAnimation(enAnimation_Run, 0.2f);
+	}break;
 	default:
 		break;
 	}
@@ -448,6 +481,12 @@ void Player::Update()
 		m_Lstickx = FLOAT_0;
 		m_Lsticky = FLOAT_0;
 		m_damageTime += FLOAT_1;
+	}
+	if (m_stamina < FLOAT_0) {
+		m_dash = false;
+	}
+	if (m_dash == false && m_stamina >= MAX_STANIMA) {
+		m_dash = true;
 	}
 
 	BallDistanceCalculation();
