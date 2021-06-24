@@ -115,6 +115,12 @@ private:
 	bool m_breakGuard = false;
 	/// @brief 前フレームのガード状態フラグ記録用
 	bool m_breakGuardPrevFrame = false;
+	/// @brief ジャストガード判定になる時間
+	float m_justGuardTime = 0.0f;
+	/// @brief キック力が上がるフラグ
+	bool m_kickPowerUp = false;
+	/// @brief キック力が上がる時間
+	float m_powerUpTime = 0.0f;
 	/// @brief ガード破壊によって起きるダウン状態
 	//bool m_breakDown = false;
 
