@@ -7,6 +7,7 @@ class Player;
 class GameCamera;
 class BackGround;
 class Ball;
+class Sky;
 
 class Game : public IGameObject
 {
@@ -33,6 +34,8 @@ private:
 	BackGround* m_backGround = nullptr;
 	/// @brief É{Å[Éã
 	Ball* m_ball = nullptr;
+	/// @brief îwåiÇÃãÛ
+	Sky* m_sky = nullptr;
 
 };
 

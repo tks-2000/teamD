@@ -15,7 +15,7 @@
 #include "GameCamera.h"
 #include "BackGround.h"
 #include "Ball.h"
-
+#include "Sky.h"
 namespace {
 
 	const int MAX_PLAYER_NUM = 4;
