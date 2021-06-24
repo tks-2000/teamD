@@ -47,7 +47,7 @@ namespace {
 	/// @brief キック可能な距離
 	const float KICK_POSSIBLE_DISTANCE = 200.0f;
 	/// @brief ガード可能な距離
-	const float GUARD_DISTANCE = 120.0f;
+	const float GUARD_DISTANCE = 90.0f;
 	/// @brief ボールと接触する距離
 	const float COLLIDE_DISTANCE = 80.0f;
 	/// @brief 落下扱いになる高さ
@@ -82,6 +82,14 @@ namespace {
 	const int SCORE_ADD = 100;
 	/// @brief スコアの減算数値
 	const int SCORE_PULL = -100;
+	/// @brief キックのクールタイム
+	const int KICK_COOLTIME = 20;
+	/// @brief ジャストガード可能な時間
+	const float POSSIBLE_JUST_GUARD_TIME = 0.01f;
+	/// @brief 通常のキック力
+	const float NORMAL_KICK_POWER = 5.0f;
+	/// @brief 強化状態のキック力
+	const float POWERFUlL_KICK_POWER = 30.0f;
 }
 
 Player::Player()
@@ -275,7 +283,7 @@ void Player::BallCollide()
 	repulsiveForce.Normalize();
 	if (m_ball->IsMove() == true) {
 		repulsiveForce *= m_ball->GetVelocity() * FLOAT_2;
-		repulsiveForce.y = m_ball->GetVelocity() * FLOAT_1;
+		repulsiveForce.y = m_ball->GetVelocity() * FLOAT_2;
 		m_moveSpeed = repulsiveForce * FLOAT_2;
 		m_ball->SetMoveDirection(repulsiveForce * FLOAT_MINUS_1);
 		m_damage = true;
@@ -295,29 +303,35 @@ void Player::Guard()
 	m_moveSpeed.z /= FLOAT_2;
 	
 	if (m_ballDistance < GUARD_DISTANCE) {
-
-		/// @brief ボールの勢いに応じて耐久値を減らす
-		float shieldDamage = 10.0f * (m_ball->GetVelocity() / 4.0f);
-		m_guardDurability -= shieldDamage;
-		if (m_guardDurability <= 0.0f)
-		{
-			m_guardDurability = 0.0f;
-			m_breakGuard = true;
-			return;
+		if(m_justGuardTime < POSSIBLE_JUST_GUARD_TIME){
+			m_ball->SetVelocity(FLOAT_0);
+			m_kickPowerUp = true;
 		}
+		else {
+			/// @brief ボールの勢いに応じて耐久値を減らす
+			float shieldDamage = 10.0f * (m_ball->GetVelocity() / 3.0f);
+			m_guardDurability -= shieldDamage;
+			if (m_guardDurability <= 0.0f)
+			{
+				m_guardDurability = 0.0f;
+				m_breakGuard = true;
+				return;
+			}
 
-		Vector3 repulsiveForce = m_position - m_ball->GetPosition();
-		repulsiveForce.Normalize();
-		repulsiveForce *= m_ball->GetVelocity();
-		repulsiveForce.y = m_ball->GetVelocity() * FLOAT_01;
-		m_moveSpeed += repulsiveForce;
-		m_ball->SetVelocity(m_ball->GetVelocity() / FLOAT_2);
-		m_ball->SetMoveDirection(repulsiveForce * FLOAT_MINUS_1);
-		
+			Vector3 repulsiveForce = m_position - m_ball->GetPosition();
+			repulsiveForce.Normalize();
+			repulsiveForce *= m_ball->GetVelocity();
+			repulsiveForce.y = m_ball->GetVelocity() * FLOAT_01;
+			m_moveSpeed += repulsiveForce;
+			m_ball->SetVelocity(m_ball->GetVelocity() / FLOAT_2);
+			m_ball->SetMoveDirection(repulsiveForce * FLOAT_MINUS_1);
+		}
 		
 	}
 	/// @brief ガード中は耐久値(guardDurability)が減り続ける
 	m_guardDurability -= 0.555f;
+
+	m_justGuardTime += g_gameTime->GetFrameDeltaTime() * FLOAT_01;
 	if (m_guardDurability <= 0.0f) {
 		m_guardDurability = 0.0f;
 		m_breakGuard = true;
@@ -426,7 +440,41 @@ void Player::Update()
 	Rotation();
 	IsKick();
 	
-	if (m_kickFlag == true) {
+	/// @brief キッククールタイム
+	if (m_kickCooling == true)
+	{
+		m_kickCooler += 1;
+		if (m_kickCooler == KICK_COOLTIME) {
+			m_kickCooling = false;
+			m_kickCooler = 0;
+		}
+	}
+
+	if (m_kickPowerUp == true) {
+		m_kickPower = POWERFUlL_KICK_POWER;
+		m_powerUpTime += g_gameTime->GetFrameDeltaTime()*FLOAT_1;
+	}
+	else
+	{
+		m_powerUpTime = FLOAT_0;
+		m_kickPower = NORMAL_KICK_POWER;
+	}
+	if (m_powerUpTime > FLOAT_2) {
+		m_kickPowerUp = false;
+	}
+
+	/// @brief キックの不可避分岐
+	if (m_damage == true || m_guard == true || m_breakGuard == true || m_kickCooling == true)
+	{
+		//キック不可
+		m_readyKick = false;
+	}
+	else {
+		//キック可
+		m_readyKick = true;
+	}
+
+	if (m_kickFlag == true && m_readyKick == true) {
 		if (g_pad[m_myNumber]->IsTrigger(enButtonA)) {
 
 			//キックエフェクト再生処理//
@@ -463,9 +511,13 @@ void Player::Update()
 		}
 	}
 
+	if (g_pad[m_myNumber]->IsTrigger(enButtonA)) {
+		m_kickCooling = true;
+	}
 	/// @brief 非ガード時、ガード耐久値を回復
 	if (m_guard == false) {
 		m_guardDurability += 0.555f;
+		m_justGuardTime = 0.0f;
 	}
 	/// @brief 再展開可能まで
 	if (m_guardDurability >= 100.0f && m_breakGuard == true)
@@ -491,7 +543,7 @@ void Player::Update()
 		}
 	}
 	/// @brief LB1を押している間ガード
-	if (g_pad[m_myNumber]->IsPress(enButtonLB1) && m_breakGuard == false) {
+	if (g_pad[m_myNumber]->IsPress(enButtonLB1) && m_breakGuard == false && m_damage == false) {
 		m_guard = true;
 	}
 	else {
