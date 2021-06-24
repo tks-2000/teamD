@@ -508,7 +508,9 @@ void Player::Update()
 		//カウンターに値を加算
 		m_guardEffectCouter += 1;
 		//規定フレーム毎にエフェクトを発生
-		if (m_guardEffectCouter % 20 == 1) {
+		if (m_guardEffectCouter % 20 == 1 &&
+			m_breakGuard == false &&
+			m_damage == false) {
 			m_guardEffect.Play();
 		}
 	}
@@ -551,7 +553,9 @@ void Player::Update()
 	//ガード開始時のエフェクト発生処理//
 	
 	//ボタン押下時かつガードブレイクしていないときに実行
-	if (g_pad[m_myNumber]->IsTrigger(enButtonLB1) && m_breakGuard == false) {
+	if (g_pad[m_myNumber]->IsTrigger(enButtonLB1) && 
+		m_breakGuard == false &&
+		m_damage == false) {
 		m_guardBeginEffect.Play();
 	}
 
