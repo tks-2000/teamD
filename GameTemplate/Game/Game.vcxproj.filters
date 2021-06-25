@@ -154,6 +154,7 @@
     <Image Include="Assets\modelData\sphere\sphere_tex_01.DDS" />
     <Image Include="Assets\sprite\title.dds" />
     <Image Include="Assets\sprite\title.png" />
+    <Image Include="Assets\sprite\UI_Gage.DDS" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\effect\kick.efk" />

@@ -58,6 +58,14 @@ public:
 
 	void Animation();
 
+	bool GetGuardFlag() {
+		return m_guard;
+	}
+	/// @brief ガード状態ゲッター
+	bool GetGuardBreak() {
+		return m_breakGuard;
+	}
+
 private:
 	/// @brief プレイヤーの番号
 	int m_myNumber = 0;

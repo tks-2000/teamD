@@ -406,6 +406,7 @@
     <Image Include="Assets\modelData\sphere\sphere_tex_01.DDS" />
     <Image Include="Assets\sprite\title.dds" />
     <Image Include="Assets\sprite\title.png" />
+    <Image Include="Assets\sprite\UI_Gage.DDS" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
