@@ -16,7 +16,7 @@
 #include "BackGround.h"
 #include "Ball.h"
 #include "Objects.h"
-
+#include "Sky.h"
 
 namespace {
 

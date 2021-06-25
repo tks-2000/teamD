@@ -8,6 +8,8 @@ class GameCamera;
 class BackGround;
 class Ball;
 class Objects;
+class Sky;
+
 
 const int PLAYER_NUMBER = 4;
 const float ZeroF = 0.0f;
@@ -40,5 +42,8 @@ private:
 	Ball* m_ball = nullptr;
 	/// @brief É{Å[Éã
 	Objects* m_objects = nullptr;
+	/// @brief îwåiÇÃãÛ
+	Sky* m_sky = nullptr;
+
 };
 

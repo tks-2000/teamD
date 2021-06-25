@@ -154,7 +154,7 @@ void GameUI::Update()
 	m_ballSpeed->SetText(speed);
 
 	for (int plFontNum = 0; plFontNum < m_playerNum; plFontNum++) {
-		std::wstring conv = std::to_wstring(m_player[plFontNum]->GetGuardDurability());
+		std::wstring conv = std::to_wstring(m_player[plFontNum]->GetStamina());
 		m_GuardDurability[plFontNum]->SetText(conv.c_str());
 	}
 }

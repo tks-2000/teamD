@@ -58,24 +58,14 @@ void Ball::Move()
 
 	m_position = m_charaCon.Execute(m_moveSpeed,1.0f);
 
+	//壁で反射する処理
 	if (m_position.x > 650.0f) {
 		m_position.x = 650.0f;
 		m_charaCon.SetPosition(m_position);
 		m_moveDirection.x *= -1.0f;
 		m_moveVelocity -= m_moveVelocity * m_friction;
 
-		//反射エフェクトの発生
-		m_reflectEffect.Play();
-		Vector3 reflectPos = m_position;
-		reflectPos.x = 650.0f;
-		reflectPos.y += 120.0f;
-
-		Quaternion reflectRot = Quaternion::Identity;
-		reflectRot.SetRotationDeg(Vector3::AxisY, 90.0f);
-		m_reflectEffect.SetPosition(reflectPos);
-		m_reflectEffect.SetScale(REFLECTEFFECT_SCALE);
-		m_reflectEffect.SetRotation(reflectRot);
-		m_reflectEffect.Update();
+		PlayReflectEffect(650.0f, 80.0f, m_position.z, 90.0f);
 
 	}
 	if (m_position.x < -650.0f) {
@@ -84,18 +74,8 @@ void Ball::Move()
 		m_moveDirection.x *= -1.0f;
 		m_moveVelocity -= m_moveVelocity * m_friction;
 
-		//反射エフェクトの発生
-		m_reflectEffect.Play();
-		Vector3 reflectPos = m_position;
-		reflectPos.x = -650.0f;
-		reflectPos.y += 120.0f;
+		PlayReflectEffect(-650.0f, 80.0f, m_position.z, -90.0f);
 
-		Quaternion reflectRot = Quaternion::Identity;
-		reflectRot.SetRotationDeg(Vector3::AxisY, -90.0f);
-		m_reflectEffect.SetPosition(reflectPos);
-		m_reflectEffect.SetScale(REFLECTEFFECT_SCALE);
-		m_reflectEffect.SetRotation(reflectRot);
-		m_reflectEffect.Update();
 	}
 	if (m_position.z > 650.0f) {
 		m_position.z = 650.0f;
@@ -103,18 +83,8 @@ void Ball::Move()
 		m_moveDirection.z *= -1.0f;
 		m_moveVelocity -= m_moveVelocity * m_friction;
 
-		//反射エフェクトの発生
-		m_reflectEffect.Play();
-		Vector3 reflectPos = m_position;
-		reflectPos.z = 650.0f;
-		reflectPos.y += 120.0f;
+		PlayReflectEffect(m_position.x, 80.0f, 650.0f, 180.0f);
 
-		Quaternion reflectRot = Quaternion::Identity;
-		reflectRot.SetRotationDeg(Vector3::AxisY, 180.0f);
-		m_reflectEffect.SetPosition(reflectPos);
-		m_reflectEffect.SetScale(REFLECTEFFECT_SCALE);
-		m_reflectEffect.SetRotation(reflectRot);
-		m_reflectEffect.Update();
 	}
 	if (m_position.z < -650.0f) {
 		m_position.z = -650.0f;
@@ -122,18 +92,8 @@ void Ball::Move()
 		m_moveDirection.z *= -1.0f;
 		m_moveVelocity -= m_moveVelocity * m_friction;
 
-		//反射エフェクトの発生
-		m_reflectEffect.Play();
-		Vector3 reflectPos = m_position;
-		reflectPos.z = -650.0f;
-		reflectPos.y += 120.0f;
+		PlayReflectEffect(m_position.x, 80.0f, -650.0f, 0.0f);
 
-		Quaternion reflectRot = Quaternion::Identity;
-		reflectRot.SetRotationDeg(Vector3::AxisY, 0.0f);
-		m_reflectEffect.SetPosition(reflectPos);
-		m_reflectEffect.SetScale(REFLECTEFFECT_SCALE);
-		m_reflectEffect.SetRotation(reflectRot);
-		m_reflectEffect.Update();
 	}
 
 	m_moveVelocity -= m_moveVelocity * m_friction;
@@ -189,6 +149,27 @@ void Ball::PlayTrackEffect()
 		m_ballTrack.SetScale(efcScale);
 	}
 
+}
+
+void Ball::PlayReflectEffect
+	(const float& posX, 
+	const float& posY, 
+	const float& posZ,
+	const float& angleH)
+{
+	//反射エフェクトの発生
+	m_reflectEffect.Play();
+	Vector3 reflectPos = m_position;
+	reflectPos.x = posX;
+	reflectPos.y = posY;
+	reflectPos.z = posZ;
+
+	Quaternion reflectRot = Quaternion::Identity;
+	reflectRot.SetRotationDeg(Vector3::AxisY, angleH);
+	m_reflectEffect.SetPosition(reflectPos);
+	m_reflectEffect.SetScale(REFLECTEFFECT_SCALE);
+	m_reflectEffect.SetRotation(reflectRot);
+	m_reflectEffect.Update();
 }
 
 void Ball::Update()

@@ -56,6 +56,8 @@ public:
 	/// @brief リスポーン時の無敵時間の処理
 	void Muteki();
 
+	float GetStamina() { return m_stamina; }
+
 	void Animation();
 
 private:
@@ -73,6 +75,10 @@ private:
 	float m_moveVelocity = 0.0f;
 	/// @brief プレイヤーの移動速度
 	Vector3 m_moveSpeed = Vector3::Zero;
+	/// @brief ダッシュフラグ
+	bool m_dash = true;
+	/// @brief プレイヤーのスタミナ
+	float m_stamina = 0.0f;
 	/// @brief プレイヤーの向いている方向
 	Vector3 m_direction = Vector3::Zero;
 	/// @brief プレイヤーのスタート時の座標
@@ -115,6 +121,12 @@ private:
 	bool m_breakGuard = false;
 	/// @brief 前フレームのガード状態フラグ記録用
 	bool m_breakGuardPrevFrame = false;
+	/// @brief ジャストガード判定になる時間
+	float m_justGuardTime = 0.0f;
+	/// @brief キック力が上がるフラグ
+	bool m_kickPowerUp = false;
+	/// @brief キック力が上がる時間
+	float m_powerUpTime = 0.0f;
 	/// @brief ガード破壊によって起きるダウン状態
 	//bool m_breakDown = false;
 
@@ -154,11 +166,14 @@ private:
 	bool m_readyKick = true;
 	//行動不能時エフェクト(ピヨり)
 	Effect m_knockOutEffect;
+	//ジャストガードエフェクト
+	Effect m_justGuardEffect;
 
 	enum enAnimationClips
 	{
 		enAnimation_Idle,
 		enAnimation_Walk,
+		enAnimation_Run,
 		enAnimation_Num
 	};
 

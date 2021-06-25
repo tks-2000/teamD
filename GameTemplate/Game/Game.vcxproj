@@ -304,6 +304,7 @@
     <ClCompile Include="Objects.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SkinModelRender.cpp" />
+    <ClCompile Include="Sky.cpp" />
     <ClCompile Include="SpriteRender.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -389,12 +390,21 @@
     <ClInclude Include="Objects.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="SkinModelRender.h" />
+    <ClInclude Include="Sky.h" />
     <ClInclude Include="SpriteRender.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
     <ClInclude Include="Title.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\animData\unitychan\clear.tka" />
+    <None Include="Assets\animData\unitychan\damage.tka" />
+    <None Include="Assets\animData\unitychan\idle.tka" />
+    <None Include="Assets\animData\unitychan\jump.tka" />
+    <None Include="Assets\animData\unitychan\KneelDown.tka" />
+    <None Include="Assets\animData\unitychan\run.tka" />
+    <None Include="Assets\animData\unitychan\slash.tka" />
+    <None Include="Assets\animData\unitychan\walk.tka" />
     <None Include="Assets\effect\kick.efk" />
     <None Include="Assets\modelData\bg\testmap.tkm" />
     <None Include="Assets\modelData\bg\testmap_s.tkm" />

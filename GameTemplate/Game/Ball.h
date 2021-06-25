@@ -21,6 +21,12 @@ public:
 	void Rotation();
 	/// @brief 軌跡用エフェクトの再生処理
 	void PlayTrackEffect();
+	/// @brief 壁反射用エフェクトの再生処理
+	void PlayReflectEffect
+		(const float& posX,
+		const float& posY,
+		const float& posZ,
+		const float& angleH);
 
 	/// @brief ボールの移動を開始する
 	void MoveStart() { m_moveFlag = true; }
