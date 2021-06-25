@@ -2,6 +2,7 @@
 #include "GameUI.h"
 
 namespace {
+
 	const int PL1 = 0;
 	const int PL2 = 1;
 	const int PL3 = 2;
@@ -188,6 +189,7 @@ void GameUI::Update()
 				m_shieldGage[charley]->SetPosition({m_ShGagePos[charley].x - ShGageDownVa, m_ShGagePos[charley].y, 0.0f });
 			}
 		}
+
 	}
 	for (int delta = 0; delta < m_playerNum; delta++)
 	{

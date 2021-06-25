@@ -15,7 +15,9 @@
 #include "GameCamera.h"
 #include "BackGround.h"
 #include "Ball.h"
+#include "Objects.h"
 #include "Sky.h"
+
 namespace {
 
 	const int MAX_PLAYER_NUM = 4;
@@ -41,6 +43,7 @@ namespace {
 	const char* GAME_CAMERA_NAME = "GameCamera";
 	const char* BACK_GROUND_NAME = "BackGround";
 	const char* BALL_NAME = "Ball";
+	const char* OBJECTS_NAME = "Objects";
 
 	const char* UNITYCHAN_MODEL = "Assets/modelData/unityChan.tkm";
 }

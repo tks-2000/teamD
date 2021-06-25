@@ -6,7 +6,6 @@ class Player;
 class Ball;
 class SpriteRender;
 
-const int PLAYER_NUMBER = 4;
 
 class GameUI : public IGameObject
 {
