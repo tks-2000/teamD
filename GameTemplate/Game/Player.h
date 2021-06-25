@@ -53,7 +53,7 @@ public:
 
 	/// @brief リスポーンの処理
 	void ReSpawn();
-
+	/// @brief リスポーン時の無敵時間の処理
 	void Muteki();
 
 	float GetStamina() { return m_stamina; }
@@ -181,6 +181,7 @@ private:
 
 	AnimationClip m_animationClips[enAnimation_Num];
 
+	/// @brief ゲームUI
 	GameUI* m_ui = nullptr;
 
 };

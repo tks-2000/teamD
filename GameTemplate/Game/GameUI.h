@@ -5,7 +5,6 @@ class GameDirector;
 class Player;
 class Ball;
 
-const int PLAYER_NUMBER = 4;
 
 class GameUI : public IGameObject
 {

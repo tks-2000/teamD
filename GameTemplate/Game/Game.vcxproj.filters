@@ -68,7 +68,11 @@
     <ClCompile Include="FontRender.cpp" />
     <ClCompile Include="GameUI.cpp" />
     <ClCompile Include="GameDirector.cpp" />
+<<<<<<< HEAD
+    <ClCompile Include="Objects.cpp" />
+=======
     <ClCompile Include="Sky.cpp" />
+>>>>>>> 702b7d2400e6ffb9710948780bfc0412163cf606
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\ExEngine\effect\Effect.h" />
@@ -146,7 +150,11 @@
     <ClInclude Include="FontRender.h" />
     <ClInclude Include="GameUI.h" />
     <ClInclude Include="GameDirector.h" />
+<<<<<<< HEAD
+    <ClInclude Include="Objects.h" />
+=======
     <ClInclude Include="Sky.h" />
+>>>>>>> 702b7d2400e6ffb9710948780bfc0412163cf606
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\modelData\bg\testmap_tex.DDS" />
@@ -160,6 +168,9 @@
     <None Include="Assets\modelData\bg\testmap.tkm" />
     <None Include="Assets\modelData\bg\testmap_s.tkm" />
     <None Include="Assets\modelData\sphere\sphere.tkm" />
+<<<<<<< HEAD
+    <None Include="Assets\modelData\object\box.tkm" />
+=======
     <None Include="Assets\animData\unitychan\clear.tka" />
     <None Include="Assets\animData\unitychan\damage.tka" />
     <None Include="Assets\animData\unitychan\idle.tka" />
@@ -168,5 +179,6 @@
     <None Include="Assets\animData\unitychan\run.tka" />
     <None Include="Assets\animData\unitychan\slash.tka" />
     <None Include="Assets\animData\unitychan\walk.tka" />
+>>>>>>> 702b7d2400e6ffb9710948780bfc0412163cf606
   </ItemGroup>
 </Project>
