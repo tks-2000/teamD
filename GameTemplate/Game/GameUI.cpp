@@ -2,6 +2,7 @@
 #include "GameUI.h"
 
 namespace {
+
 	const int PL1 = 0;
 	const int PL2 = 1;
 	const int PL3 = 2;

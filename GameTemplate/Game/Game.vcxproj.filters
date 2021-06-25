@@ -68,6 +68,7 @@
     <ClCompile Include="FontRender.cpp" />
     <ClCompile Include="GameUI.cpp" />
     <ClCompile Include="GameDirector.cpp" />
+    <ClCompile Include="Objects.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\ExEngine\effect\Effect.h" />
@@ -145,6 +146,7 @@
     <ClInclude Include="FontRender.h" />
     <ClInclude Include="GameUI.h" />
     <ClInclude Include="GameDirector.h" />
+    <ClInclude Include="Objects.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\modelData\bg\testmap_tex.DDS" />
@@ -158,5 +160,6 @@
     <None Include="Assets\modelData\bg\testmap.tkm" />
     <None Include="Assets\modelData\bg\testmap_s.tkm" />
     <None Include="Assets\modelData\sphere\sphere.tkm" />
+    <None Include="Assets\modelData\object\box.tkm" />
   </ItemGroup>
 </Project>

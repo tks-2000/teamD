@@ -53,7 +53,7 @@ public:
 
 	/// @brief リスポーンの処理
 	void ReSpawn();
-
+	/// @brief リスポーン時の無敵時間の処理
 	void Muteki();
 
 	void Animation();
@@ -166,6 +166,7 @@ private:
 
 	AnimationClip m_animationClips[enAnimation_Num];
 
+	/// @brief ゲームUI
 	GameUI* m_ui = nullptr;
 
 };

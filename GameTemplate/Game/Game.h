@@ -7,6 +7,11 @@ class Player;
 class GameCamera;
 class BackGround;
 class Ball;
+class Objects;
+
+const int PLAYER_NUMBER = 4;
+const float ZeroF = 0.0f;
+static const int OBJECTS_NUMBER = 10;
 
 class Game : public IGameObject
 {
@@ -26,13 +31,14 @@ private:
 
 	GameUI* m_ui = nullptr;
 	/// @brief プレイヤー
-	Player* m_player[4] = { nullptr };
+	Player* m_player[PLAYER_NUMBER] = { nullptr };
 	/// @brief ゲームカメラ
 	GameCamera* m_gameCamera = nullptr;
 	/// @brief 背景
 	BackGround* m_backGround = nullptr;
 	/// @brief ボール
 	Ball* m_ball = nullptr;
-
+	/// @brief ボール
+	Objects* m_objects = nullptr;
 };
 
