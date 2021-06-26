@@ -59,7 +59,7 @@ private:
 	Vector4 m_ShAlertColor = { 0.7f, 0.3f, 0.0f, 0.8f };
 	/// @brief シールドゲージのサイズ
 	int m_ShGageSize[2] = { 320, 20 };
-	/// @ brief シールドゲージの座標
+	/// @ brief シールドゲージの位置
 	Vector3 m_ShGagePos[4] = { /*1P*/{-450.0f, 200.0f, 0.0f}, /*2P*/{450.0f, 200.0f, 0.0f}, /*3P*/{-450.0f, -300.0f, 0.0f}, /*4P*/{450.0f, -300.0f, 0.0f} };
 	/// @brief シールドブレイク時のアラートメッセージ
 	FontRender* m_breakAlertMassege[PLAYER_NUMBER] = { nullptr };
@@ -71,7 +71,10 @@ private:
 	Vector4 m_StGageColor = { 0.3f,0.5f,0.2f,0.8f };
 	/// @brief スタミナゲージのサイズ
 	int m_StGageSize[WHnum] = { 320, 20 };
+	/// @brief スタミナゲージの位置
 	Vector3 m_StGagePos[4] = { /*1P*/{-450.0f, 180.0f, 0.0f}, /*2P*/{450.0f,180.0f, 0.0f}, /*3P*/{-450.0f, -320.0f, 0.0f}, /*4P*/{450.0f, -320.0f, 0.0f} };
+	/// @brief スタミナ数値を%化するための数値
+	float m_staminaComplement = 100.0f / 6.0f;
 	
 };
 

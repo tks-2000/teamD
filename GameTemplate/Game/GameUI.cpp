@@ -175,11 +175,12 @@ void GameUI::Update()
 	
 	for (int charley = 0; charley < m_playerNum; charley++)
 	{
-		float DurbilityBat = (m_player[charley]->GetGuardDurability() / 100);
+		/// @brief シールドゲージの減少処理
+		float DurbilityBat = m_player[charley]->GetGuardDurability() / 100;
 		m_shieldGage[charley]->SetScale({ DurbilityBat, 1.0f, 1.0f });
 		m_shieldGage[charley]->SetPosition(m_ShGagePos[charley]);
-		float ShGageDownVa = (m_ShGageSize[Width] * (1.0 - DurbilityBat)) / 2;	//Shゲージ減少量
-		if (m_player[charley]->GetGuardDurability() < 100.0f) {
+		float ShGageDownVa = (m_ShGageSize[Width] * (1.0f - DurbilityBat)) / 2;	//Shゲージ減少量
+		//if (m_player[charley]->GetGuardDurability() < 100.0f) {	いらないかもしれない分岐
 			if (charley % 2 == true) {
 				m_shieldGage[charley]->SetPosition({ m_ShGagePos[charley].x + ShGageDownVa, m_ShGagePos[charley].y, 0.0f });
 
@@ -188,8 +189,19 @@ void GameUI::Update()
 			else {
 				m_shieldGage[charley]->SetPosition({m_ShGagePos[charley].x - ShGageDownVa, m_ShGagePos[charley].y, 0.0f });
 			}
+		//}	いらないかもしれない分岐（終
+		/// @brief スタミナゲージの減少処理
+		float StaminaBat = (m_player[charley]->GetStamina() * m_staminaComplement) / 100;
+		m_staminaGage[charley]->SetScale({ StaminaBat, 1.0f, 1.0f });
+		m_staminaGage[charley]->SetPosition(m_StGagePos[charley]);
+		float stGageDownVa = (m_StGageSize[Width] * (1.0f - StaminaBat)) / 2;
+		if (charley % 2 == true) {
+			m_staminaGage[charley]->SetPosition({ m_StGagePos[charley].x + stGageDownVa, m_StGagePos[charley].y, 0.0f });
 		}
+		else {
+			m_staminaGage[charley]->SetPosition({ m_StGagePos[charley].x - stGageDownVa, m_StGagePos[charley].y, 0.0f });
 
+		}
 	}
 	for (int delta = 0; delta < m_playerNum; delta++)
 	{
