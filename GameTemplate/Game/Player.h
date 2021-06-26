@@ -4,6 +4,7 @@
 class Lighting;
 class SkinModelRender;
 class Ball;
+class PlayerEffect;
 class Effect;
 class GameUI;
 
@@ -42,6 +43,8 @@ public:
 
 	/// @brief ボールとの距離を計算
 	void BallDistanceCalculation();
+
+	Vector3 GetToBallVec() { return m_toBallVec; }
 
 	/// @brief ボールとぶつかる処理
 	void BallCollide();
@@ -127,6 +130,8 @@ private:
 	float m_guardDurability = 100.0f;
 	/// @brief ガードの状態
 	bool m_breakGuard = false;
+	/// @brief シールドにボールが触れたか？
+	bool m_shieldHit = false;
 	/// @brief 前フレームのガード状態フラグ記録用
 	bool m_breakGuardPrevFrame = false;
 	/// @brief ジャストガード判定になる時間
@@ -146,7 +151,7 @@ private:
 	SkinModelRender* m_skinModelRender = nullptr;
 	/// @brief ボール
 	Ball* m_ball = nullptr;
-	
+
 	//エフェクト関連//
 	/// @brief ボールをキックした時のエフェクト
 	Effect m_kickEffect;
@@ -192,5 +197,7 @@ private:
 	/// @brief ゲームUI
 	GameUI* m_ui = nullptr;
 
+	/// @brief プレイヤーのエフェクト
+	PlayerEffect* m_plEffect = nullptr;
 };
 

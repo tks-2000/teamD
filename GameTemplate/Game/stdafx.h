@@ -12,6 +12,7 @@
 #include "SpriteRender.h";
 #include "FontRender.h";
 #include "Player.h"
+#include "PlayerEffect.h"
 #include "GameCamera.h"
 #include "BackGround.h"
 #include "Ball.h"
@@ -40,6 +41,7 @@ namespace {
 	const char* GAME_UI_NAME = "GameUI";
 	const char* LIGHTING_NAME = "Lighting";
 	const char* PLAYER_NAME[MAX_PLAYER_NUM] = { "Player1","Player2","Player3","Player4" };
+	const char* PLAYER_EFFECT_NAME = "PlayerEffect";
 	const char* GAME_CAMERA_NAME = "GameCamera";
 	const char* BACK_GROUND_NAME = "BackGround";
 	const char* BALL_NAME = "Ball";
