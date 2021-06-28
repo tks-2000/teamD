@@ -27,6 +27,8 @@ namespace {
 
 	const Vector2 GUARD_DURABILIYY[MAX_PLAYER_NUM] = { {-600.0f,200.0f},{400.0f,200.0f},{-600.0f,-300.0f},{400.0f,-300.0f} };
 	const float SCALE = 1.0f;
+
+	const Vector2 TIME_FONT_POS = { 0.0f,300.0f };
 }
 
 GameUI::GameUI()
@@ -124,6 +126,9 @@ GameUI::GameUI()
 	}
 	m_ballSpeed = NewGO<FontRender>(2);
 	m_ballSpeed->SetPosition(BALL_SPEED_POS);
+
+	m_timeFont = NewGO<FontRender>(2);
+	m_timeFont->SetPosition(TIME_FONT_POS);
 }
 
 GameUI::~GameUI()
@@ -139,15 +144,44 @@ GameUI::~GameUI()
 		DeleteGO(m_breakAlertMassege[bravo]);
 	}
 	DeleteGO(m_ballSpeed);
+
+	DeleteGO(m_timeFont);
 }
 
 bool GameUI::Start()
 {
+	m_timer = FindGO<Timer>(TIMER_NAME);
+	m_score = FindGO<Score>(SCORE_NAME);
 	m_ball = FindGO<Ball>(BALL_NAME);
 	for (int plFontNum = 0; plFontNum < m_playerNum; plFontNum++) {
 		m_player[plFontNum] = FindGO<Player>(PLAYER_NAME[plFontNum]);
 	}
 	return true;
+}
+
+void GameUI::TimerFont()
+{
+	float time = FLOAT_0;
+	if (m_timer->IsCountDown() == true) {
+		time = m_timer->GetCountDownNum();
+		std::wstring conversion;
+		conversion = std::to_wstring(time);
+		m_timeFont->SetText(conversion.c_str());
+	}
+	if (m_timer->IsTimerExecution() == true) {
+		time = m_timer->GetTimer();
+		std::wstring conversion;
+		conversion = std::to_wstring(time);
+		m_timeFont->SetText(conversion.c_str());
+	}
+	if (m_timer->IsFinish() == true) {
+		m_timeFont->SetText(L"Finish");
+	}
+	if (m_timer->IsTimerEnd() == true) {
+		m_timeFont->SetText(L"PUSH A BUTTON");
+	}
+	
+	
 }
 
 void GameUI::Update()
@@ -160,7 +194,7 @@ void GameUI::Update()
 			/// @brief int型の数値を文字列に変換して出力
 			std::wstring conversion;
 			/// @brief PLのスコアの数値を入力
-			conversion = std::to_wstring(m_plNum[plFontNum]);
+			conversion = std::to_wstring(m_score->GetScore(plFontNum));
 			m_playerNumFont[plFontNum]->SetText(conversion.c_str());
 	}
 
@@ -219,6 +253,7 @@ void GameUI::Update()
 	//	std::wstring conv = std::to_wstring(m_player[plFontNum]->GetGuardDurability());
 	//	m_GuardDurability[plFontNum]->SetText(conv.c_str());
 	//}
+	TimerFont();
 }
 void GameUI::AddScore(int num, int score) {
 	/// @brief PLのスコアを加算する

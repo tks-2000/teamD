@@ -71,7 +71,7 @@ void Title::Update()
 		if (g_pad[0]->IsTrigger(enButtonStart)) {
 			DeleteGO(this);
 			NewGO<Game>(0, "Game");
-			m_gameDirector->GameStart();
+			m_gameDirector->SetGameStart();
 		}
 	}
 }

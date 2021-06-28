@@ -7,6 +7,7 @@ Game::Game()
 	m_gameDirector = FindGO<GameDirector>(GAME_DIRECTOR_NAME);
 	m_playerNum = m_gameDirector->GetPlayerNum();
 	//m_playerNum = 4;
+	m_timer = NewGO<Timer>(0, TIMER_NAME);
 	m_lighting = NewGO<Lighting>(0,LIGHTING_NAME);
 	for (int i = 0; i < m_playerNum; i++) {
 		m_player[i] = NewGO<Player>(0,PLAYER_NAME[i]);
@@ -17,6 +18,7 @@ Game::Game()
 	m_ball = NewGO<Ball>(0, BALL_NAME);
 	m_objects = NewGO<Objects>(0,OBJECTS_NAME);
 	m_ui = NewGO<GameUI>(0,GAME_UI_NAME);
+	m_score = NewGO<Score>(0, SCORE_NAME);
 	m_sky = NewGO<Sky>(0, "Sky");
 }
 
@@ -25,10 +27,12 @@ Game::~Game()
 	//ゲームシーン中に発生している全てのエフェクトを停止
 	EffectEngine::GetInstance()->AllStop();
 	
+	DeleteGO(m_timer);
 	DeleteGO(m_gameCamera);
 	DeleteGO(m_backGround);
 	DeleteGO(m_ball);
 	DeleteGO(m_ui);
+	DeleteGO(m_score);
 	DeleteGO(m_objects);
 	DeleteGO(m_sky);
 	
@@ -56,6 +60,12 @@ void Game::Update()
 {
 	if (g_pad[0]->IsTrigger(enButtonSelect)) {
 		DeleteGO(this);
-		m_gameDirector->GameEnd();
+		m_gameDirector->SetGameEnd();
+	}
+	if (m_gameDirector->IsResult() == true) {
+		if (g_pad[0]->IsTrigger(enButtonA)) {
+			DeleteGO(this);
+			m_gameDirector->SetGameEnd();
+		}
 	}
 }

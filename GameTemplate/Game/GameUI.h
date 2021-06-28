@@ -2,6 +2,8 @@
 
 class FontRender;
 class GameDirector;
+class Timer;
+class Score;
 class Player;
 class Ball;
 class SpriteRender;
@@ -14,6 +16,8 @@ public:
 	~GameUI();
 	bool Start();
 	void Update();
+
+	void TimerFont();
 
 	void AddScore(int num, int score);
 
@@ -76,5 +80,11 @@ private:
 	/// @brief スタミナ数値を%化するための数値
 	float m_staminaComplement = 100.0f / 6.0f;
 	
+	/// @brief タイマー表示
+	FontRender* m_timeFont = nullptr;
+
+	Timer* m_timer = nullptr;
+
+	Score* m_score = nullptr;
 };
 

@@ -1,8 +1,10 @@
 #pragma once
 
 class GameDirector;
+class Timer;
 class Lighting;
 class GameUI;
+class Score;
 class Player;
 class PlayerEffect;
 class GameCamera;
@@ -29,8 +31,12 @@ private:
 	GameDirector* m_gameDirector = nullptr;
 	/// @brief プレイヤーの人数
 	int m_playerNum = 0;
+	/// @brief タイマー
+	Timer* m_timer = nullptr;
 	/// @brief ライティング
 	Lighting* m_lighting = nullptr;
+	/// @brief スコア
+	Score* m_score = nullptr;
 
 	GameUI* m_ui = nullptr;
 	/// @brief プレイヤー
