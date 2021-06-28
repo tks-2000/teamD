@@ -73,6 +73,7 @@ bool Player::Start()
 {
 	//必要なデータを取得
 	m_timer = FindGO<Timer>(TIMER_NAME);
+	m_score = FindGO<Score>(SCORE_NAME);
 	m_lig = FindGO<Lighting>(LIGHTING_NAME);
 	m_plEffect = FindGO<PlayerEffect>(PLAYER_EFFECT_NAME);
 	m_ball = FindGO<Ball>(BALL_NAME);
@@ -185,10 +186,10 @@ void Player::Move()
 
 	/// @brief プレイヤーが落下したらリスポーンする
 	if (m_position.y < FALLING_HEIGHT) {
-		/// @brief リスポーン時にスコアの減算
-		m_ui->AddScore(m_myNumber, SCORE_PULL);
-		/// @brief 敵を倒したときにボールを蹴ったプレイヤーにスコアの加算
-		m_ui->AddScore(GetKillerPlayerNumber(), SCORE_ADD);
+		if (m_haveAttackedPlayer != m_myNumber) {
+			m_score->AddScore(m_haveAttackedPlayer);
+		}
+		m_score->DebuctionScore(m_myNumber);
 		ReSpawn();
 	}
 
@@ -267,10 +268,11 @@ void Player::BallCollide()
 
 	m_damage = true;
 
-	/// @brief 蹴ったプレイヤー以外に当たり、リスポーン時じゃない時にスコアの加算
-	if (m_myNumber != m_ball->GetPlayerInformation() && m_dieFlag == false) {
-		m_ui->AddScore(m_ball->GetPlayerInformation(), SCORE_ADD);
-		SetKillerPlayerNumber(m_myNumber);
+	/// @brief 攻撃してきたプレイヤーの番号を記憶する
+	m_haveAttackedPlayer = m_ball->GetPlayerInformation();
+
+	if (m_haveAttackedPlayer != m_myNumber && m_dieFlag == false) {
+		m_score->AddScore(m_haveAttackedPlayer);
 	}
 }
 

@@ -2,6 +2,7 @@
 #include "effect/Effect.h"
 
 class Timer;
+class Score;
 class Lighting;
 class SkinModelRender;
 class Ball;
@@ -20,12 +21,6 @@ public:
 	/// @brief プレイヤーが何番かを設定
 	/// @param num プレイヤー番号
 	void SetPlayerNumber(int num);
-
-	/// @brief 
-	void SetKillerPlayerNumber(int num) { m_killerPlayerNumber = num; }
-
-	/// @brief 
-	int GetKillerPlayerNumber() { return m_killerPlayerNumber; }
 
 	/// @brief 移動の処理
 	void Move();
@@ -75,8 +70,8 @@ public:
 private:
 	/// @brief プレイヤーの番号
 	int m_myNumber = 0;
-	/// @brief 
-	int m_killerPlayerNumber = 0;
+	/// @brief 自分に攻撃してきたプレイヤーの番号
+	int m_haveAttackedPlayer = 4;
 	/// @brief プレイヤーの座標
 	Vector3 m_position = Vector3::Zero;
 	/// @brief プレイやーの回転
@@ -197,6 +192,9 @@ private:
 
 	/// @brief タイマー
 	Timer* m_timer = nullptr;
+
+	/// @brief スコア
+	Score* m_score = nullptr;
 
 	/// @brief ゲームUI
 	GameUI* m_ui = nullptr;

@@ -18,6 +18,7 @@ Game::Game()
 	m_ball = NewGO<Ball>(0, BALL_NAME);
 	m_objects = NewGO<Objects>(0,OBJECTS_NAME);
 	m_ui = NewGO<GameUI>(0,GAME_UI_NAME);
+	m_score = NewGO<Score>(0, SCORE_NAME);
 	m_sky = NewGO<Sky>(0, "Sky");
 }
 
@@ -31,6 +32,7 @@ Game::~Game()
 	DeleteGO(m_backGround);
 	DeleteGO(m_ball);
 	DeleteGO(m_ui);
+	DeleteGO(m_score);
 	DeleteGO(m_objects);
 	DeleteGO(m_sky);
 	

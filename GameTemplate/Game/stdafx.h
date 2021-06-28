@@ -8,6 +8,7 @@
 #include "GameDirector.h"
 #include "Timer.h"
 #include "GameUI.h"
+#include "Score.h"
 #include "Lighting.h"
 #include "SkinModelRender.h"
 #include "SpriteRender.h"
@@ -41,6 +42,7 @@ namespace {
 	const char* GAME_NAME = "Game";
 	const char* TIMER_NAME = "Timer";
 	const char* GAME_UI_NAME = "GameUI";
+	const char* SCORE_NAME = "Score";
 	const char* LIGHTING_NAME = "Lighting";
 	const char* PLAYER_NAME[MAX_PLAYER_NUM] = { "Player1","Player2","Player3","Player4" };
 	const char* PLAYER_EFFECT_NAME = "PlayerEffect";
