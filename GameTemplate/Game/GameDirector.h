@@ -22,11 +22,15 @@ public:
 
 	void Title();
 	void MainGame();
+	void Result();
 
 	int GetPlayerNum() { return m_playerNum; }
 
-	void GameStart() { m_gameState = enMainGame; }
-	void GameEnd() { m_gameState = enTitle; }
+	bool IsResult();
+
+	void SetGameStart() { m_gameState = enMainGame; }
+	void SetGameResult() { m_gameState = enResult; }
+	void SetGameEnd() { m_gameState = enTitle; }
 
 };
 

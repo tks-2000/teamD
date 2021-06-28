@@ -72,6 +72,7 @@ Player::~Player()
 bool Player::Start()
 {
 	//必要なデータを取得
+	m_timer = FindGO<Timer>(TIMER_NAME);
 	m_lig = FindGO<Lighting>(LIGHTING_NAME);
 	m_plEffect = FindGO<PlayerEffect>(PLAYER_EFFECT_NAME);
 	m_ball = FindGO<Ball>(BALL_NAME);
@@ -134,7 +135,7 @@ void Player::Move()
 
 	if (m_dash == true && m_guard == false && g_pad[m_myNumber]->IsPress(enButtonRB1)) {
 		m_moveVelocity = 0.95f;
-		if (m_Lstickx != FLOAT_0 && m_Lsticky != FLOAT_0) {
+		if (m_Lstickx != FLOAT_0 || m_Lsticky != FLOAT_0) {
 			m_stamina -= g_gameTime->GetFrameDeltaTime() * FLOAT_2;
 		}
 		m_anim = enAnimation_Run;
@@ -410,10 +411,14 @@ void Player::Animation()
 
 void Player::Update()
 {
-
 	/// @brief スティック入力を受け取る
 	m_Lstickx = g_pad[m_myNumber]->GetLStickXF();
 	m_Lsticky = g_pad[m_myNumber]->GetLStickYF();
+
+	if (m_timer->IsTimerExecution() == false) {
+		m_Lstickx = FLOAT_0;
+		m_Lsticky = FLOAT_0;
+	}
 
 	/// @brief ダメージ中はスティック入力を受け付けない
 	if (m_damage == true) {
@@ -482,7 +487,7 @@ void Player::Update()
 		m_readyKick = true;
 	}
 
-	if (m_kickFlag == true && m_readyKick == true) {
+	if (m_kickFlag == true && m_readyKick == true && m_timer->IsTimerExecution() == true) {
 		if (g_pad[m_myNumber]->IsTrigger(enButtonA)) {
 
 
@@ -537,7 +542,7 @@ void Player::Update()
 	}
 
 	/// @brief ガード可能ならガードの処理
-	if (m_guard == true && m_breakGuard == false) {
+	if (m_guard == true && m_breakGuard == false && m_timer->IsTimerExecution() == true) {
 
 
 		Guard();
@@ -546,7 +551,8 @@ void Player::Update()
 	//ボタン押下時かつガードブレイクしていないときに実行
 	if (g_pad[m_myNumber]->IsTrigger(enButtonLB1) &&
 		m_breakGuard == false &&
-		m_damage == false) {
+		m_damage == false &&
+		m_timer->IsTimerExecution() == true) {
 		//m_guardBeginEffect.Play();
 		m_plEffect->PlayGuardBeginEffect(m_myNumber);
 	}

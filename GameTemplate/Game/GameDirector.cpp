@@ -33,6 +33,11 @@ void GameDirector::Title()
 	}
 }
 
+void GameDirector::Result()
+{
+	
+}
+
 void GameDirector::Update()
 {
 	switch (m_gameState)
@@ -40,5 +45,15 @@ void GameDirector::Update()
 	case enTitle: {
 		Title();
 	}break;
+	}
+}
+
+bool GameDirector::IsResult()
+{
+	if (m_gameState == enResult) {
+		return true;
+	}
+	else {
+		return false;
 	}
 }
