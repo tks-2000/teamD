@@ -3,15 +3,15 @@
 
 namespace {
 	/// @brief タイマーの進む量
-	float TIMER_AMOUNT_GO = 1.0f;
+	const float TIMER_AMOUNT_GO = 1.0f;
 	/// @brief タイマーの終了地点
-	float TIMER_ZERO = 0.0f;
+	const float TIMER_ZERO = 0.0f;
 	/// @brief カウントダウン時間
-	float TIMER_COUNT_DOUN = 4.0f;
+	const float TIMER_COUNT_DOUN = 4.0f;
 	/// @brief ゲームの制限時間
-	float TIME_LIMIT = 120.0f;
+	const float TIME_LIMIT = 120.0f;
 	/// @brief ゲームが終了してからリザルトに移るまでの時間
-	float FINISH_DISPLAY_TIME = 5.0f;
+	const float FINISH_DISPLAY_TIME = 5.0f;
 }
 
 Timer::Timer()

@@ -151,6 +151,7 @@ GameUI::~GameUI()
 bool GameUI::Start()
 {
 	m_timer = FindGO<Timer>(TIMER_NAME);
+	m_score = FindGO<Score>(SCORE_NAME);
 	m_ball = FindGO<Ball>(BALL_NAME);
 	for (int plFontNum = 0; plFontNum < m_playerNum; plFontNum++) {
 		m_player[plFontNum] = FindGO<Player>(PLAYER_NAME[plFontNum]);
@@ -193,7 +194,7 @@ void GameUI::Update()
 			/// @brief int型の数値を文字列に変換して出力
 			std::wstring conversion;
 			/// @brief PLのスコアの数値を入力
-			conversion = std::to_wstring(m_plNum[plFontNum]);
+			conversion = std::to_wstring(m_score->GetScore(plFontNum));
 			m_playerNumFont[plFontNum]->SetText(conversion.c_str());
 	}
 

@@ -3,6 +3,7 @@
 class FontRender;
 class GameDirector;
 class Timer;
+class Score;
 class Player;
 class Ball;
 class SpriteRender;
@@ -83,5 +84,7 @@ private:
 	FontRender* m_timeFont = nullptr;
 
 	Timer* m_timer = nullptr;
+
+	Score* m_score = nullptr;
 };
 

@@ -304,6 +304,7 @@
     <ClCompile Include="Objects.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerEffect.cpp" />
+    <ClCompile Include="Score.cpp" />
     <ClCompile Include="SkinModelRender.cpp" />
     <ClCompile Include="Sky.cpp" />
     <ClCompile Include="SpriteRender.cpp" />
@@ -392,6 +393,7 @@
     <ClInclude Include="Objects.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerEffect.h" />
+    <ClInclude Include="Score.h" />
     <ClInclude Include="SkinModelRender.h" />
     <ClInclude Include="Sky.h" />
     <ClInclude Include="SpriteRender.h" />

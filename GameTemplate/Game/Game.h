@@ -4,6 +4,7 @@ class GameDirector;
 class Timer;
 class Lighting;
 class GameUI;
+class Score;
 class Player;
 class PlayerEffect;
 class GameCamera;
@@ -34,6 +35,8 @@ private:
 	Timer* m_timer = nullptr;
 	/// @brief ライティング
 	Lighting* m_lighting = nullptr;
+	/// @brief スコア
+	Score* m_score = nullptr;
 
 	GameUI* m_ui = nullptr;
 	/// @brief プレイヤー
