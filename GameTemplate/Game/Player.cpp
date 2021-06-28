@@ -186,10 +186,12 @@ void Player::Move()
 
 	/// @brief プレイヤーが落下したらリスポーンする
 	if (m_position.y < FALLING_HEIGHT) {
+
 		if (m_haveAttackedPlayer != m_myNumber) {
 			m_score->AddScore(m_haveAttackedPlayer);
 		}
 		m_score->DebuctionScore(m_myNumber);
+
 		ReSpawn();
 	}
 
