@@ -186,8 +186,12 @@ void Player::Move()
 	if (m_position.y < FALLING_HEIGHT) {
 		/// @brief リスポーン時にスコアの減算
 		m_ui->AddScore(m_myNumber, SCORE_PULL);
-		/// @brief 敵を倒したときにボールを蹴ったプレイヤーにスコアの加算
-		m_ui->AddScore(GetKillerPlayerNumber(), SCORE_ADD);
+		//@brief 敵を倒したときにボールを蹴ったプレイヤーにスコアの加算
+		m_ui->AddScore(m_killerPlayerNumber, SCORE_ADD);
+
+		if (m_myNumber == m_killerPlayerNumber) {
+			m_ui->AddScore(m_myNumber, SCORE_PULL);
+		}
 		ReSpawn();
 	}
 
@@ -269,7 +273,10 @@ void Player::BallCollide()
 	/// @brief 蹴ったプレイヤー以外に当たり、リスポーン時じゃない時にスコアの加算
 	if (m_myNumber != m_ball->GetPlayerInformation() && m_dieFlag == false) {
 		m_ui->AddScore(m_ball->GetPlayerInformation(), SCORE_ADD);
-		SetKillerPlayerNumber(m_myNumber);
+		SetKillerPlayerNumber(m_ball->GetPlayerInformation());
+	}
+	else if (m_myNumber == m_ball->GetPlayerInformation() && m_dieFlag == false) {
+		SetKillerPlayerNumber(m_ball->GetPlayerInformation());
 	}
 }
 

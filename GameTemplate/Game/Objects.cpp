@@ -4,10 +4,13 @@
 namespace {
 	const Vector3 SCALE = { 1.0f,1.0f,1.0f };
 	const float BALL_DISTANCE = 120.0f;
+	const int SCORE_ADD = 100;
+
 }
 Objects::Objects() {
 
 	m_gameDirector = FindGO<GameDirector>(GAME_DIRECTOR_NAME);
+	m_ui = FindGO<GameUI>(GAME_UI_NAME);
 	m_playerNum = m_gameDirector->GetPlayerNum();
 
 	m_fall = 2;
@@ -86,6 +89,7 @@ void Objects::Update() {
 void Objects::ballCollider(int num) {
 	m_charaCon[num].SetPosition(m_colliderPos[num]);
 	DeleteGO(m_skinModelRender[num]);
+	m_ui->AddScore(m_ball->GetPlayerInformation(), SCORE_ADD);
 	m_delFlag[num] = false;
 }
 void Objects::DistanceCalculation() {
