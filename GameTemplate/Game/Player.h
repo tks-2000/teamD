@@ -1,6 +1,7 @@
 #pragma once
 #include "effect/Effect.h"
 
+class Timer;
 class Lighting;
 class SkinModelRender;
 class Ball;
@@ -193,6 +194,9 @@ private:
 	enAnimationClips m_anim = enAnimation_Idle;
 
 	AnimationClip m_animationClips[enAnimation_Num];
+
+	/// @brief タイマー
+	Timer* m_timer = nullptr;
 
 	/// @brief ゲームUI
 	GameUI* m_ui = nullptr;

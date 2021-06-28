@@ -5,12 +5,13 @@
 #include "ExEngine.h"
 //#include "Title.h"
 #include "Game.h"
-#include "GameDirector.h";
-#include "GameUI.h";
+#include "GameDirector.h"
+#include "Timer.h"
+#include "GameUI.h"
 #include "Lighting.h"
 #include "SkinModelRender.h"
-#include "SpriteRender.h";
-#include "FontRender.h";
+#include "SpriteRender.h"
+#include "FontRender.h"
 #include "Player.h"
 #include "PlayerEffect.h"
 #include "GameCamera.h"
@@ -38,6 +39,7 @@ namespace {
 	const char* TITLE_NAME = "Title";
 	const char* GAME_DIRECTOR_NAME = "GameDirector";
 	const char* GAME_NAME = "Game";
+	const char* TIMER_NAME = "Timer";
 	const char* GAME_UI_NAME = "GameUI";
 	const char* LIGHTING_NAME = "Lighting";
 	const char* PLAYER_NAME[MAX_PLAYER_NUM] = { "Player1","Player2","Player3","Player4" };
