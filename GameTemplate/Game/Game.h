@@ -4,6 +4,7 @@ class GameDirector;
 class Lighting;
 class GameUI;
 class Player;
+class PlayerEffect;
 class GameCamera;
 class BackGround;
 class Ball;
@@ -34,6 +35,8 @@ private:
 	GameUI* m_ui = nullptr;
 	/// @brief プレイヤー
 	Player* m_player[PLAYER_NUMBER] = { nullptr };
+	/// @brief プレイヤーのエフェクト
+	PlayerEffect* m_playerEffect = nullptr;
 	/// @brief ゲームカメラ
 	GameCamera* m_gameCamera = nullptr;
 	/// @brief 背景

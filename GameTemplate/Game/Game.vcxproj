@@ -303,6 +303,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Objects.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerEffect.cpp" />
     <ClCompile Include="SkinModelRender.cpp" />
     <ClCompile Include="Sky.cpp" />
     <ClCompile Include="SpriteRender.cpp" />
@@ -389,6 +390,7 @@
     <ClInclude Include="Lighting.h" />
     <ClInclude Include="Objects.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerEffect.h" />
     <ClInclude Include="SkinModelRender.h" />
     <ClInclude Include="Sky.h" />
     <ClInclude Include="SpriteRender.h" />
@@ -417,6 +419,7 @@
     <Image Include="Assets\modelData\sphere\sphere_tex_01.DDS" />
     <Image Include="Assets\sprite\title.dds" />
     <Image Include="Assets\sprite\title.png" />
+    <Image Include="Assets\sprite\UI_Gage.DDS" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
