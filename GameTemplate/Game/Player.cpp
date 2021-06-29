@@ -46,9 +46,9 @@ namespace {
 	/// @brief ジャストガード可能な時間
 	const float POSSIBLE_JUST_GUARD_TIME = 0.01f;
 	/// @brief 通常のキック力
-	const float NORMAL_KICK_POWER = 5.0f;
+	const float NORMAL_KICK_POWER = 2.0f;
 	/// @brief 強化状態のキック力
-	const float POWERFUlL_KICK_POWER = 30.0f;
+	const float POWERFUlL_KICK_POWER = 6.0f;
 	/// @brief スタミナの最大値
 	const float MAX_STANIMA = 6.0f;
 }

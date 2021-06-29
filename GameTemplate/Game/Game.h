@@ -12,6 +12,7 @@ class BackGround;
 class Ball;
 class Objects;
 class Sky;
+class Result;
 
 
 const int PLAYER_NUMBER = 4;
@@ -53,6 +54,7 @@ private:
 	Objects* m_objects = nullptr;
 	/// @brief ”wŒi‚Ì‹ó
 	Sky* m_sky = nullptr;
-
+	/// @brief ƒŠƒUƒ‹ƒg
+	Result* m_result = nullptr;
 };
 
