@@ -1,12 +1,17 @@
 #pragma once
 
+class FontRender;
 class GameDirector;
 
 class Score : public IGameObject
 {
 private:
+	/// @brief プレイヤーのスコア
 	int m_score[PLAYER_NUMBER] = { 0 };
+	/// @brief プレイヤーの順位
+	int m_ranking[PLAYER_NUMBER] = { 0 };
 
+	FontRender* m_rankingFont[PLAYER_NUMBER] = { nullptr };
 	GameDirector* m_gameDirector = nullptr;
 
 public:
@@ -17,7 +22,9 @@ public:
 
 	void AddScore(int plNum);
 	void DebuctionScore(int plNum);
+	void RankingSurvey();
 
 	int GetScore(int plNum) { return m_score[plNum]; }
+	int GetRanking(int plNum) { return m_ranking[plNum]; }
 };
 

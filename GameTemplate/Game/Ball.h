@@ -1,7 +1,7 @@
 #pragma once
 #include "effect/Effect.h"
 
-
+class GameDirector;
 class Lighting;
 class SkinModelRender;
 class Effect;
@@ -51,7 +51,7 @@ public:
 
 	/// @brief ボールに加える力を設定
 	/// @param kickPower キック力
-	void Acceleration(float kickPower) { m_moveVelocity += kickPower; }
+	void Acceleration(float kickPower) { m_moveVelocity += pow(kickPower,2.0); }
 	
 	/// @brief ボールの速度を入手
 	/// @return ボールの速度
@@ -116,5 +116,7 @@ private:
 	Effect m_ballTrack;
 	/// @brief 反射時エフェクト
 	Effect m_reflectEffect;
+
+	GameDirector* m_gameDirector = nullptr;
 };
 

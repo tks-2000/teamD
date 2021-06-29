@@ -20,6 +20,7 @@
 #include "Ball.h"
 #include "Objects.h"
 #include "Sky.h"
+#include "Result.h"
 
 namespace {
 
@@ -50,6 +51,7 @@ namespace {
 	const char* BACK_GROUND_NAME = "BackGround";
 	const char* BALL_NAME = "Ball";
 	const char* OBJECTS_NAME = "Objects";
+	const char* RESULT_NAME = "Result";
 
 	const char* UNITYCHAN_MODEL = "Assets/modelData/unityChan.tkm";
 }

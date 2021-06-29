@@ -48,6 +48,16 @@ void GameDirector::Update()
 	}
 }
 
+bool GameDirector::IsMainGame()
+{
+	if (m_gameState == enMainGame) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
 bool GameDirector::IsResult()
 {
 	if (m_gameState == enResult) {
