@@ -45,19 +45,19 @@ void Objects::SetObjects(int num) {
 		switch (SetNum)
 		{
 		case 0:
-			m_position[SetNum] = { 200.0f,400.0f,-400.0f };
+			m_position[SetNum] = { 400.0f,400.0f,400.0f };
 			m_charaCon[SetNum].Init(40.0f, 40.0f, m_position[SetNum]);
 			break;
 		case 1:
-			m_position[SetNum] = { 100.0f,400.0f,-400.0f };
+			m_position[SetNum] = { 400.0f,400.0f,-400.0f };
 			m_charaCon[SetNum].Init(40.0f, 40.0f, m_position[SetNum]);
 			break;
 		case 2:
-			m_position[SetNum] = { -300.0f,400.0f,400.0f };
+			m_position[SetNum] = { -400.0f,400.0f,400.0f };
 			m_charaCon[SetNum].Init(40.0f, 40.0f, m_position[SetNum]);
 			break;
 		case 3:
-			m_position[SetNum] = { -150.0f,400.0f,400.0f };
+			m_position[SetNum] = { -400.0f,400.0f,-400.0f };
 			m_charaCon[SetNum].Init(40.0f, 40.0f, m_position[SetNum]);
 			break;
 		}
