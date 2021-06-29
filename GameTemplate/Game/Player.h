@@ -134,6 +134,8 @@ private:
 	float m_justGuardTime = 0.0f;
 	/// @brief キック力が上がるフラグ
 	bool m_kickPowerUp = false;
+	/// @brief キック力強化中のカウンター
+	int m_powerUpCounter = 0;
 	/// @brief キック力が上がる時間
 	float m_powerUpTime = 0.0f;
 	/// @brief ガード破壊によって起きるダウン状態
