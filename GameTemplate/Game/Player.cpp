@@ -343,6 +343,7 @@ void Player::Guard()
 				/// @brief ガードエフェクトを消してガードブレイクエフェクトを再生する
 				m_plEffect->StopGuardEffect(m_myNumber);
 				m_plEffect->PlayGuardBreakEffect(m_myNumber);
+				m_plEffect->PlayKnockOutEffect(m_myNumber);
 				m_guardDurability = 0.0f;
 				m_breakGuard = true;
 				return;

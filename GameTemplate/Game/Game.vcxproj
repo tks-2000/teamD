@@ -301,6 +301,7 @@
     <ClCompile Include="GameUI.cpp" />
     <ClCompile Include="Lighting.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Objects.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerEffect.cpp" />
@@ -391,6 +392,7 @@
     <ClInclude Include="GameDirector.h" />
     <ClInclude Include="GameUI.h" />
     <ClInclude Include="Lighting.h" />
+    <ClInclude Include="Menu.h" />
     <ClInclude Include="Objects.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerEffect.h" />

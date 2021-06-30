@@ -74,6 +74,7 @@
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Score.cpp" />
     <ClCompile Include="Result.cpp" />
+    <ClCompile Include="Menu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\ExEngine\effect\Effect.h" />
@@ -157,6 +158,7 @@
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Score.h" />
     <ClInclude Include="Result.h" />
+    <ClInclude Include="Menu.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\modelData\bg\testmap_tex.DDS" />
