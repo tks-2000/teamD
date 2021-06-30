@@ -42,6 +42,10 @@ Game::~Game()
 	}
 	DeleteGO(m_playerEffect);
 	DeleteGO(m_lighting);
+	if (m_gameDirector->IsMainGame() == false) {
+		DeleteGO(m_result);
+	}
+
 	NewGO<Title>(0, TITLE_NAME);
 }
 
@@ -61,12 +65,18 @@ void Game::Update()
 {
 	if (g_pad[0]->IsTrigger(enButtonSelect)) {
 		DeleteGO(this);
-		m_gameDirector->SetGameEnd();
+		m_gameDirector->SetTitle();
 	}
+	
+	if (m_gameDirector->IsMainGame() == true && m_timer->IsTimerEnd() == true) {
+		m_result = NewGO<Result>(0, RESULT_NAME);
+		m_gameDirector->SetGameResult();
+	}
+
 	if (m_gameDirector->IsResult() == true) {
 		if (g_pad[0]->IsTrigger(enButtonA)) {
 			DeleteGO(this);
-			m_gameDirector->SetGameEnd();
+			m_gameDirector->SetTitle();
 		}
 	}
 }

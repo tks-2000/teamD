@@ -46,9 +46,9 @@ namespace {
 	/// @brief ジャストガード可能な時間
 	const float POSSIBLE_JUST_GUARD_TIME = 0.01f;
 	/// @brief 通常のキック力
-	const float NORMAL_KICK_POWER = 5.0f;
+	const float NORMAL_KICK_POWER = 2.0f;
 	/// @brief 強化状態のキック力
-	const float POWERFUlL_KICK_POWER = 30.0f;
+	const float POWERFUlL_KICK_POWER = 6.0f;
 	/// @brief スタミナの最大値
 	const float MAX_STANIMA = 6.0f;
 }
@@ -134,11 +134,12 @@ void Player::Move()
 	m_moveSpeed += g_camera3D->GetRight() * m_Lstickx;
 	m_moveSpeed += g_camera3D->GetForward() * m_Lsticky;
 
-	if (m_dash == true && m_guard == false && g_pad[m_myNumber]->IsPress(enButtonRB1)) {
+
+	if (IsDash() == true) {
 		m_moveVelocity = 0.95f;
-		if (m_Lstickx != FLOAT_0 || m_Lsticky != FLOAT_0) {
-			m_stamina -= g_gameTime->GetFrameDeltaTime() * FLOAT_2;
-		}
+
+		m_stamina -= g_gameTime->GetFrameDeltaTime() * FLOAT_2;
+
 		m_anim = enAnimation_Run;
 	}
 	else {
@@ -239,6 +240,21 @@ void Player::KickBall()
 	m_ball->MoveStart();
 
 
+}
+
+bool Player::IsDash()
+{
+	if (m_dash == true && m_guard == false && g_pad[m_myNumber]->IsPress(enButtonRB1)) {
+		if (m_Lstickx != FLOAT_0 || m_Lsticky != FLOAT_0) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	else {
+		return false;
+	}
 }
 
 void Player::BallCollide()
@@ -343,6 +359,7 @@ void Player::Guard()
 				/// @brief ガードエフェクトを消してガードブレイクエフェクトを再生する
 				m_plEffect->StopGuardEffect(m_myNumber);
 				m_plEffect->PlayGuardBreakEffect(m_myNumber);
+				m_plEffect->PlayKnockOutEffect(m_myNumber);
 				m_guardDurability = 0.0f;
 				m_breakGuard = true;
 				return;

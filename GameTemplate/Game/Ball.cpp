@@ -28,7 +28,7 @@ Ball::Ball()
 
 	m_moveFlag = true;
 	m_position.y = 1000.0f;
-	m_friction = 0.001f;
+	m_friction = 0.002f;
 
 	m_scale = { 0.5f,0.5f,0.5f };
 	m_gravity = 1.0f;
@@ -41,6 +41,7 @@ Ball::~Ball()
 
 bool Ball::Start()
 {
+	m_gameDirector = FindGO<GameDirector>(GAME_DIRECTOR_NAME);
 	m_lig = FindGO<Lighting>("Lighting");
 	m_skinModelRender = NewGO<SkinModelRender>(0);
 	m_skinModelRender->Init("Assets/modelData/sphere/sphere.tkm", m_lig->GetLightAddress());
@@ -96,9 +97,9 @@ void Ball::Move()
 
 	}
 
-	m_moveVelocity -= m_moveVelocity * m_friction;
+	m_moveVelocity -= pow(m_moveVelocity * m_friction,2.0);
 
-	if (m_moveSpeed.Length() < 1.0f)
+	if (m_moveSpeed.Length() < 1.0f || m_gameDirector->IsMainGame() == false)
 	{
 		m_moveDirection = Vector3::Zero;
 		m_moveSpeed = Vector3::Zero;

@@ -11,7 +11,7 @@ Objects::Objects() {
 
 	m_gameDirector = FindGO<GameDirector>(GAME_DIRECTOR_NAME);
 	m_ball = FindGO<Ball>(BALL_NAME);
-
+	m_playerNum = m_gameDirector->GetPlayerNum();
 
 }
 Objects::~Objects() {
@@ -47,6 +47,5 @@ void Objects::Update() {
 				m_reSpawnTime[Num] = 0.0f;
 			}
 		}
-
 	}
 }

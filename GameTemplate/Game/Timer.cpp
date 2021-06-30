@@ -9,7 +9,7 @@ namespace {
 	/// @brief カウントダウン時間
 	const float TIMER_COUNT_DOUN = 4.0f;
 	/// @brief ゲームの制限時間
-	const float TIME_LIMIT = 120.0f;
+	const float TIME_LIMIT = 60.0f;
 	/// @brief ゲームが終了してからリザルトに移るまでの時間
 	const float FINISH_DISPLAY_TIME = 5.0f;
 }
@@ -78,7 +78,6 @@ void Timer::Update()
 		Finish();
 	}break;
 	case enTimerEnd: {
-		m_gameDirector->SetGameResult();
 		m_timerEnd = true;
 	}break;
 	}

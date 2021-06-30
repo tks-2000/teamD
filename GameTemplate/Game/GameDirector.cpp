@@ -3,7 +3,7 @@
 
 GameDirector::GameDirector()
 {
-
+	m_playerNum = MIN_PLAYER_NUM;
 }
 
 GameDirector::~GameDirector()
@@ -45,6 +45,16 @@ void GameDirector::Update()
 	case enTitle: {
 		Title();
 	}break;
+	}
+}
+
+bool GameDirector::IsMainGame()
+{
+	if (m_gameState == enMainGame) {
+		return true;
+	}
+	else {
+		return false;
 	}
 }
 
