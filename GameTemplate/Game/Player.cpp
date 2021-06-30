@@ -2,52 +2,6 @@
 #include "Player.h"
 
 namespace {
-	/// @brief エフェクト用定数
-	//キックエフェクトのファイルパス
-	const char16_t* KICKEFFECT_FILEPATH = u"Assets/effect/kick.efk";					
-	//キックエフェクト発生位置を決める値。0に近いほどプレイヤー寄り
-	const float KICKEFFECT_POSITION_RATE = 0.8f;
-	//キックエフェクトの拡大率
-	const Vector3 KICKEFFECT_SCALE = { 25.0f,25.0f,1.0f };
-
-	//ガードエフェクトファイルパス
-	const char16_t* GUARDEFFECT_FILEPATH = u"Assets/effect/shield.efk";
-	//ガードエフェクトの拡大率(立体なのでz軸方向にも拡大している)
-	const Vector3 GUARDEFFECT_SCALE = { 80.0f,80.0f,80.0f };
-	//ガードエフェクト発生位置のy座標を決めるための定数
-	const float GUARDEFFECT_POS_Y = 80.0f;
-
-	//ガード予兆エフェクトのファイルパス
-	const char16_t* GUARDEFFECT_BEGIN_FILEPATH = u"Assets/effect/shield_begin.efk";
-	//ガード予兆エフェクトの拡大率
-	const Vector3 GUARDEFFECT_BEGIN_SCALE = { 20.0f,20.0f,1.0f };
-	
-	//ガード破壊エフェクトのファイルパス
-	const char16_t* GUARDEFFECT_BREAK_FILEPATH = u"Assets/effect/shieldbreak.efk";
-	//ガード破壊エフェクトの拡大率
-	const Vector3 GUARDEFFECT_BREAK_SCALE = { 15.0f,15.0f,15.0f };
-
-	//シールド回復エフェクトのファイルパス
-	const char16_t* GUARDEFFECT_REPAIR_FILEPATH = u"Assets/effect/shieldrepair.efk";
-	//シールド回復エフェクトの拡大率
-	const Vector3 GUARDEFFECT_REPAIR_SCALE = { 12.5f,12.5f,12.5f };
-
-	//ガードヒットエフェクトのファイルパス
-	const char16_t* GUARDEFFECT_HIT_FILEPATH = u"Assets/effect/shieldhit.efk";
-	//ガードヒットエフェクトの拡大率
-	const Vector3 GUARDEFFECT_HIT_SCALE = { 17.0f,17.0f,17.0f };
-	//ガードヒットエフェクト発生の距離
-	const float GUARDEFFECT_HIT_DISTANCE = 150.0f;
-
-	//行動不能エフェクトのファイルパス
-	const char16_t* KNOCKOUTEFFECT_FILEPATH = u"Assets/effect/knockout.efk";
-	//行動不能エフェクトのスケール
-	const Vector3 KNOCKOUTEFFECT_SCALE = { 15.0f,15.0f,15.0f };
-
-	//ジャストガードエフェクトのファイルパス
-	const char16_t* JUSTGUARDEFFECT_FILEPATH = u"Assets/effect/justguard.efk";
-	//ジャストガードエフェクトのスケール
-	const Vector3 JUSTGUARDEFFECT_SCALE = { 10.0f,10.0f,10.0f };
 
 	/// @brief キック可能な距離
 	const float KICK_POSSIBLE_DISTANCE = 200.0f;
@@ -92,9 +46,9 @@ namespace {
 	/// @brief ジャストガード可能な時間
 	const float POSSIBLE_JUST_GUARD_TIME = 0.01f;
 	/// @brief 通常のキック力
-	const float NORMAL_KICK_POWER = 5.0f;
+	const float NORMAL_KICK_POWER = 2.0f;
 	/// @brief 強化状態のキック力
-	const float POWERFUlL_KICK_POWER = 30.0f;
+	const float POWERFUlL_KICK_POWER = 6.0f;
 	/// @brief スタミナの最大値
 	const float MAX_STANIMA = 6.0f;
 }
@@ -102,23 +56,6 @@ namespace {
 Player::Player()
 {
 	//プレイヤーの初期状態を設定
-	//キック時のエフェクトを初期化
-	m_kickEffect.Init(KICKEFFECT_FILEPATH);
-	//ガード時のエフェクトを初期化
-	m_guardEffect.Init(GUARDEFFECT_FILEPATH);
-	//ガード予兆エフェクトを初期化
-	m_guardBeginEffect.Init(GUARDEFFECT_BEGIN_FILEPATH);
-	//ガード破壊のエフェクトを初期化
-	m_guardBreakEffect.Init(GUARDEFFECT_BREAK_FILEPATH);
-	//シールド回復のエフェクトを初期化
-	m_shieldRepairEffect.Init(GUARDEFFECT_REPAIR_FILEPATH);
-	//ガードヒットエフェクトを初期化
-	m_shieldHitEffect.Init(GUARDEFFECT_HIT_FILEPATH);
-	//行動不能エフェクトを初期化
-	m_knockOutEffect.Init(KNOCKOUTEFFECT_FILEPATH);
-	//ジャストガードエフェクトを初期化
-	m_justGuardEffect.Init(JUSTGUARDEFFECT_FILEPATH);
-
 	m_moveVelocity = 0.9f;
 	m_stamina = MAX_STANIMA;
 	m_kickPower = 5.0f;
@@ -135,7 +72,10 @@ Player::~Player()
 bool Player::Start()
 {
 	//必要なデータを取得
+	m_timer = FindGO<Timer>(TIMER_NAME);
+	m_score = FindGO<Score>(SCORE_NAME);
 	m_lig = FindGO<Lighting>(LIGHTING_NAME);
+	m_plEffect = FindGO<PlayerEffect>(PLAYER_EFFECT_NAME);
 	m_ball = FindGO<Ball>(BALL_NAME);
 
 	m_animationClips[enAnimation_Idle].Load("Assets/animData/idle.tka");
@@ -148,10 +88,10 @@ bool Player::Start()
 
 	m_skinModelRender = NewGO<SkinModelRender>(PRIORITY);
 
-	m_skinModelRender->InitA(UNITYCHAN_MODEL,"Assets/modelData/unityChan.tks",m_animationClips,enAnimation_Num);
+	m_skinModelRender->InitA(UNITYCHAN_MODEL, "Assets/modelData/unityChan.tks", m_animationClips, enAnimation_Num);
 	m_skinModelRender->PlayAnimation(enAnimation_Idle, 1.0f);
 
-	
+
 	m_ui = FindGO<GameUI>(GAME_UI_NAME);
 
 	return true;
@@ -166,7 +106,7 @@ void Player::SetPlayerNumber(int num)
 	case 0: {
 		m_playerColor = RED;
 		m_startPos = PLAYER1_STARTPOS;
-		
+
 	}break;
 	case 1: {
 		m_playerColor = BLUE;
@@ -183,20 +123,20 @@ void Player::SetPlayerNumber(int num)
 	}
 	m_position = m_startPos;
 	m_charaCon.SetPosition(m_position);
-	
+
 	m_lig->SetSpotLightColor(m_myNumber, m_playerColor);
-	
+
 }
 
 void Player::Move()
 {
 	/// @brief スティック入力でカメラ方向に移動
-	m_moveSpeed += g_camera3D->GetRight()* m_Lstickx;
-	m_moveSpeed += g_camera3D->GetForward()* m_Lsticky;
-	
+	m_moveSpeed += g_camera3D->GetRight() * m_Lstickx;
+	m_moveSpeed += g_camera3D->GetForward() * m_Lsticky;
+
 	if (m_dash == true && m_guard == false && g_pad[m_myNumber]->IsPress(enButtonRB1)) {
 		m_moveVelocity = 0.95f;
-		if (m_Lstickx != FLOAT_0 && m_Lsticky != FLOAT_0) {
+		if (m_Lstickx != FLOAT_0 || m_Lsticky != FLOAT_0) {
 			m_stamina -= g_gameTime->GetFrameDeltaTime() * FLOAT_2;
 		}
 		m_anim = enAnimation_Run;
@@ -213,13 +153,13 @@ void Player::Move()
 	m_moveSpeed *= m_moveVelocity;
 
 	/// @brief 重力を加える
-	if(m_damage == true){
-		m_moveSpeed.y -= m_gravity/2.0f;
+	if (m_damage == true) {
+		m_moveSpeed.y -= m_gravity / 2.0f;
 	}
 	else {
 		m_moveSpeed.y -= m_gravity;
 	}
-	
+
 	/// @brief ダメージ中かどうかで摩擦力を変える
 	if (m_damage == false) {
 		m_friction = NORMAL_FRICTION;
@@ -238,21 +178,24 @@ void Player::Move()
 
 	Vector3 moveSpeedXZ = m_moveSpeed;
 	moveSpeedXZ.y = FLOAT_0;
+	/// @brief 移動速度が一定以下で止まる
 	if (moveSpeedXZ.LengthSq() < 0.1f) {
 		m_moveSpeed.x = FLOAT_0;
 		m_moveSpeed.z = FLOAT_0;
- 	}
+	}
 
 	/// @brief プレイヤーが落下したらリスポーンする
 	if (m_position.y < FALLING_HEIGHT) {
-		/// @brief リスポーン時にスコアの減算
-		m_ui->AddScore(m_myNumber, SCORE_PULL);
-		/// @brief 敵を倒したときにボールを蹴ったプレイヤーにスコアの加算
-		m_ui->AddScore(GetKillerPlayerNumber(),SCORE_ADD);
+
+		if (m_haveAttackedPlayer != m_myNumber) {
+			m_score->AddScore(m_haveAttackedPlayer);
+		}
+		m_score->DebuctionScore(m_myNumber);
+
 		ReSpawn();
 	}
-	
-	
+
+
 }
 
 void Player::Rotation()
@@ -263,7 +206,7 @@ void Player::Rotation()
 		return;
 	}
 	m_qRot.SetRotation(Vector3::AxisY, atan2(m_direction.x, m_direction.z));
-	
+
 }
 
 void Player::IsKick()
@@ -302,27 +245,37 @@ void Player::BallCollide()
 {
 	/// @brief ボールへのベクトルとボールの向きで当たる角度を決める
 	float matchRate = Dot(m_ball->GetMoveDirection(), m_toBallVec);
-	if (matchRate > 0.0f) {
+	if (m_ball->IsMove() == false || m_guard == true || matchRate > 0.0f) {
 		return;
 	}
+
 
 	/// @brief ボールと自分の位置から吹き飛ばされる方向を決める
 	Vector3 repulsiveForce = m_position - m_ball->GetPosition();
 	repulsiveForce.y = FLOAT_0;
 	repulsiveForce.Normalize();
-	if (m_ball->IsMove() == true) {
-		repulsiveForce *= m_ball->GetVelocity() * FLOAT_2;
-		repulsiveForce.y = m_ball->GetVelocity() * 1.5f;
-		m_moveSpeed = repulsiveForce * FLOAT_2;
-		m_ball->SetMoveDirection(repulsiveForce * FLOAT_MINUS_1);
-		m_damage = true;
-		/// @brief 蹴ったプレイヤー以外に当たり、リスポーン時じゃない時にスコアの加算
-		if (m_myNumber != m_ball->GetPlayerInformation() && m_dieFlag == false) {
-			m_ui->AddScore(m_ball->GetPlayerInformation(), SCORE_ADD);
-			SetKillerPlayerNumber(m_myNumber);
-		}
+
+	repulsiveForce *= m_ball->GetVelocity() * FLOAT_2;
+	repulsiveForce.y = m_ball->GetVelocity() * 1.5f;
+	m_moveSpeed = repulsiveForce * FLOAT_2;
+	m_ball->SetMoveDirection(repulsiveForce * FLOAT_MINUS_1);
+
+
+	if (m_breakGuard == true) {
+		m_plEffect->StopKnockOutEffect(m_myNumber);
 	}
-	
+	if (m_damage == false) {
+		m_plEffect->PlayKnockOutEffect(m_myNumber);
+	}
+
+	m_damage = true;
+
+	/// @brief 攻撃してきたプレイヤーの番号を記憶する
+	m_haveAttackedPlayer = m_ball->GetPlayerInformation();
+
+	if (m_haveAttackedPlayer != m_myNumber && m_dieFlag == false) {
+		m_score->AddScore(m_haveAttackedPlayer);
+	}
 }
 
 void Player::Guard()
@@ -334,43 +287,70 @@ void Player::Guard()
 	/// @brief ガード中は耐久値(guardDurability)が減り続ける
 	m_guardDurability -= 0.555f;
 
-	m_justGuardTime += g_gameTime->GetFrameDeltaTime() * FLOAT_01;
-	if (m_guardDurability <= 0.0f) {
-		m_guardDurability = 0.0f;
-		m_breakGuard = true;
+	//シールドエフェクト発生処理//
+		//カウンターに値を加算
+	m_guardEffectCouter += 1;
+	//規定フレーム毎にエフェクトを発生
+	if (m_guardEffectCouter % 20 == 1 &&
+		m_breakGuard == false &&
+		m_damage == false) {
+		m_plEffect->PlayGuardEffect(m_myNumber);
 	}
 
+	/// @brief ジャストガード判定時間を進める
+	m_justGuardTime += g_gameTime->GetFrameDeltaTime() * FLOAT_01;
+
+	/// @brief ガード耐久値が無くなったら
+	if (m_guardDurability <= 0.0f) {
+		/// @brief ガードブレイクする
+		m_guardDurability = 0.0f;
+		m_breakGuard = true;
+		m_plEffect->StopGuardEffect(m_myNumber);
+		m_plEffect->PlayGuardBreakEffect(m_myNumber);
+		m_plEffect->PlayKnockOutEffect(m_myNumber);
+	}
+
+	/// @brief ボールが動いていなければガード判定を行わない
 	if (m_ball->IsMove() == false) {
 		return;
 	}
-	
+
+	/// @brief 接触したら
 	if (m_ballDistance < GUARD_DISTANCE) {
-		if(m_justGuardTime < POSSIBLE_JUST_GUARD_TIME){
+		/// @brief 一度も接触していない場合
+		if (m_shieldHit == false) {
+
+			//ガードヒットエフェクトの発生
+			m_plEffect->PlayShieldHitEffect(m_myNumber);
+			m_shieldHit = true;
+
+		}
+		/// @brief ジャストガード判定時間内ならジャストガード発動
+		if (m_justGuardTime < POSSIBLE_JUST_GUARD_TIME) {
 			m_ball->SetVelocity(FLOAT_0);
-			
-			//ジャストガードエフェクト再生処理//
 
-			m_justGuardEffect.Play();
-			Vector3 efcPos = m_position;
-			efcPos.y += 80.0f;
-			m_justGuardEffect.SetPosition(efcPos);
-			m_justGuardEffect.SetScale(JUSTGUARDEFFECT_SCALE);
-			m_justGuardEffect.Update();
-
+			/// @brief ジャストガードエフェクトの再生
+			m_plEffect->PlayJustGuardEffect(m_myNumber);
 			m_kickPowerUp = true;
 		}
 		else {
 			/// @brief ボールの勢いに応じて耐久値を減らす
-			float shieldDamage = 10.0f * (m_ball->GetVelocity() / 3.0f);
+			float shieldDamage = m_ball->GetVelocity() * 4.0f;
 			m_guardDurability -= shieldDamage;
+			/// @brief ガードブレイクした場合
 			if (m_guardDurability <= 0.0f)
 			{
+				/// @brief ガードエフェクトを消してガードブレイクエフェクトを再生する
+				m_plEffect->StopGuardEffect(m_myNumber);
+				m_plEffect->PlayGuardBreakEffect(m_myNumber);
+				m_plEffect->PlayKnockOutEffect(m_myNumber);
 				m_guardDurability = 0.0f;
 				m_breakGuard = true;
 				return;
 			}
 
-			Vector3 repulsiveForce = m_position - m_ball->GetPosition();
+			/// @brief ボールの勢いに応じてノックバックする。
+			Vector3 repulsiveForce = m_toBallVec * FLOAT_MINUS_1;
 			repulsiveForce.Normalize();
 			repulsiveForce *= m_ball->GetVelocity();
 			repulsiveForce.y = m_ball->GetVelocity() * FLOAT_01;
@@ -378,56 +358,24 @@ void Player::Guard()
 			m_ball->SetVelocity(m_ball->GetVelocity() / FLOAT_2);
 			m_ball->SetMoveDirection(repulsiveForce * FLOAT_MINUS_1);
 		}
-		
+
 	}
-	
-
-	if (m_ballDistance < GUARDEFFECT_HIT_DISTANCE && m_ball->IsMove() == true) {
-		//ガードヒットエフェクトの発生
-		m_shieldHitEffectCounter++;
-		if (m_shieldHitEffectCounter % 30 == 1) {
-
-			//エフェクト発生位置を決めるためのベクトル
-			Vector3 shieldHitPos = Vector3::Zero;
-
-			float shieldHitAngle = 0.0f;
-
-			//自身からボールへのベクトル
-			Vector3 toBallDirection = m_ball->GetPosition() - m_position;
-			//y成分を0にする
-			toBallDirection.y = 0.0f;
-			//正規化
-			toBallDirection.Normalize();
-
-			//エフェクトの向きを決めるためのクォータニオン
-			Quaternion shieldHitRot = Quaternion::Identity;
-
-			//自身からボールへのベクトルのx,z成分から角度を出す
-			shieldHitAngle = atan2f(toBallDirection.x, toBallDirection.z);
-
-			shieldHitRot.SetRotation(Vector3::AxisY, shieldHitAngle);
-
-			//自身とボールの間にエフェクトを発生させる
-			shieldHitPos.Lerp(0.5f, m_position, m_ball->GetPosition());
-			//プレイヤーのy座標ちょっと上に発生
-			shieldHitPos.y += 80.0f;
-
-			m_shieldHitEffect.Play();
-			m_shieldHitEffect.SetPosition(shieldHitPos);
-			m_shieldHitEffect.SetRotation(shieldHitRot);
-			m_shieldHitEffect.SetScale(GUARDEFFECT_HIT_SCALE);
-			m_shieldHitEffect.Update();
-		}
+	else {
+		/// @brief 接触していない
+		m_shieldHit = false;
 	}
-
 }
 
 void Player::ReSpawn() {
 	/// @brief スタート位置にリスポーンさせる
 	m_position = m_startPos;
 	m_charaCon.SetPosition(m_position);
-	
-	
+	m_damage = false;
+	m_damageTime = FLOAT_0;
+	m_breakGuard = false;
+	m_guardDurability = 100.0f;
+	m_plEffect->StopKnockOutEffect(m_myNumber);
+
 	m_dieFlag = true;
 }
 
@@ -461,10 +409,14 @@ void Player::Animation()
 
 void Player::Update()
 {
-
 	/// @brief スティック入力を受け取る
 	m_Lstickx = g_pad[m_myNumber]->GetLStickXF();
 	m_Lsticky = g_pad[m_myNumber]->GetLStickYF();
+
+	if (m_timer->IsTimerExecution() == false) {
+		m_Lstickx = FLOAT_0;
+		m_Lsticky = FLOAT_0;
+	}
 
 	/// @brief ダメージ中はスティック入力を受け付けない
 	if (m_damage == true) {
@@ -473,18 +425,23 @@ void Player::Update()
 		m_damageTime += FLOAT_1;
 	}
 	if (m_damageTime > DAMAGE_RETURN_TIME) {
-		m_damageTime = FLOAT_1;
+		m_damageTime = FLOAT_0;
+		if (m_breakGuard == false) {
+			m_plEffect->StopKnockOutEffect(m_myNumber);
+		}
 		m_damage = false;
 	}
+
 	if (m_breakGuard == true)
 	{
 		m_Lstickx = FLOAT_0;
 		m_Lsticky = FLOAT_0;
-		m_damageTime += FLOAT_1;
 	}
+
 	if (m_stamina < FLOAT_0) {
 		m_dash = false;
 	}
+
 	if (m_dash == false && m_stamina >= MAX_STANIMA) {
 		m_dash = true;
 	}
@@ -493,7 +450,7 @@ void Player::Update()
 	Move();
 	Rotation();
 	IsKick();
-	
+
 	/// @brief キッククールタイム
 	if (m_kickCooling == true)
 	{
@@ -506,7 +463,7 @@ void Player::Update()
 
 	if (m_kickPowerUp == true) {
 		m_kickPower = POWERFUlL_KICK_POWER;
-		m_powerUpTime += g_gameTime->GetFrameDeltaTime()*FLOAT_1;
+		m_powerUpTime += g_gameTime->GetFrameDeltaTime() * FLOAT_1;
 	}
 	else
 	{
@@ -528,38 +485,11 @@ void Player::Update()
 		m_readyKick = true;
 	}
 
-	if (m_kickFlag == true && m_readyKick == true) {
+	if (m_kickFlag == true && m_readyKick == true && m_timer->IsTimerExecution() == true) {
 		if (g_pad[m_myNumber]->IsTrigger(enButtonA)) {
 
-			//キックエフェクト再生処理//
-			
-			//エフェクト発生位置を決めるためのベクトル
-			Vector3 efcPos = Vector3::Zero;
-			//ボールへの方向
-			Vector3 toBallDir = m_ball->GetPosition() - m_position;
-			toBallDir.y = 0.0f;
-			//正規化
-			toBallDir.Normalize();
-			//回転方向を決めるためのクォータニオン
-			Quaternion efcRot = Quaternion::Identity;
-			//角度
-			float efcAngle = 0.0f;
-			//ボールへのベクトルから発生させる角度を計算
-			efcAngle = atan2(toBallDir.x, toBallDir.z);
 
-			efcRot.SetRotation(Vector3::AxisY, efcAngle);
-			
-			//プレイヤー座標とボール座標を線形補完し、発生位置を決定
-			//補間率が0に近ければプレイヤー側、1に近ければボール側に発生する
-			efcPos.Lerp(KICKEFFECT_POSITION_RATE, m_position, m_ball->GetPosition());
-			efcPos.y += 80.0f;
-
-			m_kickEffect.Play();
-			m_kickEffect.SetPosition(efcPos);
-			m_kickEffect.SetRotation(efcRot);
-			m_kickEffect.SetScale(KICKEFFECT_SCALE);
-			//キックした時の座標を保持したいのでここで更新
-			m_kickEffect.Update();
+			m_plEffect->PlayKickEffect(m_myNumber);
 
 			KickBall();
 		}
@@ -577,14 +507,18 @@ void Player::Update()
 	if (m_guardDurability >= 100.0f && m_breakGuard == true)
 	{
 		m_breakGuard = false;
-		
+		if (m_damage == false) {
+			m_plEffect->StopKnockOutEffect(m_myNumber);
+		}
+		m_plEffect->PlayShieldRepairEffect(m_myNumber);
+
 	}
 	/// @brief ガード耐久値を100より上にならないようにする奴
 	if (m_guardDurability >= 100.0f)
 	{
 		m_guardDurability = 100.0f;
 	}
-	
+
 	/// @brief ボールとの距離が一定以下で吹き飛ぶ
 	if (m_breakGuard == true) {
 		if (m_ballDistance < GUARD_DISTANCE && m_dieFlag == false) {
@@ -603,107 +537,23 @@ void Player::Update()
 	else {
 		m_guard = false;
 		m_guardEffectCouter = 0;
-		m_shieldHitEffectCounter = 0;
 	}
 
 	/// @brief ガード可能ならガードの処理
-	if (m_guard == true && m_breakGuard == false) {
+	if (m_guard == true && m_breakGuard == false && m_timer->IsTimerExecution() == true) {
+
+
 		Guard();
-		
-		//シールドエフェクト発生処理//
-		//カウンターに値を加算
-		m_guardEffectCouter += 1;
-		//規定フレーム毎にエフェクトを発生
-		if (m_guardEffectCouter % 20 == 1 &&
-			m_breakGuard == false &&
-			m_damage == false) {
-			m_guardEffect.Play();
-		}
 	}
 
-	//ガードブレイクエフェクト発生処理//
-	
-	//前フレームにガードブレイクしておらず...
-	if (m_breakGuardPrevFrame == false) {
-		//現フレームでガードブレイクしていたらガードブレイクエフェクトを再生
-		if (m_breakGuard == true) {
-			//ガードエフェクトの再生を停止
-			m_guardEffect.Stop();
-			//ガードブレイクエフェクトを再生
-			m_guardBreakEffect.Play();
-			////行動不能エフェクトを再生
-			//m_knockOutEffect.Play();
-			
-			Vector3 breakPos = m_position;
-			breakPos.y += 80.0f;
-
-			m_guardBreakEffect.SetPosition(breakPos);
-			m_guardBreakEffect.SetScale(GUARDEFFECT_BREAK_SCALE);
-			m_guardBreakEffect.Update();
-		}
-	}
-
-	//シールド回復エフェクト発生処理//
-	
-	//前フレームにガードブレイクしており...
-	if (m_breakGuardPrevFrame == true) {
-		//現フレームでガードブレイクしていなければ(シールドが回復していたら)回復エフェクトを再生
-		if (m_breakGuard == false) {
-			m_shieldRepairEffect.Play();
-			//行動不能エフェクトの再生を停止
-			m_knockOutEffect.Stop();
-		}
-	}
-
-
-	//ガード開始時のエフェクト発生処理//
-	
 	//ボタン押下時かつガードブレイクしていないときに実行
-	if (g_pad[m_myNumber]->IsTrigger(enButtonLB1) && 
+	if (g_pad[m_myNumber]->IsTrigger(enButtonLB1) &&
 		m_breakGuard == false &&
-		m_damage == false) {
-		m_guardBeginEffect.Play();
+		m_damage == false &&
+		m_timer->IsTimerExecution() == true) {
+		//m_guardBeginEffect.Play();
+		m_plEffect->PlayGuardBeginEffect(m_myNumber);
 	}
-
-	//行動不能エフェクトの発生,停止処理//
-	//行動不能エフェクトはガードブレイク時とダメージ時に発生する
-	
-	//前フレームでガードブレイクしてない時
-	if (m_breakGuardPrevFrame == false) {
-		//前フレームでダメージ状態でなく、現フレームでダメージ時
-		if (m_breakGuard == false && m_damagePrevFrame == false && m_damage == true) {
-			//再生
-			m_knockOutEffect.Play();
-		}
-		//前フレームでダメージ状態で、現フレームで非ダメージ時(=回復時)
-		else if (m_breakGuard == false && m_damagePrevFrame == true && m_damage == false) {
-			//再生を停止
-			m_knockOutEffect.Stop();
-		}
-		//現フレームでガードブレイクした時
-		else if (m_breakGuard == true) {
-			//再生
-			m_knockOutEffect.Play();
-		}
-		//吹っ飛ばされて死んだとき
-		else if (m_dieFlag == true) {
-			m_knockOutEffect.Stop();
-		}
-	}
-	//前フレームでガードブレイクしているとき
-	else {
-		//現フレームでガードブレイク状態でないとき(=回復時)
-		if (m_breakGuard == false) {
-			//再生を停止
-			m_knockOutEffect.Stop();
-		}
-		//吹っ飛ばされて死んだとき
-		else if (m_dieFlag == true) {
-			m_knockOutEffect.Stop();
-		}
-	}
-	
-
 
 	if (m_dieFlag == true) {
 		Muteki();
@@ -715,44 +565,14 @@ void Player::Update()
 	m_lig->SetSpotLightPos(m_myNumber, pos);
 
 	Vector3 dir = m_position - m_lig->GetSpotLightPos(m_myNumber);
-	m_lig->SetSpotLightDirection(m_myNumber,dir);
+	m_lig->SetSpotLightDirection(m_myNumber, dir);
 
 	/// @brief キャラクターコントローラーで座標を決める
 	m_position = m_charaCon.Execute(m_moveSpeed, FLOAT_1);
-	
 
+	/// @brief モデルに座標と回転を伝える
 	m_skinModelRender->SetPosition(m_position);
 	m_skinModelRender->SetRotation(m_qRot);
-
-	//エフェクト関係の更新処理//
-
-	//ガードエフェクトの更新
-	Vector3 efcGuardPos = m_position;
-	//プレイヤー座標よりちょっと上にする
-	efcGuardPos.y += GUARDEFFECT_POS_Y;
-	m_guardEffect.SetPosition(efcGuardPos);
-	m_guardEffect.SetScale(GUARDEFFECT_SCALE);
-	m_guardEffect.Update();
-	
-	//ガード予兆エフェクトの更新
-	m_guardBeginEffect.SetPosition(efcGuardPos);
-	m_guardBeginEffect.SetScale(GUARDEFFECT_BEGIN_SCALE);
-	m_guardBeginEffect.Update();
-	
-	//シールド回復エフェクトの更新
-	m_shieldRepairEffect.SetPosition(efcGuardPos);
-	m_shieldRepairEffect.SetScale(GUARDEFFECT_REPAIR_SCALE);
-	m_shieldRepairEffect.Update();
-
-	//行動不能エフェクトの更新
-	m_knockOutEffect.SetPosition(efcGuardPos);
-	m_knockOutEffect.SetScale(KNOCKOUTEFFECT_SCALE);
-	m_knockOutEffect.Update();
-
-	//現フレームのガード状態を記録
-	m_breakGuardPrevFrame = m_breakGuard;
-	//現フレームのダメージフラグ状態を記録
-	m_damagePrevFrame = m_damage;
 
 	/// @brief アニメーション
 	Animation();

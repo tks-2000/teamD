@@ -1,9 +1,12 @@
 #pragma once
 #include "effect/Effect.h"
 
+class Timer;
+class Score;
 class Lighting;
 class SkinModelRender;
 class Ball;
+class PlayerEffect;
 class Effect;
 class GameUI;
 
@@ -18,12 +21,6 @@ public:
 	/// @brief プレイヤーが何番かを設定
 	/// @param num プレイヤー番号
 	void SetPlayerNumber(int num);
-
-	/// @brief 
-	void SetKillerPlayerNumber(int num) { m_killerPlayerNumber = num; }
-
-	/// @brief 
-	int GetKillerPlayerNumber() { return m_killerPlayerNumber; }
 
 	/// @brief 移動の処理
 	void Move();
@@ -42,6 +39,8 @@ public:
 
 	/// @brief ボールとの距離を計算
 	void BallDistanceCalculation();
+
+	Vector3 GetToBallVec() { return m_toBallVec; }
 
 	/// @brief ボールとぶつかる処理
 	void BallCollide();
@@ -73,8 +72,8 @@ public:
 private:
 	/// @brief プレイヤーの番号
 	int m_myNumber = 0;
-	/// @brief 
-	int m_killerPlayerNumber = 0;
+	/// @brief 自分に攻撃してきたプレイヤーの番号
+	int m_haveAttackedPlayer = 4;
 	/// @brief プレイヤーの座標
 	Vector3 m_position = Vector3::Zero;
 	/// @brief プレイやーの回転
@@ -129,6 +128,8 @@ private:
 	float m_guardDurability = 100.0f;
 	/// @brief ガードの状態
 	bool m_breakGuard = false;
+	/// @brief シールドにボールが触れたか？
+	bool m_shieldHit = false;
 	/// @brief 前フレームのガード状態フラグ記録用
 	bool m_breakGuardPrevFrame = false;
 	/// @brief ジャストガード判定になる時間
@@ -148,7 +149,7 @@ private:
 	SkinModelRender* m_skinModelRender = nullptr;
 	/// @brief ボール
 	Ball* m_ball = nullptr;
-	
+
 	//エフェクト関連//
 	/// @brief ボールをキックした時のエフェクト
 	Effect m_kickEffect;
@@ -191,8 +192,16 @@ private:
 
 	AnimationClip m_animationClips[enAnimation_Num];
 
+	/// @brief タイマー
+	Timer* m_timer = nullptr;
+
+	/// @brief スコア
+	Score* m_score = nullptr;
+
 	/// @brief ゲームUI
 	GameUI* m_ui = nullptr;
 
+	/// @brief プレイヤーのエフェクト
+	PlayerEffect* m_plEffect = nullptr;
 };
 

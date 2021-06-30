@@ -70,6 +70,14 @@
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="system\system.cpp" />
     <ClCompile Include="Title.cpp" />
+<<<<<<< HEAD
+=======
+    <ClCompile Include="PlayerEffect.cpp" />
+    <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="Score.cpp" />
+    <ClCompile Include="Result.cpp" />
+    <ClCompile Include="Menu.cpp" />
+>>>>>>> 518b3d8a0055b2605b6807da157fc70246058485
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\ExEngine\effect\Effect.h" />
@@ -149,6 +157,14 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
     <ClInclude Include="Title.h" />
+<<<<<<< HEAD
+=======
+    <ClInclude Include="PlayerEffect.h" />
+    <ClInclude Include="Timer.h" />
+    <ClInclude Include="Score.h" />
+    <ClInclude Include="Result.h" />
+    <ClInclude Include="Menu.h" />
+>>>>>>> 518b3d8a0055b2605b6807da157fc70246058485
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\modelData\bg\testmap_tex.DDS" />

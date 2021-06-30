@@ -301,8 +301,12 @@
     <ClCompile Include="GameUI.cpp" />
     <ClCompile Include="Lighting.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Objects.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerEffect.cpp" />
+    <ClCompile Include="Result.cpp" />
+    <ClCompile Include="Score.cpp" />
     <ClCompile Include="SkinModelRender.cpp" />
     <ClCompile Include="Sky.cpp" />
     <ClCompile Include="SpriteRender.cpp" />
@@ -315,6 +319,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="system\system.cpp" />
+    <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Title.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -387,13 +392,18 @@
     <ClInclude Include="GameDirector.h" />
     <ClInclude Include="GameUI.h" />
     <ClInclude Include="Lighting.h" />
+    <ClInclude Include="Menu.h" />
     <ClInclude Include="Objects.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerEffect.h" />
+    <ClInclude Include="Result.h" />
+    <ClInclude Include="Score.h" />
     <ClInclude Include="SkinModelRender.h" />
     <ClInclude Include="Sky.h" />
     <ClInclude Include="SpriteRender.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
+    <ClInclude Include="Timer.h" />
     <ClInclude Include="Title.h" />
   </ItemGroup>
   <ItemGroup>
