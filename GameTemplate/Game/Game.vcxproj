@@ -425,6 +425,11 @@
     <Image Include="Assets\modelData\bg\testmap_tex.DDS" />
     <Image Include="Assets\modelData\sphere\sphere_tex.DDS" />
     <Image Include="Assets\modelData\sphere\sphere_tex_01.DDS" />
+    <Image Include="Assets\sprite\GageBody.DDS" />
+    <Image Include="Assets\sprite\GageFinal.DDS" />
+    <Image Include="Assets\sprite\GageStart.DDS" />
+    <Image Include="Assets\sprite\Shield_Icon.DDS" />
+    <Image Include="Assets\sprite\Sprint_Icon.DDS" />
     <Image Include="Assets\sprite\title.dds" />
     <Image Include="Assets\sprite\title.png" />
     <Image Include="Assets\sprite\UI_Gage.DDS" />

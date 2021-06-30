@@ -58,8 +58,10 @@ public:
 	void ReSpawn();
 	/// @brief リスポーン時の無敵時間の処理
 	void Muteki();
-
+	/// @brief スタミナ値ゲッター
 	float GetStamina() { return m_stamina; }
+	/// @brief ダッシュフラグゲッター
+	bool GetDashFlg() { return m_dash; }
 
 	void Animation();
 
