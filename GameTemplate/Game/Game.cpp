@@ -20,6 +20,7 @@ Game::Game()
 	m_ui = NewGO<GameUI>(0,GAME_UI_NAME);
 	m_score = NewGO<Score>(0, SCORE_NAME);
 	m_sky = NewGO<Sky>(0, "Sky");
+	//m_box = NewGO<Box>(0, BOX_NAME);
 }
 
 Game::~Game()
