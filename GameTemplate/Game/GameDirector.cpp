@@ -45,6 +45,10 @@ void GameDirector::Update()
 	case enTitle: {
 		Title();
 	}break;
+	case enRePlay: {
+		NewGO<Game>(0, GAME_NAME);
+		m_gameState = enMainGame;
+	}break;
 	}
 }
 

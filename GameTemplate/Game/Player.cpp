@@ -302,7 +302,7 @@ void Player::Guard()
 	m_moveSpeed.z /= FLOAT_2;
 
 	/// @brief ガード中は耐久値(guardDurability)が減り続ける
-	m_guardDurability -= 0.555f;
+	m_guardDurability -= 0.3f;
 
 	//シールドエフェクト発生処理//
 		//カウンターに値を加算
@@ -352,7 +352,7 @@ void Player::Guard()
 		}
 		else {
 			/// @brief ボールの勢いに応じて耐久値を減らす
-			float shieldDamage = m_ball->GetVelocity() * 4.0f;
+			float shieldDamage = m_ball->GetVelocity() * 3.0f;
 			m_guardDurability -= shieldDamage;
 			/// @brief ガードブレイクした場合
 			if (m_guardDurability <= 0.0f)
@@ -520,7 +520,7 @@ void Player::Update()
 	}
 	/// @brief 非ガード時、ガード耐久値を回復
 	if (m_guard == false) {
-		m_guardDurability += 0.555f;
+		m_guardDurability += 0.3f;
 		m_justGuardTime = 0.0f;
 	}
 	/// @brief 再展開可能まで

@@ -97,7 +97,7 @@ void Ball::Move()
 
 	}
 
-	m_moveVelocity -= pow(m_moveVelocity * m_friction,2.0);
+	m_moveVelocity -= pow(m_moveVelocity * m_friction,1.5);
 
 	if (m_moveSpeed.Length() < 1.0f || m_gameDirector->IsMainGame() == false)
 	{

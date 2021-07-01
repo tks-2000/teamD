@@ -3,12 +3,16 @@
 
 namespace{
 	const wchar_t* PLAYER[MAX_PLAYER_NUM] = { L"Player1",L"Player2" ,L"Player3" ,L"Player4" };
+	const wchar_t* SELECT_COMMAND_FONT[SELECT_COMMAND_NUM] = { L"Retry",L"PlayerSelect",L"Title" };
 	const Vector2 PLAYER_FONT_POS[MAX_PLAYER_NUM] = { {-100.0f,200.0f},{-100.0f,100.0f},{-100.0f,0.0f},{-100.0f,-100.0f} };
 	const Vector2 RANKING_FONT_POS[MAX_PLAYER_NUM] = { {-150.0f,200.0f},{-150.0f,100.0f},{-150.0f,0.0f},{-150.0f,-100.0f} };
+	const Vector2 SELECT_FONT_POS[SELECT_COMMAND_NUM] = { {300.0f,0.0f},{300.0f,-100.0f} ,{300.0f,-200.0f} };
+
 }
 
 Result::Result()
 {
+	m_selectNum = 0;
 	m_gameDirector = FindGO<GameDirector>(GAME_DIRECTOR_NAME);
 	m_score = FindGO<Score>(SCORE_NAME);
 	for (int plNum = 0; plNum < m_gameDirector->GetPlayerNum(); plNum++) {
@@ -20,7 +24,15 @@ Result::Result()
 		m_playerNameFont[plNum] = NewGO<FontRender>(3);
 		m_playerNameFont[plNum]->SetPosition(PLAYER_FONT_POS[plNum]);
 		m_playerNameFont[plNum]->SetText(PLAYER[plNum]);
+		
 	}
+	for (int selectNum = 0; selectNum < SELECT_COMMAND_NUM; selectNum++) {
+		m_selectFont[selectNum] = NewGO<FontRender>(3);
+		m_selectFont[selectNum]->SetPosition(SELECT_FONT_POS[selectNum]);
+		m_selectFont[selectNum]->SetText(SELECT_COMMAND_FONT[selectNum]);
+	}
+	m_arrowFont = NewGO<FontRender>(3);
+	m_arrowFont->SetText(L"@");
 }
 
 Result::~Result()
@@ -29,6 +41,10 @@ Result::~Result()
 		DeleteGO(m_rankingFont[plNum]);
 		DeleteGO(m_playerNameFont[plNum]);
 	}
+	for (int selectNum = 0; selectNum < SELECT_COMMAND_NUM; selectNum++) {
+		DeleteGO(m_selectFont[selectNum]);
+	}
+	DeleteGO(m_arrowFont);
 }
 
 bool Result::Start()
@@ -39,5 +55,20 @@ bool Result::Start()
 
 void Result::Update()
 {
-
+	if (g_pad[0]->IsTrigger(enButtonDown)) {
+		m_selectNum++;
+		if (m_selectNum > 2) {
+			m_selectNum = 0;
+		}
+	}
+	if (g_pad[0]->IsTrigger(enButtonUp)) {
+		m_selectNum--;
+		if (m_selectNum < 0) {
+			m_selectNum = 2;
+		}
+	}
+	Vector2 arrowPos = SELECT_FONT_POS[m_selectNum];
+	arrowPos.x -= 100.0f;
+	m_arrowFontPos = arrowPos;
+	m_arrowFont->SetPosition(m_arrowFontPos);
 }

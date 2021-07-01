@@ -7,7 +7,8 @@ private:
 		enTitle,
 		enMenu,
 		enMainGame,
-		enResult
+		enResult,
+		enRePlay
 	};
 
 	enGameStatus m_gameState = enTitle;
@@ -47,6 +48,8 @@ public:
 	void SetGameResult() { m_gameState = enResult; }
 	/// @brief 現在の状態をタイトルに変更
 	void SetTitle() { m_gameState = enTitle; }
+
+	void SetRePlay() { m_gameState = enRePlay; }
 
 };
 
