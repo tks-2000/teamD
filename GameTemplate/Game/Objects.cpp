@@ -11,7 +11,6 @@ Objects::Objects() {
 
 	m_gameDirector = FindGO<GameDirector>(GAME_DIRECTOR_NAME);
 	m_ball = FindGO<Ball>(BALL_NAME);
-	m_playerNum = m_gameDirector->GetPlayerNum();
 
 }
 Objects::~Objects() {
@@ -40,7 +39,7 @@ void Objects::Update() {
 	for (int Num = 0; Num < m_setNum; Num++) {
 		if (m_delFlag[Num] == true) {
 			m_reSpawnTime[Num] += 1.0f;
-			if (m_reSpawnTime[Num] >= 100.0f) {
+			if (m_reSpawnTime[Num] >= 100.0f && !m_gameDirector->IsResult()) {
 				m_box[Num] = NewGO<Box>(0, BOX_NAME);
 				m_box[Num]->SetBoxPos(OBJECTS_POS[Num], Num);
 				m_delFlag[Num] = false;

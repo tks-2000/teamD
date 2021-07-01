@@ -29,6 +29,10 @@ private:
 	Effect m_knockOutEffect[PLAYER_NUMBER];
 	//ジャストガードエフェクト
 	Effect m_justGuardEffect[PLAYER_NUMBER];
+	/// @brief ジャストガード時のプレイヤー強化エフェクト
+	Effect m_kickBuffEffect[PLAYER_NUMBER];
+	/// @brief ダメージからの回復エフェクト
+	Effect m_repairEffect[PLAYER_NUMBER];
 
 	GameDirector* m_gameDirector = nullptr;
 	Player* m_player[PLAYER_NUMBER] = { nullptr };
@@ -52,6 +56,14 @@ private:
 	/// @brief 行動不能エフェクトの更新
 	/// @param plNum 更新するプレイヤー番号
 	void KnockOutEffectUpdate(int plNum);
+
+	/// @brief 強化エフェクトの更新
+	/// @param plNum 更新するプレイヤー番号
+	void KickBuffEffectUpdate(int plNum);
+
+	/// @brief ダメージ回復エフェクトの更新
+	/// @param plNum 更新するプレイヤー番号
+	void RepairEffectUpdate(int plNum);
 
 
 public:
@@ -99,5 +111,14 @@ public:
 	/// @brief 行動不能エフェクトを停止
 	/// @param plNum 停止するプレイヤー番号
 	void StopKnockOutEffect(int plNum) { m_knockOutEffect[plNum].Stop(); }
+	
+	/// @brief プレイヤー強化エフェクトを再生
+	/// @param plNum 再生するプレイヤー番号
+	void PlayKickBuffEffect(int plNum) { m_kickBuffEffect[plNum].Play(); }
+
+	/// @brief ダメージからの回復エフェクトを再生
+	/// @param plNum 再生するプレイヤー番号
+	void PlayRepairEffect(int plNum) { m_repairEffect[plNum].Play(); }
+
 };
 

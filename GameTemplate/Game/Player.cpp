@@ -446,6 +446,9 @@ void Player::Update()
 		if (m_breakGuard == false) {
 			m_plEffect->StopKnockOutEffect(m_myNumber);
 		}
+		if (m_breakGuard != true) {
+			m_plEffect->PlayRepairEffect(m_myNumber);
+		}
 		m_damage = false;
 	}
 
@@ -505,7 +508,7 @@ void Player::Update()
 	if (m_kickFlag == true && m_readyKick == true && m_timer->IsTimerExecution() == true) {
 		if (g_pad[m_myNumber]->IsTrigger(enButtonA)) {
 
-
+			
 			m_plEffect->PlayKickEffect(m_myNumber);
 
 			KickBall();
@@ -575,6 +578,18 @@ void Player::Update()
 	if (m_dieFlag == true) {
 		Muteki();
 	}
+
+	//パワーアップエフェクトの再生
+	if (m_kickPowerUp == true) {
+		m_powerUpCounter += 1;
+		if (m_powerUpCounter % 25 == 1) {
+			m_plEffect->PlayKickBuffEffect(m_myNumber);
+		}
+	}
+	else {
+		m_powerUpCounter = 0.0f;
+	}
+
 
 	/// @brief 自分に当たるスポットライトの位置と方向を設定
 	Vector3 pos = m_position;
