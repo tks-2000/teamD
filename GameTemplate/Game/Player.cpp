@@ -510,7 +510,7 @@ void Player::Update()
 
 			m_plEffect->PlayKickEffect(m_myNumber);
 
-			KickBall();
+
 		}
 	}
 
