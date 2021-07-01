@@ -507,10 +507,10 @@ void Player::Update()
 	if (m_kickFlag == true && m_readyKick == true && m_timer->IsTimerExecution() == true) {
 		if (g_pad[m_myNumber]->IsTrigger(enButtonA)) {
 
-
+			
 			m_plEffect->PlayKickEffect(m_myNumber);
 
-
+			KickBall();
 		}
 	}
 
