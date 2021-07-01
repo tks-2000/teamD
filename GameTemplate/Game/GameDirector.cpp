@@ -3,7 +3,7 @@
 
 GameDirector::GameDirector()
 {
-
+	m_playerNum = MIN_PLAYER_NUM;
 }
 
 GameDirector::~GameDirector()

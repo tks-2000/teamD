@@ -4,6 +4,7 @@
 #include "MiniEngine.h"
 #include "ExEngine.h"
 //#include "Title.h"
+#include "Menu.h"
 #include "Game.h"
 #include "GameDirector.h"
 #include "Timer.h"
@@ -19,12 +20,18 @@
 #include "BackGround.h"
 #include "Ball.h"
 #include "Objects.h"
+#include "Box.h"
 #include "Sky.h"
 #include "Result.h"
+
+class FontRender;
+class GameDirector;
+class Menu;
 
 namespace {
 
 	const int MAX_PLAYER_NUM = 4;
+	const int MIN_PLAYER_NUM = 1;
 
 	const float FLOAT_0 = 0.0f;
 	const float FLOAT_1 = 1.0f;
@@ -40,6 +47,7 @@ namespace {
 
 	const char* TITLE_NAME = "Title";
 	const char* GAME_DIRECTOR_NAME = "GameDirector";
+	const char* MENU_NAME = "Menu";
 	const char* GAME_NAME = "Game";
 	const char* TIMER_NAME = "Timer";
 	const char* GAME_UI_NAME = "GameUI";
@@ -51,6 +59,7 @@ namespace {
 	const char* BACK_GROUND_NAME = "BackGround";
 	const char* BALL_NAME = "Ball";
 	const char* OBJECTS_NAME = "Objects";
+	const char* BOX_NAME = "Box";
 	const char* RESULT_NAME = "Result";
 
 	const char* UNITYCHAN_MODEL = "Assets/modelData/unityChan.tkm";

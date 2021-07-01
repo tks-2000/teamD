@@ -12,12 +12,13 @@ class BackGround;
 class Ball;
 class Objects;
 class Sky;
+//class Box;
 class Result;
 
 
 const int PLAYER_NUMBER = 4;
 const float ZeroF = 0.0f;
-static const int OBJECTS_NUMBER = 10;
+static const int OBJECTS_NUMBER = 4;
 
 class Game : public IGameObject
 {
@@ -54,6 +55,8 @@ private:
 	Objects* m_objects = nullptr;
 	/// @brief ”wŒi‚Ì‹ó
 	Sky* m_sky = nullptr;
+	///// @brief
+	//Box* m_box = nullptr;
 	/// @brief ƒŠƒUƒ‹ƒg
 	Result* m_result = nullptr;
 };

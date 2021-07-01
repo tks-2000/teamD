@@ -109,20 +109,75 @@ GameUI::GameUI()
 	//m_testNumFont = NewGO<FontRender>(2);
 	//m_testNumFont->SetPosition({ 500.0f,100.0f, });
 
-	for(int alpha = 0; alpha < m_playerNum; alpha++){
-	m_shieldGage[alpha] = NewGO<SpriteRender>(2);
-	m_shieldGage[alpha]->Init("Assets/sprite/UI_Gage.DDS",m_ShGageSize[Width],m_ShGageSize[Height]);
-	m_shieldGage[alpha]->SetColor(m_ShGageColor);
-	m_shieldGage[alpha]->SetPosition(m_ShGagePos[alpha]);
-	m_breakAlertMassege[alpha] = NewGO<FontRender>(3);
-	m_breakAlertMassege[alpha]->SetText(L"SHIELD OFFLINE");
-	m_breakAlertMassege[alpha]->SetColor({ 0.0f, 0.0f, 0.0f, 0.0f });
-	m_breakAlertMassege[alpha]->SetScale(0.45f);
-	m_breakAlertMassege[alpha]->SetPosition(m_alertMassegePos[alpha]);
-	m_staminaGage[alpha] = NewGO<SpriteRender>(2);
-	m_staminaGage[alpha]->Init("Assets/sprite/UI_Gage.DDS", m_StGageSize[Width], m_StGageSize[Height]);
-	m_staminaGage[alpha]->SetColor(m_StGageColor);
-	m_staminaGage[alpha]->SetPosition(m_StGagePos[alpha]);
+	for (int alpha = 0; alpha < m_playerNum; alpha++) {
+		m_shieldGage[alpha] = NewGO<SpriteRender>(3);
+		m_shieldGage[alpha]->Init("Assets/sprite/UI_Gage.DDS", m_ShGageSize[Width], m_ShGageSize[Height]);
+		m_shieldGage[alpha]->SetColor(m_ShGageColor);
+		m_shieldGage[alpha]->SetPosition(m_ShGagePos[alpha]);
+		m_breakAlertMassege[alpha] = NewGO<FontRender>(3);
+		m_breakAlertMassege[alpha]->SetText(L"SHIELD OFFLINE");
+		m_breakAlertMassege[alpha]->SetColor({ 0.0f, 0.0f, 0.0f, 0.0f });
+		m_breakAlertMassege[alpha]->SetScale(0.39f);
+		m_breakAlertMassege[alpha]->SetPosition(m_ShAlertMassegePos[alpha]);
+		m_ShGageIcon[alpha] = NewGO<SpriteRender>(5);
+		m_ShGageIcon[alpha]->Init("Assets/sprite/Shield_Icon.DDS", m_IconSize, m_IconSize);
+		m_ShGageIcon[alpha]->SetColor(m_ShGageColor);
+		m_ShGageIcon[alpha]->SetPosition(m_ShIconPos[alpha]);
+		m_ShGageBase[alpha] = NewGO<SpriteRender>(2);
+		m_ShGageBase[alpha]->Init("Assets/sprite/UI_Gage.DDS", m_gageBaseSize[Width], m_gageBaseSize[Height]);
+		m_ShGageBase[alpha]->SetColor({ 0.0f, 0.0f, 0.0f, 1.0f });
+		m_ShGageBase[alpha]->SetPosition(m_ShGagePos[alpha]);
+		m_staminaGage[alpha] = NewGO<SpriteRender>(3);
+		m_staminaGage[alpha]->Init("Assets/sprite/UI_Gage.DDS", m_StGageSize[Width], m_StGageSize[Height]);
+		m_staminaGage[alpha]->SetColor(m_StGageColor);
+		m_staminaGage[alpha]->SetPosition(m_StGagePos[alpha]);
+		m_tiredAlertMassege[alpha] = NewGO<FontRender>(3);
+		m_tiredAlertMassege[alpha]->SetText(L"STAMINA IS LOW");
+		m_tiredAlertMassege[alpha]->SetColor({ 0.0f,0.0f,0.0f,0.0f });
+		m_tiredAlertMassege[alpha]->SetScale(0.39f);
+		m_tiredAlertMassege[alpha]->SetPosition(m_StAlertMassegePos[alpha]);
+		m_StGageBase[alpha] = NewGO<SpriteRender>(1);
+		m_StGageBase[alpha]->Init("Assets/sprite/UI_Gage.DDS", m_gageBaseSize[Width], m_gageBaseSize[Height]);
+		m_StGageBase[alpha]->SetColor({ 0.0f, 0.0f, 0.0f, 1.0f });
+		m_StGageBase[alpha]->SetPosition(m_StGagePos[alpha]);
+		m_StGageIcon[alpha] = NewGO<SpriteRender>(5);
+		m_StGageIcon[alpha]->Init("Assets/sprite/Sprint_Icon.DDS", m_IconSize, m_IconSize);
+		m_StGageIcon[alpha]->SetColor(m_StGageColor);
+		m_StGageIcon[alpha]->SetPosition(m_StIconPos[alpha]);
+
+		//ガードゲージをお洒落にする奴ら
+		m_ShGageBegin[alpha] = NewGO<SpriteRender>(4);
+		m_ShGageBegin[alpha]->Init("Assets/sprite/GageStart.DDS", 50, 24);
+		m_ShGageBegin[alpha]->SetPosition(m_ShGageBeginPos[alpha]);
+		//m_ShGageBegin[alpha]->SetColor({ 0.6f, 0.6f, 1.0f, 1.0f });
+		m_ShGageBody[alpha] = NewGO<SpriteRender>(4);
+		m_ShGageBody[alpha]->Init("Assets/sprite/GageBody.DDS", 180, 24);
+		m_ShGageBody[alpha]->SetPosition(m_ShGageBodyPos[alpha]);
+		//m_ShGageBody[alpha]->SetColor({ 0.6f, 0.6f, 1.0f, 1.0f });
+		m_ShGageFinal[alpha] = NewGO<SpriteRender>(4);
+		m_ShGageFinal[alpha]->Init("Assets/sprite/GageFinal.DDS", 20, 24);
+		m_ShGageFinal[alpha]->SetPosition(m_ShGageFinalPos[alpha]);
+		//m_ShGageFinal[alpha]->SetColor({ 0.6f, 0.6f, 1.0f, 1.0f });
+
+		//スタミナゲージをお洒落にする奴ら
+		m_StGageBegin[alpha] = NewGO<SpriteRender>(4);
+		m_StGageBegin[alpha]->Init("Assets/sprite/GageStart.DDS", 50, 24);
+		m_StGageBegin[alpha]->SetPosition(m_StGageBeginPos[alpha]);
+		//m_StGageBegin[alpha]->SetColor({ 0.8f, 0.8f, 0.4f, 1.0f });
+		m_StGageBody[alpha] = NewGO<SpriteRender>(4);
+		m_StGageBody[alpha]->Init("Assets/sprite/GageBody.DDS", 180, 24);
+		m_StGageBody[alpha]->SetPosition(m_StGageBodyPos[alpha]);
+		//m_StGageBody[alpha]->SetColor({ 0.8f, 0.8f, 0.4f, 1.0f });
+		m_StGageFinal[alpha] = NewGO<SpriteRender>(4);
+		m_StGageFinal[alpha]->Init("Assets/sprite/GageFinal.DDS", 20, 24);
+		m_StGageFinal[alpha]->SetPosition(m_StGageFinalPos[alpha]);
+		//m_StGageFinal[alpha]->SetColor({ 0.8f, 0.8f, 0.4f, 1.0f });
+		if (alpha == 1 || alpha == 3) {	//3pと4pの反転処理
+			m_ShGageBegin[alpha]->SetScale({ -1.0f,1.0f,-1.0f });
+			m_ShGageFinal[alpha]->SetScale({ -1.0f,1.0f,-1.0f });
+			m_StGageBegin[alpha]->SetScale({ -1.0f,1.0f,-1.0f });
+			m_StGageFinal[alpha]->SetScale({ -1.0f,1.0f,-1.0f });
+		}
 	}
 	m_ballSpeed = NewGO<FontRender>(2);
 	m_ballSpeed->SetPosition(BALL_SPEED_POS);
@@ -142,6 +197,17 @@ GameUI::~GameUI()
 		DeleteGO(m_shieldGage[bravo]);
 		DeleteGO(m_staminaGage[bravo]);
 		DeleteGO(m_breakAlertMassege[bravo]);
+		DeleteGO(m_tiredAlertMassege[bravo]);
+		DeleteGO(m_ShGageBase[bravo]);
+		DeleteGO(m_ShGageIcon[bravo]);
+		DeleteGO(m_ShGageBegin[bravo]);
+		DeleteGO(m_ShGageBody[bravo]);
+		DeleteGO(m_ShGageFinal[bravo]);
+		DeleteGO(m_StGageBase[bravo]);
+		DeleteGO(m_StGageIcon[bravo]);
+		DeleteGO(m_StGageBegin[bravo]);
+		DeleteGO(m_StGageBody[bravo]);
+		DeleteGO(m_StGageFinal[bravo]);
 	}
 	DeleteGO(m_ballSpeed);
 
@@ -206,7 +272,7 @@ void GameUI::Update()
 	const wchar_t* speed = conv.c_str();
 	//swprintf(m_text, L"%2.1f", speed);
 	m_ballSpeed->SetText(speed);
-	
+
 	for (int charley = 0; charley < m_playerNum; charley++)
 	{
 		/// @brief シールドゲージの減少処理
@@ -214,22 +280,21 @@ void GameUI::Update()
 		m_shieldGage[charley]->SetScale({ DurbilityBat, 1.0f, 1.0f });
 		m_shieldGage[charley]->SetPosition(m_ShGagePos[charley]);
 		float ShGageDownVa = (m_ShGageSize[Width] * (1.0f - DurbilityBat)) / 2;	//Shゲージ減少量
-		//if (m_player[charley]->GetGuardDurability() < 100.0f) {	いらないかもしれない分岐
-			if (charley % 2 == true) {
-				m_shieldGage[charley]->SetPosition({ m_ShGagePos[charley].x + ShGageDownVa, m_ShGagePos[charley].y, 0.0f });
+		//m_shieldGage[charley]->SetColor({ DurbilityBat, m_ShGageColor.y, m_ShGageColor.z - DurbilityBat, 0.8f });
+		if (charley % 2 == 1) {
+			m_shieldGage[charley]->SetPosition({ m_ShGagePos[charley].x + ShGageDownVa, m_ShGagePos[charley].y, 0.0f });
 
 				
-			}
-			else {
-				m_shieldGage[charley]->SetPosition({m_ShGagePos[charley].x - ShGageDownVa, m_ShGagePos[charley].y, 0.0f });
-			}
-		//}	いらないかもしれない分岐（終
+		}
+		else {
+			m_shieldGage[charley]->SetPosition({m_ShGagePos[charley].x - ShGageDownVa, m_ShGagePos[charley].y, 0.0f });
+		}
 		/// @brief スタミナゲージの減少処理
 		float StaminaBat = (m_player[charley]->GetStamina() * m_staminaComplement) / 100;
 		m_staminaGage[charley]->SetScale({ StaminaBat, 1.0f, 1.0f });
 		m_staminaGage[charley]->SetPosition(m_StGagePos[charley]);
 		float stGageDownVa = (m_StGageSize[Width] * (1.0f - StaminaBat)) / 2;
-		if (charley % 2 == true) {
+		if (charley % 2 == 1) {
 			m_staminaGage[charley]->SetPosition({ m_StGagePos[charley].x + stGageDownVa, m_StGagePos[charley].y, 0.0f });
 		}
 		else {
@@ -239,6 +304,7 @@ void GameUI::Update()
 	}
 	for (int delta = 0; delta < m_playerNum; delta++)
 	{
+		//シールドアラートを表示するかしないかの分岐
 		if (m_player[delta]->GetGuardBreak()) {
 			m_shieldGage[delta]->SetColor(m_ShAlertColor);
 			m_breakAlertMassege[delta]->SetColor({ 1.0f, 0.0f, 0.0f, 1.0f });
@@ -247,8 +313,17 @@ void GameUI::Update()
 			m_shieldGage[delta]->SetColor(m_ShGageColor); 
 			m_breakAlertMassege[delta]->SetColor({ 0.0f,0.0f,0.0f,0.0f });
 		}
+		//スタミナアラートを表示するかしないかの分岐
+		if (m_player[delta]->GetDashFlg() == false) {
+			m_staminaGage[delta]->SetColor(m_StAlertColor);
+			m_tiredAlertMassege[delta]->SetColor( { 1.0f, 0.0f, 0.0f, 1.0f });
+		}
+		else {
+			m_staminaGage[delta]->SetColor(m_StGageColor);
+			m_tiredAlertMassege[delta]->SetColor({ 0.0f, 0.0f, 0.0f, 0.0f });
+		}
 	}
-
+	
 	//for (int plFontNum = 0; plFontNum < m_playerNum; plFontNum++) {
 	//	std::wstring conv = std::to_wstring(m_player[plFontNum]->GetGuardDurability());
 	//	m_GuardDurability[plFontNum]->SetText(conv.c_str());

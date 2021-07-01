@@ -32,10 +32,14 @@ public:
 	/// @return プレイヤーの座標
 	Vector3 GetPosition() { return m_position; }
 
+	/// @brief キック可能か判定
 	void IsKick();
 
 	/// @brief ボールを蹴る処理
 	void KickBall();
+
+	/// @brief ダッシュ可能か判定
+	bool IsDash();
 
 	/// @brief ボールとの距離を計算
 	void BallDistanceCalculation();
@@ -54,8 +58,10 @@ public:
 	void ReSpawn();
 	/// @brief リスポーン時の無敵時間の処理
 	void Muteki();
-
+	/// @brief スタミナ値ゲッター
 	float GetStamina() { return m_stamina; }
+	/// @brief ダッシュフラグゲッター
+	bool GetDashFlg() { return m_dash; }
 
 	void Animation();
 

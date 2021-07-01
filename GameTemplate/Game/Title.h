@@ -25,6 +25,5 @@ private:
 	int m_playerNum = 0;
 
 	GameDirector* m_gameDirector = nullptr;
-
 };
 

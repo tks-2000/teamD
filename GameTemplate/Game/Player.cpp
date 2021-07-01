@@ -134,11 +134,12 @@ void Player::Move()
 	m_moveSpeed += g_camera3D->GetRight() * m_Lstickx;
 	m_moveSpeed += g_camera3D->GetForward() * m_Lsticky;
 
-	if (m_dash == true && m_guard == false && g_pad[m_myNumber]->IsPress(enButtonRB1)) {
+
+	if (IsDash() == true) {
 		m_moveVelocity = 0.95f;
-		if (m_Lstickx != FLOAT_0 || m_Lsticky != FLOAT_0) {
-			m_stamina -= g_gameTime->GetFrameDeltaTime() * FLOAT_2;
-		}
+
+		m_stamina -= g_gameTime->GetFrameDeltaTime() * FLOAT_2;
+
 		m_anim = enAnimation_Run;
 	}
 	else {
@@ -239,6 +240,21 @@ void Player::KickBall()
 	m_ball->MoveStart();
 
 
+}
+
+bool Player::IsDash()
+{
+	if (m_dash == true && m_guard == false && g_pad[m_myNumber]->IsPress(enButtonRB1)) {
+		if (m_Lstickx != FLOAT_0 || m_Lsticky != FLOAT_0) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	else {
+		return false;
+	}
 }
 
 void Player::BallCollide()
@@ -343,6 +359,7 @@ void Player::Guard()
 				/// @brief ガードエフェクトを消してガードブレイクエフェクトを再生する
 				m_plEffect->StopGuardEffect(m_myNumber);
 				m_plEffect->PlayGuardBreakEffect(m_myNumber);
+				m_plEffect->PlayKnockOutEffect(m_myNumber);
 				m_guardDurability = 0.0f;
 				m_breakGuard = true;
 				return;

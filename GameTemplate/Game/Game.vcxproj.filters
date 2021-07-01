@@ -70,10 +70,18 @@
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="system\system.cpp" />
     <ClCompile Include="Title.cpp" />
+<<<<<<< HEAD
+=======
     <ClCompile Include="PlayerEffect.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Score.cpp" />
+<<<<<<< HEAD
+    <ClCompile Include="Box.cpp" />
+=======
     <ClCompile Include="Result.cpp" />
+    <ClCompile Include="Menu.cpp" />
+>>>>>>> 518b3d8a0055b2605b6807da157fc70246058485
+>>>>>>> 1df9da9b40f361fd29a5f74cd210008d4613161c
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\ExEngine\effect\Effect.h" />
@@ -153,10 +161,18 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
     <ClInclude Include="Title.h" />
+<<<<<<< HEAD
+=======
     <ClInclude Include="PlayerEffect.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Score.h" />
+<<<<<<< HEAD
+    <ClInclude Include="Box.h" />
+=======
     <ClInclude Include="Result.h" />
+    <ClInclude Include="Menu.h" />
+>>>>>>> 518b3d8a0055b2605b6807da157fc70246058485
+>>>>>>> 1df9da9b40f361fd29a5f74cd210008d4613161c
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\modelData\bg\testmap_tex.DDS" />
@@ -165,6 +181,11 @@
     <Image Include="Assets\sprite\title.dds" />
     <Image Include="Assets\sprite\title.png" />
     <Image Include="Assets\sprite\UI_Gage.DDS" />
+    <Image Include="Assets\sprite\Shield_Icon.DDS" />
+    <Image Include="Assets\sprite\Sprint_Icon.DDS" />
+    <Image Include="Assets\sprite\GageBody.DDS" />
+    <Image Include="Assets\sprite\GageFinal.DDS" />
+    <Image Include="Assets\sprite\GageStart.DDS" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\animData\unitychan\clear.tka" />
