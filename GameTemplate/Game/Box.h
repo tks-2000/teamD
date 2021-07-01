@@ -6,6 +6,7 @@ class SkinModelRender;
 class Score;
 class Objects;
 class Timer;
+class GameDirector;
 
 
 class Box : public IGameObject
@@ -30,17 +31,19 @@ private:
 
 	Vector3 m_toBallVec = Vector3::Zero;
 
-	Vector3 m_fallSpeed = Vector3::Zero;
+	Vector3 m_toPlayerVec[PLAYER_NUMBER];
 
-	Vector3 m_colliderPos = Vector3::Zero;
+	Vector3 m_fallSpeed = Vector3::Zero;
 
 	int m_setNum = 0;
 
 	int m_boxNum = 0;
 
-	//int m_playerNum = 0;
+	int m_playerNum = 0;
 
 	float m_ballDistance = 0.0f;
+
+	float m_playerDistance[PLAYER_NUMBER] = { 0.0f };
 
 	float m_fall = ZeroF;
 
@@ -58,6 +61,7 @@ private:
 	Objects* m_objects = nullptr;
 	/// @brief タイマー
 	Timer* m_timer = nullptr;
-
+	/// @brief ゲームディレクター
+	GameDirector* m_gameDirector = nullptr;
 };
 

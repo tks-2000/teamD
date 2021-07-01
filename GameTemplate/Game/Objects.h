@@ -33,8 +33,6 @@ private:
 
 	int m_setNum = 0;
 
-	int m_playerNum = 0;
-
 	float m_reSpawnTime[OBJECTS_NUMBER] = { 0.0f };
 
 	/// @brief É{Å[Éã

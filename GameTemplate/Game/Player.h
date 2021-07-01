@@ -32,6 +32,8 @@ public:
 	/// @return プレイヤーの座標
 	Vector3 GetPosition() { return m_position; }
 
+	void SetMoveSpeed(Vector3 move) { m_moveSpeed = move; }
+
 	/// @brief キック可能か判定
 	void IsKick();
 
