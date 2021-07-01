@@ -176,14 +176,14 @@ void Ball::PlayReflectEffect
 void Ball::Update()
 {
 	if (m_moveFlag == true) {
-		m_lig->SetPointLightColor(m_pointLigColor);
+		m_lig->SetPointLightColor(4,m_pointLigColor);
 		Move();
 		Rotation();
 		PlayTrackEffect();
 		
 	}
 	else {
-		m_lig->SetPointLightColor(COLORLESS);
+		m_lig->SetPointLightColor(4,COLORLESS);
 		m_playerNum = 4;
 	}
 
@@ -193,13 +193,13 @@ void Ball::Update()
 	m_skinModelRender->SetRotation(m_qRot);
 	m_skinModelRender->SetScale(m_scale);
 
-	m_lig->SetPointLighitPos(m_position);
+	m_lig->SetPointLighitPos(4,m_position);
 	
 	//軌跡用エフェクト座標をボールに合わせる
 	m_ballTrack.SetPosition(modelpos);
 	//軌跡用エフェクトの更新
 	m_ballTrack.Update();
 
-	m_lig->SetPointLighitPos(modelpos);
+	m_lig->SetPointLighitPos(4,modelpos);
 
 }

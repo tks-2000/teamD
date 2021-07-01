@@ -5,6 +5,7 @@
  //定数
  ///////////////////////////////////////////////
 static const int NUM_SPOT_LIGHT = 4;
+static const int NUM_POINT_LIGHT = 5;
 ////////////////////////////////////////////////
 // 構造体
 ////////////////////////////////////////////////
@@ -76,7 +77,7 @@ cbuffer ModelCb : register(b0){
 cbuffer LightCb : register(b1)
 {
 	DirectionLight directionLight;		//ディレクションライト
-	PointLight pointLight;				//ポイントライト
+	PointLight pointLight[NUM_POINT_LIGHT];				//ポイントライト
 	SpotLight spotLight[NUM_SPOT_LIGHT];				//スポットライト
 	HemiSphereLight hemiSphereLight;	//半球ライト
 	float3 eyePos;						//視点の位置
@@ -180,34 +181,39 @@ float4 PSMain( SPSIn psIn ) : SV_Target0
 
 	float3 finalDirectionLig = diffDirection+specDirection;
 
+	float3 finalPointLig = {0.0f,0.0f,0.0f};
+
+	for(int ptNum = 0; ptNum < NUM_POINT_LIGHT; ptNum++){
 	//サーフェイスに入射するポイントライトの光の向きを計算する。
-	float3 ligDir = psIn.worldPos - pointLight.position;
+	float3 ligDir = psIn.worldPos - pointLight[ptNum].position;
 	//正規化する。
 	ligDir = normalize(ligDir);
 
 	//減衰なしのランバート拡散反射光を計算する。
 	float3 diffPoint =  CalculateLambertDiffuse(
 		ligDir,
-		pointLight.color,
+		pointLight[ptNum].color,
 		psIn.normal
 	);
 
 	//減衰なしのフォン鏡面反射光を計算する。
 	float3 specPoint = CalculatePhoneSpecular(
 		ligDir,
-		pointLight.color,
+		pointLight[ptNum].color,
 		psIn.worldPos,
 		psIn.normal
 	);
 
 	//距離による影響率を計算する。
-	float pAffect = CalculateImpactRate(pointLight.position,pointLight.Range,psIn.worldPos);
+	float pAffect = CalculateImpactRate(pointLight[ptNum].position,pointLight[ptNum].Range,psIn.worldPos);
 
 	//拡散反射光と鏡面反射光に減衰率を乗算して影響を弱める。
 	diffPoint *= pAffect;
 	specPoint *= pAffect;
 
-	float3 finalPointLig = diffPoint + specPoint;
+	finalPointLig += diffPoint + specPoint;
+	}
+
 
 	//スポットライト用
 

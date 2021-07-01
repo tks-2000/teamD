@@ -19,8 +19,8 @@ namespace {
 	const Vector3 PLAYER3_STARTPOS = { -600.0f,200.0f,-600.0f };
 	/// @brief 4Pの初期位置
 	const Vector3 PLAYER4_STARTPOS = { 600.0f,200.0f,-600.0f };
-	/// @brief スポットライトの高さ
-	const float SPOT_LIGHT_HEIGHT = 800.0f;
+	/// @brief ポイントライトの高さ
+	const float POINT_LIGHT_HEIGHT = 50.0f;
 	/// @brief プレイヤーの半径
 	const float PLAYER_RADIUS = 20.0f;
 	/// @brief プレイヤーの高さ
@@ -124,8 +124,8 @@ void Player::SetPlayerNumber(int num)
 	m_position = m_startPos;
 	m_charaCon.SetPosition(m_position);
 
-	m_lig->SetSpotLightColor(m_myNumber, m_playerColor);
-
+	m_lig->SetPointLightColor(m_myNumber, m_playerColor);
+	m_lig->SetPointLightRange(m_myNumber, 500.0f);
 }
 
 void Player::Move()
@@ -393,7 +393,7 @@ void Player::ReSpawn() {
 	m_guardDurability = 100.0f;
 	m_plEffect->StopKnockOutEffect(m_myNumber);
 	m_mutekiTime = MUTEKI_TIME;
-	m_lig->SetSpotLightBlinking(m_myNumber, m_mutekiTime, 0.1f);
+	m_lig->SetPointLightBlinking(m_myNumber, m_mutekiTime, 0.07f);
 	m_dieFlag = true;
 }
 
@@ -593,11 +593,11 @@ void Player::Update()
 
 	/// @brief 自分に当たるスポットライトの位置と方向を設定
 	Vector3 pos = m_position;
-	pos.y = SPOT_LIGHT_HEIGHT;
-	m_lig->SetSpotLightPos(m_myNumber, pos);
+	pos.y = POINT_LIGHT_HEIGHT;
+	m_lig->SetPointLighitPos(m_myNumber, pos);
 
-	Vector3 dir = m_position - m_lig->GetSpotLightPos(m_myNumber);
-	m_lig->SetSpotLightDirection(m_myNumber, dir);
+	/*Vector3 dir = m_position - m_lig->GetSpotLightPos(m_myNumber);
+	m_lig->SetSpotLightDirection(m_myNumber, dir);*/
 
 	/// @brief キャラクターコントローラーで座標を決める
 	m_position = m_charaCon.Execute(m_moveSpeed, FLOAT_1);

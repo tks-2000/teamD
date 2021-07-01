@@ -39,10 +39,10 @@ namespace {
 	const float FLOAT_01 = 0.1f;
 	const float FLOAT_MINUS_1 = -1.0f;
 
-	const Vector3 RED = { 5.0f,0.0f,0.0f };
-	const Vector3 GREEN = { 0.0f,5.0f,0.0f };
-	const Vector3 BLUE = { 0.0f,0.0f,5.0f };
-	const Vector3 YELLOW = { 5.0f,5.0f,0.0f };
+	const Vector3 RED = { 5.0f,1.0f,1.0f };
+	const Vector3 GREEN = { 1.0f,5.0f,1.0f };
+	const Vector3 BLUE = { 1.0f,1.0f,5.0f };
+	const Vector3 YELLOW = { 3.0f,3.0f,1.0f };
 	const Vector3 COLORLESS = { 0.0f,0.0f,0.0f };
 
 	const char* TITLE_NAME = "Title";
