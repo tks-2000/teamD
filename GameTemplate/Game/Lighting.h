@@ -68,7 +68,7 @@ public:
 	void Update();
 
 
-	Light GetLight() { return m_light; }
+	Light& GetLight() { return m_light; }
 	
 	/// @brief ライトの構造体を入手
 	/// @return ライト構造体のアドレス
@@ -132,6 +132,12 @@ public:
 	/// @param dir スポットライトに設定する方向
 	void SetSpotLightDirection(int num,Vector3 dir) { m_light.spotLight[num].direction = dir; m_light.spotLight[num].direction.Normalize(); }
 
+	/// @brief スポットライトの点滅を設定
+	/// @param num 点滅させたいスポットライトの番号
+	/// @param Time 点滅させる時間
+	/// @param interval 点滅の間隔
+	void SetSpotLightBlinking(int num, float time,float interval);
+
 	/// @brief 半球ライトの初期化
 	void InitHemiSphereLight();
 
@@ -139,6 +145,20 @@ private:
 	/// @brief ライティング全てのデータ
 	Light m_light;
 
+	/// @brief スポットライトの点滅フラグ
+	bool m_spLigBlink[SPOT_LIGHT_SUM] = { false };
+	/// @brief スポットライトの点滅時間
+	float m_spLigBlinkTime[SPOT_LIGHT_SUM] = { 0.0f };
+	/// @brief スポットライトの切り替え時間
+	float m_spLigBlinkSwitchingTime[SPOT_LIGHT_SUM] = { 0.0f };
+	/// @brief スポットライトの点滅間隔
+	float m_spLigBlinkInterval[SPOT_LIGHT_SUM] = { 0.0f };
+	/// @brief スポットライトを点滅させるカラー
+	Vector3 m_spLigColor[SPOT_LIGHT_SUM] = { {Vector3::Zero},{Vector3::Zero},{Vector3::Zero},{Vector3::Zero} };
+
+	bool m_spLigLit[SPOT_LIGHT_SUM] = { true };
+
+	void SpotLightBlinking(int num);
 };
 
 

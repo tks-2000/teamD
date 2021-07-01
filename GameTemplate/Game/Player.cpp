@@ -34,7 +34,7 @@ namespace {
 	/// @brief プレイヤーモデルの表示優先度
 	const int PRIORITY = 1;
 	/// @brief プレイヤーのリスポーン時の無敵時間
-	const float MUTEKI_TIME = 150.0f;
+	const float MUTEKI_TIME = 3.0f;
 	/// @brief リスポーン時の無敵時間の初期化
 	const float TIME_ZERO = 0.0f;
 	/// @brief スコアの加算数値
@@ -193,6 +193,7 @@ void Player::Move()
 		}
 		m_score->DebuctionScore(m_myNumber);
 
+		
 		ReSpawn();
 	}
 
@@ -391,17 +392,17 @@ void Player::ReSpawn() {
 	m_breakGuard = false;
 	m_guardDurability = 100.0f;
 	m_plEffect->StopKnockOutEffect(m_myNumber);
-
+	m_mutekiTime = MUTEKI_TIME;
+	m_lig->SetSpotLightBlinking(m_myNumber, m_mutekiTime, 0.1f);
 	m_dieFlag = true;
 }
 
 void Player::Muteki()
 {
-	m_mutekiTime++;
+	m_mutekiTime -= g_gameTime->GetFrameDeltaTime();
 	/// @brief リスポーン時に少しの間ボールに当たらなくなる
-	if (m_mutekiTime == MUTEKI_TIME) {
+	if (m_mutekiTime <= TIME_ZERO) {
 		m_dieFlag = false;
-		m_mutekiTime = TIME_ZERO;
 	}
 }
 

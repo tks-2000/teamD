@@ -33,16 +33,11 @@ bool Lighting::Start()
 
 void Lighting::Update()
 {
-	//RotationDirectionLight();
-	/*if (g_pad[1]->IsPress(enButtonSelect)) {
-		
-		MovePointLight();
+	for (int spLigNum = 0; spLigNum < SPOT_LIGHT_SUM; spLigNum++) {
+		if (m_spLigBlink[spLigNum] == true) {
+			SpotLightBlinking(spLigNum);
+		}
 	}
-	else {
-		RotationSpotLight();
-		MoveSpotLight();
-	}*/
-	
 }
 
 void Lighting::InitDirectionLight()
@@ -149,6 +144,36 @@ void Lighting::MoveSpotLight(int num)
 	}
 	if (g_pad[0]->IsPress(enButtonA)) {
 		m_light.spotLight[num].position = Vector3::Zero;
+	}
+}
+
+void Lighting::SetSpotLightBlinking(int num, float time, float interval) {
+	m_spLigBlink[num] = true;
+	m_spLigBlinkTime[num] = time;
+	m_spLigBlinkInterval[num] = interval;
+	m_spLigColor[num] = m_light.spotLight[num].color;
+}
+
+void Lighting::SpotLightBlinking(int num) {
+	m_spLigBlinkTime[num] -= g_gameTime->GetFrameDeltaTime();
+	m_spLigBlinkSwitchingTime[num] += g_gameTime->GetFrameDeltaTime();
+	if (m_spLigBlinkTime[num] <= FLOAT_0) {
+		m_spLigBlink[num] = false;
+		m_light.spotLight[num].color = m_spLigColor[num];
+		m_spLigBlinkSwitchingTime[num] = FLOAT_0;
+	}
+	else {
+		if (m_spLigBlinkSwitchingTime[num] >= m_spLigBlinkInterval[num]) {
+			if (m_spLigLit[num] == true) {
+				m_light.spotLight[num].color = COLORLESS;
+				m_spLigLit[num] = false;
+			}
+			else {
+				m_light.spotLight[num].color = m_spLigColor[num];
+				m_spLigLit[num]=true;
+			}
+			m_spLigBlinkSwitchingTime[num] = FLOAT_0;
+		}
 	}
 }
 
