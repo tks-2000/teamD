@@ -4,6 +4,7 @@
 GameDirector::GameDirector()
 {
 	m_playerNum = MIN_PLAYER_NUM;
+	m_gameState = enTitle;
 }
 
 GameDirector::~GameDirector()
@@ -17,37 +18,51 @@ bool GameDirector::Start()
 	return true;
 }
 
-void GameDirector::Title()
-{
-	if (g_pad[0]->IsTrigger(enButtonB)) {
-		m_playerNum = 1;
-	}
-	if (g_pad[0]->IsTrigger(enButtonX)) {
-		m_playerNum = 2;
-	}
-	if (g_pad[0]->IsTrigger(enButtonY)) {
-		m_playerNum = 3;
-	}
-	if (g_pad[0]->IsTrigger(enButtonA)) {
-		m_playerNum = 4;
-	}
-}
 
-void GameDirector::Result()
-{
-	
-}
 
 void GameDirector::Update()
 {
 	switch (m_gameState)
 	{
 	case enTitle: {
-		Title();
+		if (m_title == nullptr) {
+			m_title = NewGO<Title>(0, TITLE_NAME);
+		}
 	}break;
-	case enRePlay: {
-		NewGO<Game>(0, GAME_NAME);
-		m_gameState = enMainGame;
+	case enMenu: {
+		if (m_menu == nullptr) {
+			m_menu = NewGO<Menu>(0, MENU_NAME);
+		}
+	}break;
+	case enMainGame: {
+		if (m_game == nullptr) {
+			m_game = NewGO<Game>(0, GAME_NAME);
+		}
+	}break;
+	case enResult: {
+		if (m_result == nullptr) {
+			m_result = NewGO<Result>(0, RESULT_NAME);
+		}
+	}break;
+	case enEnd: {
+		switch (m_result->GetSelectCommand())
+		{
+		case 0: {
+			m_gameState = enMainGame;
+		}break;
+		case 1: {
+			m_gameState = enMenu;
+		}break;
+		case 2: {
+			m_gameState = enTitle;
+		}break;
+		default:
+			break;
+		}
+		DeleteGO(m_game);
+		m_game = nullptr;
+		DeleteGO(m_result);
+		m_result = nullptr;
 	}break;
 	}
 }

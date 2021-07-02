@@ -18,7 +18,7 @@ public:
 	
 private:
 	/// @brief アクティブフラグ
-	bool m_Start = false;
+	bool m_Start = true;
 	/// @brief 背景の座標ステージが内側になるよう設定すべし
 	Vector3 Position = Vector3::Zero;
 	/// @brief スケール、ステージの大きさと相談

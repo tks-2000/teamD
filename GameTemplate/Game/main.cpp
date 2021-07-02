@@ -23,7 +23,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	EffectEngine::CreateInstance();
 
-	NewGO<Title>(0, TITLE_NAME);
+	//NewGO<Title>(0, TITLE_NAME);
 	NewGO<GameDirector>(0, GAME_DIRECTOR_NAME);
 	
 	//////////////////////////////////////

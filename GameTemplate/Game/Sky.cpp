@@ -7,7 +7,7 @@ Sky::Sky()
 	m_skinModelRender->Init("Assets/modelData/sky.tkm");
 	ang = 0.0f;
 	m_rotation = Quaternion::Identity;
-	SetScaleF(0.8f);
+	SetScaleF(1.0f);
 }
 
 Sky::~Sky()

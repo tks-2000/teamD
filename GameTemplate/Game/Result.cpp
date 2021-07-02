@@ -7,7 +7,8 @@ namespace{
 	const Vector2 PLAYER_FONT_POS[MAX_PLAYER_NUM] = { {-100.0f,200.0f},{-100.0f,100.0f},{-100.0f,0.0f},{-100.0f,-100.0f} };
 	const Vector2 RANKING_FONT_POS[MAX_PLAYER_NUM] = { {-150.0f,200.0f},{-150.0f,100.0f},{-150.0f,0.0f},{-150.0f,-100.0f} };
 	const Vector2 SELECT_FONT_POS[SELECT_COMMAND_NUM] = { {300.0f,0.0f},{300.0f,-100.0f} ,{300.0f,-200.0f} };
-
+	const int MAX_SELECT_NUM = 2;
+	const int MIN_SELECT_NUM = 0;
 }
 
 Result::Result()
@@ -49,7 +50,6 @@ Result::~Result()
 
 bool Result::Start()
 {
-
 	return true;
 }
 
@@ -57,18 +57,21 @@ void Result::Update()
 {
 	if (g_pad[0]->IsTrigger(enButtonDown)) {
 		m_selectNum++;
-		if (m_selectNum > 2) {
-			m_selectNum = 0;
+		if (m_selectNum > MAX_SELECT_NUM) {
+			m_selectNum = MIN_SELECT_NUM;
 		}
 	}
 	if (g_pad[0]->IsTrigger(enButtonUp)) {
 		m_selectNum--;
-		if (m_selectNum < 0) {
-			m_selectNum = 2;
+		if (m_selectNum < MIN_SELECT_NUM) {
+			m_selectNum = MAX_SELECT_NUM;
 		}
 	}
 	Vector2 arrowPos = SELECT_FONT_POS[m_selectNum];
 	arrowPos.x -= 100.0f;
 	m_arrowFontPos = arrowPos;
 	m_arrowFont->SetPosition(m_arrowFontPos);
+	if (g_pad[0]->IsTrigger(enButtonA)) {
+		m_gameDirector->SetEnd();
+	}
 }

@@ -2,7 +2,9 @@
 #include "Menu.h"
 
 namespace {
+	/// @brief Playerのフォント位置
 	const Vector2 PLAYER_FONT_POS = { 100.0f,0.0f };
+	/// @brief 人数のフォント位置
 	const Vector2 PLAYER_NUM_FONT_POS = { 0.0f,0.0f };
 }
 
@@ -19,7 +21,6 @@ Menu::~Menu()
 {
 	DeleteGO(m_plNumFont);
 	DeleteGO(m_plFont);
-	NewGO<Game>(0, GAME_NAME);
 }
 
 bool Menu::Start()
@@ -30,7 +31,7 @@ bool Menu::Start()
 
 void Menu::Update()
 {
-
+	/// @brief ボタン上下で人数選択
 	if (g_pad[0]->IsTrigger(enButtonDown)) {
 		m_playerNum++;
 		if (m_playerNum > MAX_PLAYER_NUM) {
@@ -44,10 +45,11 @@ void Menu::Update()
 		}
 	}
 
+	/// @brief スタートでゲーム開始
 	if (g_pad[0]->IsTrigger(enButtonStart)) {
-		DeleteGO(this);
 		m_gameDirector->SetPlayerNum(m_playerNum);
 		m_gameDirector->SetGameStart();
+		m_gameDirector->MenuEnd();
 	}
 
 	std::wstring plNum;

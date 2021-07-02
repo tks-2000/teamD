@@ -55,6 +55,7 @@
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
     <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="Ball.cpp" />
+    <ClCompile Include="Box.cpp" />
     <ClCompile Include="FontRender.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCamera.cpp" />
@@ -62,26 +63,21 @@
     <ClCompile Include="GameUI.cpp" />
     <ClCompile Include="Lighting.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Objects.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerEffect.cpp" />
+    <ClCompile Include="Result.cpp" />
+    <ClCompile Include="Score.cpp" />
     <ClCompile Include="SkinModelRender.cpp" />
     <ClCompile Include="Sky.cpp" />
     <ClCompile Include="SpriteRender.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="system\system.cpp" />
-    <ClCompile Include="Title.cpp" />
-<<<<<<< HEAD
-=======
-    <ClCompile Include="PlayerEffect.cpp" />
     <ClCompile Include="Timer.cpp" />
-    <ClCompile Include="Score.cpp" />
-<<<<<<< HEAD
-    <ClCompile Include="Box.cpp" />
-=======
-    <ClCompile Include="Result.cpp" />
-    <ClCompile Include="Menu.cpp" />
->>>>>>> 518b3d8a0055b2605b6807da157fc70246058485
->>>>>>> 1df9da9b40f361fd29a5f74cd210008d4613161c
+    <ClCompile Include="Title.cpp" />
+    <ClCompile Include="SoundSource.cpp" />
+    <ClCompile Include="WaveFile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\ExEngine\effect\Effect.h" />
@@ -147,45 +143,41 @@
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="Ball.h" />
+    <ClInclude Include="Box.h" />
     <ClInclude Include="FontRender.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="GameDirector.h" />
     <ClInclude Include="GameUI.h" />
     <ClInclude Include="Lighting.h" />
+    <ClInclude Include="Menu.h" />
     <ClInclude Include="Objects.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerEffect.h" />
+    <ClInclude Include="Result.h" />
+    <ClInclude Include="Score.h" />
     <ClInclude Include="SkinModelRender.h" />
     <ClInclude Include="Sky.h" />
     <ClInclude Include="SpriteRender.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
-    <ClInclude Include="Title.h" />
-<<<<<<< HEAD
-=======
-    <ClInclude Include="PlayerEffect.h" />
     <ClInclude Include="Timer.h" />
-    <ClInclude Include="Score.h" />
-<<<<<<< HEAD
-    <ClInclude Include="Box.h" />
-=======
-    <ClInclude Include="Result.h" />
-    <ClInclude Include="Menu.h" />
->>>>>>> 518b3d8a0055b2605b6807da157fc70246058485
->>>>>>> 1df9da9b40f361fd29a5f74cd210008d4613161c
+    <ClInclude Include="Title.h" />
+    <ClInclude Include="SoundSource.h" />
+    <ClInclude Include="WaveFile.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\modelData\bg\testmap_tex.DDS" />
     <Image Include="Assets\modelData\sphere\sphere_tex.DDS" />
     <Image Include="Assets\modelData\sphere\sphere_tex_01.DDS" />
-    <Image Include="Assets\sprite\title.dds" />
-    <Image Include="Assets\sprite\title.png" />
-    <Image Include="Assets\sprite\UI_Gage.DDS" />
-    <Image Include="Assets\sprite\Shield_Icon.DDS" />
-    <Image Include="Assets\sprite\Sprint_Icon.DDS" />
     <Image Include="Assets\sprite\GageBody.DDS" />
     <Image Include="Assets\sprite\GageFinal.DDS" />
     <Image Include="Assets\sprite\GageStart.DDS" />
+    <Image Include="Assets\sprite\Shield_Icon.DDS" />
+    <Image Include="Assets\sprite\Sprint_Icon.DDS" />
+    <Image Include="Assets\sprite\title.dds" />
+    <Image Include="Assets\sprite\title.png" />
+    <Image Include="Assets\sprite\UI_Gage.DDS" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\animData\unitychan\clear.tka" />

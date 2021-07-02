@@ -19,7 +19,7 @@ Game::Game()
 	m_objects = NewGO<Objects>(0,OBJECTS_NAME);
 	m_ui = NewGO<GameUI>(0,GAME_UI_NAME);
 	m_score = NewGO<Score>(0, SCORE_NAME);
-	m_sky = NewGO<Sky>(0, "Sky");
+	
 	//m_box = NewGO<Box>(0, BOX_NAME);
 }
 
@@ -42,11 +42,7 @@ Game::~Game()
 	}
 	DeleteGO(m_playerEffect);
 	DeleteGO(m_lighting);
-	
-		DeleteGO(m_result);
-	
 
-	
 }
 
 bool Game::Start()
@@ -56,47 +52,14 @@ bool Game::Start()
 		m_player[i]->SetPlayerNumber(i);
 	}
 	m_objects->SetObjects(4);
-	m_gameDirector->SetGameStart();
+	m_sky = NewGO<Sky>(0, SKY_NAME);
 	return true;
 
 }
 
 void Game::Update()
 {
-	/*if (g_pad[0]->IsTrigger(enButtonSelect)) {
-		DeleteGO(this);
-		m_gameDirector->SetTitle();
-		NewGO<Title>(0, TITLE_NAME);
-	}*/
-	
 	if (m_gameDirector->IsMainGame() == true && m_timer->IsTimerEnd() == true) {
-		m_result = NewGO<Result>(0, RESULT_NAME);
 		m_gameDirector->SetGameResult();
-	}
-
-	if (m_gameDirector->IsResult() == true) {
-		if (g_pad[0]->IsTrigger(enButtonA)) {
-			switch (m_result->GetSelectCommand())
-			{
-			case 0: {
-				DeleteGO(this);
-				m_gameDirector->SetRePlay();
-				
-			}break;
-			case 1: {
-				DeleteGO(this);
-				m_gameDirector->SetMenu();
-				NewGO<Menu>(0, MENU_NAME);
-			}break;
-			case 2: {
-				DeleteGO(this);
-				m_gameDirector->SetTitle();
-				NewGO<Title>(0, TITLE_NAME);
-			}break;
-			default:
-				break;
-			}
-			
-		}
 	}
 }

@@ -3,7 +3,7 @@
 
 #include "MiniEngine.h"
 #include "ExEngine.h"
-//#include "Title.h"
+#include "Title.h"
 #include "Menu.h"
 #include "Game.h"
 #include "GameDirector.h"
@@ -58,6 +58,7 @@ namespace {
 	const char* GAME_CAMERA_NAME = "GameCamera";
 	const char* BACK_GROUND_NAME = "BackGround";
 	const char* BALL_NAME = "Ball";
+	const char* SKY_NAME = "Sky";
 	const char* OBJECTS_NAME = "Objects";
 	const char* BOX_NAME = "Box";
 	const char* RESULT_NAME = "Result";
