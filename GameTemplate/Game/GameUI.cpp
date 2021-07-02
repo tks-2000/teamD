@@ -18,7 +18,7 @@ namespace {
 	const Vector2 PL3_NUMFONT_POS = { -550.0f,-250.0f };
 	const Vector2 PL4_NUMFONT_POS = { 500.0f,-250.0f };
 
-	const Vector2 BALL_SPEED_POS = { 500.0f,0.0f };
+	const Vector2 BALL_SPEED_POS = { 500.0f, -300.0f };
 
 	const Vector4 PL1_COLOR = { 1.0f, 0.0f, 0.0f, 0.5f };
 	const Vector4 PL2_COLOR = { 0.0f, 0.0f, 1.0f, 0.5f };
@@ -179,8 +179,17 @@ GameUI::GameUI()
 			m_StGageFinal[alpha]->SetScale({ -1.0f,1.0f,-1.0f });
 		}
 	}
-	m_ballSpeed = NewGO<FontRender>(2);
-	m_ballSpeed->SetPosition(BALL_SPEED_POS);
+	m_ballSpeedMeter = NewGO<SpriteRender>(4);
+	m_ballSpeedMeter->Init("Assets/sprite/SpeedMeter.DDS", 220, 220);
+	m_ballSpeedMeter->SetPosition({ 500.0f, 0.0f, 0.0f});
+
+	m_ballSpeedMeterPin = NewGO<SpriteRender>(5);
+	m_ballSpeedMeterPin->Init("Assets/sprite/SpeedMeterPin.DDS", 144, 144);
+	m_ballSpeedMeterPin->SetPosition({ 500 + 16.0f, 0.0f - 23.0f, 0.0f });
+	m_ballSpeedMeterPin->SetPivot({1.0f - (256.0f / 512.0f), 1.0f - (156.0f / 512.0f)});
+
+	/*m_ballSpeed = NewGO<FontRender>(2);
+	m_ballSpeed->SetPosition(BALL_SPEED_POS);*/
 
 	m_timeFont = NewGO<FontRender>(2);
 	m_timeFont->SetPosition(TIME_FONT_POS);
@@ -209,8 +218,9 @@ GameUI::~GameUI()
 		DeleteGO(m_StGageBody[bravo]);
 		DeleteGO(m_StGageFinal[bravo]);
 	}
-	DeleteGO(m_ballSpeed);
-
+	//DeleteGO(m_ballSpeed);
+	DeleteGO(m_ballSpeedMeter);
+	DeleteGO(m_ballSpeedMeterPin);
 	DeleteGO(m_timeFont);
 }
 
@@ -268,10 +278,10 @@ void GameUI::Update()
 	/// @brief ボールの速度を入手
 	m_ballVelocity = m_ball->GetVelocity();
 	/// @brief 文字列に変換して出力
-	std::wstring conv = std::to_wstring(m_ballVelocity);
-	const wchar_t* speed = conv.c_str();
+	//std::wstring conv = std::to_wstring(m_ballVelocity);
+	//const wchar_t* speed = conv.c_str();
 	//swprintf(m_text, L"%2.1f", speed);
-	m_ballSpeed->SetText(speed);
+	//m_ballSpeed->SetText(speed);
 
 	for (int charley = 0; charley < m_playerNum; charley++)
 	{
@@ -324,6 +334,29 @@ void GameUI::Update()
 		}
 	}
 	
+	PinAngArrival = (m_ballVelocity * -5.0f) - 65.0f;
+	float PinSpeed = std::pow(PinAngArrival - PinRot, 2);
+	PinSpeed = std::sqrt(PinSpeed) * 0.1;
+
+	if (PinRot > PinAngArrival) {
+		PinRot -= PinSpeed;
+	}
+	else { PinRot += PinSpeed; }
+
+	if (PinRot < -245.0f) {
+		PinRot = -245.0f;
+		m_ballSpeedMeterPin->SetColor({ 1.0f, 0.0f, 0.0f, 1.0f });
+	}
+	else { m_ballSpeedMeterPin->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f }); }
+
+	//PinRot = PinAngArrival;
+	Quaternion PinQuaternion;
+	PinQuaternion.SetRotationDeg(Vector3::AxisZ, PinRot);
+	
+
+	m_ballSpeedMeterPin->SetRotation(PinQuaternion);
+
+
 	//for (int plFontNum = 0; plFontNum < m_playerNum; plFontNum++) {
 	//	std::wstring conv = std::to_wstring(m_player[plFontNum]->GetGuardDurability());
 	//	m_GuardDurability[plFontNum]->SetText(conv.c_str());

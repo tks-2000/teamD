@@ -41,6 +41,12 @@ private:
 	/// @brief ボールの速度表示用のフォント
 	FontRender* m_ballSpeed = nullptr;
 
+	/// @brief ボール速表示用画像
+	SpriteRender* m_ballSpeedMeter = nullptr;
+	/// @brief ボール速表示用画像その2
+	SpriteRender* m_ballSpeedMeterPin = nullptr;
+	float PinRot = -65.0f;
+
 	/// @brief ボールの速度
 	float m_ballVelocity = 0.0f;
 
@@ -118,6 +124,8 @@ private:
 	Vector3 m_StGageBodyPos[PLAYER_NUMBER] = { {-494.0f, 170.0f, 0.0f}, {494.0f, 170.0f, 0.0f}, {-494.0f, -330.0f, 0.0f}, {494.0f, -330.0f, 0.0f } };
 	SpriteRender* m_StGageFinal[PLAYER_NUMBER] = { nullptr };
 	Vector3 m_StGageFinalPos[PLAYER_NUMBER] = { {-400.0f, 170.0f, 0.0f}, {400.0f, 170.0f, 0.0f}, {-400.0f, -330.0f, 0.0f},{400.0f, -330.0f, 0.0f} };
+
+	float PinAngArrival = 0.0f;
 
 	
 	/// @brief タイマー表示
