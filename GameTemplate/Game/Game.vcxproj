@@ -141,7 +141,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>DXGI.lib;dxguid.lib;DirectXTK12.lib;d3d12.lib;d3dcompiler.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>DXGI.lib;dxguid.lib;DirectXTK12.lib;d3d12.lib;d3dcompiler.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);winmm.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -158,7 +158,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>DXGI.lib;dxguid.lib;DirectXTK12.lib;d3d12.lib;d3dcompiler.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;BulletCollision_Debug.lib;BulletDynamics_Debug.lib;LinearMath_Debug.lib;Effekseerd.lib;EffekseerRendererDX12d.lib;LLGId.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>DXGI.lib;dxguid.lib;DirectXTK12.lib;d3d12.lib;d3dcompiler.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;BulletCollision_Debug.lib;BulletDynamics_Debug.lib;LinearMath_Debug.lib;Effekseerd.lib;EffekseerRendererDX12d.lib;LLGId.lib;%(AdditionalDependencies);winmm.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -177,7 +177,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>DXGI.lib;dxguid.lib;DirectXTK12.lib;d3d12.lib;d3dcompiler.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>DXGI.lib;dxguid.lib;DirectXTK12.lib;d3d12.lib;d3dcompiler.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);winmm.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Preview|Win32'">
@@ -196,7 +196,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>DXGI.lib;dxguid.lib;DirectXTK12.lib;d3d12.lib;d3dcompiler.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>DXGI.lib;dxguid.lib;DirectXTK12.lib;d3d12.lib;d3dcompiler.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);winmm.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -216,7 +216,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>DXGI.lib;dxguid.lib;DirectXTK12.lib;d3d12.lib;d3dcompiler.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;BulletCollision.lib;BulletDynamics.lib;LinearMath.lib;Effekseer.lib;EffekseerRendererDX12.lib;LLGI.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>DXGI.lib;dxguid.lib;DirectXTK12.lib;d3d12.lib;d3dcompiler.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;BulletCollision.lib;BulletDynamics.lib;LinearMath.lib;Effekseer.lib;EffekseerRendererDX12.lib;LLGI.lib;%(AdditionalDependencies);winmm.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">
@@ -236,7 +236,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>DXGI.lib;dxguid.lib;DirectXTK12.lib;d3d12.lib;d3dcompiler.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;BulletCollision.lib;BulletDynamics.lib;LinearMath.lib;Effekseer.lib;EffekseerRendererDX12.lib;LLGI.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>DXGI.lib;dxguid.lib;DirectXTK12.lib;d3d12.lib;d3dcompiler.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;BulletCollision.lib;BulletDynamics.lib;LinearMath.lib;Effekseer.lib;EffekseerRendererDX12.lib;LLGI.lib;%(AdditionalDependencies);winmm.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -303,6 +303,7 @@
     <ClCompile Include="Lighting.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="NameKey.cpp" />
     <ClCompile Include="Objects.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerEffect.cpp" />
@@ -310,6 +311,8 @@
     <ClCompile Include="Score.cpp" />
     <ClCompile Include="SkinModelRender.cpp" />
     <ClCompile Include="Sky.cpp" />
+    <ClCompile Include="SoundEngine.cpp" />
+    <ClCompile Include="SoundPreCompile.cpp" />
     <ClCompile Include="SoundSource.cpp" />
     <ClCompile Include="SpriteRender.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -323,7 +326,9 @@
     <ClCompile Include="system\system.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Title.cpp" />
+    <ClCompile Include="Util.cpp" />
     <ClCompile Include="WaveFile.cpp" />
+    <ClCompile Include="WaveFileBank.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\ExEngine\effect\Effect.h" />
@@ -397,6 +402,7 @@
     <ClInclude Include="GameUI.h" />
     <ClInclude Include="Lighting.h" />
     <ClInclude Include="Menu.h" />
+    <ClInclude Include="NameKey.h" />
     <ClInclude Include="Objects.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerEffect.h" />
@@ -404,13 +410,17 @@
     <ClInclude Include="Score.h" />
     <ClInclude Include="SkinModelRender.h" />
     <ClInclude Include="Sky.h" />
+    <ClInclude Include="SoundEngine.h" />
+    <ClInclude Include="SoundPreCompile.h" />
     <ClInclude Include="SoundSource.h" />
     <ClInclude Include="SpriteRender.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Title.h" />
+    <ClInclude Include="Util.h" />
     <ClInclude Include="WaveFile.h" />
+    <ClInclude Include="WaveFileBank.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\animData\unitychan\clear.tka" />
@@ -439,6 +449,9 @@
     <Image Include="Assets\sprite\title.dds" />
     <Image Include="Assets\sprite\title.png" />
     <Image Include="Assets\sprite\UI_Gage.DDS" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="Assets\sound\bgm\normalBGM.wav" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

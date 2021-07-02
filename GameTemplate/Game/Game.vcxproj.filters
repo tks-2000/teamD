@@ -78,6 +78,11 @@
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="SoundSource.cpp" />
     <ClCompile Include="WaveFile.cpp" />
+    <ClCompile Include="Util.cpp" />
+    <ClCompile Include="WaveFileBank.cpp" />
+    <ClCompile Include="NameKey.cpp" />
+    <ClCompile Include="SoundPreCompile.cpp" />
+    <ClCompile Include="SoundEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\ExEngine\effect\Effect.h" />
@@ -165,6 +170,11 @@
     <ClInclude Include="Title.h" />
     <ClInclude Include="SoundSource.h" />
     <ClInclude Include="WaveFile.h" />
+    <ClInclude Include="Util.h" />
+    <ClInclude Include="WaveFileBank.h" />
+    <ClInclude Include="NameKey.h" />
+    <ClInclude Include="SoundPreCompile.h" />
+    <ClInclude Include="SoundEngine.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\modelData\bg\testmap_tex.DDS" />
@@ -193,5 +203,8 @@
     <None Include="Assets\modelData\bg\testmap_s.tkm" />
     <None Include="Assets\modelData\object\box.tkm" />
     <None Include="Assets\modelData\sphere\sphere.tkm" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="Assets\sound\bgm\normalBGM.wav" />
   </ItemGroup>
 </Project>

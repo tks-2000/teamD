@@ -9,6 +9,11 @@ namespace {
 
 Title::Title()
 {
+	CSoundSource* bgm = NewGO<CSoundSource>(0);
+	bgm->Init(L"Assets/sound/bgm/normalBGM.wav");
+	bgm->SetVolume(1.0f);
+	bgm->Play(true);
+
 	m_titleSprite = NewGO<SpriteRender>(0);
 	m_titleSprite->Init("Assets/sprite/title.dds", 1280, 720);
 	m_pushStart = NewGO<FontRender>(1);

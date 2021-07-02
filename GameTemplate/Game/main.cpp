@@ -21,6 +21,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	GameObjectManager::CreateInstance();
 	PhysicsWorld::CreateInstance();
 
+	CSoundEngine::CreateInstance();
+	CSoundEngine::GetInstance()->Init();
+
 	EffectEngine::CreateInstance();
 
 	//NewGO<Title>(0, TITLE_NAME);
@@ -105,6 +108,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	}
 	//ゲームオブジェクトマネージャーを削除。
 	GameObjectManager::DeleteInstance();
+	CSoundEngine::DeleteInstance();
 	return 0;
 }
 

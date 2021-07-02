@@ -3,6 +3,8 @@
 
 #include "MiniEngine.h"
 #include "ExEngine.h"
+#include "SoundEngine.h"
+#include "SoundSource.h"
 #include "Title.h"
 #include "Menu.h"
 #include "Game.h"
