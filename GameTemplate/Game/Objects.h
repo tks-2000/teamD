@@ -1,10 +1,8 @@
 #pragma once
 
-class Player;
 class Ball;
-class GameUI;
-class SkinModelRender;
 class GameDirector;
+class Box;
 
 
 class Objects : public IGameObject
@@ -15,15 +13,13 @@ public:
 	bool Start();
 	void Update();
 
-	void ballCollider(int num);
-
 	void SetObjects(int num);
 
-	void DistanceCalculation();
-	
+	void SetDelFlag(int num) { m_delFlag[num] = true; }
+
 private:
 	/// @brief オブジェクトの座標
-	Vector3 m_position[OBJECTS_NUMBER];
+	Vector3 m_position;
 
 	Vector3 m_setPos[OBJECTS_NUMBER];
 
@@ -31,34 +27,19 @@ private:
 
 	Vector3 m_fallSpeed[OBJECTS_NUMBER];
 
-	Vector3 m_colliderPos[OBJECTS_NUMBER];
-
-	int SetNum = 0;
-
-	int SetDelNum = 0;
-
-	int m_playerNum = 0;
-
-	float m_fall = ZeroF;
-
-	float m_ballDistance[OBJECTS_NUMBER] = { 0.0f };
+	//Vector3 m_colliderPos[OBJECTS_NUMBER];
 
 	bool m_delFlag[OBJECTS_NUMBER] = { false };
 
-	/// @brief スキンモデルレンダラー
-	SkinModelRender* m_skinModelRender[OBJECTS_NUMBER] = { nullptr };
-	/// @brief プレイヤー
-	Player* m_player[PLAYER_NUMBER] = { nullptr };
+	int m_setNum = 0;
+
+	float m_reSpawnTime[OBJECTS_NUMBER] = { 0.0f };
+
 	/// @brief ボール
 	Ball* m_ball = nullptr;
-	/// @brief ゲームUI
-	GameUI* m_ui = nullptr;
-
-	CharacterController m_charaCon[PLAYER_NUMBER];
-
-
+	/// @brief ゲームディレクター
 	GameDirector* m_gameDirector = nullptr;
-
-
+	/// @brief ボール
+	Box* m_box[OBJECTS_NUMBER] = { nullptr };
 };
 

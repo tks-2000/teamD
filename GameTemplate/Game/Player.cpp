@@ -19,8 +19,8 @@ namespace {
 	const Vector3 PLAYER3_STARTPOS = { -600.0f,200.0f,-600.0f };
 	/// @brief 4Pの初期位置
 	const Vector3 PLAYER4_STARTPOS = { 600.0f,200.0f,-600.0f };
-	/// @brief スポットライトの高さ
-	const float SPOT_LIGHT_HEIGHT = 800.0f;
+	/// @brief ポイントライトの高さ
+	const float POINT_LIGHT_HEIGHT = 50.0f;
 	/// @brief プレイヤーの半径
 	const float PLAYER_RADIUS = 20.0f;
 	/// @brief プレイヤーの高さ
@@ -34,7 +34,7 @@ namespace {
 	/// @brief プレイヤーモデルの表示優先度
 	const int PRIORITY = 1;
 	/// @brief プレイヤーのリスポーン時の無敵時間
-	const float MUTEKI_TIME = 150.0f;
+	const float MUTEKI_TIME = 3.0f;
 	/// @brief リスポーン時の無敵時間の初期化
 	const float TIME_ZERO = 0.0f;
 	/// @brief スコアの加算数値
@@ -124,8 +124,8 @@ void Player::SetPlayerNumber(int num)
 	m_position = m_startPos;
 	m_charaCon.SetPosition(m_position);
 
-	m_lig->SetSpotLightColor(m_myNumber, m_playerColor);
-
+	m_lig->SetPointLightColor(m_myNumber, m_playerColor);
+	m_lig->SetPointLightRange(m_myNumber, 500.0f);
 }
 
 void Player::Move()
@@ -134,11 +134,12 @@ void Player::Move()
 	m_moveSpeed += g_camera3D->GetRight() * m_Lstickx;
 	m_moveSpeed += g_camera3D->GetForward() * m_Lsticky;
 
-	if (m_dash == true && m_guard == false && g_pad[m_myNumber]->IsPress(enButtonRB1)) {
+
+	if (IsDash() == true) {
 		m_moveVelocity = 0.95f;
-		if (m_Lstickx != FLOAT_0 || m_Lsticky != FLOAT_0) {
-			m_stamina -= g_gameTime->GetFrameDeltaTime() * FLOAT_2;
-		}
+
+		m_stamina -= g_gameTime->GetFrameDeltaTime() * FLOAT_2;
+
 		m_anim = enAnimation_Run;
 	}
 	else {
@@ -192,6 +193,7 @@ void Player::Move()
 		}
 		m_score->DebuctionScore(m_myNumber);
 
+		
 		ReSpawn();
 	}
 
@@ -241,6 +243,21 @@ void Player::KickBall()
 
 }
 
+bool Player::IsDash()
+{
+	if (m_dash == true && m_guard == false && g_pad[m_myNumber]->IsPress(enButtonRB1)) {
+		if (m_Lstickx != FLOAT_0 || m_Lsticky != FLOAT_0) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	else {
+		return false;
+	}
+}
+
 void Player::BallCollide()
 {
 	/// @brief ボールへのベクトルとボールの向きで当たる角度を決める
@@ -285,7 +302,7 @@ void Player::Guard()
 	m_moveSpeed.z /= FLOAT_2;
 
 	/// @brief ガード中は耐久値(guardDurability)が減り続ける
-	m_guardDurability -= 0.555f;
+	m_guardDurability -= 0.3f;
 
 	//シールドエフェクト発生処理//
 		//カウンターに値を加算
@@ -335,7 +352,7 @@ void Player::Guard()
 		}
 		else {
 			/// @brief ボールの勢いに応じて耐久値を減らす
-			float shieldDamage = m_ball->GetVelocity() * 4.0f;
+			float shieldDamage = m_ball->GetVelocity() * 3.0f;
 			m_guardDurability -= shieldDamage;
 			/// @brief ガードブレイクした場合
 			if (m_guardDurability <= 0.0f)
@@ -375,17 +392,17 @@ void Player::ReSpawn() {
 	m_breakGuard = false;
 	m_guardDurability = 100.0f;
 	m_plEffect->StopKnockOutEffect(m_myNumber);
-
+	m_mutekiTime = MUTEKI_TIME;
+	m_lig->SetPointLightBlinking(m_myNumber, m_mutekiTime, 0.07f);
 	m_dieFlag = true;
 }
 
 void Player::Muteki()
 {
-	m_mutekiTime++;
+	m_mutekiTime -= g_gameTime->GetFrameDeltaTime();
 	/// @brief リスポーン時に少しの間ボールに当たらなくなる
-	if (m_mutekiTime == MUTEKI_TIME) {
+	if (m_mutekiTime <= TIME_ZERO) {
 		m_dieFlag = false;
-		m_mutekiTime = TIME_ZERO;
 	}
 }
 
@@ -428,6 +445,9 @@ void Player::Update()
 		m_damageTime = FLOAT_0;
 		if (m_breakGuard == false) {
 			m_plEffect->StopKnockOutEffect(m_myNumber);
+		}
+		if (m_breakGuard != true) {
+			m_plEffect->PlayRepairEffect(m_myNumber);
 		}
 		m_damage = false;
 	}
@@ -488,7 +508,7 @@ void Player::Update()
 	if (m_kickFlag == true && m_readyKick == true && m_timer->IsTimerExecution() == true) {
 		if (g_pad[m_myNumber]->IsTrigger(enButtonA)) {
 
-
+			
 			m_plEffect->PlayKickEffect(m_myNumber);
 
 			KickBall();
@@ -500,7 +520,7 @@ void Player::Update()
 	}
 	/// @brief 非ガード時、ガード耐久値を回復
 	if (m_guard == false) {
-		m_guardDurability += 0.555f;
+		m_guardDurability += 0.3f;
 		m_justGuardTime = 0.0f;
 	}
 	/// @brief 再展開可能まで
@@ -559,13 +579,25 @@ void Player::Update()
 		Muteki();
 	}
 
+	//パワーアップエフェクトの再生
+	if (m_kickPowerUp == true) {
+		m_powerUpCounter += 1;
+		if (m_powerUpCounter % 25 == 1) {
+			m_plEffect->PlayKickBuffEffect(m_myNumber);
+		}
+	}
+	else {
+		m_powerUpCounter = 0.0f;
+	}
+
+
 	/// @brief 自分に当たるスポットライトの位置と方向を設定
 	Vector3 pos = m_position;
-	pos.y = SPOT_LIGHT_HEIGHT;
-	m_lig->SetSpotLightPos(m_myNumber, pos);
+	pos.y = POINT_LIGHT_HEIGHT;
+	m_lig->SetPointLighitPos(m_myNumber, pos);
 
-	Vector3 dir = m_position - m_lig->GetSpotLightPos(m_myNumber);
-	m_lig->SetSpotLightDirection(m_myNumber, dir);
+	/*Vector3 dir = m_position - m_lig->GetSpotLightPos(m_myNumber);
+	m_lig->SetSpotLightDirection(m_myNumber, dir);*/
 
 	/// @brief キャラクターコントローラーで座標を決める
 	m_position = m_charaCon.Execute(m_moveSpeed, FLOAT_1);

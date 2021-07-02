@@ -32,10 +32,16 @@ public:
 	/// @return プレイヤーの座標
 	Vector3 GetPosition() { return m_position; }
 
+	void SetMoveSpeed(Vector3 move) { m_moveSpeed = move; }
+
+	/// @brief キック可能か判定
 	void IsKick();
 
 	/// @brief ボールを蹴る処理
 	void KickBall();
+
+	/// @brief ダッシュ可能か判定
+	bool IsDash();
 
 	/// @brief ボールとの距離を計算
 	void BallDistanceCalculation();
@@ -136,6 +142,8 @@ private:
 	float m_justGuardTime = 0.0f;
 	/// @brief キック力が上がるフラグ
 	bool m_kickPowerUp = false;
+	/// @brief キック力強化中のカウンター
+	int m_powerUpCounter = 0;
 	/// @brief キック力が上がる時間
 	float m_powerUpTime = 0.0f;
 	/// @brief ガード破壊によって起きるダウン状態

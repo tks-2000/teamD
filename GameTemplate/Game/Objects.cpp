@@ -3,125 +3,48 @@
 
 namespace {
 	const Vector3 SCALE = { 1.0f,1.0f,1.0f };
+	const int MAX_OBJECTS_NUM = 4;
+	const Vector3 OBJECTS_POS[MAX_OBJECTS_NUM] = { {400.0f,400.0f,400.0f},{400.0f,400.0f,-400.0f},{-400.0f,400.0f,400.0f},{-400.0f,400.0f,-400.0f} };
 	const float BALL_DISTANCE = 120.0f;
-
-
-	const int SCORE_ADD = 100;
-
-
 }
 Objects::Objects() {
 
 	m_gameDirector = FindGO<GameDirector>(GAME_DIRECTOR_NAME);
+	m_ball = FindGO<Ball>(BALL_NAME);
 
-
-	m_ui = FindGO<GameUI>(GAME_UI_NAME);
-
-	m_playerNum = m_gameDirector->GetPlayerNum();
-
-	m_fall = 2;
 }
 Objects::~Objects() {
-	for (int del = 0; del < SetNum; del++) {
-		if (m_delFlag[del] == true) {
-			DeleteGO(m_skinModelRender[del]);
+	for (int Num = 0; Num < m_setNum; Num++) {
+		if (m_delFlag[Num] == false) {
+			DeleteGO(m_box[Num]);
 		}
+		
 	}
 }
 bool Objects::Start() {
-	m_ball = FindGO<Ball>(BALL_NAME);
-	m_ui = FindGO<GameUI>(GAME_UI_NAME);
-	for (int plNum = 0; plNum < m_playerNum; plNum++) {
-		m_player[plNum] = FindGO<Player>(PLAYER_NAME[plNum]);
-	}
-
 
 	return true;
 }
 void Objects::SetObjects(int num) {
-	for (SetNum; SetNum < num; SetNum++) {
-		m_skinModelRender[SetNum] = NewGO<SkinModelRender>(0);
-		m_skinModelRender[SetNum]->Init("Assets/modelData/object/box.tkm");
-		m_skinModelRender[SetNum]->SetScale(SCALE);
-		m_colliderPos[SetNum] = { 0.0f,800.0f,0.0f };
-
-		SetDelNum++;
-		m_delFlag[SetNum] = true;
-
-		switch (SetNum)
-		{
-		case 0:
-
-			m_position[SetNum] = { 200.0f,400.0f,-400.0f };
-			m_charaCon[SetNum].Init(40.0f, 40.0f, m_position[SetNum]);
-			break;
-		case 1:
-			m_position[SetNum] = { 100.0f,400.0f,-400.0f };
-			m_charaCon[SetNum].Init(40.0f, 40.0f, m_position[SetNum]);
-			break;
-		case 2:
-			m_position[SetNum] = { -300.0f,400.0f,400.0f };
-			m_charaCon[SetNum].Init(40.0f, 40.0f, m_position[SetNum]);
-			break;
-		case 3:
-			m_position[SetNum] = { -150.0f,400.0f,400.0f };
-
-			m_position[SetNum] = { 400.0f,400.0f,400.0f };
-			m_charaCon[SetNum].Init(40.0f, 40.0f, m_position[SetNum]);
-			break;
-		//case 1:
-		//	m_position[SetNum] = { 400.0f,400.0f,-400.0f };
-		//	m_charaCon[SetNum].Init(40.0f, 40.0f, m_position[SetNum]);
-		//	break;
-		//case 2:
-		//	m_position[SetNum] = { -400.0f,400.0f,400.0f };
-		//	m_charaCon[SetNum].Init(40.0f, 40.0f, m_position[SetNum]);
-		//	break;
-		//case 3:
-		//	m_position[SetNum] = { -400.0f,400.0f,-400.0f };
-
-		//	m_charaCon[SetNum].Init(40.0f, 40.0f, m_position[SetNum]);
-		//	break;
-		}
+	for (int setNum = 0; setNum < num; setNum++) {
+		//m_colliderPos[setNum] = { 0.0f,800.0f,0.0f };
+		m_setNum++;
+		m_box[setNum] = FindGO<Box>(BOX_NAME);
+		m_box[setNum] = NewGO<Box>(0, BOX_NAME);
+		m_box[setNum]->SetBoxPos(OBJECTS_POS[setNum], setNum);
 
 	}
 }
 void Objects::Update() {
-
-	DistanceCalculation();
-
-	for (int setPosNum = 0; setPosNum < SetDelNum; setPosNum++) {
-		if (m_delFlag[setPosNum] == true) {
-			if (m_position[setPosNum].y > 50) {
-				m_fallSpeed[setPosNum].y -= m_fall;
+	for (int Num = 0; Num < m_setNum; Num++) {
+		if (m_delFlag[Num] == true) {
+			m_reSpawnTime[Num] += 1.0f;
+			if (m_reSpawnTime[Num] >= 100.0f && !m_gameDirector->IsResult()) {
+				m_box[Num] = NewGO<Box>(0, BOX_NAME);
+				m_box[Num]->SetBoxPos(OBJECTS_POS[Num], Num);
+				m_delFlag[Num] = false;
+				m_reSpawnTime[Num] = 0.0f;
 			}
-			if (m_ballDistance[setPosNum] < BALL_DISTANCE) {
-				ballCollider(setPosNum);
-			}
-			m_position[setPosNum] = m_charaCon[setPosNum].Execute(m_fallSpeed[setPosNum], 1.0f);
-			m_charaCon[setPosNum].SetPosition(m_position[setPosNum]);
-			//m_setPos[setPosNum] = m_position[setPosNum];
-			m_skinModelRender[setPosNum]->SetPosition(m_position[setPosNum]);
 		}
-	}
-
-
-
-}
-void Objects::ballCollider(int num) {
-	m_charaCon[num].SetPosition(m_colliderPos[num]);
-	DeleteGO(m_skinModelRender[num]);
-
-
-	m_ui->AddScore(m_ball->GetPlayerInformation(), SCORE_ADD);
-
-	m_delFlag[num] = false;
-}
-void Objects::DistanceCalculation() {
-	for (int setPosNum = 0; setPosNum < SetDelNum; setPosNum++) {
-		m_toBallVec[setPosNum] = m_ball->GetPosition() - m_position[setPosNum];
-		m_ballDistance[setPosNum] = m_toBallVec[setPosNum].Length();
-		m_toBallVec[setPosNum].y = FLOAT_0;
-		m_toBallVec[setPosNum].Normalize();
 	}
 }

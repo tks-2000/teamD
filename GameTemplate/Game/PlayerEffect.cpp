@@ -48,6 +48,18 @@ namespace {
 	const char16_t* JUSTGUARDEFFECT_FILEPATH = u"Assets/effect/justguard.efk";
 	//ジャストガードエフェクトのスケール
 	const Vector3 JUSTGUARDEFFECT_SCALE = { 10.0f,10.0f,10.0f };
+
+	//強化エフェクトのファイルパス
+	const char16_t* KICKBUFFEFFECT_FILEPATH = u"Assets/effect/kickbuff.efk";
+	//強化エフェクトのスケール
+	const Vector3 KICKBUFFEFFECT_SCALE = { 20.0f,20.0f,20.0f };
+	//強化エフェクトのy座標発生位置を決めるための定数
+	const float KICKBUFFEFFECT_POS_Y = 10.0f;
+
+	//ダメージ回復エフェクトのファイルパス
+	const char16_t* REPAIREFFECT_FILEPATH = u"Assets/effect/repair.efk";
+	//ダメージ回復エフェクトのスケール
+	const Vector3 REPAIREFFECT_SCALE = { 10.0f,10.0f,10.0f };
 }
 
 PlayerEffect::PlayerEffect()
@@ -72,6 +84,11 @@ PlayerEffect::PlayerEffect()
 		m_knockOutEffect[plNum].Init(KNOCKOUTEFFECT_FILEPATH);
 		//ジャストガードエフェクトを初期化
 		m_justGuardEffect[plNum].Init(JUSTGUARDEFFECT_FILEPATH);
+		//強化エフェクトを初期化
+		m_kickBuffEffect[plNum].Init(KICKBUFFEFFECT_FILEPATH);
+		//ダメージ回復エフェクトを初期化
+		m_repairEffect[plNum].Init(REPAIREFFECT_FILEPATH);
+
 	}
 }
 
@@ -171,6 +188,23 @@ void PlayerEffect::KnockOutEffectUpdate(int plNum)
 	m_knockOutEffect[plNum].Update();
 }
 
+void PlayerEffect::KickBuffEffectUpdate(int plNum)
+{
+	Vector3 efcPos = m_player[plNum]->GetPosition();
+	efcPos.y += KICKBUFFEFFECT_POS_Y;
+
+	m_kickBuffEffect[plNum].SetPosition(efcPos);
+	m_kickBuffEffect[plNum].SetScale(KICKBUFFEFFECT_SCALE);
+	m_kickBuffEffect[plNum].Update();
+}
+
+void PlayerEffect::RepairEffectUpdate(int plNum)
+{
+	m_repairEffect[plNum].SetPosition(m_efcGuardPos[plNum]);
+	m_repairEffect[plNum].SetScale(REPAIREFFECT_SCALE);
+	m_repairEffect[plNum].Update();
+}
+
 void PlayerEffect::Update()
 {
 	/// @brief 更新が必要なエフェクトをすべて更新する
@@ -181,5 +215,7 @@ void PlayerEffect::Update()
 		GuardEffectUpdate(plNum);
 		ShieldRepairEffectUpdate(plNum);
 		KnockOutEffectUpdate(plNum);
+		KickBuffEffectUpdate(plNum);
+		RepairEffectUpdate(plNum);
 	}
 }

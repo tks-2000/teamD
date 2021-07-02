@@ -55,6 +55,7 @@
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
     <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="Ball.cpp" />
+    <ClCompile Include="Box.cpp" />
     <ClCompile Include="FontRender.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCamera.cpp" />
@@ -75,6 +76,11 @@
     <ClCompile Include="system\system.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Title.cpp" />
+<<<<<<< HEAD
+=======
+    <ClCompile Include="SoundSource.cpp" />
+    <ClCompile Include="WaveFile.cpp" />
+>>>>>>> 423028361cafbdf03a7d391807e0e812f30b3acf
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\ExEngine\effect\Effect.h" />
@@ -140,6 +146,7 @@
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="Ball.h" />
+    <ClInclude Include="Box.h" />
     <ClInclude Include="FontRender.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameCamera.h" />
@@ -159,6 +166,11 @@
     <ClInclude Include="system\system.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Title.h" />
+<<<<<<< HEAD
+=======
+    <ClInclude Include="SoundSource.h" />
+    <ClInclude Include="WaveFile.h" />
+>>>>>>> 423028361cafbdf03a7d391807e0e812f30b3acf
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\modelData\bg\testmap_tex.DDS" />
@@ -172,8 +184,11 @@
     <Image Include="Assets\sprite\title.dds" />
     <Image Include="Assets\sprite\title.png" />
     <Image Include="Assets\sprite\UI_Gage.DDS" />
+<<<<<<< HEAD
     <Image Include="Assets\sprite\SpeedMeterPin.DDS" />
     <Image Include="Assets\sprite\SpeedMeter.DDS" />
+=======
+>>>>>>> 423028361cafbdf03a7d391807e0e812f30b3acf
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\animData\unitychan\clear.tka" />

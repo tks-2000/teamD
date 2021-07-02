@@ -5,9 +5,13 @@
 Lighting::Lighting()
 {
 	InitDirectionLight();
-	InitPointLight();
+	
 	for (int spotLigNo = 0; spotLigNo < SPOT_LIGHT_SUM; spotLigNo++) {
 		InitSpotLight(spotLigNo);
+		
+	}
+	for (int pointLigNo = 0; pointLigNo < POINT_LIGHT_SUM; pointLigNo++) {
+		InitPointLight(pointLigNo);
 	}
 	InitHemiSphereLight();
 
@@ -33,16 +37,16 @@ bool Lighting::Start()
 
 void Lighting::Update()
 {
-	//RotationDirectionLight();
-	/*if (g_pad[1]->IsPress(enButtonSelect)) {
-		
-		MovePointLight();
+	for (int spLigNum = 0; spLigNum < SPOT_LIGHT_SUM; spLigNum++) {
+		if (m_spLigBlink[spLigNum] == true) {
+			SpotLightBlinking(spLigNum);
+		}
 	}
-	else {
-		RotationSpotLight();
-		MoveSpotLight();
-	}*/
-	
+	for (int ptLigNum = 0; ptLigNum < POINT_LIGHT_SUM; ptLigNum++) {
+		if (m_ptLigBlink[ptLigNum] == true) {
+			PointLightBlinking(ptLigNum);
+		}
+	}
 }
 
 void Lighting::InitDirectionLight()
@@ -80,26 +84,26 @@ void Lighting::RotationDirectionLight()
 	qRot.Apply(m_light.directionLight.direction);
 }
 
-void Lighting::InitPointLight()
+void Lighting::InitPointLight(int num)
 {
 	//ポイントライトの座標
-	m_light.pointLight.position.x = 50.0f;
-	m_light.pointLight.position.y = 50.0f;
-	m_light.pointLight.position.z = 50.0f;
+	m_light.pointLight[num].position.x = 0.0f;
+	m_light.pointLight[num].position.y = 0.0f;
+	m_light.pointLight[num].position.z = 0.0f;
 
 	//ポイントライトのカラー
-	m_light.pointLight.color.x = 5.0f;
-	m_light.pointLight.color.y = 0.0f;
-	m_light.pointLight.color.z = 0.0f;
+	m_light.pointLight[num].color.x = 0.0f;
+	m_light.pointLight[num].color.y = 0.0f;
+	m_light.pointLight[num].color.z = 0.0f;
 
 	//ポイントライトの影響範囲
-	m_light.pointLight.Range = 1000.0f;
+	m_light.pointLight[num].Range = 1000.0f;
 }
 
 void Lighting::MovePointLight()
 {
 	//左スティック入力でポイントライトの座標を操作
-	m_light.pointLight.position.x -= g_pad[1]->GetLStickXF();
+	/*m_light.pointLight.position.x -= g_pad[1]->GetLStickXF();
 	if (g_pad[0]->IsPress(enButtonB)) {
 		m_light.pointLight.position.y += g_pad[1]->GetLStickYF();
 	}
@@ -108,6 +112,37 @@ void Lighting::MovePointLight()
 	}
 	if (g_pad[0]->IsPress(enButtonA)) {
 		m_light.pointLight.position = Vector3::Zero;
+	}*/
+}
+void Lighting::SetPointLightBlinking(int num, float time, float interval)
+{
+	m_ptLigBlink[num] = true;
+	m_ptLigBlinkTime[num] = time;
+	m_ptLigBlinkInterval[num] = interval;
+	m_ptLigColor[num] = m_light.pointLight[num].color;
+}
+
+void Lighting::PointLightBlinking(int num)
+{
+	m_ptLigBlinkTime[num] -= g_gameTime->GetFrameDeltaTime();
+	m_ptLigBlinkSwitchingTime[num] += g_gameTime->GetFrameDeltaTime();
+	if (m_ptLigBlinkTime[num] <= FLOAT_0) {
+		m_ptLigBlink[num] = false;
+		m_light.pointLight[num].color = m_ptLigColor[num];
+		m_ptLigBlinkSwitchingTime[num] = FLOAT_0;
+	}
+	else {
+		if (m_ptLigBlinkSwitchingTime[num] >= m_ptLigBlinkInterval[num]) {
+			if (m_ptLigLit[num] == true) {
+				m_light.pointLight[num].color = COLORLESS;
+				m_ptLigLit[num] = false;
+			}
+			else {
+				m_light.pointLight[num].color = m_ptLigColor[num];
+				m_ptLigLit[num] = true;
+			}
+			m_ptLigBlinkSwitchingTime[num] = FLOAT_0;
+		}
 	}
 }
 
@@ -149,6 +184,36 @@ void Lighting::MoveSpotLight(int num)
 	}
 	if (g_pad[0]->IsPress(enButtonA)) {
 		m_light.spotLight[num].position = Vector3::Zero;
+	}
+}
+
+void Lighting::SetSpotLightBlinking(int num, float time, float interval) {
+	m_spLigBlink[num] = true;
+	m_spLigBlinkTime[num] = time;
+	m_spLigBlinkInterval[num] = interval;
+	m_spLigColor[num] = m_light.spotLight[num].color;
+}
+
+void Lighting::SpotLightBlinking(int num) {
+	m_spLigBlinkTime[num] -= g_gameTime->GetFrameDeltaTime();
+	m_spLigBlinkSwitchingTime[num] += g_gameTime->GetFrameDeltaTime();
+	if (m_spLigBlinkTime[num] <= FLOAT_0) {
+		m_spLigBlink[num] = false;
+		m_light.spotLight[num].color = m_spLigColor[num];
+		m_spLigBlinkSwitchingTime[num] = FLOAT_0;
+	}
+	else {
+		if (m_spLigBlinkSwitchingTime[num] >= m_spLigBlinkInterval[num]) {
+			if (m_spLigLit[num] == true) {
+				m_light.spotLight[num].color = COLORLESS;
+				m_spLigLit[num] = false;
+			}
+			else {
+				m_light.spotLight[num].color = m_spLigColor[num];
+				m_spLigLit[num]=true;
+			}
+			m_spLigBlinkSwitchingTime[num] = FLOAT_0;
+		}
 	}
 }
 

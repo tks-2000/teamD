@@ -4,8 +4,8 @@
 namespace
 {
 	//軌跡エフェクト関係
-	const char16_t* TRACKEFFECT_PL01_FILEPATH = u"Assets/effect/balltrack.efk";	//軌跡エフェクトのファイルパス
-	const Vector3 TRACKEFFECT_SCALE_MAX = { 80.0f,80.0f,1.0f };					//エフェクトの最大サイズ
+	const char16_t* TRACKEFFECT_PL01_FILEPATH = u"Assets/effect/balltrack_low.efk";	//軌跡エフェクトのファイルパス
+	const Vector3 TRACKEFFECT_SCALE_MAX = { 60.0f,60.0f,1.0f };					//エフェクトの最大サイズ
 	const Vector3 TRACKEFFECT_SCALE_MIN = { 3.0f,3.0f,1.0f };					//エフェクトの最小サイズ	
 	const float TRACKEFFECT_BASE_MAX = 40.0f;									//補間率を決めるための最大基準値
 	const float TRACKEFFECT_PLAY_MIN = 10.0f;									//軌跡を表示し始める速度
@@ -97,7 +97,7 @@ void Ball::Move()
 
 	}
 
-	m_moveVelocity -= pow(m_moveVelocity * m_friction,2.0);
+	m_moveVelocity -= pow(m_moveVelocity * m_friction,1.5);
 
 	if (m_moveSpeed.Length() < 1.0f || m_gameDirector->IsMainGame() == false)
 	{
@@ -176,13 +176,14 @@ void Ball::PlayReflectEffect
 void Ball::Update()
 {
 	if (m_moveFlag == true) {
-		m_lig->SetPointLightColor(m_pointLigColor);
+		m_lig->SetPointLightColor(4,m_pointLigColor);
 		Move();
 		Rotation();
 		PlayTrackEffect();
+		
 	}
 	else {
-		m_lig->SetPointLightColor(COLORLESS);
+		m_lig->SetPointLightColor(4,COLORLESS);
 		m_playerNum = 4;
 	}
 
@@ -192,13 +193,13 @@ void Ball::Update()
 	m_skinModelRender->SetRotation(m_qRot);
 	m_skinModelRender->SetScale(m_scale);
 
-	m_lig->SetPointLighitPos(m_position);
+	m_lig->SetPointLighitPos(4,m_position);
 	
 	//軌跡用エフェクト座標をボールに合わせる
 	m_ballTrack.SetPosition(modelpos);
 	//軌跡用エフェクトの更新
 	m_ballTrack.Update();
 
-	m_lig->SetPointLighitPos(modelpos);
+	m_lig->SetPointLighitPos(4,modelpos);
 
 }

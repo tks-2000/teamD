@@ -3,7 +3,7 @@
 
 #include "MiniEngine.h"
 #include "ExEngine.h"
-//#include "Title.h"
+#include "Title.h"
 #include "Menu.h"
 #include "Game.h"
 #include "GameDirector.h"
@@ -20,6 +20,7 @@
 #include "BackGround.h"
 #include "Ball.h"
 #include "Objects.h"
+#include "Box.h"
 #include "Sky.h"
 #include "Result.h"
 
@@ -38,10 +39,10 @@ namespace {
 	const float FLOAT_01 = 0.1f;
 	const float FLOAT_MINUS_1 = -1.0f;
 
-	const Vector3 RED = { 5.0f,0.0f,0.0f };
-	const Vector3 GREEN = { 0.0f,5.0f,0.0f };
-	const Vector3 BLUE = { 0.0f,0.0f,5.0f };
-	const Vector3 YELLOW = { 5.0f,5.0f,0.0f };
+	const Vector3 RED = { 5.0f,1.0f,1.0f };
+	const Vector3 GREEN = { 1.0f,5.0f,1.0f };
+	const Vector3 BLUE = { 1.0f,1.0f,5.0f };
+	const Vector3 YELLOW = { 3.0f,3.0f,1.0f };
 	const Vector3 COLORLESS = { 0.0f,0.0f,0.0f };
 
 	const char* TITLE_NAME = "Title";
@@ -57,7 +58,9 @@ namespace {
 	const char* GAME_CAMERA_NAME = "GameCamera";
 	const char* BACK_GROUND_NAME = "BackGround";
 	const char* BALL_NAME = "Ball";
+	const char* SKY_NAME = "Sky";
 	const char* OBJECTS_NAME = "Objects";
+	const char* BOX_NAME = "Box";
 	const char* RESULT_NAME = "Result";
 
 	const char* UNITYCHAN_MODEL = "Assets/modelData/unityChan.tkm";
