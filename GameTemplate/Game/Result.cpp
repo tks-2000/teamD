@@ -28,11 +28,11 @@ Result::Result()
 		
 	}
 	for (int selectNum = 0; selectNum < SELECT_COMMAND_NUM; selectNum++) {
-		m_selectFont[selectNum] = NewGO<FontRender>(3);
+		m_selectFont[selectNum] = NewGO<FontRender>(5);
 		m_selectFont[selectNum]->SetPosition(SELECT_FONT_POS[selectNum]);
 		m_selectFont[selectNum]->SetText(SELECT_COMMAND_FONT[selectNum]);
 	}
-	m_arrowFont = NewGO<FontRender>(3);
+	m_arrowFont = NewGO<FontRender>(5);
 	m_arrowFont->SetText(L"@");
 }
 

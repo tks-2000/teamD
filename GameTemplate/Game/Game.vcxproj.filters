@@ -76,13 +76,19 @@
     <ClCompile Include="system\system.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Title.cpp" />
+<<<<<<< HEAD
+=======
     <ClCompile Include="SoundSource.cpp" />
     <ClCompile Include="WaveFile.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="Util.cpp" />
     <ClCompile Include="WaveFileBank.cpp" />
     <ClCompile Include="NameKey.cpp" />
     <ClCompile Include="SoundPreCompile.cpp" />
     <ClCompile Include="SoundEngine.cpp" />
+=======
+>>>>>>> 423028361cafbdf03a7d391807e0e812f30b3acf
+>>>>>>> c5e2b08aea713bd40713abcc0832adeecf12ccf2
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\ExEngine\effect\Effect.h" />
@@ -168,13 +174,19 @@
     <ClInclude Include="system\system.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Title.h" />
+<<<<<<< HEAD
+=======
     <ClInclude Include="SoundSource.h" />
     <ClInclude Include="WaveFile.h" />
+<<<<<<< HEAD
     <ClInclude Include="Util.h" />
     <ClInclude Include="WaveFileBank.h" />
     <ClInclude Include="NameKey.h" />
     <ClInclude Include="SoundPreCompile.h" />
     <ClInclude Include="SoundEngine.h" />
+=======
+>>>>>>> 423028361cafbdf03a7d391807e0e812f30b3acf
+>>>>>>> c5e2b08aea713bd40713abcc0832adeecf12ccf2
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\modelData\bg\testmap_tex.DDS" />
@@ -188,6 +200,11 @@
     <Image Include="Assets\sprite\title.dds" />
     <Image Include="Assets\sprite\title.png" />
     <Image Include="Assets\sprite\UI_Gage.DDS" />
+<<<<<<< HEAD
+    <Image Include="Assets\sprite\SpeedMeterPin.DDS" />
+    <Image Include="Assets\sprite\SpeedMeter.DDS" />
+=======
+>>>>>>> 423028361cafbdf03a7d391807e0e812f30b3acf
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\animData\unitychan\clear.tka" />

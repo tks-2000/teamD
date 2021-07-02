@@ -445,6 +445,8 @@
     <Image Include="Assets\sprite\GageFinal.DDS" />
     <Image Include="Assets\sprite\GageStart.DDS" />
     <Image Include="Assets\sprite\Shield_Icon.DDS" />
+    <Image Include="Assets\sprite\SpeedMeter.DDS" />
+    <Image Include="Assets\sprite\SpeedMeterPin.DDS" />
     <Image Include="Assets\sprite\Sprint_Icon.DDS" />
     <Image Include="Assets\sprite\title.dds" />
     <Image Include="Assets\sprite\title.png" />
