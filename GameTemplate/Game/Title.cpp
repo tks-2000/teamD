@@ -9,10 +9,6 @@ namespace {
 
 Title::Title()
 {
-	CSoundSource* bgm = NewGO<CSoundSource>(0);
-	bgm->Init(L"Assets/sound/bgm/normalBGM.wav");
-	bgm->SetVolume(1.0f);
-	bgm->Play(true);
 
 	m_titleSprite = NewGO<SpriteRender>(0);
 	m_titleSprite->Init("Assets/sprite/title.dds", 1280, 720);
@@ -31,6 +27,7 @@ Title::~Title()
 bool Title::Start()
 {
 	m_gameDirector = FindGO<GameDirector>(GAME_DIRECTOR_NAME);
+	m_se = FindGO<Se>(SE_NAME);
 	return true;
 }
 
@@ -48,5 +45,6 @@ void Title::Update()
 	if (g_pad[0]->IsTrigger(enButtonStart)) {
 		m_gameDirector->SetMenu();
 		m_gameDirector->TitleEnd();
+		m_se->PlayPressKeySe();
 	}
 }

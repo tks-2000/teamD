@@ -4,6 +4,8 @@ class Title;
 class Menu;
 class Game;
 class Result;
+class Bgm;
+class Se;
 
 class GameDirector : public IGameObject
 {
@@ -30,6 +32,10 @@ private:
 	Game* m_game = nullptr;
 
 	Result* m_result = nullptr;
+
+	Bgm* m_bgm = nullptr;
+
+	Se* m_se = nullptr;
 
 public:
 	GameDirector();

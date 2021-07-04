@@ -3,6 +3,7 @@
 class SpriteRender;
 class FontRender;
 class GameDirector;
+class Se;
 
 class Title : public IGameObject
 {
@@ -19,5 +20,7 @@ private:
 	FontRender* m_pushStart = nullptr;
 
 	GameDirector* m_gameDirector = nullptr;
+
+	Se* m_se = nullptr;
 };
 

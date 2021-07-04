@@ -5,6 +5,8 @@
 #include "ExEngine.h"
 #include "SoundEngine.h"
 #include "SoundSource.h"
+#include "Bgm.h"
+#include "Se.h"
 #include "Title.h"
 #include "Menu.h"
 #include "Game.h"
@@ -64,6 +66,8 @@ namespace {
 	const char* OBJECTS_NAME = "Objects";
 	const char* BOX_NAME = "Box";
 	const char* RESULT_NAME = "Result";
+	const char* BGM_NAME = "Bgm";
+	const char* SE_NAME = "Se";
 
 	const char* UNITYCHAN_MODEL = "Assets/modelData/unityChan.tkm";
 }

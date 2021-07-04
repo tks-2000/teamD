@@ -64,6 +64,7 @@
     <ClCompile Include="Lighting.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="NameKey.cpp" />
     <ClCompile Include="Objects.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerEffect.cpp" />
@@ -71,24 +72,19 @@
     <ClCompile Include="Score.cpp" />
     <ClCompile Include="SkinModelRender.cpp" />
     <ClCompile Include="Sky.cpp" />
+    <ClCompile Include="SoundEngine.cpp" />
+    <ClCompile Include="SoundPreCompile.cpp" />
+    <ClCompile Include="SoundSource.cpp" />
     <ClCompile Include="SpriteRender.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="system\system.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Title.cpp" />
-<<<<<<< HEAD
-=======
-    <ClCompile Include="SoundSource.cpp" />
-    <ClCompile Include="WaveFile.cpp" />
-<<<<<<< HEAD
     <ClCompile Include="Util.cpp" />
+    <ClCompile Include="WaveFile.cpp" />
     <ClCompile Include="WaveFileBank.cpp" />
-    <ClCompile Include="NameKey.cpp" />
-    <ClCompile Include="SoundPreCompile.cpp" />
-    <ClCompile Include="SoundEngine.cpp" />
-=======
->>>>>>> 423028361cafbdf03a7d391807e0e812f30b3acf
->>>>>>> c5e2b08aea713bd40713abcc0832adeecf12ccf2
+    <ClCompile Include="Bgm.cpp" />
+    <ClCompile Include="Se.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\ExEngine\effect\Effect.h" />
@@ -162,6 +158,7 @@
     <ClInclude Include="GameUI.h" />
     <ClInclude Include="Lighting.h" />
     <ClInclude Include="Menu.h" />
+    <ClInclude Include="NameKey.h" />
     <ClInclude Include="Objects.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerEffect.h" />
@@ -169,24 +166,25 @@
     <ClInclude Include="Score.h" />
     <ClInclude Include="SkinModelRender.h" />
     <ClInclude Include="Sky.h" />
+    <ClInclude Include="SoundEngine.h" />
+    <ClInclude Include="SoundPreCompile.h" />
+    <ClInclude Include="SoundSource.h" />
     <ClInclude Include="SpriteRender.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Title.h" />
-<<<<<<< HEAD
-=======
-    <ClInclude Include="SoundSource.h" />
-    <ClInclude Include="WaveFile.h" />
-<<<<<<< HEAD
     <ClInclude Include="Util.h" />
+    <ClInclude Include="WaveFile.h" />
     <ClInclude Include="WaveFileBank.h" />
-    <ClInclude Include="NameKey.h" />
-    <ClInclude Include="SoundPreCompile.h" />
-    <ClInclude Include="SoundEngine.h" />
-=======
->>>>>>> 423028361cafbdf03a7d391807e0e812f30b3acf
->>>>>>> c5e2b08aea713bd40713abcc0832adeecf12ccf2
+    <ClInclude Include="Bgm.h" />
+    <ClInclude Include="Se.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="Assets\sound\bgm\normalBGM.wav" />
+    <Media Include="Assets\sound\bgm\bgm.wav" />
+    <Media Include="Assets\sound\bgm\title.wav" />
+    <Media Include="Assets\sound\se\press_key.wav" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\modelData\bg\testmap_tex.DDS" />
@@ -196,15 +194,12 @@
     <Image Include="Assets\sprite\GageFinal.DDS" />
     <Image Include="Assets\sprite\GageStart.DDS" />
     <Image Include="Assets\sprite\Shield_Icon.DDS" />
+    <Image Include="Assets\sprite\SpeedMeter.DDS" />
+    <Image Include="Assets\sprite\SpeedMeterPin.DDS" />
     <Image Include="Assets\sprite\Sprint_Icon.DDS" />
     <Image Include="Assets\sprite\title.dds" />
     <Image Include="Assets\sprite\title.png" />
     <Image Include="Assets\sprite\UI_Gage.DDS" />
-<<<<<<< HEAD
-    <Image Include="Assets\sprite\SpeedMeterPin.DDS" />
-    <Image Include="Assets\sprite\SpeedMeter.DDS" />
-=======
->>>>>>> 423028361cafbdf03a7d391807e0e812f30b3acf
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\animData\unitychan\clear.tka" />
@@ -220,8 +215,5 @@
     <None Include="Assets\modelData\bg\testmap_s.tkm" />
     <None Include="Assets\modelData\object\box.tkm" />
     <None Include="Assets\modelData\sphere\sphere.tkm" />
-  </ItemGroup>
-  <ItemGroup>
-    <Media Include="Assets\sound\bgm\normalBGM.wav" />
   </ItemGroup>
 </Project>
