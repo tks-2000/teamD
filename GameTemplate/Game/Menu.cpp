@@ -45,12 +45,14 @@ void Menu::Update()
 		}
 	}
 
+	m_gameDirector->SetPlayerNum(m_playerNum);
+
 	/// @brief スタートでゲーム開始
-	if (g_pad[0]->IsTrigger(enButtonStart)) {
-		m_gameDirector->SetPlayerNum(m_playerNum);
+	/*if (g_pad[0]->IsTrigger(enButtonStart)) {
+		
 		m_gameDirector->SetGameStart();
 		m_gameDirector->MenuEnd();
-	}
+	}*/
 
 	std::wstring plNum;
 	plNum = std::to_wstring(m_playerNum);

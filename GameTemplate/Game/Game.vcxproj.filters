@@ -85,6 +85,7 @@
     <ClCompile Include="WaveFileBank.cpp" />
     <ClCompile Include="Bgm.cpp" />
     <ClCompile Include="Se.cpp" />
+    <ClCompile Include="SceneChange.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\ExEngine\effect\Effect.h" />
@@ -179,6 +180,7 @@
     <ClInclude Include="WaveFileBank.h" />
     <ClInclude Include="Bgm.h" />
     <ClInclude Include="Se.h" />
+    <ClInclude Include="SceneChange.h" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="Assets\sound\bgm\normalBGM.wav" />
@@ -200,6 +202,7 @@
     <Image Include="Assets\sprite\title.dds" />
     <Image Include="Assets\sprite\title.png" />
     <Image Include="Assets\sprite\UI_Gage.DDS" />
+    <Image Include="Assets\sprite\BLACK.dds" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\animData\unitychan\clear.tka" />

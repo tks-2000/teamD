@@ -11,6 +11,7 @@
 #include "Menu.h"
 #include "Game.h"
 #include "GameDirector.h"
+#include "SceneChange.h"
 #include "Timer.h"
 #include "GameUI.h"
 #include "Score.h"
@@ -57,6 +58,7 @@ namespace {
 
 	const char* TITLE_NAME = "Title";
 	const char* GAME_DIRECTOR_NAME = "GameDirector";
+	const char* SCENE_CHANGE_NAME = "SceneChange";
 	const char* MENU_NAME = "Menu";
 	const char* GAME_NAME = "Game";
 	const char* TIMER_NAME = "Timer";
