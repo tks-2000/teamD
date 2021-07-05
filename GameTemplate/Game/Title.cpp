@@ -27,6 +27,8 @@ Title::~Title()
 bool Title::Start()
 {
 	m_gameDirector = FindGO<GameDirector>(GAME_DIRECTOR_NAME);
+	//m_titleSprite->MoveStart({ 100.0f,0.0f,0.0f },100.0f);
+	//m_pushStart->MoveStart({ -100.0f,100.0f }, 100.0f);
 	m_se = FindGO<Se>(SE_NAME);
 	return true;
 }

@@ -49,6 +49,12 @@ namespace {
 	const Vector3 YELLOW = { 3.0f,3.0f,1.0f };
 	const Vector3 COLORLESS = { 0.0f,0.0f,0.0f };
 
+	const int PRIORITY_VERYLOW = 0;
+	const int PRIORITY_LOW = 1;
+	const int PRIORITY_NORMAL = 2;
+	const int PRIORITY_HIGH = 3;
+	const int PRIORITY_VERYHIGH = 4;
+
 	const char* TITLE_NAME = "Title";
 	const char* GAME_DIRECTOR_NAME = "GameDirector";
 	const char* MENU_NAME = "Menu";

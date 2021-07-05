@@ -5,6 +5,7 @@ GameDirector::GameDirector()
 {
 	m_bgm = NewGO<Bgm>(0, BGM_NAME);
 	m_se = NewGO<Se>(0, SE_NAME);
+	m_lighting = NewGO<Lighting>(0, LIGHTING_NAME);
 	m_playerNum = MIN_PLAYER_NUM;
 	m_gameState = enTitle;
 }
@@ -13,6 +14,7 @@ GameDirector::~GameDirector()
 {
 	DeleteGO(m_bgm);
 	DeleteGO(m_se);
+	DeleteGO(m_lighting);
 }
 
 bool GameDirector::Start()

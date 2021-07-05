@@ -6,6 +6,7 @@ class Game;
 class Result;
 class Bgm;
 class Se;
+class Lighting;
 
 class GameDirector : public IGameObject
 {
@@ -36,6 +37,8 @@ private:
 	Bgm* m_bgm = nullptr;
 
 	Se* m_se = nullptr;
+
+	Lighting* m_lighting = nullptr;
 
 public:
 	GameDirector();
@@ -73,8 +76,6 @@ public:
 
 	/// @brief 現在の状態を終了に変更
 	void SetEnd() { m_gameState = enEnd; }
-
-	void SetDelete() { m_delete = true; }
 
 	/// @brief タイトルを終了させる
 	void TitleEnd() { DeleteGO(m_title); m_title = nullptr; }

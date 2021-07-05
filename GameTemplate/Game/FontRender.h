@@ -29,10 +29,10 @@ public:
 	void Fade();
 	/// @brief フォントのフェードインを開始
 	/// @param rate フェードのレート
-	void FadeIn(float rate) { m_fadeInFlag = true; m_fadeRate = rate; }
+	void FadeIn(float rate) { m_fadeInFlag = true; m_fadeOutFlag = false; m_fadeRate = rate; }
 	/// @brief フォントのフェードアウトを開始
 	/// @param rate フェードのレート
-	void FadeOut(float rate) { m_fadeOutFlag = true; m_fadeRate = rate; }
+	void FadeOut(float rate) { m_fadeOutFlag = true; m_fadeInFlag = false; m_fadeRate = rate; }
 	/// @brief フォントの不透明度を入手
 	/// @return カラーのアルファ値
 	float GetOpacity() { return m_color.w; }
@@ -42,7 +42,11 @@ public:
 	/// @brief フォントが透明か？
 	/// @return 透明ならtrue 不透明か半透明ならfalse
 	bool IsTransparent();
-	
+	/// @brief フォントを移動させる
+	/// @param targetPos 移動させたい座標
+	/// @param velocity 移動する速度
+	void MoveStart(const Vector2& targetPos, float velocity);
+
 	void Render(RenderContext& rc);
 
 private:
@@ -62,10 +66,22 @@ private:
 	/// @brief フォントの中心
 	Vector2 m_pivot = { 1.0f,1.0f };
 
+	/// @brief 移動する目標の座標
+	Vector2 m_targetPos = Vector2::Zero;
+	/// @brief 移動速度
+	Vector2 m_moveSpeed = Vector2::Zero;
+	/// @brief 移動処理をする前の座標
+	Vector2 m_previousPos = Vector2::Zero;
+
 	bool m_fadeInFlag = false;
 
 	bool m_fadeOutFlag = false;
 
 	float m_fadeRate = 0.0f;
+
+	/// @brief 移動フラグ
+	bool m_moveFlag = false;
+
+	void Move();
 };
 

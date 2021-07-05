@@ -20,15 +20,15 @@ public:
 
 	/// @brief モデルの座標を設定
 	/// @param pos 座標
-	void SetPosition(Vector3 pos) { m_position = pos; }
+	void SetPosition(const Vector3& pos) { m_position = pos; }
 
 	/// @brief モデルの大きさを設定
 	/// @param scale 拡大率
-	void SetScale(Vector3 scale) { m_scale = scale; }
+	void SetScale(const Vector3& scale) { m_scale = scale; }
 
 	/// @brief モデルの回転を設定
 	/// @param rot クォータニオン
-	void SetRotation(Quaternion rot) { m_qRot = rot; }
+	void SetRotation(const Quaternion& rot) { m_qRot = rot; }
 
 
 	void SetNewModel() { m_model.Init(m_modelInitData); }
