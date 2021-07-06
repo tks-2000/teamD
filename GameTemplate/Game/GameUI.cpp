@@ -185,11 +185,13 @@ GameUI::GameUI()
 	m_ballSpeedMeter = NewGO<SpriteRender>(4);
 	m_ballSpeedMeter->Init("Assets/sprite/SpeedMeter.DDS", 220, 220);
 	m_ballSpeedMeter->SetPosition({ 500.0f, 0.0f, 0.0f});
+	m_ballSpeedMeter->SetScale({ 0.75f,0.75f,0.75f });
 
 	m_ballSpeedMeterPin = NewGO<SpriteRender>(5);
 	m_ballSpeedMeterPin->Init("Assets/sprite/SpeedMeterPin.DDS", 144, 144);
-	m_ballSpeedMeterPin->SetPosition({ 500 + 16.0f, 0.0f - 23.0f, 0.0f });
+	m_ballSpeedMeterPin->SetPosition({ 500, 0.0f, 0.0f });
 	m_ballSpeedMeterPin->SetPivot({1.0f - (256.0f / 512.0f), 1.0f - (156.0f / 512.0f)});
+	m_ballSpeedMeterPin->SetScale({ 0.75f,0.75f,0.75f });
 
 	/*m_ballSpeed = NewGO<FontRender>(2);
 	m_ballSpeed->SetPosition(BALL_SPEED_POS);*/
@@ -341,17 +343,20 @@ void GameUI::Update()
 		}
 	}
 	
-	PinAngArrival = (m_ballVelocity * -5.0f) - 65.0f;
+	PinAngArrival = (m_ballVelocity * -7.0f) - 60.0f;
 	float PinSpeed = std::pow(PinAngArrival - PinRot, 2);
-	PinSpeed = std::sqrt(PinSpeed) * 0.1;
+	PinSpeed = std::sqrt(PinSpeed) * 0.05;
 
 	if (PinRot > PinAngArrival) {
 		PinRot -= PinSpeed;
 	}
 	else { PinRot += PinSpeed; }
 
-	if (PinRot < -245.0f) {
-		PinRot = -245.0f;
+	if (PinRot < -300.0f) {
+		PinRot = -300.0f;
+	}
+	if (PinRot < -237.0f)
+	{
 		m_ballSpeedMeterPin->SetColor({ 1.0f, 0.0f, 0.0f, 1.0f });
 	}
 	else { m_ballSpeedMeterPin->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f }); }
