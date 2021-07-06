@@ -92,8 +92,8 @@ bool Player::Start()
 
 	m_skinModelRender = NewGO<SkinModelRender>(PRIORITY);
 
-	m_skinModelRender->InitA(UNITYCHAN_MODEL, "Assets/modelData/unityChan.tks", m_animationClips, enAnimation_Num);
-	m_skinModelRender->PlayAnimation(enAnimation_Idle, 1.0f);
+	/*m_skinModelRender->InitA(UNITYCHAN_MODEL, "Assets/modelData/unityChan.tks", m_animationClips, enAnimation_Num);
+	m_skinModelRender->PlayAnimation(enAnimation_Idle, 1.0f);*/
 
 
 	m_ui = FindGO<GameUI>(GAME_UI_NAME);
@@ -103,6 +103,7 @@ bool Player::Start()
 
 void Player::SetPlayerNumber(int num)
 {
+
 	//Žó‚¯Žæ‚Á‚½”Ô†‚É‰ž‚¶‚ÄŽ©•ª‚ª‰½P‚©‚ðÝ’è‚·‚é
 	m_myNumber = num;
 	switch (num)
@@ -110,19 +111,22 @@ void Player::SetPlayerNumber(int num)
 	case 0: {
 		m_playerColor = RED;
 		m_startPos = PLAYER1_STARTPOS;
-
+		m_skinModelRender->InitA(UNITYCHAN_MULTI_FILEPATH[num], "Assets/modelData/unityChan.tks", m_animationClips, enAnimation_Num);
 	}break;
 	case 1: {
 		m_playerColor = BLUE;
 		m_startPos = PLAYER2_STARTPOS;
+		m_skinModelRender->InitA(UNITYCHAN_MULTI_FILEPATH[num], "Assets/modelData/unityChan.tks", m_animationClips, enAnimation_Num);
 	}break;
 	case 2: {
 		m_playerColor = YELLOW;
 		m_startPos = PLAYER3_STARTPOS;
+		m_skinModelRender->InitA(UNITYCHAN_MULTI_FILEPATH[num], "Assets/modelData/unityChan.tks", m_animationClips, enAnimation_Num);
 	}break;
 	case 3: {
 		m_playerColor = GREEN;
 		m_startPos = PLAYER4_STARTPOS;
+		m_skinModelRender->InitA(UNITYCHAN_MULTI_FILEPATH[num], "Assets/modelData/unityChan.tks", m_animationClips, enAnimation_Num);
 	}break;
 	}
 	m_position = m_startPos;
@@ -130,6 +134,10 @@ void Player::SetPlayerNumber(int num)
 
 	m_lig->SetPointLightColor(m_myNumber, m_playerColor);
 	m_lig->SetPointLightRange(m_myNumber, 500.0f);
+
+	
+	m_skinModelRender->PlayAnimation(enAnimation_Idle, 1.0f);
+
 }
 
 void Player::Move()

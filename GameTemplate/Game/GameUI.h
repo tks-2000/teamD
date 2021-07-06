@@ -45,7 +45,7 @@ private:
 	SpriteRender* m_ballSpeedMeter = nullptr;
 	/// @brief ボール速表示用画像その2
 	SpriteRender* m_ballSpeedMeterPin = nullptr;
-	float PinRot = -65.0f;
+	float PinRot = -60.0f;
 
 	/// @brief ボールの速度
 	float m_ballVelocity = 0.0f;
