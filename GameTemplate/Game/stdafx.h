@@ -78,4 +78,12 @@ namespace {
 	const char* SE_NAME = "Se";
 
 	const char* UNITYCHAN_MODEL = "Assets/modelData/unityChan.tkm";
+
+	//ユニティちゃんモデルごとのファイルパス
+	const char* UNITYCHAN_MULTI_FILEPATH[4] =
+	{	{"Assets/modelData/utc_red.tkm"},		//1p 赤
+		{"Assets/modelData/utc_blue.tkm"},		//2p 青
+		{"Assets/modelData/utc_yellow.tkm"},	//3p 黄
+		{"Assets/modelData/utc_green.tkm"}		//4p 緑
+	};
 }
