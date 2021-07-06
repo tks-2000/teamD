@@ -54,8 +54,9 @@ void GameDirector::Update()
 			m_bgm->ChangeMenuBgm();
 		}
 		else {
-			if (g_pad[0]->IsTrigger(enButtonStart)) {
+			if (g_pad[0]->IsTrigger(enButtonStart) && m_playerNum > 0) {
 				m_sceneChange->TransparencyChange(false);
+				m_menu->End();
 			}
 			if (m_sceneChange->TransparencyChangeEnd() == true) {
 				m_gameState = enMainGame;

@@ -68,19 +68,10 @@ void Lighting::RotationDirectionLight()
 {
 	//右スティック入力でディレクションライトの方向を操作
 	Quaternion qRot;
-	if (g_pad[0]->IsPress(enButtonRB1)) {
-		qRot.SetRotationDegY(1.0f);
-	}
-	if (g_pad[0]->IsPress(enButtonLB1)) {
-		qRot.SetRotationDegY(-1.0f);
-	}
-	qRot.Apply(m_light.directionLight.direction);
-	if (g_pad[0]->IsPress(enButtonRB2)) {
-		qRot.SetRotationDegX(1.0f);
-	}
-	if (g_pad[0]->IsPress(enButtonLB2)) {
-		qRot.SetRotationDegX(-1.0f);
-	}
+	
+	qRot.SetRotationDegY(1.0f);
+
+	
 	qRot.Apply(m_light.directionLight.direction);
 }
 
