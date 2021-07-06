@@ -51,12 +51,16 @@ namespace {
 	const float POWERFUlL_KICK_POWER = 6.0f;
 	/// @brief スタミナの最大値
 	const float MAX_STANIMA = 6.0f;
+
+	const float NORMAL_VELOCITY = 0.9f;
+
+	const float DASH_VELOCITY = 0.95f;
 }
 
 Player::Player()
 {
 	//プレイヤーの初期状態を設定
-	m_moveVelocity = 0.9f;
+	m_moveVelocity = NORMAL_VELOCITY;
 	m_stamina = MAX_STANIMA;
 	m_kickPower = 5.0f;
 	m_gravity = 5.0f;
@@ -136,14 +140,14 @@ void Player::Move()
 
 
 	if (IsDash() == true) {
-		m_moveVelocity = 0.95f;
+		m_moveVelocity = DASH_VELOCITY;
 
 		m_stamina -= g_gameTime->GetFrameDeltaTime() * FLOAT_2;
 
 		m_anim = enAnimation_Run;
 	}
 	else {
-		m_moveVelocity = 0.9f;
+		m_moveVelocity = NORMAL_VELOCITY;
 		m_stamina += g_gameTime->GetFrameDeltaTime() * FLOAT_1;
 		if (m_stamina > MAX_STANIMA) {
 			m_stamina = MAX_STANIMA;

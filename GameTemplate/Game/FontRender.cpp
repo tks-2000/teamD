@@ -47,10 +47,10 @@ bool FontRender::IsTransparent()
 void FontRender::Fade()
 {
 	if (m_fadeInFlag == true) {
-		m_color.w += m_fadeRate;
+		m_color.w += m_fadeRate * g_gameTime->GetFrameDeltaTime();
 	}
 	if (m_fadeOutFlag == true) {
-		m_color.w -= m_fadeRate;
+		m_color.w -= m_fadeRate * g_gameTime->GetFrameDeltaTime();
 	}
 	if (m_color.w > FLOAT_1) {
 		m_color.w = FLOAT_1;

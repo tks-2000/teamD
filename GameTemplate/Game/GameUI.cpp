@@ -29,6 +29,9 @@ namespace {
 	const float SCALE = 1.0f;
 
 	const Vector2 TIME_FONT_POS = { 0.0f,300.0f };
+	const float TIME_FONT_SCALE = 1.0f;
+	const Vector2 FINISH_FONT_POS = { -200.0f,100.0f };
+	const float FINISH_FONT_SCALE = 3.0f;
 }
 
 GameUI::GameUI()
@@ -254,9 +257,13 @@ void GameUI::TimerFont()
 	}
 	if (m_timer->IsFinish() == true) {
 		m_timeFont->SetText(L"Finish");
+		m_timeFont->SetPosition(FINISH_FONT_POS);
+		m_timeFont->SetScale(FINISH_FONT_SCALE);
 	}
 	if (m_timer->IsTimerEnd() == true) {
 		m_timeFont->SetText(L"PUSH A BUTTON");
+		m_timeFont->SetPosition(TIME_FONT_POS);
+		m_timeFont->SetScale(TIME_FONT_SCALE);
 	}
 	
 	

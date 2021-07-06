@@ -36,17 +36,17 @@ bool Title::Start()
 void Title::Update()
 {
 	if (m_pushStart->IsTransparent() == true) {
-		m_pushStart->FadeIn(0.01f);
+		m_pushStart->FadeIn(1.0f);
 	}
 	if (m_pushStart->IsOpacity() == true) {
-		m_pushStart->FadeOut(0.01f);
+		m_pushStart->FadeOut(1.0f);
 	}
 
 
 	/// @brief スタートボタンでメニューに進む
-	if (g_pad[0]->IsTrigger(enButtonStart)) {
+	/*if (g_pad[0]->IsTrigger(enButtonStart)) {
 		m_gameDirector->SetMenu();
 		m_gameDirector->TitleEnd();
 		m_se->PlayPressKeySe();
-	}
+	}*/
 }
