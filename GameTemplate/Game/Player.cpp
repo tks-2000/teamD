@@ -12,13 +12,13 @@ namespace {
 	/// @brief 落下扱いになる高さ
 	const float FALLING_HEIGHT = -1000.0f;
 	/// @brief 1Pの初期位置
-	const Vector3 PLAYER1_STARTPOS = { -600.0f,200.0f,600.0f };
+	const Vector3 PLAYER1_STARTPOS = { -500.0f,500.0f,500.0f };
 	/// @brief 2Pの初期位置
-	const Vector3 PLAYER2_STARTPOS = { 600.0f,200.0f,600.0f };
+	const Vector3 PLAYER2_STARTPOS = { 500.0f,500.0f,500.0f };
 	/// @brief 3Pの初期位置
-	const Vector3 PLAYER3_STARTPOS = { -600.0f,200.0f,-600.0f };
+	const Vector3 PLAYER3_STARTPOS = { -500.0f,500.0f,-500.0f };
 	/// @brief 4Pの初期位置
-	const Vector3 PLAYER4_STARTPOS = { 600.0f,200.0f,-600.0f };
+	const Vector3 PLAYER4_STARTPOS = { 500.0f,500.0f,-500.0f };
 	/// @brief ポイントライトの高さ
 	const float POINT_LIGHT_HEIGHT = 50.0f;
 	/// @brief プレイヤーの半径
@@ -46,9 +46,9 @@ namespace {
 	/// @brief ジャストガード可能な時間
 	const float POSSIBLE_JUST_GUARD_TIME = 0.01f;
 	/// @brief 通常のキック力
-	const float NORMAL_KICK_POWER = 2.0f;
+	const float NORMAL_KICK_POWER = 1.5f;
 	/// @brief 強化状態のキック力
-	const float POWERFUlL_KICK_POWER = 6.0f;
+	const float POWERFUlL_KICK_POWER = 5.0f;
 	/// @brief スタミナの最大値
 	const float MAX_STANIMA = 6.0f;
 

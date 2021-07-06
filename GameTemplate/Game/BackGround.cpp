@@ -15,7 +15,7 @@ bool BackGround::Start()
 {
 	m_lig = FindGO<Lighting>("Lighting");
 	m_skinModelRender = NewGO<SkinModelRender>(0);
-	m_skinModelRender->Init("Assets/modelData/bg/testmap.tkm", m_lig->GetLightAddress());
+	m_skinModelRender->Init("Assets/modelData/bg/stage_2.tkm", m_lig->GetLightAddress());
 	m_skinModelRender->SetPosition(m_position);
 	m_skinModelRender->SetRotation(m_qRot);
 	m_skinModelRender->SetScale(m_scale);
