@@ -50,6 +50,8 @@ private:
 	//è∞
 	SkinModelRender* m_floor = nullptr;
 
+	Quaternion m_floorRot = Quaternion::Identity;
+
 public:
 	Menu();
 	~Menu();

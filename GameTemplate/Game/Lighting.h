@@ -87,6 +87,10 @@ public:
 	/// @param dirLigVec ディレクションライトに設定する方向
 	void SetDirectionLightDirection(Vector3 dirLigVec) { m_light.directionLight.direction = dirLigVec; m_light.directionLight.direction.Normalize(); }
 
+	/// @brief ディレクションライトのカラーを設定
+	/// @param color ディレクションライトに設定するカラー
+	void SetDirectionLightColor(const Vector3& color) { m_light.directionLight.color = color; }
+
 	void RotationDirectionLight();
 
 	/// @brief ポイントライトの初期化

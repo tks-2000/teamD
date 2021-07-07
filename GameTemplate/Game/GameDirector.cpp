@@ -1,6 +1,10 @@
 #include "stdafx.h"
 #include "GameDirector.h"
 
+namespace {
+
+}
+
 GameDirector::GameDirector()
 {
 	m_bgm = NewGO<Bgm>(PRIORITY_VERYLOW, BGM_NAME);
@@ -52,6 +56,7 @@ void GameDirector::Update()
 		if (m_menu == nullptr) {
 			m_menu = NewGO<Menu>(PRIORITY_VERYLOW, MENU_NAME);
 			m_bgm->ChangeMenuBgm();
+			m_lighting->SetDirectionLightColor({0.3f,0.3f,0.3f});
 		}
 		else {
 			if (g_pad[0]->IsTrigger(enButtonStart) && m_playerNum > 0) {
@@ -65,6 +70,7 @@ void GameDirector::Update()
 				m_se->PlayPressKeySe();
 				m_sceneChange->TransparencyChange(true);
 				m_lighting->ResetSpotLight();
+				m_lighting->InitDirectionLight();
 			}
 		}
 	}break;

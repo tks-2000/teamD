@@ -9,7 +9,9 @@ namespace {
 
 	const Vector3 PLAYER_MODEL_POS[MAX_PLAYER_NUM] = { {-200.0f,0.0f,200.0f},{200.0f,0.0f,200.0f},{-200.0f,0.0f,-200.0f},{200.0f,0.0f,-200.0f} };
 
-	const float SPOT_LIGHT_HEIGHT = 500.0f;
+	const float SPOT_LIGHT_HEIGHT = 400.0f;
+
+	const float SPOT_LIGHT_DEPTH = -300.0f;
 
 	const float ROTATIONAL_SPEED = 3.0f;
 
@@ -33,11 +35,12 @@ Menu::Menu()
 	for (int plNum = 0; plNum < MAX_PLAYER_NUM; plNum++) {
 		m_pos[plNum] = PLAYER_MODEL_POS[plNum];
 		m_plModel[plNum] = NewGO<SkinModelRender>(PRIORITY_VERYLOW);
-		m_plModel[plNum]->InitA(UNITYCHAN_MULTI_FILEPATH[plNum], "Assets/modelData/unityChan.tks", m_animationClips, enAnimation_Num);
+		m_plModel[plNum]->InitA(UNITYCHAN_MULTI_FILEPATH[plNum], "Assets/modelData/unityChan.tks", enModelUpAxisY, m_animationClips, enAnimation_Num);
 		m_plModel[plNum]->PlayAnimation(enAnimation_Idle, FLOAT_1);
 		m_riseSpeed[plNum] = FLOAT_0;
 		m_spLigPos[plNum] = m_pos[plNum];
 		m_spLigPos[plNum].y += SPOT_LIGHT_HEIGHT;
+		m_spLigPos[plNum].z += SPOT_LIGHT_DEPTH;
 	}
 	g_camera3D->SetPosition(CAMERA_POS);
 	m_endFlag = false;
@@ -59,8 +62,10 @@ Menu::~Menu()
 bool Menu::Start()
 {
 	m_floor = NewGO<SkinModelRender>(0);
-	m_floor->Init("Assets/modelData/floor.tkm");
-	m_floor->SetPosition({ 0.0f,-10.0f,0.0f });
+	m_floor->Init("Assets/modelData/bg/floor.tkm");
+	m_floor->SetPosition({ 0.0f,0.0f,0.0f });
+	m_floorRot.SetRotationDegY(180.0f);
+	m_floor->SetRotation(m_floorRot);
 
 	m_gameDirector = FindGO<GameDirector>(GAME_DIRECTOR_NAME);
 	m_lig = FindGO<Lighting>(LIGHTING_NAME);
