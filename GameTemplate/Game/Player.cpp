@@ -252,6 +252,11 @@ void Player::KickBall()
 
 	m_ball->MoveStart();
 
+	//キック時、強化状態のとき
+	if (m_kickPowerUp) {
+		m_se->PlayPoweredKickSe();
+	}
+
 
 }
 
@@ -337,6 +342,8 @@ void Player::Guard()
 		m_plEffect->StopGuardEffect(m_myNumber);
 		m_plEffect->PlayGuardBreakEffect(m_myNumber);
 		m_plEffect->PlayKnockOutEffect(m_myNumber);
+
+		m_se->PlayBreakSe();
 	}
 
 	/// @brief ボールが動いていなければガード判定を行わない
@@ -351,6 +358,17 @@ void Player::Guard()
 
 			//ガードヒットエフェクトの発生
 			m_plEffect->PlayShieldHitEffect(m_myNumber);
+			
+			//ガードヒットseの再生処理
+			float takeDamage = m_ball->GetVelocity() * 3.0f;
+			
+			if (m_guardDurability <= takeDamage) {
+				m_se->PlayBreakSe();
+			}
+			else {
+				m_se->PlayShieldHitSe();
+			}
+			
 			m_shieldHit = true;
 
 		}
@@ -360,6 +378,7 @@ void Player::Guard()
 
 			/// @brief ジャストガードエフェクトの再生
 			m_plEffect->PlayJustGuardEffect(m_myNumber);
+			m_se->PlayJustGuardSe();
 			m_kickPowerUp = true;
 		}
 		else {
@@ -375,6 +394,9 @@ void Player::Guard()
 				m_plEffect->PlayKnockOutEffect(m_myNumber);
 				m_guardDurability = 0.0f;
 				m_breakGuard = true;
+
+				m_se->PlayBreakSe();
+
 				return;
 			}
 
@@ -522,6 +544,7 @@ void Player::Update()
 
 			
 			m_plEffect->PlayKickEffect(m_myNumber);
+			m_se->PlayKickSe();
 
 			KickBall();
 		}
@@ -543,6 +566,7 @@ void Player::Update()
 			m_plEffect->StopKnockOutEffect(m_myNumber);
 		}
 		m_plEffect->PlayShieldRepairEffect(m_myNumber);
+		m_se->PlayShieldRepairSe();
 
 	}
 	/// @brief ガード耐久値を100より上にならないようにする奴

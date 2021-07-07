@@ -9,7 +9,7 @@ namespace {
 
 	const Vector3 PLAYER_MODEL_POS[MAX_PLAYER_NUM] = { {-200.0f,0.0f,200.0f},{200.0f,0.0f,200.0f},{-200.0f,0.0f,-200.0f},{200.0f,0.0f,-200.0f} };
 
-	const Vector3 CAMERA_POS = { 0.0f,300.0f,-600.0f };
+	const Vector3 CAMERA_POS = { 0.0f,100.0f,-600.0f };
 }
 
 Menu::Menu()
@@ -28,16 +28,20 @@ Menu::Menu()
 	for (int plNum = 0; plNum < MAX_PLAYER_NUM; plNum++) {
 		m_pos[plNum] = PLAYER_MODEL_POS[plNum];
 		m_plModel[plNum] = NewGO<SkinModelRender>(PRIORITY_VERYLOW);
-		m_plModel[plNum]->InitA(UNITYCHAN_MODEL, "Assets/modelData/unityChan.tks", m_animationClips, enAnimation_Num);
+		m_plModel[plNum]->InitA(UNITYCHAN_MULTI_FILEPATH[plNum], "Assets/modelData/unityChan.tks", m_animationClips, enAnimation_Num);
 		m_plModel[plNum]->PlayAnimation(enAnimation_Idle, FLOAT_1);
 		m_riseSpeed[plNum] = FLOAT_0;
 	}
 	g_camera3D->SetPosition(CAMERA_POS);
 	m_endFlag = false;
+
+	
+
 }
 
 Menu::~Menu()
 {
+	DeleteGO(m_floor);
 	DeleteGO(m_plNumFont);
 	DeleteGO(m_plFont);
 	for (int plNum = 0; plNum < MAX_PLAYER_NUM; plNum++) {
@@ -47,6 +51,10 @@ Menu::~Menu()
 
 bool Menu::Start()
 {
+	m_floor = NewGO<SkinModelRender>(0);
+	m_floor->Init("Assets/modelData/floor.tkm");
+	m_floor->SetPosition({ 0.0f,-10.0f,0.0f });
+
 	m_gameDirector = FindGO<GameDirector>(GAME_DIRECTOR_NAME);
 	return true;
 }

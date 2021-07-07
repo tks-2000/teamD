@@ -67,6 +67,7 @@ void Ball::Move()
 		m_moveVelocity -= m_moveVelocity * m_friction;
 
 		PlayReflectEffect(650.0f, 80.0f, m_position.z, 90.0f);
+		m_se->PlayReflectSe();
 
 	}
 	if (m_position.x < -650.0f) {
@@ -76,7 +77,7 @@ void Ball::Move()
 		m_moveVelocity -= m_moveVelocity * m_friction;
 
 		PlayReflectEffect(-650.0f, 80.0f, m_position.z, -90.0f);
-
+		m_se->PlayReflectSe();
 	}
 	if (m_position.z > 650.0f) {
 		m_position.z = 650.0f;
@@ -85,7 +86,7 @@ void Ball::Move()
 		m_moveVelocity -= m_moveVelocity * m_friction;
 
 		PlayReflectEffect(m_position.x, 80.0f, 650.0f, 180.0f);
-
+		m_se->PlayReflectSe();
 	}
 	if (m_position.z < -650.0f) {
 		m_position.z = -650.0f;
@@ -94,7 +95,7 @@ void Ball::Move()
 		m_moveVelocity -= m_moveVelocity * m_friction;
 
 		PlayReflectEffect(m_position.x, 80.0f, -650.0f, 0.0f);
-
+		m_se->PlayReflectSe();
 	}
 
 	m_moveVelocity -= pow(m_moveVelocity * m_friction,1.5);
