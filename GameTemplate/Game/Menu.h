@@ -47,6 +47,9 @@ private:
 
 	bool m_endFlag = false;
 
+	//è∞
+	SkinModelRender* m_floor = nullptr;
+
 public:
 	Menu();
 	~Menu();
