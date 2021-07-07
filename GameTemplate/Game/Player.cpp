@@ -12,13 +12,13 @@ namespace {
 	/// @brief 落下扱いになる高さ
 	const float FALLING_HEIGHT = -1000.0f;
 	/// @brief 1Pの初期位置
-	const Vector3 PLAYER1_STARTPOS = { -600.0f,200.0f,600.0f };
+	const Vector3 PLAYER1_STARTPOS = { -500.0f,500.0f,500.0f };
 	/// @brief 2Pの初期位置
-	const Vector3 PLAYER2_STARTPOS = { 600.0f,200.0f,600.0f };
+	const Vector3 PLAYER2_STARTPOS = { 500.0f,500.0f,500.0f };
 	/// @brief 3Pの初期位置
-	const Vector3 PLAYER3_STARTPOS = { -600.0f,200.0f,-600.0f };
+	const Vector3 PLAYER3_STARTPOS = { -500.0f,500.0f,-500.0f };
 	/// @brief 4Pの初期位置
-	const Vector3 PLAYER4_STARTPOS = { 600.0f,200.0f,-600.0f };
+	const Vector3 PLAYER4_STARTPOS = { 500.0f,500.0f,-500.0f };
 	/// @brief ポイントライトの高さ
 	const float POINT_LIGHT_HEIGHT = 50.0f;
 	/// @brief プレイヤーの半径
@@ -46,17 +46,21 @@ namespace {
 	/// @brief ジャストガード可能な時間
 	const float POSSIBLE_JUST_GUARD_TIME = 0.01f;
 	/// @brief 通常のキック力
-	const float NORMAL_KICK_POWER = 2.0f;
+	const float NORMAL_KICK_POWER = 1.5f;
 	/// @brief 強化状態のキック力
-	const float POWERFUlL_KICK_POWER = 6.0f;
+	const float POWERFUlL_KICK_POWER = 5.0f;
 	/// @brief スタミナの最大値
 	const float MAX_STANIMA = 6.0f;
+
+	const float NORMAL_VELOCITY = 0.9f;
+
+	const float DASH_VELOCITY = 0.95f;
 }
 
 Player::Player()
 {
 	//プレイヤーの初期状態を設定
-	m_moveVelocity = 0.9f;
+	m_moveVelocity = NORMAL_VELOCITY;
 	m_stamina = MAX_STANIMA;
 	m_kickPower = 5.0f;
 	m_gravity = 5.0f;
@@ -88,8 +92,8 @@ bool Player::Start()
 
 	m_skinModelRender = NewGO<SkinModelRender>(PRIORITY);
 
-	m_skinModelRender->InitA(UNITYCHAN_MODEL, "Assets/modelData/unityChan.tks", m_animationClips, enAnimation_Num);
-	m_skinModelRender->PlayAnimation(enAnimation_Idle, 1.0f);
+	/*m_skinModelRender->InitA(UNITYCHAN_MODEL, "Assets/modelData/unityChan.tks", m_animationClips, enAnimation_Num);
+	m_skinModelRender->PlayAnimation(enAnimation_Idle, 1.0f);*/
 
 
 	m_ui = FindGO<GameUI>(GAME_UI_NAME);
@@ -99,6 +103,7 @@ bool Player::Start()
 
 void Player::SetPlayerNumber(int num)
 {
+
 	//受け取った番号に応じて自分が何Pかを設定する
 	m_myNumber = num;
 	switch (num)
@@ -106,19 +111,22 @@ void Player::SetPlayerNumber(int num)
 	case 0: {
 		m_playerColor = RED;
 		m_startPos = PLAYER1_STARTPOS;
-
+		m_skinModelRender->InitA(UNITYCHAN_MULTI_FILEPATH[num], "Assets/modelData/unityChan.tks", m_animationClips, enAnimation_Num);
 	}break;
 	case 1: {
 		m_playerColor = BLUE;
 		m_startPos = PLAYER2_STARTPOS;
+		m_skinModelRender->InitA(UNITYCHAN_MULTI_FILEPATH[num], "Assets/modelData/unityChan.tks", m_animationClips, enAnimation_Num);
 	}break;
 	case 2: {
 		m_playerColor = YELLOW;
 		m_startPos = PLAYER3_STARTPOS;
+		m_skinModelRender->InitA(UNITYCHAN_MULTI_FILEPATH[num], "Assets/modelData/unityChan.tks", m_animationClips, enAnimation_Num);
 	}break;
 	case 3: {
 		m_playerColor = GREEN;
 		m_startPos = PLAYER4_STARTPOS;
+		m_skinModelRender->InitA(UNITYCHAN_MULTI_FILEPATH[num], "Assets/modelData/unityChan.tks", m_animationClips, enAnimation_Num);
 	}break;
 	}
 	m_position = m_startPos;
@@ -126,6 +134,10 @@ void Player::SetPlayerNumber(int num)
 
 	m_lig->SetPointLightColor(m_myNumber, m_playerColor);
 	m_lig->SetPointLightRange(m_myNumber, 500.0f);
+
+	
+	m_skinModelRender->PlayAnimation(enAnimation_Idle, 1.0f);
+
 }
 
 void Player::Move()
@@ -136,14 +148,14 @@ void Player::Move()
 
 
 	if (IsDash() == true) {
-		m_moveVelocity = 0.95f;
+		m_moveVelocity = DASH_VELOCITY;
 
 		m_stamina -= g_gameTime->GetFrameDeltaTime() * FLOAT_2;
 
 		m_anim = enAnimation_Run;
 	}
 	else {
-		m_moveVelocity = 0.9f;
+		m_moveVelocity = NORMAL_VELOCITY;
 		m_stamina += g_gameTime->GetFrameDeltaTime() * FLOAT_1;
 		if (m_stamina > MAX_STANIMA) {
 			m_stamina = MAX_STANIMA;
@@ -240,6 +252,11 @@ void Player::KickBall()
 
 	m_ball->MoveStart();
 
+	//キック時、強化状態のとき
+	if (m_kickPowerUp) {
+		m_se->PlayPoweredKickSe();
+	}
+
 
 }
 
@@ -325,6 +342,8 @@ void Player::Guard()
 		m_plEffect->StopGuardEffect(m_myNumber);
 		m_plEffect->PlayGuardBreakEffect(m_myNumber);
 		m_plEffect->PlayKnockOutEffect(m_myNumber);
+
+		m_se->PlayBreakSe();
 	}
 
 	/// @brief ボールが動いていなければガード判定を行わない
@@ -339,6 +358,17 @@ void Player::Guard()
 
 			//ガードヒットエフェクトの発生
 			m_plEffect->PlayShieldHitEffect(m_myNumber);
+			
+			//ガードヒットseの再生処理
+			float takeDamage = m_ball->GetVelocity() * 3.0f;
+			
+			if (m_guardDurability <= takeDamage) {
+				m_se->PlayBreakSe();
+			}
+			else {
+				m_se->PlayShieldHitSe();
+			}
+			
 			m_shieldHit = true;
 
 		}
@@ -348,6 +378,7 @@ void Player::Guard()
 
 			/// @brief ジャストガードエフェクトの再生
 			m_plEffect->PlayJustGuardEffect(m_myNumber);
+			m_se->PlayJustGuardSe();
 			m_kickPowerUp = true;
 		}
 		else {
@@ -363,6 +394,9 @@ void Player::Guard()
 				m_plEffect->PlayKnockOutEffect(m_myNumber);
 				m_guardDurability = 0.0f;
 				m_breakGuard = true;
+
+				m_se->PlayBreakSe();
+
 				return;
 			}
 
@@ -510,6 +544,7 @@ void Player::Update()
 
 			
 			m_plEffect->PlayKickEffect(m_myNumber);
+			m_se->PlayKickSe();
 
 			KickBall();
 		}
@@ -531,6 +566,7 @@ void Player::Update()
 			m_plEffect->StopKnockOutEffect(m_myNumber);
 		}
 		m_plEffect->PlayShieldRepairEffect(m_myNumber);
+		m_se->PlayShieldRepairSe();
 
 	}
 	/// @brief ガード耐久値を100より上にならないようにする奴

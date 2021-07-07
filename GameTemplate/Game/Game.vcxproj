@@ -309,6 +309,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerEffect.cpp" />
     <ClCompile Include="Result.cpp" />
+    <ClCompile Include="SceneChange.cpp" />
     <ClCompile Include="Score.cpp" />
     <ClCompile Include="Se.cpp" />
     <ClCompile Include="SkinModelRender.cpp" />
@@ -410,6 +411,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerEffect.h" />
     <ClInclude Include="Result.h" />
+    <ClInclude Include="SceneChange.h" />
     <ClInclude Include="Score.h" />
     <ClInclude Include="Se.h" />
     <ClInclude Include="SkinModelRender.h" />
@@ -436,15 +438,18 @@
     <None Include="Assets\animData\unitychan\slash.tka" />
     <None Include="Assets\animData\unitychan\walk.tka" />
     <None Include="Assets\effect\kick.efk" />
+    <None Include="Assets\modelData\bg\stage_2.tkm" />
     <None Include="Assets\modelData\bg\testmap.tkm" />
     <None Include="Assets\modelData\bg\testmap_s.tkm" />
     <None Include="Assets\modelData\object\box.tkm" />
     <None Include="Assets\modelData\sphere\sphere.tkm" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Assets\modelData\bg\Stainless-Steel-HairLine.DDS" />
     <Image Include="Assets\modelData\bg\testmap_tex.DDS" />
     <Image Include="Assets\modelData\sphere\sphere_tex.DDS" />
     <Image Include="Assets\modelData\sphere\sphere_tex_01.DDS" />
+    <Image Include="Assets\sprite\BLACK.dds" />
     <Image Include="Assets\sprite\GageBody.DDS" />
     <Image Include="Assets\sprite\GageFinal.DDS" />
     <Image Include="Assets\sprite\GageStart.DDS" />

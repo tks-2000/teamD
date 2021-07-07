@@ -15,6 +15,8 @@ namespace
 	const char16_t* REFLECTEFFECT_FILEPATH = u"Assets/effect/ballreflect.efk";
 	const Vector3 REFLECTEFFECT_SCALE = { 20.0f,20.0f,20.0f };
 
+	const float REFLECTE_DISTANCE = 500.0f;
+
 }
 
 Ball::Ball()
@@ -60,40 +62,44 @@ void Ball::Move()
 	m_position = m_charaCon.Execute(m_moveSpeed,1.0f);
 
 	//•Ç‚Å”½ŽË‚·‚éˆ—
-	if (m_position.x > 650.0f) {
-		m_position.x = 650.0f;
+	if (m_position.x > REFLECTE_DISTANCE) {
+		m_position.x = REFLECTE_DISTANCE;
 		m_charaCon.SetPosition(m_position);
 		m_moveDirection.x *= -1.0f;
 		m_moveVelocity -= m_moveVelocity * m_friction;
 
-		PlayReflectEffect(650.0f, 80.0f, m_position.z, 90.0f);
+		PlayReflectEffect(REFLECTE_DISTANCE, 80.0f, m_position.z, 90.0f);
+		m_se->PlayReflectSe();
 
 	}
-	if (m_position.x < -650.0f) {
-		m_position.x = -650.0f;
+	if (m_position.x < -REFLECTE_DISTANCE) {
+		m_position.x = -REFLECTE_DISTANCE;
 		m_charaCon.SetPosition(m_position);
 		m_moveDirection.x *= -1.0f;
 		m_moveVelocity -= m_moveVelocity * m_friction;
 
-		PlayReflectEffect(-650.0f, 80.0f, m_position.z, -90.0f);
+		PlayReflectEffect(-REFLECTE_DISTANCE, 80.0f, m_position.z, -90.0f);
+		m_se->PlayReflectSe();
 
 	}
-	if (m_position.z > 650.0f) {
-		m_position.z = 650.0f;
+	if (m_position.z > REFLECTE_DISTANCE) {
+		m_position.z = REFLECTE_DISTANCE;
 		m_charaCon.SetPosition(m_position);
 		m_moveDirection.z *= -1.0f;
 		m_moveVelocity -= m_moveVelocity * m_friction;
 
-		PlayReflectEffect(m_position.x, 80.0f, 650.0f, 180.0f);
+		PlayReflectEffect(m_position.x, 80.0f, REFLECTE_DISTANCE, 180.0f);
+		m_se->PlayReflectSe();
 
 	}
-	if (m_position.z < -650.0f) {
-		m_position.z = -650.0f;
+	if (m_position.z < -REFLECTE_DISTANCE) {
+		m_position.z = -REFLECTE_DISTANCE;
 		m_charaCon.SetPosition(m_position);
 		m_moveDirection.z *= -1.0f;
 		m_moveVelocity -= m_moveVelocity * m_friction;
 
-		PlayReflectEffect(m_position.x, 80.0f, -650.0f, 0.0f);
+		PlayReflectEffect(m_position.x, 80.0f, -REFLECTE_DISTANCE, 0.0f);
+		m_se->PlayReflectSe();
 
 	}
 

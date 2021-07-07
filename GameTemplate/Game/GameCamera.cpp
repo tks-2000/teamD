@@ -17,7 +17,7 @@ bool GameCamera::Start()
 {
 	m_player = FindGO<Player>("Player");
 	m_backGround = FindGO<BackGround>("BackGround");
-	m_toPosition = { 0.0f,1400.0f,-800.0f };
+	m_toPosition = { 0.0f,900.0f,-900.0f };
 	g_camera3D->SetFar(10000000.0f);
 	return true;
 }
@@ -40,7 +40,7 @@ void GameCamera::Update()
 {
 	
 	Move();
-	Rotation();
+	//Rotation();
 
 	g_camera3D->SetPosition(m_position);
 	g_camera3D->SetTarget(m_targetPos);

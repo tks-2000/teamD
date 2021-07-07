@@ -11,6 +11,7 @@
 #include "Menu.h"
 #include "Game.h"
 #include "GameDirector.h"
+#include "SceneChange.h"
 #include "Timer.h"
 #include "GameUI.h"
 #include "Score.h"
@@ -47,6 +48,7 @@ namespace {
 	const Vector3 GREEN = { 1.0f,5.0f,1.0f };
 	const Vector3 BLUE = { 1.0f,1.0f,5.0f };
 	const Vector3 YELLOW = { 3.0f,3.0f,1.0f };
+	const Vector3 WHITE = { 2.0f,2.0f,2.0f };
 	const Vector3 COLORLESS = { 0.0f,0.0f,0.0f };
 
 	const int PRIORITY_VERYLOW = 0;
@@ -57,6 +59,7 @@ namespace {
 
 	const char* TITLE_NAME = "Title";
 	const char* GAME_DIRECTOR_NAME = "GameDirector";
+	const char* SCENE_CHANGE_NAME = "SceneChange";
 	const char* MENU_NAME = "Menu";
 	const char* GAME_NAME = "Game";
 	const char* TIMER_NAME = "Timer";
@@ -76,4 +79,12 @@ namespace {
 	const char* SE_NAME = "Se";
 
 	const char* UNITYCHAN_MODEL = "Assets/modelData/unityChan.tkm";
+
+	//ユニティちゃんモデルごとのファイルパス
+	const char* UNITYCHAN_MULTI_FILEPATH[4] =
+	{	{"Assets/modelData/utc_red.tkm"},		//1p 赤
+		{"Assets/modelData/utc_blue.tkm"},		//2p 青
+		{"Assets/modelData/utc_yellow.tkm"},	//3p 黄
+		{"Assets/modelData/utc_green.tkm"}		//4p 緑
+	};
 }

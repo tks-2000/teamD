@@ -71,7 +71,7 @@ void Result::Update()
 	arrowPos.x -= 100.0f;
 	m_arrowFontPos = arrowPos;
 	m_arrowFont->SetPosition(m_arrowFontPos);
-	if (g_pad[0]->IsTrigger(enButtonA)) {
+	/*if (g_pad[0]->IsTrigger(enButtonA)) {
 		m_gameDirector->SetEnd();
-	}
+	}*/
 }

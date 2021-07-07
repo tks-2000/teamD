@@ -47,13 +47,15 @@ void Lighting::Update()
 			PointLightBlinking(ptLigNum);
 		}
 	}
+
+	RotationDirectionLight();
 }
 
 void Lighting::InitDirectionLight()
 {
 	//ディレクションライトの方向
 	m_light.directionLight.direction.x = 0.0f;
-	m_light.directionLight.direction.y = 0.0f;
+	m_light.directionLight.direction.y = 1.0f;
 	m_light.directionLight.direction.z = -1.0f;
 	//正規化する
 	m_light.directionLight.direction.Normalize();
@@ -68,19 +70,10 @@ void Lighting::RotationDirectionLight()
 {
 	//右スティック入力でディレクションライトの方向を操作
 	Quaternion qRot;
-	if (g_pad[0]->IsPress(enButtonRB1)) {
-		qRot.SetRotationDegY(1.0f);
-	}
-	if (g_pad[0]->IsPress(enButtonLB1)) {
-		qRot.SetRotationDegY(-1.0f);
-	}
-	qRot.Apply(m_light.directionLight.direction);
-	if (g_pad[0]->IsPress(enButtonRB2)) {
-		qRot.SetRotationDegX(1.0f);
-	}
-	if (g_pad[0]->IsPress(enButtonLB2)) {
-		qRot.SetRotationDegX(-1.0f);
-	}
+	
+	qRot.SetRotationDegY(0.1f);
+
+	
 	qRot.Apply(m_light.directionLight.direction);
 }
 
@@ -116,10 +109,12 @@ void Lighting::MovePointLight()
 }
 void Lighting::SetPointLightBlinking(int num, float time, float interval)
 {
-	m_ptLigBlink[num] = true;
-	m_ptLigBlinkTime[num] = time;
-	m_ptLigBlinkInterval[num] = interval;
-	m_ptLigColor[num] = m_light.pointLight[num].color;
+	if (m_ptLigBlink[num] == false) {
+		m_ptLigBlink[num] = true;
+		m_ptLigBlinkTime[num] = time;
+		m_ptLigBlinkInterval[num] = interval;
+		m_ptLigColor[num] = m_light.pointLight[num].color;
+	}
 }
 
 void Lighting::PointLightBlinking(int num)
@@ -143,6 +138,13 @@ void Lighting::PointLightBlinking(int num)
 			}
 			m_ptLigBlinkSwitchingTime[num] = FLOAT_0;
 		}
+	}
+}
+
+void Lighting::ResetPointLight()
+{
+	for (int ptLig = 0; ptLig < POINT_LIGHT_SUM; ptLig++) {
+		InitPointLight(ptLig);
 	}
 }
 
@@ -228,6 +230,13 @@ void Lighting::RotationSpotLight(int num)
 	Quaternion qRotX;
 	qRotX.SetRotation(rotAxis,-g_pad[1]->GetRStickYF() * 0.01f);
 	qRotX.Apply(m_light.spotLight[num].direction);
+}
+
+void Lighting::ResetSpotLight()
+{
+	for (int spotLigNo = 0; spotLigNo < SPOT_LIGHT_SUM; spotLigNo++) {
+		InitSpotLight(spotLigNo);
+	}
 }
 
 void Lighting::InitHemiSphereLight()

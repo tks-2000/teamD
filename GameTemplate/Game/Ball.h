@@ -5,6 +5,7 @@ class GameDirector;
 class Lighting;
 class SkinModelRender;
 class Effect;
+class Se;
 
 class Ball : public IGameObject
 {
@@ -116,6 +117,8 @@ private:
 	Effect m_ballTrack;
 	/// @brief 反射時エフェクト
 	Effect m_reflectEffect;
+	//se
+	Se* m_se = nullptr;
 
 	GameDirector* m_gameDirector = nullptr;
 };

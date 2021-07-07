@@ -7,6 +7,7 @@ class Result;
 class Bgm;
 class Se;
 class Lighting;
+class SceneChange;
 
 class GameDirector : public IGameObject
 {
@@ -39,6 +40,8 @@ private:
 	Se* m_se = nullptr;
 
 	Lighting* m_lighting = nullptr;
+
+	SceneChange* m_sceneChange = nullptr;
 
 public:
 	GameDirector();

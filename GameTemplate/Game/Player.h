@@ -9,6 +9,7 @@ class Ball;
 class PlayerEffect;
 class Effect;
 class GameUI;
+class Se;
 
 class Player : public IGameObject
 {
@@ -208,6 +209,9 @@ private:
 
 	/// @brief ゲームUI
 	GameUI* m_ui = nullptr;
+
+	//SE
+	Se* m_se = nullptr;
 
 	/// @brief プレイヤーのエフェクト
 	PlayerEffect* m_plEffect = nullptr;
