@@ -64,6 +64,7 @@ void GameDirector::Update()
 				m_menu = nullptr;
 				m_se->PlayPressKeySe();
 				m_sceneChange->TransparencyChange(true);
+				m_lighting->ResetSpotLight();
 			}
 		}
 	}break;
@@ -106,6 +107,7 @@ void GameDirector::Update()
 		m_game = nullptr;
 		DeleteGO(m_result);
 		m_result = nullptr;
+		m_lighting->ResetPointLight();
 		m_sceneChange->TransparencyChange(true);
 	}break;
 	}

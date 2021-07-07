@@ -10,6 +10,10 @@ namespace {
 	const Vector3 PLAYER_MODEL_POS[MAX_PLAYER_NUM] = { {-200.0f,0.0f,200.0f},{200.0f,0.0f,200.0f},{-200.0f,0.0f,-200.0f},{200.0f,0.0f,-200.0f} };
 
 	const Vector3 CAMERA_POS = { 0.0f,300.0f,-600.0f };
+
+	const float SPOT_LIGHT_HEIGHT = 500.0f;
+
+	const float ROTATIONAL_SPEED = 3.0f;
 }
 
 Menu::Menu()
@@ -31,6 +35,8 @@ Menu::Menu()
 		m_plModel[plNum]->InitA(UNITYCHAN_MODEL, "Assets/modelData/unityChan.tks", m_animationClips, enAnimation_Num);
 		m_plModel[plNum]->PlayAnimation(enAnimation_Idle, FLOAT_1);
 		m_riseSpeed[plNum] = FLOAT_0;
+		m_spLigPos[plNum] = m_pos[plNum];
+		m_spLigPos[plNum].y += SPOT_LIGHT_HEIGHT;
 	}
 	g_camera3D->SetPosition(CAMERA_POS);
 	m_endFlag = false;
@@ -48,6 +54,7 @@ Menu::~Menu()
 bool Menu::Start()
 {
 	m_gameDirector = FindGO<GameDirector>(GAME_DIRECTOR_NAME);
+	m_lig = FindGO<Lighting>(LIGHTING_NAME);
 	return true;
 }
 
@@ -79,17 +86,19 @@ void Menu::Update()
 				m_plModel[plNum]->PlayAnimation(enAnimation_clear, FLOAT_1);
 			}
 			if (m_angle[plNum] < 180.0f) {
-				m_angle[plNum] += 2.0f;
+				m_angle[plNum] += ROTATIONAL_SPEED;
 			}
 			if (m_angle[plNum] > 180.0f) {
-				m_angle[plNum] -= 2.0f;
+				m_angle[plNum] -= ROTATIONAL_SPEED;
 			}
+			m_lig->SetSpotLightColor(plNum, WHITE);
 		}
 		else {
 			m_plModel[plNum]->PlayAnimation(enAnimation_Idle, FLOAT_1);
 			if (m_angle[plNum] < 360.0f && m_angle[plNum] != 0.0f) {
-				m_angle[plNum] += 2.0f;
+				m_angle[plNum] += ROTATIONAL_SPEED;
 			}
+			m_lig->SetSpotLightColor(plNum, COLORLESS);
 		}
 		if (m_angle[plNum] >= 360.0f) {
 			m_angle[plNum] = 0.0f;
@@ -98,6 +107,9 @@ void Menu::Update()
 		m_plModel[plNum]->SetRotation(m_qRot[plNum]);
 		m_pos[plNum].y += m_riseSpeed[plNum];
 		m_plModel[plNum]->SetPosition(m_pos[plNum]);
+		m_lig->SetSpotLightPos(plNum, m_spLigPos[plNum]);
+		m_lig->SetSpotLightDirection(plNum, m_pos[plNum] - m_spLigPos[plNum]);
+
 	}
 
 	if (m_endFlag == true) {
