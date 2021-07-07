@@ -63,5 +63,15 @@ private:
 	Timer* m_timer = nullptr;
 	/// @brief ゲームディレクター
 	GameDirector* m_gameDirector = nullptr;
+
+	enum enAnimationClips
+	{
+		enAnimation_Open,
+		enAnimation_Num
+	};
+
+	AnimationClip m_animationClips[enAnimation_Num];
+
+
 };
 
