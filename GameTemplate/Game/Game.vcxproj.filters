@@ -203,6 +203,7 @@
     <Image Include="Assets\sprite\title.png" />
     <Image Include="Assets\sprite\UI_Gage.DDS" />
     <Image Include="Assets\sprite\BLACK.dds" />
+    <Image Include="Assets\modelData\bg\Stainless-Steel-HairLine.DDS" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\animData\unitychan\clear.tka" />
@@ -218,5 +219,6 @@
     <None Include="Assets\modelData\bg\testmap_s.tkm" />
     <None Include="Assets\modelData\object\box.tkm" />
     <None Include="Assets\modelData\sphere\sphere.tkm" />
+    <None Include="Assets\modelData\bg\stage_2.tkm" />
   </ItemGroup>
 </Project>
