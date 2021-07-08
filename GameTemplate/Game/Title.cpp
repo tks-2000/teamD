@@ -11,7 +11,7 @@ Title::Title()
 {
 
 	m_titleSprite = NewGO<SpriteRender>(0);
-	m_titleSprite->Init("Assets/sprite/title.dds", 1280, 720);
+	m_titleSprite->Init("Assets/sprite/title_a.dds", 1280, 720);
 	m_pushStart = NewGO<FontRender>(1);
 	m_pushStart->SetText(PLAYER_START);
 	m_pushStart->SetColor({ 0.0f,0.0f,0.0f,0.0f });
