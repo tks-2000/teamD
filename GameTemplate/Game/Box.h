@@ -47,6 +47,10 @@ private:
 
 	float m_fall = ZeroF;
 
+	bool m_openFlag = false;
+
+	float m_openTime = 0.0f;
+
 	/// @brief プレイヤー
 	Player* m_player[PLAYER_NUMBER] = { nullptr };
 	/// @brief ボール
@@ -66,7 +70,9 @@ private:
 
 	enum enAnimationClips
 	{
+		enAnimation_Close,
 		enAnimation_Open,
+
 		enAnimation_Num
 	};
 
