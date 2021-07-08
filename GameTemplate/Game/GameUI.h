@@ -134,6 +134,10 @@ private:
 
 	/// @brief タイマー表示
 	FontRender* m_timeFont = nullptr;
+	/// @brief タイマーのフレーム
+	SpriteRender* m_timerFrame = nullptr;
+	/// @brief タイマーヘッダ
+	FontRender* m_timerHedder = nullptr;
 
 	Timer* m_timer = nullptr;
 

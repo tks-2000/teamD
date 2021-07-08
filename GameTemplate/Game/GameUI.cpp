@@ -28,7 +28,7 @@ namespace {
 	const Vector2 GUARD_DURABILIYY[MAX_PLAYER_NUM] = { {-600.0f,200.0f},{400.0f,200.0f},{-600.0f,-300.0f},{400.0f,-300.0f} };
 	const float SCALE = 1.0f;
 
-	const Vector2 TIME_FONT_POS = { 0.0f,300.0f };
+	const Vector2 TIME_FONT_POS = { 80.0f,280.0f };
 	const float TIME_FONT_SCALE = 1.0f;
 	const Vector2 FINISH_FONT_POS = { -200.0f,100.0f };
 	const float FINISH_FONT_SCALE = 3.0f;
@@ -193,20 +193,27 @@ GameUI::GameUI()
 	}
 	m_ballSpeedMeter = NewGO<SpriteRender>(4);
 	m_ballSpeedMeter->Init("Assets/sprite/SpeedMeter.DDS", 220, 220);
-	m_ballSpeedMeter->SetPosition({ 500.0f, 0.0f, 0.0f});
-	m_ballSpeedMeter->SetScale({ 0.75f,0.75f,0.75f });
+	m_ballSpeedMeter->SetPosition({ -100.0f, 280.0f, 0.0f});
+	m_ballSpeedMeter->SetScale({ 0.60f,0.60f,1.0f });
 
 	m_ballSpeedMeterPin = NewGO<SpriteRender>(5);
 	m_ballSpeedMeterPin->Init("Assets/sprite/SpeedMeterPin.DDS", 144, 144);
-	m_ballSpeedMeterPin->SetPosition({ 500, 0.0f, 0.0f });
+	m_ballSpeedMeterPin->SetPosition({ -100.0f, 280.0f, 0.0f });
 	m_ballSpeedMeterPin->SetPivot({1.0f - (256.0f / 512.0f), 1.0f - (156.0f / 512.0f)});
-	m_ballSpeedMeterPin->SetScale({ 0.75f,0.75f,0.75f });
+	m_ballSpeedMeterPin->SetScale({ 0.60f,0.60f,1.0f });
 
 	/*m_ballSpeed = NewGO<FontRender>(2);
 	m_ballSpeed->SetPosition(BALL_SPEED_POS);*/
 
 	m_timeFont = NewGO<FontRender>(2);
 	m_timeFont->SetPosition(TIME_FONT_POS);
+	m_timerFrame = NewGO<SpriteRender>(1);
+	m_timerFrame->Init("Assets/sprite/TimerFrame.DDS", 150, 150);
+	m_timerFrame->SetPosition({ 100.0f,260.0f , 0.0f });
+	m_timerHedder = NewGO<FontRender>(2);
+	m_timerHedder->SetPosition({ 55.0f,330.0f });
+	m_timerHedder->SetText(L"Time");
+	m_timerHedder->SetScale(0.6f);
 }
 
 GameUI::~GameUI()
@@ -238,6 +245,8 @@ GameUI::~GameUI()
 	DeleteGO(m_ballSpeedMeter);
 	DeleteGO(m_ballSpeedMeterPin);
 	DeleteGO(m_timeFont);
+	DeleteGO(m_timerFrame);
+	DeleteGO(m_timerHedder);
 }
 
 bool GameUI::Start()
@@ -257,13 +266,15 @@ void GameUI::TimerFont()
 	if (m_timer->IsCountDown() == true) {
 		time = m_timer->GetCountDownNum();
 		std::wstring conversion;
-		conversion = std::to_wstring(time);
+		int integerTime = time;
+		conversion = std::to_wstring(integerTime);
 		m_timeFont->SetText(conversion.c_str());
 	}
 	if (m_timer->IsTimerExecution() == true) {
 		time = m_timer->GetTimer();
+		int integerTime = time;
 		std::wstring conversion;
-		conversion = std::to_wstring(time);
+		conversion = std::to_wstring(integerTime);
 		m_timeFont->SetText(conversion.c_str());
 	}
 	if (m_timer->IsFinish() == true) {
