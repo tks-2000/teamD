@@ -168,7 +168,7 @@ void Material::InitShaders(
 {
 	//スキンなしモデル用のシェーダーをロードする。
 	//m_vsNonSkinModel.LoadVS(fxFilePath, vsEntryPointFunc);
-	/*m_vsNonSkinModel = g_engine->GetShaderFromBank(fxFilePath, vsEntryPointFunc);*/
+	m_vsNonSkinModel = g_engine->GetShaderFromBank(fxFilePath, vsEntryPointFunc);
 	if (m_vsNonSkinModel == nullptr) {
 		m_vsNonSkinModel = new Shader;
 		m_vsNonSkinModel->LoadVS(fxFilePath, vsEntryPointFunc);
