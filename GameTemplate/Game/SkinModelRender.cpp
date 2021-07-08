@@ -41,7 +41,7 @@ void SkinModelRender::Init(const char* modelFilePath)
 	m_model.Init(m_modelInitData);
 }
 
-void SkinModelRender::InitA(const char* modelFilePath, const char* skeletonPath, EnModelUpAxis enAxsis, AnimationClip* animationClip, int animationNum )
+void SkinModelRender::InitA(const char* modelFilePath, const char* skeletonPath, EnModelUpAxis enAxsis, AnimationClip* animationClip, int animationNum ,bool cullMode)
 {
 	m_modelInitData.m_tkmFilePath = modelFilePath;
 	m_modelInitData.m_fxFilePath = "Assets/shader/model.fx";
@@ -62,6 +62,7 @@ void SkinModelRender::InitA(const char* modelFilePath, const char* skeletonPath,
 
 	m_animation.Init(m_skeleton, m_animationClip, animationNum);
 
+	m_modelInitData.m_cullMode = cullMode;
 
 	//‰Šú‰»î•ñ‚Åƒ‚ƒfƒ‹‚ğ‰Šú‰»‚·‚é
 	m_model.Init(m_modelInitData);

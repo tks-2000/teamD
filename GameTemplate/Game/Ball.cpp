@@ -32,7 +32,7 @@ Ball::Ball()
 	m_position.y = 1000.0f;
 	m_friction = 0.002f;
 
-	m_scale = { 0.5f,0.5f,0.5f };
+	//m_scale = { 0.5f,0.5f,0.5f };
 	m_gravity = 1.0f;
 }
 
@@ -49,6 +49,7 @@ bool Ball::Start()
 	m_skinModelRender->Init("Assets/modelData/sphere/sphere.tkm", m_lig->GetLightAddress());
 	m_position.y += 40.0f;
 	m_charaCon.Init(40.0f, 40.0f, m_position);
+	
 	return true;
 }
 

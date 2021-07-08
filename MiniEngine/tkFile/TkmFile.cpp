@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "tkFile/TkmFile.h"
+#include <string>
 
 
 //法線スムージング。

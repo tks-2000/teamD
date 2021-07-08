@@ -37,7 +37,8 @@ bool Box::Start() {
 		"Assets/modelData/object/box2.tks",
 		enModelUpAxisZ,
 		m_animationClips,
-		enAnimation_Num
+		enAnimation_Num,
+		true
 	);
 
 	m_skinModelRender->PlayAnimation(enAnimation_Close, 1.0f);

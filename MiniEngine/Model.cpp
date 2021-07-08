@@ -14,12 +14,12 @@ void Model::Init(const ModelInitData& initData)
 	);
 	//内部のシェーダーをロードする処理が求めているのが
 	//wchar_t型の文字列なので、ここで変換しておく。
-	wchar_t wfxFilePath[256] = {L""};
-	if (initData.m_fxFilePath != nullptr) {
-		//MessageBoxA(nullptr, "fxファイルパスが指定されていません。", "エラー", MB_OK);
-		//std::abort();
-		mbstowcs(wfxFilePath, initData.m_fxFilePath, 256);
-	}
+	//wchar_t wfxFilePath[256] = {L""};
+	//if (initData.m_fxFilePath != nullptr) {
+	//	//MessageBoxA(nullptr, "fxファイルパスが指定されていません。", "エラー", MB_OK);
+	//	//std::abort();
+	//	mbstowcs(wfxFilePath, initData.m_fxFilePath, 256);
+	//}
 	
 	if (initData.m_skeleton != nullptr) {
 		//スケルトンが指定されている。
@@ -32,16 +32,25 @@ void Model::Init(const ModelInitData& initData)
 	//auto tkmFile = g_engine->GetTkmFileFromBank(initData.m_tkmFilePath);
 
 
-	m_tkmFile.Load(initData.m_tkmFilePath);
+	//m_tkmFile.Load(initData.m_tkmFilePath);
+	auto tkmFile = g_engine->GetTkmFileFromBank(initData.m_tkmFilePath);
+	if (tkmFile == nullptr) {
+		//未登録
+		tkmFile = new TkmFile;
+		tkmFile->Load(initData.m_tkmFilePath);
+		g_engine->RegistTkmFileToBank(initData.m_tkmFilePath, tkmFile);
+	}
+	m_tkmFile = tkmFile;
 	m_meshParts.InitFromTkmFile(
-		m_tkmFile, 
-		wfxFilePath, 
+		*m_tkmFile, 
+		initData.m_fxFilePath, 
 		initData.m_vsEntryPointFunc,
 		initData.m_vsSkinEntryPointFunc,
 		initData.m_psEntryPointFunc,
 		initData.m_expandConstantBuffer,
 		initData.m_expandConstantBufferSize,
-		initData.m_expandShaderResoruceView
+		initData.m_expandShaderResoruceView,
+		initData.m_cullMode
 	);
 
 	UpdateWorldMatrix(g_vec3Zero, g_quatIdentity, g_vec3One);

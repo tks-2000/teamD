@@ -35,7 +35,7 @@ Menu::Menu()
 	for (int plNum = 0; plNum < MAX_PLAYER_NUM; plNum++) {
 		m_pos[plNum] = PLAYER_MODEL_POS[plNum];
 		m_plModel[plNum] = NewGO<SkinModelRender>(PRIORITY_VERYLOW);
-		m_plModel[plNum]->InitA(UNITYCHAN_MULTI_FILEPATH[plNum], "Assets/modelData/unityChan.tks", enModelUpAxisY, m_animationClips, enAnimation_Num);
+		m_plModel[plNum]->InitA(UNITYCHAN_MULTI_FILEPATH[plNum], "Assets/modelData/unityChan.tks", enModelUpAxisY, m_animationClips, enAnimation_Num,false);
 		m_plModel[plNum]->PlayAnimation(enAnimation_Idle, FLOAT_1);
 		m_riseSpeed[plNum] = FLOAT_0;
 		m_spLigPos[plNum] = m_pos[plNum];
