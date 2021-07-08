@@ -40,6 +40,20 @@ public:
 		m_tkmFileBank.Regist(filePath, tkmFile);
 	}
 
+	Shader* GetShaderFromBank(const char* filePath, const char* entryPointFuncName)
+	{
+		std::string programName = filePath;
+		programName += entryPointFuncName;
+		return m_shaderBank.Get(programName.c_str());
+	}
+
+	void RegistShaderToBank(const char* filePath, const char* entryPointFuncName, Shader* shader)
+	{
+		std::string programName = filePath;
+		programName += entryPointFuncName;
+		m_shaderBank.Regist(programName.c_str(), shader);
+	}
+
 private:
 	GraphicsEngine* m_graphicsEngine = nullptr;		//グラフィックエンジン。
 	TResourceBank<TkmFile> m_tkmFileBank;
