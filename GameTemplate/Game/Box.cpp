@@ -76,7 +76,7 @@ void Box::Update() {
 	if (m_openFlag == true) {
 		m_openTime++;
 	}
-	if (m_openTime >= 45) {
+	if (m_openTime >= 60) {
 		m_score->AddScore(m_ball->GetPlayerInformation());
 		m_objects->SetDelFlag(m_boxNum);
 		DeleteGO(this);
