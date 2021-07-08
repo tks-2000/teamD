@@ -15,7 +15,8 @@ public:
 		const wchar_t* fxFilePath,
 		const char* vsEntryPointFunc,
 		const char* vsSkinEntriyPointFunc,
-		const char* psEntryPointFunc);
+		const char* psEntryPointFunc,
+		bool culMode);
 	/// <summary>
 	/// レンダリングを開始するときに呼び出す関数。
 	/// </summary>
@@ -116,6 +117,8 @@ private:
 	Shader m_vsNonSkinModel;						//スキンなしモデル用の頂点シェーダー。
 	Shader m_vsSkinModel;							//スキンありモデル用の頂点シェーダー。
 	Shader m_psModel;								//モデル用のピクセルシェーダー。
+
+	bool m_cullMode = false;
 };
 
 
