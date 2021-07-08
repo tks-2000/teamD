@@ -127,7 +127,11 @@ private:
 
 	float PinAngArrival = 0.0f;
 
-	
+	SpriteRender* m_LBbuttonIcon[PLAYER_NUMBER] = { nullptr };
+	Vector3 m_LBbuttonIPos[PLAYER_NUMBER] = { {-370.0f, 208.0f, 0.0f},{370.0f, 208.0f, 0.0f},{-370.0f, -292.0f, 0.0f},{370.0f, -292.0f, 0.0f} };
+	SpriteRender* m_RBbuttonIcon[PLAYER_NUMBER] = { nullptr };
+	Vector3 m_RBbuttonIPos[PLAYER_NUMBER] = { {-370.0f, 178.0f, 0.0f},{370.0f, 178.0f, 0.0f},{-370.0f, -322.0f, 0.0f},{370.0f, -322.0f, 0.0f} };
+
 	/// @brief タイマー表示
 	FontRender* m_timeFont = nullptr;
 

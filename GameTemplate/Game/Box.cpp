@@ -33,6 +33,7 @@ bool Box::Start() {
 	m_skinModelRender->InitA(
 		"Assets/modelData/object/box2.tkm", 
 		"Assets/modelData/object/box2.tks",
+		enModelUpAxisZ,
 		m_animationClips,
 		enAnimation_Num
 	);
