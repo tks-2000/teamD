@@ -86,7 +86,6 @@
     <ClCompile Include="Bgm.cpp" />
     <ClCompile Include="Se.cpp" />
     <ClCompile Include="SceneChange.cpp" />
-    <ClCompile Include="TResourceBank.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\ExEngine\effect\Effect.h" />
@@ -182,7 +181,6 @@
     <ClInclude Include="Bgm.h" />
     <ClInclude Include="Se.h" />
     <ClInclude Include="SceneChange.h" />
-    <ClInclude Include="TResourceBank.h" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="Assets\sound\bgm\normalBGM.wav" />
