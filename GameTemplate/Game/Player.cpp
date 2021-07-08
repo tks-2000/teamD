@@ -111,22 +111,22 @@ void Player::SetPlayerNumber(int num)
 	case 0: {
 		m_playerColor = RED;
 		m_startPos = PLAYER1_STARTPOS;
-		m_skinModelRender->InitA(UNITYCHAN_MULTI_FILEPATH[num], "Assets/modelData/unityChan.tks", m_animationClips, enAnimation_Num);
+		m_skinModelRender->InitA(UNITYCHAN_MULTI_FILEPATH[num], "Assets/modelData/unityChan.tks", enModelUpAxisY, m_animationClips, enAnimation_Num,false);
 	}break;
 	case 1: {
 		m_playerColor = BLUE;
 		m_startPos = PLAYER2_STARTPOS;
-		m_skinModelRender->InitA(UNITYCHAN_MULTI_FILEPATH[num], "Assets/modelData/unityChan.tks", m_animationClips, enAnimation_Num);
+		m_skinModelRender->InitA(UNITYCHAN_MULTI_FILEPATH[num], "Assets/modelData/unityChan.tks", enModelUpAxisY, m_animationClips, enAnimation_Num,false);
 	}break;
 	case 2: {
 		m_playerColor = YELLOW;
 		m_startPos = PLAYER3_STARTPOS;
-		m_skinModelRender->InitA(UNITYCHAN_MULTI_FILEPATH[num], "Assets/modelData/unityChan.tks", m_animationClips, enAnimation_Num);
+		m_skinModelRender->InitA(UNITYCHAN_MULTI_FILEPATH[num], "Assets/modelData/unityChan.tks", enModelUpAxisY, m_animationClips, enAnimation_Num,false);
 	}break;
 	case 3: {
 		m_playerColor = GREEN;
 		m_startPos = PLAYER4_STARTPOS;
-		m_skinModelRender->InitA(UNITYCHAN_MULTI_FILEPATH[num], "Assets/modelData/unityChan.tks", m_animationClips, enAnimation_Num);
+		m_skinModelRender->InitA(UNITYCHAN_MULTI_FILEPATH[num], "Assets/modelData/unityChan.tks", enModelUpAxisY, m_animationClips, enAnimation_Num,false);
 	}break;
 	}
 	m_position = m_startPos;

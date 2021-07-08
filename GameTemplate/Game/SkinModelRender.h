@@ -47,7 +47,7 @@ public:
 	/// @param modelFilePath モデルのファイルパス
 	void Init(const char* modelFilePath);
 
-	void InitA(const char* modelFilePath, const char* skeletonPath, AnimationClip* animation, int animationNum);
+	void InitA(const char* modelFilePath, const char* skeletonPath, EnModelUpAxis enAxis, AnimationClip* animation, int animationNum,bool cullMode);
 
 	void PlayAnimation(int animNo, float interpolateTime);
 

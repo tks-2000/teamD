@@ -1,5 +1,6 @@
 #pragma once
 
+class Lighting;
 class FontRender;
 class SkinModelRender;
 class GameDirector;
@@ -14,6 +15,8 @@ private:
 	SkinModelRender* m_plModel[PLAYER_NUM] = { nullptr };
 
 	Vector3 m_pos[PLAYER_NUM] = { Vector3::Zero,Vector3::Zero ,Vector3::Zero ,Vector3::Zero };
+
+	Vector3 m_spLigPos[PLAYER_NUM] = { Vector3::Zero,Vector3::Zero ,Vector3::Zero ,Vector3::Zero };
 
 	Quaternion m_qRot[PLAYER_NUM] = { Quaternion::Identity,Quaternion::Identity,Quaternion::Identity,Quaternion::Identity };
 
@@ -40,10 +43,14 @@ private:
 
 	GameDirector* m_gameDirector = nullptr;
 
+	Lighting* m_lig = nullptr;
+
 	bool m_endFlag = false;
 
 	//è∞
 	SkinModelRender* m_floor = nullptr;
+
+	Quaternion m_floorRot = Quaternion::Identity;
 
 public:
 	Menu();

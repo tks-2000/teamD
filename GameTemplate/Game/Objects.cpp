@@ -29,7 +29,6 @@ void Objects::SetObjects(int num) {
 	for (int setNum = 0; setNum < num; setNum++) {
 		//m_colliderPos[setNum] = { 0.0f,800.0f,0.0f };
 		m_setNum++;
-		m_box[setNum] = FindGO<Box>(BOX_NAME);
 		m_box[setNum] = NewGO<Box>(0, BOX_NAME);
 		m_box[setNum]->SetBoxPos(OBJECTS_POS[setNum], setNum);
 

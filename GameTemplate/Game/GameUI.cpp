@@ -181,6 +181,15 @@ GameUI::GameUI()
 			m_StGageBegin[alpha]->SetScale({ -1.0f,1.0f,-1.0f });
 			m_StGageFinal[alpha]->SetScale({ -1.0f,1.0f,-1.0f });
 		}
+		/// @brief ÇøÇÂÇ¡Ç∆ÇµÇΩëÄçÏê‡ñæ
+		m_LBbuttonIcon[alpha] = NewGO<SpriteRender>(4);
+		m_LBbuttonIcon[alpha]->Init("Assets/sprite/LB_ButtonIcon.DDS", 40, 40);
+		m_LBbuttonIcon[alpha]->SetPosition(m_LBbuttonIPos[alpha]);
+		m_LBbuttonIcon[alpha]->SetPivot({ 1 - (256.0 / 512.0f), 1 - (152.0f / 512.0f) });
+		m_RBbuttonIcon[alpha] = NewGO<SpriteRender>(4);
+		m_RBbuttonIcon[alpha]->Init("Assets/sprite/RB_ButtonIcon.DDS", 40, 40);
+		m_RBbuttonIcon[alpha]->SetPosition(m_RBbuttonIPos[alpha]);
+		m_RBbuttonIcon[alpha]->SetPivot({ 1 - (256.0 / 512.0f), 1 - (152.0f / 512.0f) });
 	}
 	m_ballSpeedMeter = NewGO<SpriteRender>(4);
 	m_ballSpeedMeter->Init("Assets/sprite/SpeedMeter.DDS", 220, 220);
@@ -222,6 +231,8 @@ GameUI::~GameUI()
 		DeleteGO(m_StGageBegin[bravo]);
 		DeleteGO(m_StGageBody[bravo]);
 		DeleteGO(m_StGageFinal[bravo]);
+		DeleteGO(m_LBbuttonIcon[bravo]);
+		DeleteGO(m_RBbuttonIcon[bravo]);
 	}
 	//DeleteGO(m_ballSpeed);
 	DeleteGO(m_ballSpeedMeter);
@@ -340,6 +351,29 @@ void GameUI::Update()
 		else {
 			m_staminaGage[delta]->SetColor(m_StGageColor);
 			m_tiredAlertMassege[delta]->SetColor({ 0.0f, 0.0f, 0.0f, 0.0f });
+		}
+	}
+
+	for (int echo = 0; echo < m_playerNum; echo++) {
+		if (g_pad[echo]->IsPress(enButtonLB1)) 
+		{
+			//m_LBbuttonIcon[echo]->SetScale({ 1.0f, 0.8f, 0.0f });
+			m_LBbuttonIcon[echo]->SetColor({ 0.0f, 0.0f, 1.0f, 1.0f });
+		}
+		else
+		{
+			//m_LBbuttonIcon[echo]->SetScale({ 1.0f, 1.0f, 0.0f });
+			m_LBbuttonIcon[echo]->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+		}
+		if (g_pad[echo]->IsPress(enButtonRB1)) 
+		{
+			//m_RBbuttonIcon[echo]->SetScale({ 1.0f, 0.8f, 0.0f });
+			m_RBbuttonIcon[echo]->SetColor({ 1.0f, 1.0f, 0.0f, 1.0f });
+		}
+		else
+		{
+			//m_RBbuttonIcon[echo]->SetScale({ 1.0f, 1.0f, 0.0f });
+			m_RBbuttonIcon[echo]->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
 		}
 	}
 	

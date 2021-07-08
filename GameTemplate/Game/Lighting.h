@@ -87,6 +87,10 @@ public:
 	/// @param dirLigVec ディレクションライトに設定する方向
 	void SetDirectionLightDirection(Vector3 dirLigVec) { m_light.directionLight.direction = dirLigVec; m_light.directionLight.direction.Normalize(); }
 
+	/// @brief ディレクションライトのカラーを設定
+	/// @param color ディレクションライトに設定するカラー
+	void SetDirectionLightColor(const Vector3& color) { m_light.directionLight.color = color; }
+
 	void RotationDirectionLight();
 
 	/// @brief ポイントライトの初期化
@@ -110,6 +114,8 @@ public:
 	/// @param num 設定したいポイントライトの番号
 	/// @param range ポイントライトに設定する影響範囲
 	void SetPointLightRange(int num, float range) { m_light.pointLight[num].Range = range; }
+
+	void ResetPointLight();
 	
 	/// @brief スポットライトの初期化
 	void InitSpotLight(int num);
@@ -144,6 +150,7 @@ public:
 	/// @param interval 点滅の間隔
 	void SetSpotLightBlinking(int num, float time,float interval);
 
+	void ResetSpotLight();
 
 	/// @brief ポイントライトの点滅を設定
 	/// @param num 点滅させたいポイントライトの番号

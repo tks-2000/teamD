@@ -204,6 +204,9 @@
     <Image Include="Assets\sprite\UI_Gage.DDS" />
     <Image Include="Assets\sprite\BLACK.dds" />
     <Image Include="Assets\modelData\bg\Stainless-Steel-HairLine.DDS" />
+    <Image Include="Assets\modelData\bg\floor_tex_1.DDS" />
+    <Image Include="Assets\sprite\LB_ButtonIcon.DDS" />
+    <Image Include="Assets\sprite\RB_ButtonIcon.DDS" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\animData\unitychan\clear.tka" />
@@ -220,5 +223,6 @@
     <None Include="Assets\modelData\object\box.tkm" />
     <None Include="Assets\modelData\sphere\sphere.tkm" />
     <None Include="Assets\modelData\bg\stage_2.tkm" />
+    <None Include="Assets\modelData\bg\floor.tkm" />
   </ItemGroup>
 </Project>
