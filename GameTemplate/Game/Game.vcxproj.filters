@@ -205,6 +205,8 @@
     <Image Include="Assets\sprite\BLACK.dds" />
     <Image Include="Assets\modelData\bg\Stainless-Steel-HairLine.DDS" />
     <Image Include="Assets\modelData\bg\floor_tex_1.DDS" />
+    <Image Include="Assets\sprite\LB_ButtonIcon.DDS" />
+    <Image Include="Assets\sprite\RB_ButtonIcon.DDS" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\animData\unitychan\clear.tka" />

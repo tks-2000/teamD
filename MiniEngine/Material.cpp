@@ -105,18 +105,20 @@ void Material::InitPipelineState()
 	CD3DX12_RASTERIZER_DESC origRasterizer = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
 	
 	if (m_cullMode == true) {
-		origRasterizer.CullMode = D3D12_CULL_MODE_FRONT;
+		origRasterizer.CullMode = D3D12_CULL_MODE_NONE;
 	}
 
 	//パイプラインステートを作成。
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc = { 0 };
 	psoDesc.InputLayout = { inputElementDescs, _countof(inputElementDescs) };
 	psoDesc.pRootSignature = m_rootSignature.Get();
+
 	psoDesc.VS = CD3DX12_SHADER_BYTECODE(m_vsSkinModel->GetCompiledBlob());
 	psoDesc.PS = CD3DX12_SHADER_BYTECODE(m_psModel->GetCompiledBlob());
 	//
 	//psoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_CULL_MODE_FRONT);
 	psoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(origRasterizer);
+
 	psoDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
 	psoDesc.DepthStencilState.DepthEnable = TRUE;
 	psoDesc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;

@@ -13,7 +13,7 @@ SkinModelRender::~SkinModelRender()
 
 bool SkinModelRender::Start()
 {
-	
+	m_model.UpdateWorldMatrix(m_position, m_qRot, m_scale);
 	return true;
 }
 
@@ -75,12 +75,12 @@ void SkinModelRender::PlayAnimation(int animNo, float interpolateTime)
 
 void SkinModelRender::Update()
 {
-	m_skeleton.Update(m_model.GetWorldMatrix());
 
 	m_animation.Progress(1.0f / 60.0f);
 
 	m_model.UpdateWorldMatrix(m_position,m_qRot,m_scale);
 	
+	m_skeleton.Update(m_model.GetWorldMatrix());
 
 }
 

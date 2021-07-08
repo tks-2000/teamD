@@ -25,6 +25,8 @@ Box::~Box() {
 	DeleteGO(m_skinModelRender);
 }
 bool Box::Start() {
+	m_animationClips[enAnimation_Close].Load("Assets/animData/box/close.tka");
+	m_animationClips[enAnimation_Close].SetLoopFlag(false);
 	m_animationClips[enAnimation_Open].Load("Assets/animData/box/open.tka");
 	m_animationClips[enAnimation_Open].SetLoopFlag(false);
 
@@ -39,13 +41,13 @@ bool Box::Start() {
 		true
 	);
 
+	m_skinModelRender->PlayAnimation(enAnimation_Close, 1.0f);
 
 
-	m_skinModelRender->SetPosition(m_position);
 
 	m_charaCon.Init(40.0f, 40.0f, m_position);
 
-
+	m_skinModelRender->SetPosition(m_position);
 	return true;
 }
 void Box::Update() {
@@ -71,6 +73,16 @@ void Box::Update() {
 		}
 	}
 
+	if (m_openFlag == true) {
+		m_openTime++;
+	}
+	if (m_openTime >= 45) {
+		m_score->AddScore(m_ball->GetPlayerInformation());
+		m_objects->SetDelFlag(m_boxNum);
+		DeleteGO(this);
+	}
+
+
 
 	m_position = m_charaCon.Execute(m_fallSpeed, 1.0f);
 	m_charaCon.SetPosition(m_position);
@@ -79,11 +91,8 @@ void Box::Update() {
 
 }
 void Box::ballCollider() {
-	m_score->AddScore(m_ball->GetPlayerInformation());
-	//m_objects->SetDelFlag(m_boxNum);
+	m_openFlag = true;
 	m_skinModelRender->PlayAnimation(enAnimation_Open, 1.0f);
-	
-	//DeleteGO(this);
 }
 void Box::DistanceCalculation() {
 	m_toBallVec = m_ball->GetPosition() - m_position;
