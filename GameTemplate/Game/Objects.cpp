@@ -38,7 +38,7 @@ void Objects::Update() {
 	for (int Num = 0; Num < m_setNum; Num++) {
 		if (m_delFlag[Num] == true) {
 			m_reSpawnTime[Num] += 1.0f;
-			if (m_reSpawnTime[Num] >= 300.0f && !m_gameDirector->IsResult()) {
+			if (m_reSpawnTime[Num] >= 600.0f && !m_gameDirector->IsResult()) {
 				m_box[Num] = NewGO<Box>(0, BOX_NAME);
 				m_box[Num]->SetBoxPos(OBJECTS_POS[Num], Num);
 				m_delFlag[Num] = false;
