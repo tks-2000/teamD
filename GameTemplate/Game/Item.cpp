@@ -48,6 +48,20 @@ void Item::Update()
 	for (int plNum = 0; plNum < m_gameDirector->GetPlayerNum(); plNum++) {
 		if (m_distance[plNum] < 50.0f) {
 			m_objects->SetItemDelFlag(m_myNo);
+			switch (m_itemState)
+			{
+			case enAttackUp: {
+				m_player[plNum]->KickPowerUp();
+			}break;
+			case enGuardUp: {
+				m_player[plNum]->GuardPowerUp();
+			}break;
+			case enSpeedUp: {
+				m_player[plNum]->SpeedPowerUp();
+			}break;
+			default:
+				break;
+			}
 			DeleteGO(this);
 			break;
 		}

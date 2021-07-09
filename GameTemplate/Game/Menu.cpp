@@ -119,7 +119,7 @@ void Menu::Update()
 		}
 		m_qRot[plNum].SetRotationDeg(Vector3::AxisY, m_angle[plNum]);
 		m_plModel[plNum]->SetRotation(m_qRot[plNum]);
-		m_pos[plNum].y += m_riseSpeed[plNum];
+		m_pos[plNum].y += m_riseSpeed[plNum] * m_riseSpeed[plNum];
 		m_plModel[plNum]->SetPosition(m_pos[plNum]);
 		m_lig->SetSpotLightPos(plNum, m_spLigPos[plNum]);
 		m_lig->SetSpotLightDirection(plNum, m_pos[plNum] - m_spLigPos[plNum]);
@@ -129,7 +129,7 @@ void Menu::Update()
 	if (m_endFlag == true) {
 		for (int plNum = 0; plNum < MAX_PLAYER_NUM; plNum++) {
 			if (m_playerNum > plNum) {
-				m_riseSpeed[plNum] += 0.2f;
+				m_riseSpeed[plNum] += 0.1f;
 				m_plModel[plNum]->PlayAnimation(enAnimation_jump, FLOAT_1);
 			}
 		}

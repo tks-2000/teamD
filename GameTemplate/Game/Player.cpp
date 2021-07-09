@@ -31,6 +31,12 @@ namespace {
 	const float DAMAGE_FRICYION = 0.001f;
 	/// @brief ダメージを受けて復帰するのにかかる時間
 	const float DAMAGE_RETURN_TIME = 100.0f;
+
+	const float BLOW_AWAY_RATE = 2.0f;
+
+	const float BLOW_AWAY_HEIGHT_RATE = 1.5f;
+
+	const float DECREASE_BLOW_AWAY_RATE = 1.0f;
 	/// @brief プレイヤーモデルの表示優先度
 	const int PRIORITY = 1;
 	/// @brief プレイヤーのリスポーン時の無敵時間
@@ -45,16 +51,35 @@ namespace {
 	const int KICK_COOLTIME = 20;
 	/// @brief ジャストガード可能な時間
 	const float POSSIBLE_JUST_GUARD_TIME = 0.01f;
+	/// @brief ジャストガード発動時の強化時間
+	const float POWERUP_TIME = 10.0f;
 	/// @brief 通常のキック力
 	const float NORMAL_KICK_POWER = 1.5f;
 	/// @brief 強化状態のキック力
-	const float POWERFUlL_KICK_POWER = 5.0f;
+	const float POWERFUL_KICK_POWER = 4.0f;
+
+	const float KICK_POWER_ADDITION_AMOUNT = 1.0f;
+	/// @brief 通常の移動速度
+	const float NORMAL_VELOCITY = 0.9f;
+	/// @brief ダッシュの移動速度
+	const float DASH_VELOCITY = 0.95f;
+
+	const float VELOCITY_ADDITION_AMOUNT = 0.02f;
+	/// @brief 通常のガード耐久値低下量
+	const float GUARD_DECREASE_VALUE = 0.3f;
+	/// @brief 強化状態のガード耐久値低下量
+	const float POWERFUIL_GUARD_DECREASE_VALUE = 0.15f;
+
+	const float GUARD_ADDITION_AMOUNT = 0.1f;
 	/// @brief スタミナの最大値
 	const float MAX_STANIMA = 6.0f;
+	/// @brief 通常のスタミナ低下量
+	const float STAMINA_DECREASE_VALUE = 2.0f;
+	/// @brief 強化状態のスタミナ低下量
+	const float POWERFUIL_STAMINA_DECREASE_VALUE = 1.0f;
 
-	const float NORMAL_VELOCITY = 0.9f;
-
-	const float DASH_VELOCITY = 0.95f;
+	const float ITEM_POWERUP_TIME = 10.0f;
+	
 }
 
 Player::Player()
@@ -146,11 +171,17 @@ void Player::Move()
 	m_moveSpeed += g_camera3D->GetRight() * m_Lstickx;
 	m_moveSpeed += g_camera3D->GetForward() * m_Lsticky;
 
+	if (m_powerUp == true) {
+		m_staminaDecreaseValue = POWERFUIL_STAMINA_DECREASE_VALUE;
+	}
+	else {
+		m_staminaDecreaseValue = STAMINA_DECREASE_VALUE;
+	}
 
 	if (IsDash() == true) {
 		m_moveVelocity = DASH_VELOCITY;
 
-		m_stamina -= g_gameTime->GetFrameDeltaTime() * FLOAT_2;
+		m_stamina -= g_gameTime->GetFrameDeltaTime() * m_staminaDecreaseValue;
 
 		m_anim = enAnimation_Run;
 	}
@@ -161,6 +192,10 @@ void Player::Move()
 			m_stamina = MAX_STANIMA;
 		}
 		m_anim = enAnimation_Walk;
+	}
+
+	if (m_speedUp == true) {
+		m_moveVelocity += VELOCITY_ADDITION_AMOUNT;
 	}
 
 	m_moveSpeed *= m_moveVelocity;
@@ -220,7 +255,6 @@ void Player::Rotation()
 		return;
 	}
 	m_qRot.SetRotation(Vector3::AxisY, atan2(m_direction.x, m_direction.z));
-
 }
 
 void Player::IsKick()
@@ -239,6 +273,22 @@ void Player::IsKick()
 	else {
 		m_kickFlag = false;
 	}
+
+	if (m_powerUp == true) {
+		m_kickPower = POWERFUL_KICK_POWER;
+		m_powerUpTime += g_gameTime->GetFrameDeltaTime() * FLOAT_1;
+	}
+	else
+	{
+		m_powerUpTime = FLOAT_0;
+		m_kickPower = NORMAL_KICK_POWER;
+	}
+	if (m_powerUpTime > POWERUP_TIME) {
+		m_powerUp = false;
+	}
+	if (m_kickUp == true) {
+		m_kickPower += KICK_POWER_ADDITION_AMOUNT;
+	}
 }
 
 void Player::KickBall()
@@ -253,7 +303,7 @@ void Player::KickBall()
 	m_ball->MoveStart();
 
 	//キック時、強化状態のとき
-	if (m_kickPowerUp) {
+	if (m_powerUp) {
 		m_se->PlayPoweredKickSe();
 	}
 
@@ -289,8 +339,14 @@ void Player::BallCollide()
 	repulsiveForce.y = FLOAT_0;
 	repulsiveForce.Normalize();
 
-	repulsiveForce *= m_ball->GetVelocity() * FLOAT_2;
-	repulsiveForce.y = m_ball->GetVelocity() * 1.5f;
+	if (m_guardUp == true) {
+		repulsiveForce *= m_ball->GetVelocity() * DECREASE_BLOW_AWAY_RATE;
+	}
+	else {
+		repulsiveForce *= m_ball->GetVelocity() * BLOW_AWAY_RATE;
+	}
+
+	repulsiveForce.y = m_ball->GetVelocity() * BLOW_AWAY_HEIGHT_RATE;
 	m_moveSpeed = repulsiveForce * FLOAT_2;
 	m_ball->SetMoveDirection(repulsiveForce * FLOAT_MINUS_1);
 
@@ -319,7 +375,18 @@ void Player::Guard()
 	m_moveSpeed.z /= FLOAT_2;
 
 	/// @brief ガード中は耐久値(guardDurability)が減り続ける
-	m_guardDurability -= 0.3f;
+	if (m_powerUp == true) {
+		m_guradDecreaseValue = POWERFUIL_GUARD_DECREASE_VALUE;
+	}
+	else {
+		m_guradDecreaseValue = GUARD_DECREASE_VALUE;
+	}
+
+	if (m_guardUp == true) {
+		m_guradDecreaseValue -= GUARD_ADDITION_AMOUNT;
+	}
+
+	m_guardDurability -= m_guradDecreaseValue;
 
 	//シールドエフェクト発生処理//
 		//カウンターに値を加算
@@ -379,11 +446,11 @@ void Player::Guard()
 			/// @brief ジャストガードエフェクトの再生
 			m_plEffect->PlayJustGuardEffect(m_myNumber);
 			m_se->PlayJustGuardSe();
-			m_kickPowerUp = true;
+			m_powerUp = true;
 		}
 		else {
 			/// @brief ボールの勢いに応じて耐久値を減らす
-			float shieldDamage = m_ball->GetVelocity() * 3.0f;
+			float shieldDamage = m_ball->GetVelocity() * m_guradDecreaseValue * 10.0f;
 			m_guardDurability -= shieldDamage;
 			/// @brief ガードブレイクした場合
 			if (m_guardDurability <= 0.0f)
@@ -429,6 +496,8 @@ void Player::ReSpawn() {
 	m_mutekiTime = MUTEKI_TIME;
 	m_lig->SetPointLightBlinking(m_myNumber, m_mutekiTime, 0.07f);
 	m_dieFlag = true;
+	m_powerUp = false;
+	m_powerUpTime = FLOAT_0;
 }
 
 void Player::Muteki()
@@ -515,18 +584,7 @@ void Player::Update()
 		}
 	}
 
-	if (m_kickPowerUp == true) {
-		m_kickPower = POWERFUlL_KICK_POWER;
-		m_powerUpTime += g_gameTime->GetFrameDeltaTime() * FLOAT_1;
-	}
-	else
-	{
-		m_powerUpTime = FLOAT_0;
-		m_kickPower = NORMAL_KICK_POWER;
-	}
-	if (m_powerUpTime > FLOAT_2) {
-		m_kickPowerUp = false;
-	}
+	
 
 	/// @brief キックの不可避分岐
 	if (m_damage == true || m_guard == true || m_breakGuard == true || m_kickCooling == true)
@@ -616,7 +674,7 @@ void Player::Update()
 	}
 
 	//パワーアップエフェクトの再生
-	if (m_kickPowerUp == true) {
+	if (m_powerUp == true) {
 		m_powerUpCounter += 1;
 		if (m_powerUpCounter % 25 == 1) {
 			m_plEffect->PlayKickBuffEffect(m_myNumber);
@@ -626,6 +684,17 @@ void Player::Update()
 		m_powerUpCounter = 0.0f;
 	}
 
+	if (m_itemPowerUp == true) {
+		m_itemPowerUpTime += g_gameTime->GetFrameDeltaTime();
+	}
+	else {
+		m_kickUp = false;
+		m_guardUp = false;
+		m_speedUp = false;
+	}
+	if (m_itemPowerUpTime > ITEM_POWERUP_TIME) {
+		m_itemPowerUp = false;
+	}
 
 	/// @brief 自分に当たるスポットライトの位置と方向を設定
 	Vector3 pos = m_position;

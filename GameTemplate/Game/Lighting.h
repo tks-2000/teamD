@@ -161,6 +161,10 @@ public:
 	/// @brief 半球ライトの初期化
 	void InitHemiSphereLight();
 
+	void SetHemiSphereLifhtGroundColor(const Vector3& groundColor) { m_light.hemiSphereLight.groundColor = groundColor; }
+
+	void SetHemiSphereLifhtSkyColor(const Vector3& skyColor) { m_light.hemiSphereLight.skyColor = skyColor; }
+
 private:
 	/// @brief ライティング全てのデータ
 	Light m_light;
