@@ -6,9 +6,9 @@ namespace {
 	const float BALL_DISTANCE = 100.0f;
 	const float PLAYER_DISTANCE = 120.0f;
 	const float PLAYER_REPEL = 5.0f;
-	const float OPEN_TIME = 60.0f;
+	const float OPEN_TIME = 75.0f;
 	const float FALL = 2.0f;
-	const float BOX_FALL_YPOS = 50.0f;
+	const float BOX_FALL_YPOS = 60.0f;
 	const float CHARACON_SCALE = 40.0f;
 }
 Box::Box() {
@@ -37,8 +37,8 @@ bool Box::Start() {
 	m_skinModelRender = NewGO<SkinModelRender>(0);
 	//m_skinModelRender->Init("Assets/modelData/object/box.tkm");
 	m_skinModelRender->InitA(
-		"Assets/modelData/object/box2.tkm", 
-		"Assets/modelData/object/box2.tks",
+		"Assets/modelData/object/box3.tkm", 
+		"Assets/modelData/object/box3.tks",
 		enModelUpAxisZ,
 		m_animationClips,
 		enAnimation_Num,
