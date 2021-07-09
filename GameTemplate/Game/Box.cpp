@@ -3,7 +3,7 @@
 
 namespace {
 	const Vector3 SCALE = { 1.0f,1.0f,1.0f };
-	const float BALL_DISTANCE = 120.0f;
+	const float BALL_DISTANCE = 100.0f;
 	const float PLAYER_DISTANCE = 120.0f;
 	const float PLAYER_REPEL = 5.0f;
 }
@@ -48,6 +48,11 @@ bool Box::Start() {
 	m_charaCon.Init(40.0f, 40.0f, m_position);
 
 	m_skinModelRender->SetPosition(m_position);
+
+	//初期角度を変える処理
+	m_rot.SetRotationDeg(Vector3::AxisY, 45.0f);
+	m_skinModelRender->SetRotation(m_rot);
+
 	return true;
 }
 void Box::Update() {
@@ -76,16 +81,24 @@ void Box::Update() {
 	if (m_openFlag == true) {
 		m_openTime++;
 	}
-	if (m_openTime >= 45) {
+	if (m_openTime >= 60) {
 		m_score->AddScore(m_ball->GetPlayerInformation());
 		m_objects->SetDelFlag(m_boxNum);
 		DeleteGO(this);
 	}
 
 
+	if (m_openFlag == false) {
+		m_position = m_charaCon.Execute(m_fallSpeed, 1.0f);
+	}
+	else if(m_isReflect == false){
+		//ボールの反射
+		BallBound();
+		//キャラコンを逃がす処理
+		m_charaCon.RemoveRigidBoby();
+	}
 
-	m_position = m_charaCon.Execute(m_fallSpeed, 1.0f);
-	m_charaCon.SetPosition(m_position);
+	//m_charaCon.SetPosition(m_position);
 	//m_setPos[setPosNum] = m_position[setPosNum];
 	m_skinModelRender->SetPosition(m_position);
 
@@ -94,6 +107,19 @@ void Box::ballCollider() {
 	m_openFlag = true;
 	m_skinModelRender->PlayAnimation(enAnimation_Open, 1.0f);
 }
+
+void Box::BallBound()
+{
+	m_isReflect = true;
+
+	Vector3 toBallDir = m_ball->GetPosition() - m_position;
+	toBallDir.y = 0.0f;
+	toBallDir.Normalize();
+	
+	m_ball->SetMoveDirection(toBallDir);
+
+}
+
 void Box::DistanceCalculation() {
 	m_toBallVec = m_ball->GetPosition() - m_position;
 	m_ballDistance = m_toBallVec.Length();

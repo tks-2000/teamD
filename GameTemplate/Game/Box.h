@@ -18,6 +18,8 @@ public:
 	void Update();
 
 	void ballCollider();
+	//当たったときの跳ね返り処理
+	void BallBound();
 
 	void SetBoxPos(Vector3 pos,int num);
 
@@ -28,6 +30,8 @@ public:
 private:
 
 	Vector3 m_position = Vector3::Zero;
+
+	Quaternion m_rot = Quaternion::Identity;
 
 	Vector3 m_setPos = Vector3::Zero;
 
@@ -50,6 +54,8 @@ private:
 	float m_fall = ZeroF;
 
 	bool m_openFlag = false;
+	//ボールを跳ね返したかフラグ
+	bool m_isReflect = false;
 
 	float m_openTime = 0.0f;
 

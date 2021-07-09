@@ -4,7 +4,7 @@
 namespace {
 	const Vector3 SCALE = { 1.0f,1.0f,1.0f };
 	const int MAX_OBJECTS_NUM = 4;
-	const Vector3 OBJECTS_POS[MAX_OBJECTS_NUM] = { {400.0f,400.0f,400.0f},{400.0f,400.0f,-400.0f},{-400.0f,400.0f,400.0f},{-400.0f,400.0f,-400.0f} };
+	const Vector3 OBJECTS_POS[MAX_OBJECTS_NUM] = { {350.0f,400.0f,350.0f},{350.0f,400.0f,-350.0f},{-350.0f,400.0f,350.0f},{-350.0f,400.0f,-350.0f} };
 	const float BALL_DISTANCE = 120.0f;
 }
 Objects::Objects() {
@@ -54,7 +54,7 @@ void Objects::Update() {
 	for (int Num = 0; Num < m_setNum; Num++) {
 		if (m_delFlag[Num] == true && m_itemDelFlag[Num] == true) {
 			m_reSpawnTime[Num] += 1.0f;
-			if (m_reSpawnTime[Num] >= 100.0f && !m_gameDirector->IsResult()) {
+			if (m_reSpawnTime[Num] >= 600.0f && !m_gameDirector->IsResult()) {
 				m_box[Num] = NewGO<Box>(0, BOX_NAME);
 				m_box[Num]->SetBoxPos(OBJECTS_POS[Num], Num);
 				m_item[Num] = NewGO<Item>(PRIORITY_VERYLOW, ITEM_NAME);
