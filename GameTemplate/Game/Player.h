@@ -75,6 +75,9 @@ public:
 	bool GetGuardBreak() {
 		return m_breakGuard;
 	}
+	/// @brief プレイヤーのリスポーン地点ゲッター
+	/// @return 
+	Vector3 GetRespawnPoint() { return m_startPos; }
 
 private:
 	/// @brief プレイヤーの番号

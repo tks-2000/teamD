@@ -60,6 +60,26 @@ namespace {
 	const char16_t* REPAIREFFECT_FILEPATH = u"Assets/effect/repair.efk";
 	//ダメージ回復エフェクトのスケール
 	const Vector3 REPAIREFFECT_SCALE = { 10.0f,10.0f,10.0f };
+	
+	//ダメージエフェクト
+	const char16_t* DAMAGEEFFECT_FILEPATH = u"Assets/effect/damage.efk";
+	const Vector3 DAMAGEEFFECT_SCALE_MIN = { 5.0f,5.0f,5.0f };
+	const Vector3 DAMAGEEFFECT_SCALE_MAX = { 30.0f,30.0f,30.0f };
+	const float DAMAGEEFFECT_BALLSPEED_MAX = 60.0f;
+	const float DAMAGEEFFECT_BALLSPEED_MIN = 0.0f;
+
+
+
+	//リスポーン時のエフェクトのファイルパス(プレイヤー別)
+	const char16_t* RESPAWNEFFECT_FILEPATH[4] = { 
+		{u"Assets/effect/respawn_red.efk"},
+		{u"Assets/effect/respawn_blue.efk"},
+		{u"Assets/effect/respawn_yellow.efk"},
+		{u"Assets/effect/respawn_green.efk"}
+	};
+	const Vector3 RESPAWNEFFECT_SCALE = { 20.0f,20.0f,20.0f };
+	const float RESPAWNEFFECT_OFFSET_Y = 400.0f;
+
 }
 
 PlayerEffect::PlayerEffect()
@@ -88,6 +108,12 @@ PlayerEffect::PlayerEffect()
 		m_kickBuffEffect[plNum].Init(KICKBUFFEFFECT_FILEPATH);
 		//ダメージ回復エフェクトを初期化
 		m_repairEffect[plNum].Init(REPAIREFFECT_FILEPATH);
+		//ダメージエフェクトを初期化
+		m_damageEffect[plNum].Init(DAMAGEEFFECT_FILEPATH);
+
+		//プレイヤー別エフェクトの初期化
+		//リスポーン時のエフェクトを初期化
+		m_respawnEffect[plNum].Init(RESPAWNEFFECT_FILEPATH[plNum]);
 
 	}
 }
@@ -159,6 +185,27 @@ void PlayerEffect::PlayShieldHitEffect(int plNum)
 	m_shieldHitEffect[plNum].Update();
 }
 
+void PlayerEffect::PlayDamageEffect(int plNum)
+{
+	Vector3 efcScale = Vector3::Zero;
+
+	//最大値に対する現在のスピードの割合を計算
+	float speedRate = m_ball->GetVelocity() / DAMAGEEFFECT_BALLSPEED_MAX;
+
+	//1.0を超えるときに1.0にする
+	if (speedRate > 1.0f) {
+		speedRate = 1.0f;
+	}
+
+	//得られた割合から拡大率を線形補完
+	efcScale.Lerp(speedRate, DAMAGEEFFECT_SCALE_MIN, DAMAGEEFFECT_SCALE_MAX);
+
+	m_damageEffect[plNum].Play();
+	m_damageEffect[plNum].SetPosition(m_efcGuardPos[plNum]);
+	m_damageEffect[plNum].SetScale(efcScale);
+	m_damageEffect[plNum].Update();
+}
+
 void PlayerEffect::GuardBeginEffectUpdate(int plNum)
 {
 	m_guardBeginEffect[plNum].SetPosition(m_efcGuardPos[plNum]);
@@ -205,6 +252,16 @@ void PlayerEffect::RepairEffectUpdate(int plNum)
 	m_repairEffect[plNum].Update();
 }
 
+void PlayerEffect::RespawnEffectUpdate(int plNum)
+{
+
+	Vector3 efcPos = m_player[plNum]->GetRespawnPoint();
+	efcPos.y -= RESPAWNEFFECT_OFFSET_Y;
+	m_respawnEffect[plNum].SetPosition(efcPos);
+	m_respawnEffect[plNum].SetScale(RESPAWNEFFECT_SCALE);
+	m_respawnEffect[plNum].Update();
+}
+
 void PlayerEffect::Update()
 {
 	/// @brief 更新が必要なエフェクトをすべて更新する
@@ -217,5 +274,6 @@ void PlayerEffect::Update()
 		KnockOutEffectUpdate(plNum);
 		KickBuffEffectUpdate(plNum);
 		RepairEffectUpdate(plNum);
+		RespawnEffectUpdate(plNum);
 	}
 }

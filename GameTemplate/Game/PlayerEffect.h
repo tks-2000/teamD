@@ -33,6 +33,11 @@ private:
 	Effect m_kickBuffEffect[PLAYER_NUMBER];
 	/// @brief ダメージからの回復エフェクト
 	Effect m_repairEffect[PLAYER_NUMBER];
+	/// @brief リスポーン時のエフェクト
+	Effect m_respawnEffect[PLAYER_NUMBER];
+	/// @brief ダメージエフェクト
+	Effect m_damageEffect[PLAYER_NUMBER];
+
 
 	GameDirector* m_gameDirector = nullptr;
 	Player* m_player[PLAYER_NUMBER] = { nullptr };
@@ -65,6 +70,9 @@ private:
 	/// @param plNum 更新するプレイヤー番号
 	void RepairEffectUpdate(int plNum);
 
+	/// @brief リスポーン時のエフェクトの更新
+	/// @param plNum 更新するプレイヤー番号
+	void RespawnEffectUpdate(int plNum);
 
 public:
 	
@@ -119,6 +127,14 @@ public:
 	/// @brief ダメージからの回復エフェクトを再生
 	/// @param plNum 再生するプレイヤー番号
 	void PlayRepairEffect(int plNum) { m_repairEffect[plNum].Play(); }
+	
+	/// @brief ダメージエフェクトを再生
+	/// @param plNum 
+	void PlayDamageEffect(int plNum);
+
+	/// @brief リスポーン時のエフェクトを再生
+	/// @param plNum 再生するプレイヤー番号
+	void PlayRespawnEffect(int plNum) { m_respawnEffect[plNum].Play(); }
 
 };
 
