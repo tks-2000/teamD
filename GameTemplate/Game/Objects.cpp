@@ -19,7 +19,9 @@ Objects::~Objects() {
 		if (m_delFlag[Num] == false) {
 			DeleteGO(m_box[Num]);
 		}
-		
+		if (m_itemDelFlag[Num] == false) {
+			DeleteGO(m_item[Num]);
+		}
 	}
 }
 bool Objects::Start() {
@@ -32,19 +34,52 @@ void Objects::SetObjects(int num) {
 		m_setNum++;
 		m_box[setNum] = NewGO<Box>(0, BOX_NAME);
 		m_box[setNum]->SetBoxPos(OBJECTS_POS[setNum], setNum);
-
+		m_item[setNum] = NewGO<Item>(PRIORITY_VERYLOW, ITEM_NAME);
+		m_box[setNum]->SetBoxPos(OBJECTS_POS[setNum], setNum);
+		m_item[setNum]->SetNumber(setNum);
+		switch (setNum)
+		{
+		case 1: {
+			m_item[setNum]->SetItem(Item::enAttackUp);
+		}break;
+		case 2: {
+			m_item[setNum]->SetItem(Item::enGuardUp);
+		}break;
+		default:{
+			m_item[setNum]->SetItem(Item::enSpeedUp);
+		}break;
+		}
 	}
 }
 void Objects::Update() {
 	for (int Num = 0; Num < m_setNum; Num++) {
-		if (m_delFlag[Num] == true) {
+		if (m_delFlag[Num] == true && m_itemDelFlag[Num] == true) {
 			m_reSpawnTime[Num] += 1.0f;
 			if (m_reSpawnTime[Num] >= RESPAWN_TIME && !m_gameDirector->IsResult()) {
 				m_box[Num] = NewGO<Box>(0, BOX_NAME);
 				m_box[Num]->SetBoxPos(OBJECTS_POS[Num], Num);
+				m_item[Num] = NewGO<Item>(PRIORITY_VERYLOW, ITEM_NAME);
+				m_item[Num]->SetNumber(Num);
+				switch (Num)
+				{
+				case 1: {
+					m_item[Num]->SetItem(Item::enAttackUp);
+				}break;
+				case 2: {
+					m_item[Num]->SetItem(Item::enGuardUp);
+				}break;
+				default: {
+					m_item[Num]->SetItem(Item::enSpeedUp);
+				}break;
+				}
 				m_delFlag[Num] = false;
 				m_reSpawnTime[Num] = ZeroF;
+				m_itemDelFlag[Num] = false;
 			}
 		}
+		if (m_delFlag[Num] == false && m_itemDelFlag[Num] == false) {
+			m_item[Num]->SetPosition(m_box[Num]->GetBoxPos());
+		}
+		
 	}
 }
