@@ -28,8 +28,6 @@ bool GameDirector::Start()
 	return true;
 }
 
-
-
 void GameDirector::Update()
 {
 	switch (m_gameState)
@@ -56,7 +54,7 @@ void GameDirector::Update()
 		if (m_menu == nullptr) {
 			m_menu = NewGO<Menu>(PRIORITY_VERYLOW, MENU_NAME);
 			m_bgm->ChangeMenuBgm();
-			m_lighting->SetDirectionLightColor({0.3f,0.3f,0.3f});
+			m_lighting->InitHemiSphereLight();
 		}
 		else {
 			if (g_pad[0]->IsTrigger(enButtonStart) && m_playerNum > 0) {
@@ -75,9 +73,27 @@ void GameDirector::Update()
 		}
 	}break;
 	case enMainGame: {
-		if (m_game == nullptr) {
+		if (m_game == nullptr && m_timer == nullptr) {
 			m_game = NewGO<Game>(PRIORITY_VERYLOW, GAME_NAME);
 			m_bgm->ChangeGameBgm();
+			m_timer = NewGO<Timer>(PRIORITY_VERYLOW, TIMER_NAME);
+		}
+		else {
+			float changeRate = (TIME_LIMIT - m_timer->GetTimer()) / TIME_LIMIT;
+
+			if (changeRate > FLOAT_1) {
+				changeRate = FLOAT_1;
+			}
+
+			changeRate *= changeRate;
+
+			Vector3 hemLigSkyColor = Vector3::Zero;
+			hemLigSkyColor.Lerp(changeRate,HEMISPHERE_LIGHT_SKYCOLOR_START, HEMISPHERE_LIGHT_SKYCOLOR_END);
+			m_lighting->SetHemiSphereLifhtSkyColor(hemLigSkyColor);
+
+			if (m_timer->IsTimerEnd() == true) {
+				m_gameState = enResult;
+			}
 		}
 	}break;
 	case enResult: {
@@ -113,6 +129,8 @@ void GameDirector::Update()
 		m_game = nullptr;
 		DeleteGO(m_result);
 		m_result = nullptr;
+		DeleteGO(m_timer);
+		m_timer = nullptr;
 		m_lighting->ResetPointLight();
 		m_sceneChange->TransparencyChange(true);
 	}break;

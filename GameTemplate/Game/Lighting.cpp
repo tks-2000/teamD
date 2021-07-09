@@ -68,10 +68,10 @@ void Lighting::InitDirectionLight()
 
 void Lighting::RotationDirectionLight()
 {
-	//右スティック入力でディレクションライトの方向を操作
+	
 	Quaternion qRot;
 	
-	qRot.SetRotationDegY(0.1f);
+	qRot.SetRotationDegY(0.5f);
 
 	
 	qRot.Apply(m_light.directionLight.direction);
@@ -244,12 +244,12 @@ void Lighting::InitHemiSphereLight()
 	//地面の照り返しカラー
 	m_light.hemiSphereLight.groundColor.x = 0.1f;
 	m_light.hemiSphereLight.groundColor.y = 0.1f;
-	m_light.hemiSphereLight.groundColor.z = 0.3f;
+	m_light.hemiSphereLight.groundColor.z = 0.1f;
 
 	//天球ライトのカラー
-	m_light.hemiSphereLight.skyColor.x = 0.1f;
-	m_light.hemiSphereLight.skyColor.y = 0.3f;
-	m_light.hemiSphereLight.skyColor.z = 0.1f;
+	m_light.hemiSphereLight.skyColor.x = -0.3f;
+	m_light.hemiSphereLight.skyColor.y = -0.3f;
+	m_light.hemiSphereLight.skyColor.z = -0.3f;
 
 	//地面の法線を設定
 	m_light.hemiSphereLight.groundNormal.x = 0.0f;

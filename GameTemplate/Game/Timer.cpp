@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Timer.h"
 
+
+
 namespace {
 	/// @brief タイマーの進む量
 	const float TIMER_AMOUNT_GO = 1.0f;
@@ -8,8 +10,7 @@ namespace {
 	const float TIMER_ZERO = 0.0f;
 	/// @brief カウントダウン時間
 	const float TIMER_COUNT_DOUN = 4.0f;
-	/// @brief ゲームの制限時間
-	const float TIME_LIMIT = 120.0f;
+	
 	/// @brief ゲームが終了してからリザルトに移るまでの時間
 	const float FINISH_DISPLAY_TIME = 5.0f;
 }

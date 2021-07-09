@@ -6,7 +6,7 @@ Game::Game()
 {
 	m_gameDirector = FindGO<GameDirector>(GAME_DIRECTOR_NAME);
 	m_playerNum = m_gameDirector->GetPlayerNum();
-	m_timer = NewGO<Timer>(0, TIMER_NAME);
+	//m_timer = NewGO<Timer>(0, TIMER_NAME);
 	for (int i = 0; i < m_playerNum; i++) {
 		m_player[i] = NewGO<Player>(0,PLAYER_NAME[i]);
 	}
@@ -24,7 +24,7 @@ Game::~Game()
 	//ゲームシーン中に発生している全てのエフェクトを停止
 	EffectEngine::GetInstance()->AllStop();
 
-	DeleteGO(m_timer);
+	//DeleteGO(m_timer);
 	DeleteGO(m_gameCamera);
 	DeleteGO(m_backGround);
 	DeleteGO(m_ball);
@@ -53,7 +53,7 @@ bool Game::Start()
 
 void Game::Update()
 {
-	if (m_gameDirector->IsMainGame() == true && m_timer->IsTimerEnd() == true) {
+	/*if (m_gameDirector->IsMainGame() == true && m_timer->IsTimerEnd() == true) {
 		m_gameDirector->SetGameResult();
-	}
+	}*/
 }
