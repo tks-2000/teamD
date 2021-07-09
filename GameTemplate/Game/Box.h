@@ -21,6 +21,8 @@ public:
 
 	void SetBoxPos(Vector3 pos,int num);
 
+	Vector3& GetBoxPos() { return m_position; }
+
 	void DistanceCalculation();
 
 private:

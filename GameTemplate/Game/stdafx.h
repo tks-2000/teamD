@@ -26,6 +26,7 @@
 #include "Ball.h"
 #include "Objects.h"
 #include "Box.h"
+#include "Item.h"
 #include "Sky.h"
 #include "Result.h"
 
@@ -74,6 +75,7 @@ namespace {
 	const char* SKY_NAME = "Sky";
 	const char* OBJECTS_NAME = "Objects";
 	const char* BOX_NAME = "Box";
+	const char* ITEM_NAME = "Item";
 	const char* RESULT_NAME = "Result";
 	const char* BGM_NAME = "Bgm";
 	const char* SE_NAME = "Se";
