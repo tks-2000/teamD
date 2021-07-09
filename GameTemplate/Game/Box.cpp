@@ -6,6 +6,10 @@ namespace {
 	const float BALL_DISTANCE = 100.0f;
 	const float PLAYER_DISTANCE = 120.0f;
 	const float PLAYER_REPEL = 5.0f;
+	const float OPEN_TIME = 60.0f;
+	const float FALL = 2.0f;
+	const float BOX_FALL_YPOS = 50.0f;
+	const float CHARACON_SCALE = 40.0f;
 }
 Box::Box() {
 	m_gameDirector = FindGO<GameDirector>(GAME_DIRECTOR_NAME);
@@ -19,7 +23,7 @@ Box::Box() {
 	m_objects = FindGO<Objects>(OBJECTS_NAME);
 	m_timer = FindGO<Timer>(TIMER_NAME);
 
-	m_fall = 2;
+	m_fall = FALL;
 }
 Box::~Box() {
 	DeleteGO(m_skinModelRender);
@@ -45,7 +49,7 @@ bool Box::Start() {
 
 
 
-	m_charaCon.Init(40.0f, 40.0f, m_position);
+	m_charaCon.Init(CHARACON_SCALE, CHARACON_SCALE, m_position);
 
 	m_skinModelRender->SetPosition(m_position);
 
@@ -59,14 +63,14 @@ void Box::Update() {
 	DistanceCalculation();
 
 
-	if (m_position.y > 50) {
+	if (m_position.y > BOX_FALL_YPOS) {
 		m_fallSpeed.y -= m_fall;
 	}
 	if (m_ballDistance < BALL_DISTANCE /*&& !m_timer->IsCountDown()*/) {
 		ballCollider();
 	}
 	for (int plNum = 0; plNum < m_playerNum; plNum++) {
-		if (m_position.y > 50 && m_playerDistance[plNum] < PLAYER_DISTANCE) {
+		if (m_position.y > BOX_FALL_YPOS && m_playerDistance[plNum] < PLAYER_DISTANCE) {
 			/// @brief ƒ{[ƒ‹‚ÆŽ©•ª‚ÌˆÊ’u‚©‚ç‚«”ò‚Î‚³‚ê‚é•ûŒü‚ðŒˆ‚ß‚é
 			Vector3 repulsiveForce = m_player[plNum]->GetPosition() - m_position;
 			repulsiveForce.y = FLOAT_0;
@@ -81,7 +85,7 @@ void Box::Update() {
 	if (m_openFlag == true) {
 		m_openTime++;
 	}
-	if (m_openTime >= 60) {
+	if (m_openTime >= OPEN_TIME) {
 		m_score->AddScore(m_ball->GetPlayerInformation());
 		m_objects->SetDelFlag(m_boxNum);
 		DeleteGO(this);
@@ -113,7 +117,7 @@ void Box::BallBound()
 	m_isReflect = true;
 
 	Vector3 toBallDir = m_ball->GetPosition() - m_position;
-	toBallDir.y = 0.0f;
+	toBallDir.y = ZeroF;
 	toBallDir.Normalize();
 	
 	m_ball->SetMoveDirection(toBallDir);
