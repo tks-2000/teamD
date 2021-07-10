@@ -37,6 +37,8 @@ private:
 	Effect m_respawnEffect[PLAYER_NUMBER];
 	/// @brief ダメージエフェクト
 	Effect m_damageEffect[PLAYER_NUMBER];
+	/// @brief バースト時のエフェクト
+	Effect m_burstEffect[PLAYER_NUMBER];
 
 
 	GameDirector* m_gameDirector = nullptr;
@@ -108,6 +110,13 @@ public:
 	/// @param plNum 再生するプレイヤー番号
 	void PlayShieldHitEffect(int plNum);
 
+	/// @brief ダメージエフェクトを再生
+	/// @param plNum 
+	void PlayDamageEffect(int plNum);
+
+	/// @brief バーストエフェクトを再生
+	void PlayBurstEffect(int plNum);
+
 	/// @brief シールド回復エフェクトの再生
 	/// @param plNum 再生するプレイヤー番号
 	void PlayShieldRepairEffect(int plNum) { m_shieldRepairEffect[plNum].Play(); }
@@ -128,13 +137,9 @@ public:
 	/// @param plNum 再生するプレイヤー番号
 	void PlayRepairEffect(int plNum) { m_repairEffect[plNum].Play(); }
 	
-	/// @brief ダメージエフェクトを再生
-	/// @param plNum 
-	void PlayDamageEffect(int plNum);
-
 	/// @brief リスポーン時のエフェクトを再生
 	/// @param plNum 再生するプレイヤー番号
 	void PlayRespawnEffect(int plNum) { m_respawnEffect[plNum].Play(); }
-
+	
 };
 

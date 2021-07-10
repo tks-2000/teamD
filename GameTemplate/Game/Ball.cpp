@@ -5,6 +5,16 @@ namespace
 {
 	//軌跡エフェクト関係
 	const char16_t* TRACKEFFECT_PL01_FILEPATH = u"Assets/effect/balltrack_low.efk";	//軌跡エフェクトのファイルパス
+	//ボールがどのプレイヤーのものかを表すための色
+	const char16_t* TRACKEFFECT_MULTIPLE_FILEPATH[PLAYER_NUMBER] = 
+	{
+		{u"Assets/effect/balltrack_red.efk"},		//1p 赤
+		{u"Assets/effect/balltrack_blue.efk"},		//2p 青
+		{u"Assets/effect/balltrack_yellow.efk"},	//3p 黄
+		{u"Assets/effect/balltrack_green.efk"}		//4p 緑
+	};
+
+	//軌跡エフェクトのファイルパス
 	const Vector3 TRACKEFFECT_SCALE_MAX = { 60.0f,60.0f,1.0f };					//エフェクトの最大サイズ
 	const Vector3 TRACKEFFECT_SCALE_MIN = { 3.0f,3.0f,1.0f };					//エフェクトの最小サイズ	
 	const float TRACKEFFECT_BASE_MAX = 40.0f;									//補間率を決めるための最大基準値
@@ -159,6 +169,12 @@ void Ball::PlayTrackEffect()
 
 }
 
+void Ball::ChangeTrackEffect()
+{
+	//最後にキックしたプレイヤーに対応したカラーのエフェクトで初期化
+	m_ballTrack.Init(TRACKEFFECT_MULTIPLE_FILEPATH[m_playerNum]);
+}
+
 void Ball::PlayReflectEffect
 	(const float& posX, 
 	const float& posY, 
@@ -182,6 +198,11 @@ void Ball::PlayReflectEffect
 
 void Ball::Update()
 {
+	//軌跡用エフェクトの変更処理
+	if (m_playerNumPrevFrame != m_playerNum) {
+		ChangeTrackEffect();
+	}
+
 	if (m_moveFlag == true) {
 		m_lig->SetPointLightColor(4,m_pointLigColor);
 		Move();
@@ -208,5 +229,10 @@ void Ball::Update()
 	m_ballTrack.Update();
 
 	m_lig->SetPointLighitPos(4,modelpos);
+
+	//現フレームのプレイヤーナンバーを記録
+	if (m_playerNumPrevFrame != m_playerNum) {
+		m_playerNumPrevFrame = m_playerNum;
+	}
 
 }

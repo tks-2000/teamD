@@ -118,6 +118,10 @@ private:
 	Vector3 m_toBallVec = Vector3::Zero;
 	/// @brief プレイヤーが死んだかどうかのフラグ
 	bool m_dieFlag = false;
+	/// @brief バースト扱いのフラグ
+	bool m_burstFlag = false;
+	/// @brief 前フレームのバーストフラグ記録用
+	bool m_burstFlagPrevFrame = false;
 	/// @brief プレイヤーがリスポーンした時の無敵時間
 	float m_mutekiTime = 0.0f;
 	/// @brief ボールとの距離

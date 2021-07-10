@@ -68,10 +68,12 @@ namespace {
 	const float DAMAGEEFFECT_BALLSPEED_MAX = 60.0f;
 	const float DAMAGEEFFECT_BALLSPEED_MIN = 0.0f;
 
+	
+	
 
 
 	//リスポーン時のエフェクトのファイルパス(プレイヤー別)
-	const char16_t* RESPAWNEFFECT_FILEPATH[4] = { 
+	const char16_t* RESPAWNEFFECT_FILEPATH[PLAYER_NUMBER] = { 
 		{u"Assets/effect/respawn_red.efk"},
 		{u"Assets/effect/respawn_blue.efk"},
 		{u"Assets/effect/respawn_yellow.efk"},
@@ -79,6 +81,15 @@ namespace {
 	};
 	const Vector3 RESPAWNEFFECT_SCALE = { 20.0f,20.0f,20.0f };
 	const float RESPAWNEFFECT_OFFSET_Y = 400.0f;
+
+	//バーストエフェクトのファイルパス(プレイヤー別)
+	const char16_t* BURSTEFFECT_FILEPATH[PLAYER_NUMBER] = {
+		{u"Assets/effect/burst_red.efk"},
+		{u"Assets/effect/burst_blue.efk"},
+		{u"Assets/effect/burst_yellow.efk"},
+		{u"Assets/effect/burst_green.efk"}
+	};
+	const Vector3 BURSTEFFECT_SCALE = { 5.0f,5.0f,5.0f };
 
 }
 
@@ -114,6 +125,8 @@ PlayerEffect::PlayerEffect()
 		//プレイヤー別エフェクトの初期化
 		//リスポーン時のエフェクトを初期化
 		m_respawnEffect[plNum].Init(RESPAWNEFFECT_FILEPATH[plNum]);
+		//バーストエフェクトを初期化
+		m_burstEffect[plNum].Init(BURSTEFFECT_FILEPATH[plNum]);
 
 	}
 }
@@ -204,6 +217,17 @@ void PlayerEffect::PlayDamageEffect(int plNum)
 	m_damageEffect[plNum].SetPosition(m_efcGuardPos[plNum]);
 	m_damageEffect[plNum].SetScale(efcScale);
 	m_damageEffect[plNum].Update();
+}
+
+void PlayerEffect::PlayBurstEffect(int plNum)
+{
+	Vector3 efcPos = Vector3::Zero;
+	efcPos = m_player[plNum]->GetPosition();
+
+	m_burstEffect[plNum].Play();
+	m_burstEffect[plNum].SetPosition(efcPos);
+	m_burstEffect[plNum].SetScale(BURSTEFFECT_SCALE);
+	m_burstEffect[plNum].Update();
 }
 
 void PlayerEffect::GuardBeginEffectUpdate(int plNum)

@@ -11,6 +11,8 @@ namespace {
 	const float COLLIDE_DISTANCE = 80.0f;
 	/// @brief 落下扱いになる高さ
 	const float FALLING_HEIGHT = -1000.0f;
+	/// @brief バーストエフェクトを再生する判定を行う高さ
+	const float BURST_HEIGHT = -500.0f;
 	/// @brief 1Pの初期位置
 	const Vector3 PLAYER1_STARTPOS = { -500.0f,500.0f,500.0f };
 	/// @brief 2Pの初期位置
@@ -242,6 +244,15 @@ void Player::Move()
 
 		
 		ReSpawn();
+	}
+
+	/// @brief バースト処理
+	if (m_position.y < BURST_HEIGHT) {
+		m_burstFlag = true;
+
+		if (m_burstFlag == true && m_burstFlagPrevFrame == false) {
+			m_plEffect->PlayBurstEffect(m_myNumber);
+		}
 	}
 
 
@@ -495,6 +506,7 @@ void Player::ReSpawn() {
 	m_lig->SetPointLightBlinking(m_myNumber, m_mutekiTime, 0.07f);
 	m_dieFlag = true;
 
+	//リスポーン時のエフェクトを再生
 	m_plEffect->PlayRespawnEffect(m_myNumber);
 	m_powerUp = false;
 	m_powerUpTime = FLOAT_0;
@@ -507,6 +519,7 @@ void Player::Muteki()
 	/// @brief リスポーン時に少しの間ボールに当たらなくなる
 	if (m_mutekiTime <= TIME_ZERO) {
 		m_dieFlag = false;
+		m_burstFlag = false;
 	}
 }
 
@@ -728,6 +741,12 @@ void Player::Update()
 	if (g_pad[m_myNumber]->IsTrigger(enButtonStart)) {
 		ReSpawn();
 	}
+
+	//現フレームのバースト状況を記録
+	if (m_burstFlagPrevFrame != m_burstFlag) {
+		m_burstFlagPrevFrame = m_burstFlag;
+	}
+
 }
 
 void Player::BallDistanceCalculation()
