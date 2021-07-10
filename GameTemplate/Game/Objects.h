@@ -20,6 +20,10 @@ public:
 	void SetDelFlag(int num) { m_delFlag[num] = true; }
 	void SetItemDelFlag(int num) { m_itemDelFlag[num] = true; }
 
+	bool IsBoxOpen(int num) { return m_boxOpenFlag[num]; }
+
+	void SetBoxOpen(int num) { m_boxOpenFlag[num] = true; }
+
 private:
 	/// @brief オブジェクトの座標
 	Vector3 m_position;
@@ -35,6 +39,8 @@ private:
 	bool m_delFlag[OBJECTS_NUMBER] = { false };
 
 	bool m_itemDelFlag[OBJECTS_NUMBER] = { false };
+
+	bool m_boxOpenFlag[OBJECTS_NUMBER] = { false };
 
 	int m_setNum = 0;
 

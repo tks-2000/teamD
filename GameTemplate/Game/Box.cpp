@@ -66,8 +66,10 @@ void Box::Update() {
 	if (m_position.y > BOX_FALL_YPOS) {
 		m_fallSpeed.y -= m_fall;
 	}
-	if (m_ballDistance < BALL_DISTANCE /*&& !m_timer->IsCountDown()*/) {
-		ballCollider();
+	else {
+		if (m_ballDistance < BALL_DISTANCE /*&& !m_timer->IsCountDown()*/) {
+			ballCollider();
+		}
 	}
 	for (int plNum = 0; plNum < m_playerNum; plNum++) {
 		if (m_position.y > BOX_FALL_YPOS && m_playerDistance[plNum] < PLAYER_DISTANCE) {
@@ -109,6 +111,7 @@ void Box::Update() {
 }
 void Box::ballCollider() {
 	m_openFlag = true;
+	m_objects->SetBoxOpen(m_boxNum);
 	m_skinModelRender->PlayAnimation(enAnimation_Open, 1.0f);
 }
 

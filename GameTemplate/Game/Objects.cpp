@@ -37,16 +37,19 @@ void Objects::SetObjects(int num) {
 		m_item[setNum] = NewGO<Item>(PRIORITY_VERYLOW, ITEM_NAME);
 		m_box[setNum]->SetBoxPos(OBJECTS_POS[setNum], setNum);
 		m_item[setNum]->SetNumber(setNum);
-		switch (setNum)
+		int itemNo = rand() % Item::enItemNum;
+		switch (itemNo)
 		{
-		case 1: {
+		case 0: {
 			m_item[setNum]->SetItem(Item::enAttackUp);
 		}break;
-		case 2: {
+		case 1: {
 			m_item[setNum]->SetItem(Item::enGuardUp);
 		}break;
-		default:{
+		case 2: {
 			m_item[setNum]->SetItem(Item::enSpeedUp);
+		}break;
+		default:{
 		}break;
 		}
 	}
@@ -75,6 +78,7 @@ void Objects::Update() {
 				m_delFlag[Num] = false;
 				m_reSpawnTime[Num] = ZeroF;
 				m_itemDelFlag[Num] = false;
+				m_boxOpenFlag[Num] = false;
 			}
 		}
 		if (m_delFlag[Num] == false && m_itemDelFlag[Num] == false) {

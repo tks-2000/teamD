@@ -102,7 +102,7 @@ void GameDirector::Update()
 			m_bgm->ChangeResultBgm();
 		}
 		else {
-			if (g_pad[0]->IsTrigger(enButtonA)) {
+			if (m_result->IsMoveEnd() == true && g_pad[0]->IsTrigger(enButtonA)) {
 				m_sceneChange->TransparencyChange(false);
 			}
 			if (m_sceneChange->TransparencyChangeEnd() == true) {
