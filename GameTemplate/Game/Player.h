@@ -75,6 +75,9 @@ public:
 	bool GetGuardBreak() {
 		return m_breakGuard;
 	}
+	/// @brief プレイヤーのリスポーン地点ゲッター
+	/// @return 
+	Vector3 GetRespawnPoint() { return m_startPos; }
 
 	void KickPowerUp() { m_kickUp = true; m_guardUp = false; m_speedUp = false; m_itemPowerUp = true; m_itemPowerUpTime = 0.0f; }
 

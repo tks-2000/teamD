@@ -333,7 +333,6 @@ void Player::BallCollide()
 		return;
 	}
 
-
 	/// @brief ボールと自分の位置から吹き飛ばされる方向を決める
 	Vector3 repulsiveForce = m_position - m_ball->GetPosition();
 	repulsiveForce.y = FLOAT_0;
@@ -349,7 +348,6 @@ void Player::BallCollide()
 	repulsiveForce.y = m_ball->GetVelocity() * BLOW_AWAY_HEIGHT_RATE;
 	m_moveSpeed = repulsiveForce * FLOAT_2;
 	m_ball->SetMoveDirection(repulsiveForce * FLOAT_MINUS_1);
-
 
 	if (m_breakGuard == true) {
 		m_plEffect->StopKnockOutEffect(m_myNumber);
@@ -496,8 +494,11 @@ void Player::ReSpawn() {
 	m_mutekiTime = MUTEKI_TIME;
 	m_lig->SetPointLightBlinking(m_myNumber, m_mutekiTime, 0.07f);
 	m_dieFlag = true;
+
+	m_plEffect->PlayRespawnEffect(m_myNumber);
 	m_powerUp = false;
 	m_powerUpTime = FLOAT_0;
+
 }
 
 void Player::Muteki()
@@ -637,11 +638,21 @@ void Player::Update()
 	if (m_breakGuard == true) {
 		if (m_ballDistance < GUARD_DISTANCE && m_dieFlag == false) {
 			BallCollide();
+			//ダメージエフェクト再生処理
+			//前フレームにダメージ状態でなく、現フレームでダメージ状態のとき
+			if (m_damagePrevFrame == false && m_damage == true) {
+				m_plEffect->PlayDamageEffect(m_myNumber);
+			}
 		}
 	}
 	else {
 		if (m_ballDistance < COLLIDE_DISTANCE && m_dieFlag == false) {
 			BallCollide();
+			//ダメージエフェクト再生処理
+			//前フレームにダメージ状態でなく、現フレームでダメージ状態のとき
+			if (m_damagePrevFrame == false && m_damage == true) {
+				m_plEffect->PlayDamageEffect(m_myNumber);
+			}
 		}
 	}
 	/// @brief LB1を押している間ガード
