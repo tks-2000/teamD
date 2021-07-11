@@ -22,6 +22,8 @@ private:
 	Vector2 m_movePos[PLAYER_NUMBER] = { Vector2::Zero,Vector2::Zero ,Vector2::Zero ,Vector2::Zero };
 	GameDirector* m_gameDirector = nullptr;
 	Score* m_score = nullptr;
+	int m_moveOrder[PLAYER_NUMBER] = { 0 };
+	int m_decrease = 0;
 
 	void PlayerFontMove(int num);
 

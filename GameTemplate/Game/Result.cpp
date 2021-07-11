@@ -41,15 +41,22 @@ Result::Result()
 		m_movePos[plNum].x = PLAYER_FONT_POS[m_score->GetRanking(plNum) + incremental].x;
 		m_movePos[plNum].y = PLAYER_FONT_POS[m_score->GetRanking(plNum) + incremental].y;
 		m_playerFontSet[m_score->GetRanking(plNum) + incremental] = true;
+		m_moveOrder[plNum] = m_score->GetRanking(plNum) + incremental;
 
 		//m_playerNameFont[plNum]->SetPosition(PLAYER_FONT_POS[plNum]);
 		m_playerNameFont[plNum]->SetText(PLAYER[plNum]);
 		m_playerNameFont[plNum]->SetColor(PLAYER_FONT_COLOR[plNum]);
 	}
-	m_moveFlag[m_gameDirector->GetPlayerNum() - 1] = true;
+	
 	m_moveEndFlag = false;
-	
-	
+	m_decrease = 1;
+	for (int plNum = 0; plNum < m_gameDirector->GetPlayerNum(); plNum++) {
+		if (m_moveOrder[plNum] == m_gameDirector->GetPlayerNum() - m_decrease) {
+			m_moveFlag[plNum] = true;
+			
+			break;
+		}
+	}
 }
 
 Result::~Result()
@@ -66,7 +73,7 @@ Result::~Result()
 
 bool Result::Start()
 {
-
+	
 	return true;
 }
 
@@ -76,8 +83,13 @@ void Result::PlayerFontMove(int num)
 		m_plFontPos[num].x -= 10.0f;
 	}
 	else {
-		if (num != 0) {
-			m_moveFlag[num - 1] = true;
+		if (m_moveOrder[num] != MIN_PLAYER_NUM - m_decrease) {
+			for (int plNum = 0; plNum < m_gameDirector->GetPlayerNum(); plNum++) {
+				if (m_moveOrder[plNum] == m_moveOrder[num] - m_decrease) {
+					m_moveFlag[plNum] = true;
+					break;
+				}
+			}
 		}
 		else {
 			SelectCommandNewGO();
@@ -94,7 +106,8 @@ void Result::SelectCommandNewGO()
 		m_selectFont[selectNum]->SetText(SELECT_COMMAND_FONT[selectNum]);
 	}
 	m_arrowFont = NewGO<FontRender>(5);
-	m_arrowFont->SetText(L"@");
+	m_arrowFont->SetText(L"->");
+	m_arrowFont->SetColor({ 0.0f,1.0f,1.0f,1.0f });
 }
 
 void Result::Update()
@@ -123,6 +136,14 @@ void Result::Update()
 		Vector2 arrowPos = SELECT_FONT_POS[m_selectNum];
 		arrowPos.x -= 100.0f;
 		m_arrowFontPos = arrowPos;
+		for (int selectNum = 0; selectNum < SELECT_COMMAND_NUM; selectNum++) {
+			if (selectNum == m_selectNum) {
+				m_selectFont[selectNum]->SetColor({ 0.0f,1.0f,1.0f,1.0f });
+			}
+			else {
+				m_selectFont[selectNum]->SetColor({ 0.0f,0.0f,0.0f,1.0f });
+			}
+		}
 		m_arrowFont->SetPosition(m_arrowFontPos);
 	}
 }
