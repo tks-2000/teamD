@@ -39,6 +39,8 @@ private:
 	Effect m_damageEffect[PLAYER_NUMBER];
 	/// @brief バースト時のエフェクト
 	Effect m_burstEffect[PLAYER_NUMBER];
+	/// @brief アイテムバフエフェクト
+	Effect m_itemBuffEffect[PLAYER_NUMBER];
 
 
 	GameDirector* m_gameDirector = nullptr;
@@ -75,6 +77,10 @@ private:
 	/// @brief リスポーン時のエフェクトの更新
 	/// @param plNum 更新するプレイヤー番号
 	void RespawnEffectUpdate(int plNum);
+
+	/// @brief アイテムバフエフェクトの更新
+	/// @param plNum 更新するプレイヤー番号
+	void ItemBuffEffectUpdate(int plNum);
 
 public:
 	
@@ -140,6 +146,12 @@ public:
 	/// @brief リスポーン時のエフェクトを再生
 	/// @param plNum 再生するプレイヤー番号
 	void PlayRespawnEffect(int plNum) { m_respawnEffect[plNum].Play(); }
+
+	/// @brief アイテムバフエフェクトを再生
+	/// @param plNum 再生するプレイヤー番号
+	void PlayItemBuffEffect(int plNum) { m_itemBuffEffect[plNum].Play(); }
 	
+	//ファイルパスの変更
+	void ChangeItemBuffEffect(int plNum, ItemBuffChange buffNum);
 };
 

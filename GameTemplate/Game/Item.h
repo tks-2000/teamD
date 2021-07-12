@@ -4,6 +4,7 @@ class SkinModelRender;
 class GameDirector;
 class Objects;
 class Player;
+class Effect;
 
 class Item : public IGameObject
 {
@@ -19,6 +20,11 @@ public:
 	
 
 	void PlayerDistanceCalculation();
+	
+	//存在エフェクトの再生
+	void PlayBeingEffect();
+	//存在エフェクトの再生許可フラグをオン
+	void SetVallidPlayEffect() { m_isValidEffectPlay = true; }
 
 	enum enItemType {
 		enAttackUp,
@@ -45,6 +51,13 @@ private:
 	bool m_newGoFlag = false;
 
 	bool m_moveChange = false;
+
+	/// @brief アイテムの周りに出すエフェクト
+	Effect m_itemBeingEffect;
+	/// @brief エフェクト再生用カウンター
+	int m_itemBeingCounter = 0;
+	/// @brief エフェクト再生許可フラグ
+	bool m_isValidEffectPlay = false;
 
 	void ItemModelNewGO();
 
