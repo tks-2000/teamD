@@ -13,9 +13,11 @@ namespace {
 		{u"Assets/effect/itemAura_blue.efk"},
 		{u"Assets/effect/itemAura_yellow.efk"}
 	};
-	const Vector3 ITEMEFFECT_SCALE = { 20.0f,20.0f,20.0f };
+	const Vector3 ITEMEFFECT_SCALE = { 8.0f,8.0f,8.0f };
 	//エフェクト発生高度のオフセット値
 	const float ITEMEFFECT_OFFSET_Y = 20.0f;
+	//エフェクト再生可能フラグを立てるための高度
+	const float ITEMEFFECT_PLAYHEIGHT = 10.0f;
 	//エフェクト再生周期(低いほど多く発生)
 	const int ITEMEFFECT_PLAYCYCLE = 6;
 }
@@ -129,6 +131,10 @@ void Item::Update()
 	if (m_newGoFlag == true) {
 		m_skinModelRender->SetPosition(modelPos);
 		m_skinModelRender->SetRotation(m_qRot);
+	}
+
+	if (m_position.y < ITEMEFFECT_PLAYHEIGHT) {
+		m_isValidEffectPlay = true;
 	}
 
 	//存在エフェクト再生処理

@@ -591,6 +591,7 @@ void Player::RecordFlags()
 
 void Player::Update()
 {
+	//アイテムを取ったら自身のバフ状況を変更
 	SetItemChangeState();
 	
 	//アイテムバフエフェクトの再生処理

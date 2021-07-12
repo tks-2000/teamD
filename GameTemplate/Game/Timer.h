@@ -3,7 +3,7 @@
 class GameDirector;
 
 /// @brief ƒQ[ƒ€‚Ì§ŒÀŠÔ
-static const float TIME_LIMIT = 120.0f;
+static const float TIME_LIMIT = 5.0f;
 
 class Timer : public IGameObject
 {

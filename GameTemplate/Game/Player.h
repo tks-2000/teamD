@@ -92,7 +92,7 @@ public:
 
 	void GuardPowerUp() { m_kickUp = false; m_guardUp = true; m_speedUp = false; m_itemPowerUp = true; m_itemPowerUpTime = 0.0f; }
 
-	void SpeedPowerUp() { m_kickUp = true; m_guardUp = false; m_speedUp = true; m_itemPowerUp = true; m_itemPowerUpTime = 0.0f; }
+	void SpeedPowerUp() { m_kickUp = false; m_guardUp = false; m_speedUp = true; m_itemPowerUp = true; m_itemPowerUpTime = 0.0f; }
 
 	/// @brief バフ状態の変化状況を記録,エフェクト用ファイルパスの変更
 	void SetItemChangeState();

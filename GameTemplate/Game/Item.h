@@ -23,8 +23,6 @@ public:
 	
 	//存在エフェクトの再生
 	void PlayBeingEffect();
-	//存在エフェクトの再生許可フラグをオン
-	void SetVallidPlayEffect() { m_isValidEffectPlay = true; }
 
 	enum enItemType {
 		enAttackUp,

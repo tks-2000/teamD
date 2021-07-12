@@ -3,6 +3,7 @@
 class FontRender;
 class GameDirector;
 class Score;
+class Effect;
 
 const int SELECT_COMMAND_NUM = 3;
 
@@ -24,6 +25,13 @@ private:
 	Score* m_score = nullptr;
 	int m_moveOrder[PLAYER_NUMBER] = { 0 };
 	int m_decrease = 0;
+
+	//紙吹雪エフェクト(吹きあがるタイプ)
+	Effect m_kamifubukiEffect[2];
+	Quaternion m_kamifubukiEffectRotation[2] = { Quaternion::Identity };
+	bool m_kamifubukiEffectPlayFlag = false;
+	//紙吹雪エフェクト(落ちるタイプ)
+	Effect m_kamifubukiFallEffect;
 
 	void PlayerFontMove(int num);
 

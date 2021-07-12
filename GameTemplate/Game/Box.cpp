@@ -10,8 +10,10 @@ namespace {
 	const float FALL = 2.0f;
 	const float BOX_FALL_YPOS = 60.0f;
 	const float CHARACON_SCALE = 40.0f;
+	
 	//消滅時に出る煙のエフェクトファイルパス
 	const char16_t* SMOKEEFFECT_FILEPATH = u"Assets/effect/smoke.efk";
+	const float SMOKEEFFECT_OFFSET_Y = 20.0f;
 	const Vector3 SMOKEEFFECT_SCALE = { 30.0f,30.0f,30.0f };
 
 }
@@ -31,13 +33,6 @@ Box::Box() {
 }
 Box::~Box() {
 	DeleteGO(m_skinModelRender);
-
-	Effect smokeEffect;
-	smokeEffect.Init(SMOKEEFFECT_FILEPATH);
-	smokeEffect.Play();
-	smokeEffect.SetPosition(m_position);
-	smokeEffect.SetScale(SMOKEEFFECT_SCALE);
-	smokeEffect.Update();
 }
 bool Box::Start() {
 	m_animationClips[enAnimation_Close].Load("Assets/animData/box/close.tka");
@@ -99,6 +94,17 @@ void Box::Update() {
 		m_openTime++;
 	}
 	if (m_openTime >= OPEN_TIME) {
+		
+		//消滅時の煙を出すエフェクト処理
+		Vector3 efcPos = m_position;
+		efcPos.y += SMOKEEFFECT_OFFSET_Y;
+		Effect smokeEffect;
+		smokeEffect.Init(SMOKEEFFECT_FILEPATH);
+		smokeEffect.Play();
+		smokeEffect.SetPosition(efcPos);
+		smokeEffect.SetScale(SMOKEEFFECT_SCALE);
+		smokeEffect.Update();
+
 		m_score->AddScore(m_ball->GetPlayerInformation());
 		m_objects->SetDelFlag(m_boxNum);
 		DeleteGO(this);
