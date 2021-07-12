@@ -37,8 +37,8 @@ bool Box::Start() {
 	m_skinModelRender = NewGO<SkinModelRender>(0);
 	//m_skinModelRender->Init("Assets/modelData/object/box.tkm");
 	m_skinModelRender->InitA(
-		"Assets/modelData/object/box3.tkm", 
-		"Assets/modelData/object/box3.tks",
+		"Assets/modelData/object/box2.tkm", 
+		"Assets/modelData/object/box2.tks",
 		enModelUpAxisZ,
 		m_animationClips,
 		enAnimation_Num,
