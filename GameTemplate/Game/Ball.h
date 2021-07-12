@@ -22,6 +22,8 @@ public:
 	void Rotation();
 	/// @brief 軌跡用エフェクトの再生処理
 	void PlayTrackEffect();
+	/// @brief 軌跡用エフェクトの変更
+	void ChangeTrackEffect();
 	/// @brief 壁反射用エフェクトの再生処理
 	void PlayReflectEffect
 		(const float& posX,
@@ -105,6 +107,8 @@ private:
 	Vector3 m_pointLigColor = Vector3::Zero;
 	/// @brief ボールにプレイヤー情報を渡すナンバー
 	int m_playerNum = 0;
+	/// @brief 前フレームのプレイヤーナンバー記録用
+	int m_playerNumPrevFrame = 0;
 
 	/// @brief キャラクターコントローラー
 	CharacterController m_charaCon;

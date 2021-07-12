@@ -2,6 +2,7 @@
 
 #include "HID/GamePad.h"
 #include "TResourceBank.h"
+#include "TResourceBank2.h"
 #include "tkFile/TkmFile.h"
 #include "Shader.h"
 #include <MiniEngine.h>
@@ -56,8 +57,8 @@ public:
 
 private:
 	GraphicsEngine* m_graphicsEngine = nullptr;		//グラフィックエンジン。
-	TResourceBank<TkmFile> m_tkmFileBank;
-	TResourceBank<Shader> m_shaderBank;
+	TResourceBank2<TkmFile> m_tkmFileBank;
+	TResourceBank2<Shader> m_shaderBank;
 	GamePad m_pad[GamePad::CONNECT_PAD_MAX];		//ゲームパッド。
 	GameTime m_gameTime;							//ゲームタイム。
 	

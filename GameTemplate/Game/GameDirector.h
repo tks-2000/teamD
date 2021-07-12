@@ -8,6 +8,7 @@ class Bgm;
 class Se;
 class Lighting;
 class SceneChange;
+class Timer;
 
 class GameDirector : public IGameObject
 {
@@ -42,6 +43,8 @@ private:
 	Lighting* m_lighting = nullptr;
 
 	SceneChange* m_sceneChange = nullptr;
+
+	Timer* m_timer = nullptr;
 
 public:
 	GameDirector();

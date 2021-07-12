@@ -17,6 +17,8 @@ namespace {
 
 	const Vector3 CAMERA_POS = { 0.0f,100.0f,-600.0f };
 
+	const char* SELECTMENU_BG_FILEPATH = "Assets/modelData/selectBg/selectbg.tkm";
+
 }
 
 Menu::Menu()
@@ -62,9 +64,9 @@ Menu::~Menu()
 bool Menu::Start()
 {
 	m_floor = NewGO<SkinModelRender>(0);
-	m_floor->Init("Assets/modelData/bg/floor.tkm");
-	m_floor->SetPosition({ 0.0f,0.0f,0.0f });
-	m_floorRot.SetRotationDegY(180.0f);
+	m_floor->Init(SELECTMENU_BG_FILEPATH);
+	m_floor->SetPosition({ 0.0f,-50.0f,800.0f });
+	m_floorRot.SetRotationDegY(0.0f);
 	m_floor->SetRotation(m_floorRot);
 
 	m_gameDirector = FindGO<GameDirector>(GAME_DIRECTOR_NAME);
@@ -119,7 +121,7 @@ void Menu::Update()
 		}
 		m_qRot[plNum].SetRotationDeg(Vector3::AxisY, m_angle[plNum]);
 		m_plModel[plNum]->SetRotation(m_qRot[plNum]);
-		m_pos[plNum].y += m_riseSpeed[plNum];
+		m_pos[plNum].y += m_riseSpeed[plNum] * m_riseSpeed[plNum];
 		m_plModel[plNum]->SetPosition(m_pos[plNum]);
 		m_lig->SetSpotLightPos(plNum, m_spLigPos[plNum]);
 		m_lig->SetSpotLightDirection(plNum, m_pos[plNum] - m_spLigPos[plNum]);
@@ -129,7 +131,7 @@ void Menu::Update()
 	if (m_endFlag == true) {
 		for (int plNum = 0; plNum < MAX_PLAYER_NUM; plNum++) {
 			if (m_playerNum > plNum) {
-				m_riseSpeed[plNum] += 0.2f;
+				m_riseSpeed[plNum] += 0.1f;
 				m_plModel[plNum]->PlayAnimation(enAnimation_jump, FLOAT_1);
 			}
 		}

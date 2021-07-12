@@ -60,6 +60,46 @@ namespace {
 	const char16_t* REPAIREFFECT_FILEPATH = u"Assets/effect/repair.efk";
 	//ダメージ回復エフェクトのスケール
 	const Vector3 REPAIREFFECT_SCALE = { 10.0f,10.0f,10.0f };
+	
+	//ダメージエフェクトのファイルパス
+	const char16_t* DAMAGEEFFECT_FILEPATH = u"Assets/effect/damage.efk";
+	//最大の大きさ
+	const Vector3 DAMAGEEFFECT_SCALE_MIN = { 5.0f,5.0f,5.0f };
+	//最小の大きさ
+	const Vector3 DAMAGEEFFECT_SCALE_MAX = { 30.0f,30.0f,30.0f };
+	//大きさが最大となるボールスピードの上限
+	const float DAMAGEEFFECT_BALLSPEED_MAX = 60.0f;
+	//大きさが最小となるボールスピードの下限
+	const float DAMAGEEFFECT_BALLSPEED_MIN = 0.0f;
+
+	//リスポーン時のエフェクトのファイルパス(プレイヤー別)
+	const char16_t* RESPAWNEFFECT_FILEPATH[PLAYER_NUMBER] = { 
+		{u"Assets/effect/respawn_red.efk"},
+		{u"Assets/effect/respawn_blue.efk"},
+		{u"Assets/effect/respawn_yellow.efk"},
+		{u"Assets/effect/respawn_green.efk"}
+	};
+	const Vector3 RESPAWNEFFECT_SCALE = { 20.0f,20.0f,20.0f };
+	const float RESPAWNEFFECT_OFFSET_Y = 400.0f;
+
+	//バーストエフェクトのファイルパス(プレイヤー別)
+	const char16_t* BURSTEFFECT_FILEPATH[PLAYER_NUMBER] = {
+		{u"Assets/effect/burst_red.efk"},
+		{u"Assets/effect/burst_blue.efk"},
+		{u"Assets/effect/burst_yellow.efk"},
+		{u"Assets/effect/burst_green.efk"}
+	};
+	const Vector3 BURSTEFFECT_SCALE = { 8.0f,16.0f,8.0f };
+
+	// アイテムバフエフェクトのファイルパス
+	const char16_t* ITEMBUFFEFFECT_FILEPATH[ITEM_NUMBER] = {
+		{u"Assets/effect/itembuff_attackup.efk"},
+		{u"Assets/effect/itembuff_guardup.efk"},
+		{u"Assets/effect/itembuff_speedup.efk"}
+	};
+	const Vector3 ITEMBUFFEFFECT_SCALE = { 10.0f,10.0f,10.0f };
+	const float ITEMBUFFEFFECT_OFFSET_Y = 20.0f;
+
 }
 
 PlayerEffect::PlayerEffect()
@@ -88,7 +128,16 @@ PlayerEffect::PlayerEffect()
 		m_kickBuffEffect[plNum].Init(KICKBUFFEFFECT_FILEPATH);
 		//ダメージ回復エフェクトを初期化
 		m_repairEffect[plNum].Init(REPAIREFFECT_FILEPATH);
+		//ダメージエフェクトを初期化
+		m_damageEffect[plNum].Init(DAMAGEEFFECT_FILEPATH);
 
+		//プレイヤー別エフェクトの初期化
+		//リスポーン時のエフェクトを初期化
+		m_respawnEffect[plNum].Init(RESPAWNEFFECT_FILEPATH[plNum]);
+		//バーストエフェクトを初期化
+		m_burstEffect[plNum].Init(BURSTEFFECT_FILEPATH[plNum]);
+		/// バフエフェクトを初期化
+		m_itemBuffEffect[plNum].Init(ITEMBUFFEFFECT_FILEPATH[0]);
 	}
 }
 
@@ -104,6 +153,8 @@ bool PlayerEffect::Start()
 		m_player[plNum] = FindGO<Player>(PLAYER_NAME[plNum]);
 	}
 	m_ball = FindGO<Ball>(BALL_NAME);
+
+	
 
 	return true;
 }
@@ -159,6 +210,38 @@ void PlayerEffect::PlayShieldHitEffect(int plNum)
 	m_shieldHitEffect[plNum].Update();
 }
 
+void PlayerEffect::PlayDamageEffect(int plNum)
+{
+	Vector3 efcScale = Vector3::Zero;
+
+	//最大値に対する現在のスピードの割合を計算
+	float speedRate = m_ball->GetVelocity() / DAMAGEEFFECT_BALLSPEED_MAX;
+
+	//1.0を超えるときに1.0にする
+	if (speedRate > 1.0f) {
+		speedRate = 1.0f;
+	}
+
+	//得られた割合から拡大率を線形補完
+	efcScale.Lerp(speedRate, DAMAGEEFFECT_SCALE_MIN, DAMAGEEFFECT_SCALE_MAX);
+
+	m_damageEffect[plNum].Play();
+	m_damageEffect[plNum].SetPosition(m_efcGuardPos[plNum]);
+	m_damageEffect[plNum].SetScale(efcScale);
+	m_damageEffect[plNum].Update();
+}
+
+void PlayerEffect::PlayBurstEffect(int plNum)
+{
+	Vector3 efcPos = Vector3::Zero;
+	efcPos = m_player[plNum]->GetPosition();
+
+	m_burstEffect[plNum].Play();
+	m_burstEffect[plNum].SetPosition(efcPos);
+	m_burstEffect[plNum].SetScale(BURSTEFFECT_SCALE);
+	m_burstEffect[plNum].Update();
+}
+
 void PlayerEffect::GuardBeginEffectUpdate(int plNum)
 {
 	m_guardBeginEffect[plNum].SetPosition(m_efcGuardPos[plNum]);
@@ -205,6 +288,40 @@ void PlayerEffect::RepairEffectUpdate(int plNum)
 	m_repairEffect[plNum].Update();
 }
 
+void PlayerEffect::RespawnEffectUpdate(int plNum)
+{
+
+	Vector3 efcPos = m_player[plNum]->GetRespawnPoint();
+	efcPos.y -= RESPAWNEFFECT_OFFSET_Y;
+	m_respawnEffect[plNum].SetPosition(efcPos);
+	m_respawnEffect[plNum].SetScale(RESPAWNEFFECT_SCALE);
+	m_respawnEffect[plNum].Update();
+}
+
+void PlayerEffect::ItemBuffEffectUpdate(int plNum)
+{
+	Vector3 efcPos = m_player[plNum]->GetPosition();
+	efcPos.y += ITEMBUFFEFFECT_OFFSET_Y;
+	m_itemBuffEffect[plNum].SetPosition(efcPos);
+	m_itemBuffEffect[plNum].SetScale(ITEMBUFFEFFECT_SCALE);
+	m_itemBuffEffect[plNum].Update();
+}
+
+void PlayerEffect::ChangeItemBuffEffect(int plNum,ItemBuffChange buffNum)
+{
+	switch (buffNum) {
+		case enItemBuff_Kick: {
+			m_itemBuffEffect[plNum].Init(ITEMBUFFEFFECT_FILEPATH[enItemBuff_Kick]);
+		}break;
+		case enItemBuff_Guard: {
+			m_itemBuffEffect[plNum].Init(ITEMBUFFEFFECT_FILEPATH[enItemBuff_Guard]);
+		}break;
+		case enItemBuff_Speed: {
+			m_itemBuffEffect[plNum].Init(ITEMBUFFEFFECT_FILEPATH[enItemBuff_Speed]);
+		}break;
+	}
+}
+
 void PlayerEffect::Update()
 {
 	/// @brief 更新が必要なエフェクトをすべて更新する
@@ -217,5 +334,7 @@ void PlayerEffect::Update()
 		KnockOutEffectUpdate(plNum);
 		KickBuffEffectUpdate(plNum);
 		RepairEffectUpdate(plNum);
+		RespawnEffectUpdate(plNum);
+		ItemBuffEffectUpdate(plNum);
 	}
 }

@@ -26,6 +26,7 @@
 #include "Ball.h"
 #include "Objects.h"
 #include "Box.h"
+#include "Item.h"
 #include "Sky.h"
 #include "Result.h"
 
@@ -44,12 +45,15 @@ namespace {
 	const float FLOAT_01 = 0.1f;
 	const float FLOAT_MINUS_1 = -1.0f;
 
-	const Vector3 RED = { 5.0f,1.0f,1.0f };
-	const Vector3 GREEN = { 1.0f,5.0f,1.0f };
-	const Vector3 BLUE = { 1.0f,1.0f,5.0f };
-	const Vector3 YELLOW = { 3.0f,3.0f,1.0f };
+	const Vector3 RED = { 3.0f,1.0f,1.0f };
+	const Vector3 GREEN = { 1.0f,3.0,1.0f };
+	const Vector3 BLUE = { 1.0f,1.0f,3.0f };
+	const Vector3 YELLOW = { 2.0f,2.0f,1.0f };
 	const Vector3 WHITE = { 2.0f,2.0f,2.0f };
 	const Vector3 COLORLESS = { 0.0f,0.0f,0.0f };
+
+	const Vector3 HEMISPHERE_LIGHT_SKYCOLOR_START = { 0.3f,0.3f,0.3f };
+	const Vector3 HEMISPHERE_LIGHT_SKYCOLOR_END = { -0.7f,-0.7f,0.1f };
 
 	const int PRIORITY_VERYLOW = 0;
 	const int PRIORITY_LOW = 1;
@@ -74,6 +78,7 @@ namespace {
 	const char* SKY_NAME = "Sky";
 	const char* OBJECTS_NAME = "Objects";
 	const char* BOX_NAME = "Box";
+	const char* ITEM_NAME = "Item";
 	const char* RESULT_NAME = "Result";
 	const char* BGM_NAME = "Bgm";
 	const char* SE_NAME = "Se";

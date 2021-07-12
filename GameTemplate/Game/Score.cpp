@@ -5,7 +5,7 @@ namespace {
 	const int SCORE_ZERO = 0;
 	const int SCORE_ADD_POINTS = 100;
 	const int SCORE_DEBUCTION_RATE = 2;
-	const Vector2 RANKING_FONT_POS[MAX_PLAYER_NUM] = { { -600.0f,150.0f },{ 600.0f,150.0f },{ -600.0f,-150.0f },{ 600.0f,-150.0f } };
+	//const Vector2 RANKING_FONT_POS[MAX_PLAYER_NUM] = { { -600.0f,150.0f },{ 600.0f,150.0f },{ -600.0f,-150.0f },{ 600.0f,-150.0f } };
 }
 
 Score::Score()
@@ -13,8 +13,8 @@ Score::Score()
 	m_gameDirector = FindGO<GameDirector>(GAME_DIRECTOR_NAME);
 	for (int plNum = 0; plNum < m_gameDirector->GetPlayerNum(); plNum++) {
 		m_score[plNum] = SCORE_ZERO;
-		m_rankingFont[plNum] = NewGO<FontRender>(4);
-		m_rankingFont[plNum]->SetPosition(RANKING_FONT_POS[plNum]);
+		//m_rankingFont[plNum] = NewGO<FontRender>(4);
+		//m_rankingFont[plNum]->SetPosition(RANKING_FONT_POS[plNum]);
 	}
 }
 
@@ -54,8 +54,8 @@ void Score::RankingSurvey()
 			}
 		}
 		m_ranking[plNum] = rank;
-		std::wstring conv = std::to_wstring(m_ranking[plNum]);
-		m_rankingFont[plNum]->SetText(conv.c_str());
+		//std::wstring conv = std::to_wstring(m_ranking[plNum]);
+		//m_rankingFont[plNum]->SetText(conv.c_str());
 	}
 }
 

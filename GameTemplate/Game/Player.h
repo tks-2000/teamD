@@ -11,6 +11,15 @@ class Effect;
 class GameUI;
 class Se;
 
+//自分のアイテムバフが今何に変わったかを伝えるための列挙体
+enum ItemBuffChange
+{
+	enItemBuff_Kick,
+	enItemBuff_Guard,
+	enItemBuff_Speed,
+	enItemBuff_Num
+};
+
 class Player : public IGameObject
 {
 public:
@@ -75,6 +84,22 @@ public:
 	bool GetGuardBreak() {
 		return m_breakGuard;
 	}
+	/// @brief プレイヤーのリスポーン地点ゲッター
+	/// @return 
+	Vector3 GetRespawnPoint() { return m_startPos; }
+
+	void KickPowerUp() { m_kickUp = true; m_guardUp = false; m_speedUp = false; m_itemPowerUp = true; m_itemPowerUpTime = 0.0f; }
+
+	void GuardPowerUp() { m_kickUp = false; m_guardUp = true; m_speedUp = false; m_itemPowerUp = true; m_itemPowerUpTime = 0.0f; }
+
+	void SpeedPowerUp() { m_kickUp = true; m_guardUp = false; m_speedUp = true; m_itemPowerUp = true; m_itemPowerUpTime = 0.0f; }
+
+	/// @brief バフ状態の変化状況を記録,エフェクト用ファイルパスの変更
+	void SetItemChangeState();
+	ItemBuffChange m_itemBuffChageState;
+
+	/// @brief 現フレームのフラグ状態を記録
+	void RecordFlags();
 
 private:
 	/// @brief プレイヤーの番号
@@ -95,6 +120,8 @@ private:
 	bool m_dash = true;
 	/// @brief プレイヤーのスタミナ
 	float m_stamina = 0.0f;
+	/// @brief スタミナ低下量
+	float m_staminaDecreaseValue = 0.0f;
 	/// @brief プレイヤーの向いている方向
 	Vector3 m_direction = Vector3::Zero;
 	/// @brief プレイヤーのスタート時の座標
@@ -107,6 +134,10 @@ private:
 	Vector3 m_toBallVec = Vector3::Zero;
 	/// @brief プレイヤーが死んだかどうかのフラグ
 	bool m_dieFlag = false;
+	/// @brief バースト扱いのフラグ
+	bool m_burstFlag = false;
+	/// @brief 前フレームのバーストフラグ記録用
+	bool m_burstFlagPrevFrame = false;
 	/// @brief プレイヤーがリスポーンした時の無敵時間
 	float m_mutekiTime = 0.0f;
 	/// @brief ボールとの距離
@@ -133,6 +164,8 @@ private:
 
 	/// @brief ガード耐久力
 	float m_guardDurability = 100.0f;
+	/// @brief ガード耐久値低下量
+	float m_guradDecreaseValue = 0.0f;
 	/// @brief ガードの状態
 	bool m_breakGuard = false;
 	/// @brief シールドにボールが触れたか？
@@ -141,15 +174,30 @@ private:
 	bool m_breakGuardPrevFrame = false;
 	/// @brief ジャストガード判定になる時間
 	float m_justGuardTime = 0.0f;
-	/// @brief キック力が上がるフラグ
-	bool m_kickPowerUp = false;
-	/// @brief キック力強化中のカウンター
+	/// @brief パワーアップフラグ
+	bool m_powerUp = false;
+	/// @brief パワーアップ中のカウンター
 	int m_powerUpCounter = 0;
-	/// @brief キック力が上がる時間
+	/// @brief パワーアップの時間
 	float m_powerUpTime = 0.0f;
 	/// @brief ガード破壊によって起きるダウン状態
 	//bool m_breakDown = false;
+	
+	/// @brief キック強化フラグ
+	bool m_kickUp = false;
+	bool m_kickUpPrevFrame = false;
+	/// @brief ガード強化フラグ
+	bool m_guardUp = false;
+	bool m_guardUpPrevFrame = false;
+	/// @brief スピード強化フラグ
+	bool m_speedUp = false;
+	bool m_speedUpPrevFrame = false;
 
+	bool m_itemPowerUp = false;
+
+	float m_itemPowerUpTime = 0.0f;
+	/// @brief アイテムバフエフェクト再生用カウンター
+	int m_itemPowerUpCounter = 0;
 	/// @brief キャラクターコントローラー
 	CharacterController m_charaCon;
 	/// @brief ライティング

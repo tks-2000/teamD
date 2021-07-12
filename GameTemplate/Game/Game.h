@@ -17,6 +17,7 @@ class Result;
 
 
 const int PLAYER_NUMBER = 4;
+const int ITEM_NUMBER = 3;
 const float ZeroF = 0.0f;
 static const int OBJECTS_NUMBER = 4;
 

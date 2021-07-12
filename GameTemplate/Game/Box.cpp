@@ -3,9 +3,17 @@
 
 namespace {
 	const Vector3 SCALE = { 1.0f,1.0f,1.0f };
-	const float BALL_DISTANCE = 120.0f;
+	const float BALL_DISTANCE = 100.0f;
 	const float PLAYER_DISTANCE = 120.0f;
 	const float PLAYER_REPEL = 5.0f;
+	const float OPEN_TIME = 75.0f;
+	const float FALL = 2.0f;
+	const float BOX_FALL_YPOS = 60.0f;
+	const float CHARACON_SCALE = 40.0f;
+	//消滅時に出る煙のエフェクトファイルパス
+	const char16_t* SMOKEEFFECT_FILEPATH = u"Assets/effect/smoke.efk";
+	const Vector3 SMOKEEFFECT_SCALE = { 30.0f,30.0f,30.0f };
+
 }
 Box::Box() {
 	m_gameDirector = FindGO<GameDirector>(GAME_DIRECTOR_NAME);
@@ -19,10 +27,17 @@ Box::Box() {
 	m_objects = FindGO<Objects>(OBJECTS_NAME);
 	m_timer = FindGO<Timer>(TIMER_NAME);
 
-	m_fall = 2;
+	m_fall = FALL;
 }
 Box::~Box() {
 	DeleteGO(m_skinModelRender);
+
+	Effect smokeEffect;
+	smokeEffect.Init(SMOKEEFFECT_FILEPATH);
+	smokeEffect.Play();
+	smokeEffect.SetPosition(m_position);
+	smokeEffect.SetScale(SMOKEEFFECT_SCALE);
+	smokeEffect.Update();
 }
 bool Box::Start() {
 	m_animationClips[enAnimation_Close].Load("Assets/animData/box/close.tka");
@@ -45,23 +60,30 @@ bool Box::Start() {
 
 
 
-	m_charaCon.Init(40.0f, 40.0f, m_position);
+	m_charaCon.Init(CHARACON_SCALE, CHARACON_SCALE, m_position);
 
 	m_skinModelRender->SetPosition(m_position);
+
+	//初期角度を変える処理
+	m_rot.SetRotationDeg(Vector3::AxisY, 45.0f);
+	m_skinModelRender->SetRotation(m_rot);
+
 	return true;
 }
 void Box::Update() {
 	DistanceCalculation();
 
 
-	if (m_position.y > 50) {
+	if (m_position.y > BOX_FALL_YPOS) {
 		m_fallSpeed.y -= m_fall;
 	}
-	if (m_ballDistance < BALL_DISTANCE /*&& !m_timer->IsCountDown()*/) {
-		ballCollider();
+	else {
+		if (m_ballDistance < BALL_DISTANCE /*&& !m_timer->IsCountDown()*/) {
+			ballCollider();
+		}
 	}
 	for (int plNum = 0; plNum < m_playerNum; plNum++) {
-		if (m_position.y > 50 && m_playerDistance[plNum] < PLAYER_DISTANCE) {
+		if (m_position.y > BOX_FALL_YPOS && m_playerDistance[plNum] < PLAYER_DISTANCE) {
 			/// @brief ボールと自分の位置から吹き飛ばされる方向を決める
 			Vector3 repulsiveForce = m_player[plNum]->GetPosition() - m_position;
 			repulsiveForce.y = FLOAT_0;
@@ -76,24 +98,46 @@ void Box::Update() {
 	if (m_openFlag == true) {
 		m_openTime++;
 	}
-	if (m_openTime >= 45) {
+	if (m_openTime >= OPEN_TIME) {
 		m_score->AddScore(m_ball->GetPlayerInformation());
 		m_objects->SetDelFlag(m_boxNum);
 		DeleteGO(this);
 	}
 
 
+	if (m_openFlag == false) {
+		m_position = m_charaCon.Execute(m_fallSpeed, 1.0f);
+	}
+	else if(m_isReflect == false){
+		//ボールの反射
+		BallBound();
+		//キャラコンを逃がす処理
+		m_charaCon.RemoveRigidBoby();
+	}
 
-	m_position = m_charaCon.Execute(m_fallSpeed, 1.0f);
-	m_charaCon.SetPosition(m_position);
+	//m_charaCon.SetPosition(m_position);
 	//m_setPos[setPosNum] = m_position[setPosNum];
 	m_skinModelRender->SetPosition(m_position);
 
 }
 void Box::ballCollider() {
 	m_openFlag = true;
+	m_objects->SetBoxOpen(m_boxNum);
 	m_skinModelRender->PlayAnimation(enAnimation_Open, 1.0f);
 }
+
+void Box::BallBound()
+{
+	m_isReflect = true;
+
+	Vector3 toBallDir = m_ball->GetPosition() - m_position;
+	toBallDir.y = ZeroF;
+	toBallDir.Normalize();
+	
+	m_ball->SetMoveDirection(toBallDir);
+
+}
+
 void Box::DistanceCalculation() {
 	m_toBallVec = m_ball->GetPosition() - m_position;
 	m_ballDistance = m_toBallVec.Length();

@@ -301,6 +301,7 @@
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="GameDirector.cpp" />
     <ClCompile Include="GameUI.cpp" />
+    <ClCompile Include="Item.cpp" />
     <ClCompile Include="Lighting.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Menu.cpp" />
@@ -329,6 +330,7 @@
     <ClCompile Include="system\system.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Title.cpp" />
+    <ClCompile Include="TResourceBank2.cpp" />
     <ClCompile Include="Util.cpp" />
     <ClCompile Include="WaveFile.cpp" />
     <ClCompile Include="WaveFileBank.cpp" />
@@ -404,6 +406,7 @@
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="GameDirector.h" />
     <ClInclude Include="GameUI.h" />
+    <ClInclude Include="Item.h" />
     <ClInclude Include="Lighting.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="NameKey.h" />
@@ -424,6 +427,8 @@
     <ClInclude Include="system\system.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Title.h" />
+    <ClInclude Include="TResourceBank.h" />
+    <ClInclude Include="TResourceBank2.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="WaveFile.h" />
     <ClInclude Include="WaveFileBank.h" />

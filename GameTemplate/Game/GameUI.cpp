@@ -28,7 +28,7 @@ namespace {
 	const Vector2 GUARD_DURABILIYY[MAX_PLAYER_NUM] = { {-600.0f,200.0f},{400.0f,200.0f},{-600.0f,-300.0f},{400.0f,-300.0f} };
 	const float SCALE = 0.9f;
 
-	const Vector2 TIME_FONT_POS = { 80.0f,280.0f };
+	const Vector2 TIME_FONT_POS = { -150.0f,300.0f };
 	const float TIME_FONT_SCALE = 1.0f;
 	const Vector2 FINISH_FONT_POS = { -200.0f,100.0f };
 	const float FINISH_FONT_SCALE = 3.0f;
