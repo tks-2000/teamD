@@ -84,6 +84,10 @@ void Objects::Update() {
 		if (m_delFlag[Num] == false && m_itemDelFlag[Num] == false) {
 			m_item[Num]->SetPosition(m_box[Num]->GetBoxPos());
 		}
+		//箱が開いたらアイテムのエフェクト再生を許可
+		if (m_box[Num]->GetIsOpen() == true) {
+			m_item[Num]->SetVallidPlayEffect();
+		}
 		
 	}
 }

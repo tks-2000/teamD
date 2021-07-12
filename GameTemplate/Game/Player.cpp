@@ -541,8 +541,70 @@ void Player::Animation()
 	}
 }
 
+void Player::SetItemChangeState()
+{
+	//各フラグが前フレームと変化なしだったら処理しない
+	if (m_kickUp == m_kickUpPrevFrame &&
+		m_guardUp == m_guardUpPrevFrame &&
+		m_speedUp == m_speedUpPrevFrame) {
+
+		return;
+	}
+
+	//各フラグが1つでも前フレームと変化していたら処理に移行
+	if (m_kickUp == true && m_kickUpPrevFrame == false) {
+		m_itemBuffChageState = enItemBuff_Kick;
+		m_plEffect->ChangeItemBuffEffect(m_myNumber, m_itemBuffChageState);
+	}
+	if (m_guardUp == true && m_guardUpPrevFrame == false) {
+		m_itemBuffChageState = enItemBuff_Guard;
+		m_plEffect->ChangeItemBuffEffect(m_myNumber, m_itemBuffChageState);
+	}
+	if (m_speedUp == true && m_speedUpPrevFrame == false) {
+		m_itemBuffChageState = enItemBuff_Speed;
+		m_plEffect->ChangeItemBuffEffect(m_myNumber, m_itemBuffChageState);
+	}
+
+}
+
+void Player::RecordFlags()
+{
+	//現フレームのバースト状況を記録
+	if (m_burstFlagPrevFrame != m_burstFlag) {
+		m_burstFlagPrevFrame = m_burstFlag;
+	}
+
+	//アイテムパワーアップフラグ各種の記録
+	if (m_kickUpPrevFrame != m_kickUp) {
+		m_kickUpPrevFrame = m_kickUp;
+	}
+	
+	if (m_guardUpPrevFrame != m_guardUp) {
+		m_guardUpPrevFrame = m_guardUp;
+	}
+
+	if (m_speedUpPrevFrame != m_speedUp) {
+		m_speedUpPrevFrame = m_speedUp;
+	}
+
+}
+
 void Player::Update()
 {
+	SetItemChangeState();
+	
+	//アイテムバフエフェクトの再生処理
+	if (m_kickUp == true ||
+		m_guardUp == true ||
+		m_speedUp == true) {
+		
+		m_itemPowerUpCounter += 1;
+		if (m_itemPowerUpCounter % 25 == 1) {
+			m_plEffect->PlayItemBuffEffect(m_myNumber);
+		}
+	}
+
+
 	/// @brief スティック入力を受け取る
 	m_Lstickx = g_pad[m_myNumber]->GetLStickXF();
 	m_Lsticky = g_pad[m_myNumber]->GetLStickYF();
@@ -742,11 +804,8 @@ void Player::Update()
 		ReSpawn();
 	}
 
-	//現フレームのバースト状況を記録
-	if (m_burstFlagPrevFrame != m_burstFlag) {
-		m_burstFlagPrevFrame = m_burstFlag;
-	}
-
+	//現フレームのフラグ状態を記録
+	RecordFlags();
 }
 
 void Player::BallDistanceCalculation()

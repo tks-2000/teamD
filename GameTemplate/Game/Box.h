@@ -20,6 +20,9 @@ public:
 	void ballCollider();
 	//当たったときの跳ね返り処理
 	void BallBound();
+	/// @brief ボックスが開いたかどうか
+	/// @return 開閉状況
+	bool GetIsOpen() { return m_openFlag; }
 
 	void SetBoxPos(Vector3 pos,int num);
 
