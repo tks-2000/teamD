@@ -21,6 +21,8 @@ public:
 
 	void AddScore(int num, int score);
 
+	//void ScoreIndicator(float addition, Vector3 Pos);
+
 private:
 	/// @brief テスト用の数値
 	//int m_testNum = 0;
@@ -127,10 +129,28 @@ private:
 
 	float PinAngArrival = 0.0f;
 
+	/// @brief 操作説明アイコン
 	SpriteRender* m_LBbuttonIcon[PLAYER_NUMBER] = { nullptr };
 	Vector3 m_LBbuttonIPos[PLAYER_NUMBER] = { {-370.0f, 208.0f, 0.0f},{370.0f, 208.0f, 0.0f},{-370.0f, -292.0f, 0.0f},{370.0f, -292.0f, 0.0f} };
 	SpriteRender* m_RBbuttonIcon[PLAYER_NUMBER] = { nullptr };
 	Vector3 m_RBbuttonIPos[PLAYER_NUMBER] = { {-370.0f, 178.0f, 0.0f},{370.0f, 178.0f, 0.0f},{-370.0f, -322.0f, 0.0f},{370.0f, -322.0f, 0.0f} };
+
+	/// @brief スコアの到達点
+	float NowScore[PLAYER_NUMBER] = { 0.0f };
+	/// @brief 古スコア
+	float oldScore[PLAYER_NUMBER] = { 0.0f };
+	/// @brief 見せスコア
+	float viewScore[PLAYER_NUMBER] = { 0.0f };
+
+	/// @brief スコア変動表示
+	FontRender* m_fluctiationIndicater[PLAYER_NUMBER] = { nullptr };
+	/// @brief スコア変動表示の位置
+	Vector2 m_IndicaterPos[PLAYER_NUMBER] = { { -450.0f,250.0f },{ 400.0f,250.0f },{ -450.0f,-250.0f },{ 400.0f,-250.0f } };
+	/// @brief 表示する変動スコア
+	int m_fluctiationScore[PLAYER_NUMBER] = { 0 };
+	/// @brief インジケーターウェイター
+	int m_indicaterWaiter;
+
 
 	/// @brief タイマー表示
 	FontRender* m_timeFont = nullptr;
@@ -138,6 +158,12 @@ private:
 	SpriteRender* m_timerFrame = nullptr;
 	/// @brief タイマーヘッダ
 	FontRender* m_timerHedder = nullptr;
+	/// @brief GOサイン
+	FontRender* m_goSign = nullptr;
+	bool m_Gone = false;
+
+	int goGoneWaiter = 0;
+	bool m_GoisGone = false;
 
 	Timer* m_timer = nullptr;
 
