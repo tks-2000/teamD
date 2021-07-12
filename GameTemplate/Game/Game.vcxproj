@@ -466,6 +466,7 @@
     <Image Include="Assets\sprite\SpeedMeter.DDS" />
     <Image Include="Assets\sprite\SpeedMeterPin.DDS" />
     <Image Include="Assets\sprite\Sprint_Icon.DDS" />
+    <Image Include="Assets\sprite\TimerFrame.DDS" />
     <Image Include="Assets\sprite\title.dds" />
     <Image Include="Assets\sprite\title.png" />
     <Image Include="Assets\sprite\UI_Gage.DDS" />
