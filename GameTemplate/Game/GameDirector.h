@@ -46,6 +46,7 @@ private:
 
 	Timer* m_timer = nullptr;
 
+
 public:
 	GameDirector();
 	~GameDirector();

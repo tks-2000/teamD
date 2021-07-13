@@ -7,6 +7,8 @@ namespace {
 	/// @brief 人数のフォント位置
 	const Vector2 PLAYER_NUM_FONT_POS = { 0.0f,-200.0f };
 
+	const Vector2 PUSH_START_FONT_POS = { -200.0f,-300.0f };
+
 	const Vector3 PLAYER_MODEL_POS[MAX_PLAYER_NUM] = { {-200.0f,0.0f,200.0f},{200.0f,0.0f,200.0f},{-200.0f,0.0f,-200.0f},{200.0f,0.0f,-200.0f} };
 
 	const float SPOT_LIGHT_HEIGHT = 400.0f;
@@ -28,6 +30,10 @@ Menu::Menu()
 	m_plFont = NewGO<FontRender>(2);
 	m_plFont->SetPosition(PLAYER_FONT_POS);
 	m_plFont->SetText(L"Player");
+	m_pushStart = NewGO<FontRender>(2);
+	m_pushStart->SetPosition(PUSH_START_FONT_POS);
+	m_pushStart->SetText(L"PUSH START BUTTON");
+	m_pushStart->FadeOut(1.0f);
 	m_animationClips[enAnimation_Idle].Load("Assets/animData/idle.tka");
 	m_animationClips[enAnimation_clear].Load("Assets/animData/unitychan/clear.tka");
 	m_animationClips[enAnimation_jump].Load("Assets/animData/unitychan/jump.tka");
@@ -56,6 +62,7 @@ Menu::~Menu()
 	DeleteGO(m_floor);
 	DeleteGO(m_plNumFont);
 	DeleteGO(m_plFont);
+	DeleteGO(m_pushStart);
 	for (int plNum = 0; plNum < MAX_PLAYER_NUM; plNum++) {
 		DeleteGO(m_plModel[plNum]);
 	}
@@ -71,6 +78,7 @@ bool Menu::Start()
 
 	m_gameDirector = FindGO<GameDirector>(GAME_DIRECTOR_NAME);
 	m_lig = FindGO<Lighting>(LIGHTING_NAME);
+	m_se = FindGO<Se>(SE_NAME);
 	return true;
 }
 
@@ -83,18 +91,26 @@ void Menu::Update()
 			if (m_playerNum > MAX_PLAYER_NUM) {
 				m_playerNum = 0;
 			}
+			m_se->PlaySelectKeySe();
 		}
 		if (g_pad[0]->IsTrigger(enButtonUp)) {
 			m_playerNum--;
 			if (m_playerNum < 0) {
 				m_playerNum = MAX_PLAYER_NUM;
 			}
+			m_se->PlaySelectKeySe();
 		}
 
 		m_gameDirector->SetPlayerNum(m_playerNum);
 		std::wstring plNum;
 		plNum = std::to_wstring(m_playerNum);
 		m_plNumFont->SetText(plNum.c_str());
+	}
+	if (m_playerNum != 0) {
+		m_pushStart->SetColor({1.0f,1.0f,1.0f,1.0f});
+	}
+	else {
+		m_pushStart->SetColor({ 0.2f,0.2f,0.2f,0.2f });
 	}
 	for (int plNum = 0; plNum < MAX_PLAYER_NUM; plNum++) {
 		if (m_playerNum > plNum) {

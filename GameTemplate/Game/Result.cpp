@@ -102,7 +102,7 @@ Result::~Result()
 
 bool Result::Start()
 {
-	
+	m_se = FindGO<Se>(SE_NAME);
 	return true;
 }
 
@@ -116,6 +116,8 @@ void Result::PlayerFontMove(int num)
 			for (int plNum = 0; plNum < m_gameDirector->GetPlayerNum(); plNum++) {
 				if (m_moveOrder[plNum] == m_moveOrder[num] - m_decrease) {
 					m_moveFlag[plNum] = true;
+					m_se->PlayRankingSe();
+					m_moveFlag[num] = false;
 					break;
 				}
 			}
@@ -123,6 +125,7 @@ void Result::PlayerFontMove(int num)
 		else {
 			SelectCommandNewGO();
 			m_moveEndFlag = true;
+			m_se->PlayCheersSe();
 		}
 	}
 }
@@ -175,12 +178,14 @@ void Result::Update()
 			if (m_selectNum > MAX_SELECT_NUM) {
 				m_selectNum = MIN_SELECT_NUM;
 			}
+			m_se->PlaySelectKeySe();
 		}
 		if (g_pad[0]->IsTrigger(enButtonUp)) {
 			m_selectNum--;
 			if (m_selectNum < MIN_SELECT_NUM) {
 				m_selectNum = MAX_SELECT_NUM;
 			}
+			m_se->PlaySelectKeySe();
 		}
 		Vector2 arrowPos = SELECT_FONT_POS[m_selectNum];
 		arrowPos.x -= 100.0f;
@@ -190,7 +195,7 @@ void Result::Update()
 				m_selectFont[selectNum]->SetColor({ 0.0f,1.0f,1.0f,1.0f });
 			}
 			else {
-				m_selectFont[selectNum]->SetColor({ 0.0f,0.0f,0.0f,1.0f });
+				m_selectFont[selectNum]->SetColor({ 0.0f,0.3f,0.3f,0.3f });
 			}
 		}
 		m_arrowFont->SetPosition(m_arrowFontPos);

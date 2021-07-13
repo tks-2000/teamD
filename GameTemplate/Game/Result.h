@@ -3,6 +3,7 @@
 class FontRender;
 class GameDirector;
 class Score;
+class Se;
 class Effect;
 
 const int SELECT_COMMAND_NUM = 3;
@@ -23,6 +24,7 @@ private:
 	Vector2 m_movePos[PLAYER_NUMBER] = { Vector2::Zero,Vector2::Zero ,Vector2::Zero ,Vector2::Zero };
 	GameDirector* m_gameDirector = nullptr;
 	Score* m_score = nullptr;
+	Se* m_se = nullptr;
 	int m_moveOrder[PLAYER_NUMBER] = { 0 };
 	int m_decrease = 0;
 

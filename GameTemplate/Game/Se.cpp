@@ -5,8 +5,14 @@
 
 namespace {
 	//ファイルパス各種
+	//選択
+	const wchar_t* SELECT_KEY_SE_FILEPATH = L"Assets/sound/se/SelectKey.wav";
 	//決定
-	const wchar_t* PRESS_KEYSE_FILEPATH = L"Assets/sound/se/press_key.wav";
+	const wchar_t* PRESS_KEY_SE_FILEPATH = L"Assets/sound/se/press_key.wav";
+	//試合開始
+	const wchar_t* COUNT_DOWN_SE_FILEPATH = L"Assets/sound/se/CountDown.wav";
+	//試合終了
+	const wchar_t* END_SE_FILEPATH = L"Assets/sound/se/End.wav";
 	//キック時
 	const wchar_t* KICK_SE_FILEPATH = L"Assets/sound/se/kick_2.wav";
 	//強化キック時
@@ -31,14 +37,24 @@ namespace {
 	const wchar_t* STRONG_COLLIDE_SE_FILEPATH = L"Assets/sound/se/StrongCollide.wav";
 	//衝突(箱)
 	const wchar_t* BOX_COLLIDE_SE_FILEPATH = L"Assets/sound/se/BoxCollide.wav";
+	//箱が開く
+	const wchar_t* BOX_OPEN_SE_FILEPATH = L"Assets/sound/se/BoxOpen.wav";
 	//行動不能
 	const wchar_t* STAN_SE_FILEPATH = L"Assets/sound/se/Stan.wav";
+	//スタミナ切れ
+	const wchar_t* STAMINA_OVER_SE_FILEPATH = L"Assets/sound/se/StaminaOver.wav";
+	//スタミナ回復
+	const wchar_t* STAMINA_RECOVERY_SE_FILEPATH = L"Assets/sound/se/StaminaRecovery.wav";
 	//アイテム入手
 	const wchar_t* ITEM_GET_SE_FILEPATH = L"Assets/sound/se/ItemGet.wav";
 	//撃破
 	const wchar_t* DEFEAT_SE_FILEPATH = L"Assets/sound/se/Defeat.wav";
 	//リスポーン
 	const wchar_t* RESPAWN_SE_FILEPATH = L"Assets/sound/se/ReSpawn.wav";
+	//順位表示
+	const wchar_t* RANKING_SE_FILEPATH = L"Assets/sound/se/Ranking.wav";
+	//歓声
+	const wchar_t* CHEER_SE_FILEPATH = L"Assets/sound/se/Cheer.wav";
 
 }
 
@@ -72,16 +88,35 @@ void Se::Update()
 
 void Se::PlaySelectKeySe()
 {
-
+	CSoundSource* selectKeySe = NewGO<CSoundSource>(0);
+	selectKeySe->Init(SELECT_KEY_SE_FILEPATH);
+	selectKeySe->SetVolume(m_seVolume);
+	selectKeySe->Play(false);
 }
 
 /// @brief SEはこのようにPlay関数を作って再生する場所でSEクラスから呼び出して下さい。
 void Se::PlayPressKeySe()
 {
 	CSoundSource* pressKeySe = NewGO<CSoundSource>(0);
-	pressKeySe->Init(PRESS_KEYSE_FILEPATH);
+	pressKeySe->Init(PRESS_KEY_SE_FILEPATH);
 	pressKeySe->SetVolume(m_seVolume);
 	pressKeySe->Play(false);
+}
+
+void Se::PlayCountDownSe()
+{
+	CSoundSource* countDownSe = NewGO<CSoundSource>(0);
+	countDownSe->Init(COUNT_DOWN_SE_FILEPATH);
+	countDownSe->SetVolume(m_seVolume);
+	countDownSe->Play(false);
+}
+
+void Se::PlayEndSe()
+{
+	CSoundSource* endSe = NewGO<CSoundSource>(0);
+	endSe->Init(END_SE_FILEPATH);
+	endSe->SetVolume(m_seVolume);
+	endSe->Play(false);
 }
 
 void Se::PlayKickSe()
@@ -182,13 +217,32 @@ void Se::PlayBoxCollideSe()
 
 void Se::PlayBoxOpenSe()
 {
-
+	CSoundSource* boxOpeneSe = NewGO<CSoundSource>(0);
+	boxOpeneSe->Init(BOX_OPEN_SE_FILEPATH);
+	boxOpeneSe->SetVolume(1.0f);
+	boxOpeneSe->Play(false);
 }
 
 void Se::PlayStanSe(int plNum)
 {
 	m_stanSe[plNum]->SetVolume(1.0f);
 	m_stanSe[plNum]->Play(true);
+}
+
+void Se::PlayStaminaOverSe()
+{
+	CSoundSource* staminaOverSe = NewGO<CSoundSource>(0);
+	staminaOverSe->Init(STAMINA_OVER_SE_FILEPATH);
+	staminaOverSe->SetVolume(1.0f);
+	staminaOverSe->Play(false);
+}
+
+void Se::PlayStaminaRecoverySe()
+{
+	CSoundSource* staminaRecoverySe = NewGO<CSoundSource>(0);
+	staminaRecoverySe->Init(STAMINA_RECOVERY_SE_FILEPATH);
+	staminaRecoverySe->SetVolume(1.0f);
+	staminaRecoverySe->Play(false);
 }
 
 void Se::PlayItemGetSe()
@@ -213,4 +267,20 @@ void Se::PlayReSpawnSe()
 	reSpawnSe->Init(RESPAWN_SE_FILEPATH);
 	reSpawnSe->SetVolume(1.0f);
 	reSpawnSe->Play(false);
+}
+
+void Se::PlayRankingSe()
+{
+	CSoundSource* rankingSe = NewGO<CSoundSource>(0);
+	rankingSe->Init(RANKING_SE_FILEPATH);
+	rankingSe->SetVolume(1.0f);
+	rankingSe->Play(false);
+}
+
+void Se::PlayCheersSe()
+{
+	CSoundSource* CheersSe = NewGO<CSoundSource>(0);
+	CheersSe->Init(CHEER_SE_FILEPATH);
+	CheersSe->SetVolume(1.0f);
+	CheersSe->Play(false);
 }

@@ -4,6 +4,8 @@
 
 
 namespace {
+	/// @brief 開始時のタイマーの進む量
+	const float START_TIMER_AMOUNT_GO = 1.3f;
 	/// @brief タイマーの進む量
 	const float TIMER_AMOUNT_GO = 1.0f;
 	/// @brief タイマーの終了地点
@@ -22,6 +24,9 @@ Timer::Timer()
 	m_finishTimer = FINISH_DISPLAY_TIME;
 	m_timerEnd = false;
 	m_timerStatus = enCountDown;
+	m_se = FindGO<Se>(SE_NAME);
+	m_sceneChange = FindGO<SceneChange>(SCENE_CHANGE_NAME);
+	m_countStart = false;
 }
 
 Timer::~Timer()
@@ -32,12 +37,17 @@ Timer::~Timer()
 bool Timer::Start()
 {
 	m_gameDirector = FindGO<GameDirector>(GAME_DIRECTOR_NAME);
+	
 	return true;
 }
 
 void Timer::CountDown()
 {
-	m_countDownNum -= TIMER_AMOUNT_GO * g_gameTime->GetFrameDeltaTime();
+	if (m_countStart == false) {
+		m_se->PlayCountDownSe();
+		m_countStart = true;
+	}
+	m_countDownNum -= START_TIMER_AMOUNT_GO * g_gameTime->GetFrameDeltaTime();
 	if (m_countDownNum < TIMER_ZERO) {
 		m_countDownNum = TIMER_ZERO;
 		m_timerStatus = enTimerExecution;
@@ -50,6 +60,7 @@ void Timer::TimerExecution()
 	if (m_time < TIMER_ZERO) {
 		m_time = TIMER_ZERO;
 		m_timerStatus = enFinish;
+		m_se->PlayEndSe();
 	}
 }
 
@@ -64,7 +75,7 @@ void Timer::Finish()
 
 void Timer::Update()
 {
-	if (m_timerEnd == true) {
+	if (m_timerEnd == true || m_sceneChange->TransparencyChangeStart() == false) {
 		return;
 	}
 

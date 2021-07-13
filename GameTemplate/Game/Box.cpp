@@ -76,6 +76,7 @@ void Box::Update() {
 		if (m_ballDistance < BALL_DISTANCE && m_openFlag == false/*&& !m_timer->IsCountDown()*/) {
 			ballCollider();
 			m_se->PlayBoxCollideSe();
+			m_se->PlayBoxOpenSe();
 		}
 	}
 	for (int plNum = 0; plNum < m_playerNum; plNum++) {

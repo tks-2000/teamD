@@ -652,10 +652,12 @@ void Player::Update()
 
 	if (m_stamina < FLOAT_0) {
 		m_dash = false;
+		m_se->PlayStaminaOverSe();
 	}
 
 	if (m_dash == false && m_stamina >= MAX_STANIMA) {
 		m_dash = true;
+		m_se->PlayStaminaRecoverySe();
 	}
 
 	BallDistanceCalculation();
