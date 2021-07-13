@@ -13,11 +13,27 @@ namespace {
 	
 	//消滅時に出る煙のエフェクトファイルパス
 	const char16_t* SMOKEEFFECT_FILEPATH = u"Assets/effect/smoke.efk";
+	//再生高度のオフセット量
 	const float SMOKEEFFECT_OFFSET_Y = 20.0f;
+	//スケール
 	const Vector3 SMOKEEFFECT_SCALE = { 30.0f,30.0f,30.0f };
+	
+	//ボックスが開くときに出るエフェクトのファイルパス
+	const char16_t* OPENEFFECT_FILEPATH = u"Assets/effect/boxopen.efk";
+	//再生高度のオフセット量
+	const float OPENEFFECT_OFFSET_Y = 100.0f;
+	//スケール
+	const Vector3 OPENEFFECT_SCALE = { 20.0f,20.0f,20.0f };
 
 }
 Box::Box() {
+
+	//煙エフェクトの初期化
+	m_smokeEffect.Init(SMOKEEFFECT_FILEPATH);
+	//ボックスが開くエフェクトの初期化
+	m_openEffect.Init(OPENEFFECT_FILEPATH);
+
+
 	m_gameDirector = FindGO<GameDirector>(GAME_DIRECTOR_NAME);
 	m_playerNum = m_gameDirector->GetPlayerNum();
 
@@ -35,6 +51,7 @@ Box::~Box() {
 	DeleteGO(m_skinModelRender);
 }
 bool Box::Start() {
+
 	m_animationClips[enAnimation_Close].Load("Assets/animData/box/close.tka");
 	m_animationClips[enAnimation_Close].SetLoopFlag(false);
 	m_animationClips[enAnimation_Open].Load("Assets/animData/box/open.tka");
@@ -98,12 +115,11 @@ void Box::Update() {
 		//消滅時の煙を出すエフェクト処理
 		Vector3 efcPos = m_position;
 		efcPos.y += SMOKEEFFECT_OFFSET_Y;
-		Effect smokeEffect;
-		smokeEffect.Init(SMOKEEFFECT_FILEPATH);
-		smokeEffect.Play();
-		smokeEffect.SetPosition(efcPos);
-		smokeEffect.SetScale(SMOKEEFFECT_SCALE);
-		smokeEffect.Update();
+
+		m_smokeEffect.Play();
+		m_smokeEffect.SetPosition(efcPos);
+		m_smokeEffect.SetScale(SMOKEEFFECT_SCALE);
+		m_smokeEffect.Update();
 
 		m_score->AddScore(m_ball->GetPlayerInformation());
 		m_objects->SetDelFlag(m_boxNum);
@@ -127,6 +143,19 @@ void Box::Update() {
 
 }
 void Box::ballCollider() {
+	//箱が開くエフェクト再生処理
+	if (m_openFlag == false) {
+
+		Vector3 efcPos = Vector3::Zero;
+		efcPos = m_position;
+		efcPos.y += OPENEFFECT_OFFSET_Y;
+
+		m_openEffect.Play();
+		m_openEffect.SetPosition(efcPos);
+		m_openEffect.SetScale(OPENEFFECT_SCALE);
+		m_openEffect.Update();
+	}
+	
 	m_openFlag = true;
 	m_objects->SetBoxOpen(m_boxNum);
 	m_skinModelRender->PlayAnimation(enAnimation_Open, 1.0f);

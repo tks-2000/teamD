@@ -50,7 +50,7 @@ namespace {
 	const Vector3 JUSTGUARDEFFECT_SCALE = { 10.0f,10.0f,10.0f };
 
 	//強化エフェクトのファイルパス
-	const char16_t* KICKBUFFEFFECT_FILEPATH = u"Assets/effect/kickbuff.efk";
+	const char16_t* KICKBUFFEFFECT_FILEPATH = u"Assets/effect/justguardBuff.efk";
 	//強化エフェクトのスケール
 	const Vector3 KICKBUFFEFFECT_SCALE = { 20.0f,20.0f,20.0f };
 	//強化エフェクトのy座標発生位置を決めるための定数
