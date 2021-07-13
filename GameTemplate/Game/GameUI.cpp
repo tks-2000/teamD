@@ -28,7 +28,7 @@ namespace {
 	const Vector2 GUARD_DURABILIYY[MAX_PLAYER_NUM] = { {-600.0f,200.0f},{400.0f,200.0f},{-600.0f,-300.0f},{400.0f,-300.0f} };
 	const float SCALE = 0.9f;
 
-	const Vector2 TIME_FONT_POS = { -150.0f,300.0f };
+	const Vector2 TIME_FONT_POS = { 80.0f, 280.0f };
 	const float TIME_FONT_SCALE = 1.0f;
 	const Vector2 FINISH_FONT_POS = { -200.0f,100.0f };
 	const float FINISH_FONT_SCALE = 3.0f;
@@ -210,9 +210,9 @@ GameUI::GameUI()
 	/*m_ballSpeed = NewGO<FontRender>(2);
 	m_ballSpeed->SetPosition(BALL_SPEED_POS);*/
 
-	m_timeFont = NewGO<FontRender>(2);
+	m_timeFont = NewGO<FontRender>(3);
 	m_timeFont->SetPosition(TIME_FONT_POS);
-	m_timerFrame = NewGO<SpriteRender>(1);
+	m_timerFrame = NewGO<SpriteRender>(2);
 	m_timerFrame->Init("Assets/sprite/TimerFrame.DDS", 150, 150);
 	m_timerFrame->SetPosition({ 100.0f,260.0f , 0.0f });
 	m_timerHedder = NewGO<FontRender>(2);
@@ -275,18 +275,19 @@ void GameUI::TimerFont()
 		int integerTime = time;
 		conversion = std::to_wstring(integerTime);
 		m_timeFont->SetText(conversion.c_str());
+		//m_timeFont->SetPosition({ 0.0f,0.0f });
 	}
 	if (m_timer->IsCountDown() == false && m_GoisGone == false)
 	{
 		if (m_Gone == false) {
 			m_Gone = true;
-			m_goSign = NewGO<FontRender>(6);
+			m_goSign = NewGO<SpriteRender>(6);
 		}
-		m_goSign->SetPosition({ -200.0f, 200.0f });
-		m_goSign->SetText(L"G O");
+		m_goSign->SetPosition({ 0.0f, 0.0f, 0.0f });
+		m_goSign->Init("Assets/sprite/Go.DDS",512, 512);
 		m_goSign->SetColor({ 1.0f, 0.0f, 0.0f, 1.0f });
 		
-			m_goSign->SetScale(8.0f);
+		//m_goSign->SetScale({ 2.0f, 2.0f, 0.0f });
 		if (goGoneWaiter >= 50) 
 		{
 			DeleteGO(m_goSign);

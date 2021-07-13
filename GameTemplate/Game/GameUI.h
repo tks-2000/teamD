@@ -159,7 +159,7 @@ private:
 	/// @brief タイマーヘッダ
 	FontRender* m_timerHedder = nullptr;
 	/// @brief GOサイン
-	FontRender* m_goSign = nullptr;
+	SpriteRender* m_goSign = nullptr;
 	bool m_Gone = false;
 
 	int goGoneWaiter = 0;

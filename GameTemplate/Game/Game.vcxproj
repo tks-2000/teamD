@@ -460,6 +460,7 @@
     <Image Include="Assets\sprite\GageBody.DDS" />
     <Image Include="Assets\sprite\GageFinal.DDS" />
     <Image Include="Assets\sprite\GageStart.DDS" />
+    <Image Include="Assets\sprite\GO.DDS" />
     <Image Include="Assets\sprite\LB_ButtonIcon.DDS" />
     <Image Include="Assets\sprite\RB_ButtonIcon.DDS" />
     <Image Include="Assets\sprite\Shield_Icon.DDS" />
