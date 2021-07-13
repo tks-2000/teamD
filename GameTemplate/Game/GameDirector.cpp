@@ -38,14 +38,14 @@ void GameDirector::Update()
 			m_bgm->ChangeTitleBgm();
 		}
 		else {
-			if (g_pad[0]->IsTrigger(enButtonStart)) {
+			if (g_pad[0]->IsTrigger(enButtonStart) && m_sceneChange->TransparencyChangeStart() == true) {
 				m_sceneChange->TransparencyChange(false);
+				m_se->PlayPressKeySe();
 			}
 			if (m_sceneChange->TransparencyChangeEnd() == true) {
 				m_gameState = enMenu;
 				DeleteGO(m_title);
 				m_title = nullptr;
-				m_se->PlayPressKeySe();
 				m_sceneChange->TransparencyChange(true);
 			}
 		}
@@ -57,15 +57,15 @@ void GameDirector::Update()
 			m_lighting->InitHemiSphereLight();
 		}
 		else {
-			if (g_pad[0]->IsTrigger(enButtonStart) && m_playerNum > 0) {
+			if (g_pad[0]->IsTrigger(enButtonStart) && m_playerNum > 0 && m_sceneChange->TransparencyChangeStart() == true) {
 				m_sceneChange->TransparencyChange(false);
+				m_se->PlayPressKeySe();
 				m_menu->End();
 			}
 			if (m_sceneChange->TransparencyChangeEnd() == true) {
 				m_gameState = enMainGame;
 				DeleteGO(m_menu);
 				m_menu = nullptr;
-				m_se->PlayPressKeySe();
 				m_sceneChange->TransparencyChange(true);
 				m_lighting->ResetSpotLight();
 				m_lighting->InitDirectionLight();
@@ -102,8 +102,9 @@ void GameDirector::Update()
 			m_bgm->ChangeResultBgm();
 		}
 		else {
-			if (m_result->IsMoveEnd() == true && g_pad[0]->IsTrigger(enButtonA)) {
+			if (m_result->IsMoveEnd() == true && g_pad[0]->IsTrigger(enButtonA) && m_sceneChange->TransparencyChangeStart() == true) {
 				m_sceneChange->TransparencyChange(false);
+				m_se->PlayPressKeySe();
 			}
 			if (m_sceneChange->TransparencyChangeEnd() == true) {
 				m_gameState = enEnd;
