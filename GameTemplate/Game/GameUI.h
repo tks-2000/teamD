@@ -21,6 +21,12 @@ public:
 
 	void AddScore(int num, int score);
 
+	/// @brief 妖怪スコアカクシ
+	void ScoreHider();
+	/// @brief 妖怪プレイヤーカクシ
+	void Playerhider();
+	/// @brief 妖怪ゲージカクシ
+	void GageHider();
 	//void ScoreIndicator(float addition, Vector3 Pos);
 
 private:
