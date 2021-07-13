@@ -476,7 +476,16 @@
     <Media Include="Assets\sound\bgm\bgm.wav" />
     <Media Include="Assets\sound\bgm\normalBGM.wav" />
     <Media Include="Assets\sound\bgm\title.wav" />
+    <Media Include="Assets\sound\se\BoxCollide.wav" />
+    <Media Include="Assets\sound\se\Defeat.wav" />
+    <Media Include="Assets\sound\se\GuardEnd.wav" />
+    <Media Include="Assets\sound\se\GuardStart.wav" />
+    <Media Include="Assets\sound\se\ItemGet.wav" />
     <Media Include="Assets\sound\se\press_key.wav" />
+    <Media Include="Assets\sound\se\ReSpawn.wav" />
+    <Media Include="Assets\sound\se\Stan.wav" />
+    <Media Include="Assets\sound\se\StrongCollide.wav" />
+    <Media Include="Assets\sound\se\WeakCollide.wav" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

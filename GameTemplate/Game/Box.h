@@ -7,7 +7,8 @@ class Score;
 class Objects;
 class Timer;
 class GameDirector;
-
+class Effect;
+class Se;
 
 class Box : public IGameObject
 {
@@ -62,6 +63,11 @@ private:
 
 	float m_openTime = 0.0f;
 
+	/// @brief 消えるときに出る煙エフェクト
+	Effect m_smokeEffect;
+	/// @brief 開いたときに出るエフェクト
+	Effect m_openEffect;
+
 	/// @brief プレイヤー
 	Player* m_player[PLAYER_NUMBER] = { nullptr };
 	/// @brief ボール
@@ -78,6 +84,8 @@ private:
 	Timer* m_timer = nullptr;
 	/// @brief ゲームディレクター
 	GameDirector* m_gameDirector = nullptr;
+	/// @brief SE
+	Se* m_se = nullptr;
 
 	enum enAnimationClips
 	{
