@@ -32,6 +32,14 @@ namespace {
 	const float TIME_FONT_SCALE = 1.0f;
 	const Vector2 FINISH_FONT_POS = { -200.0f,100.0f };
 	const float FINISH_FONT_SCALE = 3.0f;
+
+	//フィニッシュスプライト表示関連
+	const char* FINISHSPRITE_FILEPATH = "Assets/sprite/finish.DDS";
+	const Vector3 FINISHSPRITE_INITSCALE = { 3.0f, 3.0f, 1.0f };
+	const int FINISHSPRITE_HEIGHT = 512;
+	const int FINISHSPRITE_WIDTH = 512;
+	
+
 }
 
 GameUI::GameUI()
@@ -219,6 +227,20 @@ GameUI::GameUI()
 	m_timerHedder->SetPosition({ 55.0f,330.0f });
 	m_timerHedder->SetText(L"Time");
 	m_timerHedder->SetScale(0.6f);
+
+
+	m_finishSprite = NewGO<SpriteRender>(3);
+	//フィニッシュスプライトの初期化
+	m_finishSprite->Init(FINISHSPRITE_FILEPATH, FINISHSPRITE_WIDTH, FINISHSPRITE_HEIGHT);
+	//ピボットを設定
+	m_finishSprite->SetPivot({ 0.5f,0.5f });
+
+	m_finishSpriteScale = FINISHSPRITE_INITSCALE;
+
+	m_finishSprite->SetScale(m_finishSpriteScale);
+
+	m_finishSprite->SetColor({ 1.0f,1.0f,1.0f,0.0f });
+
 }
 
 GameUI::~GameUI()
@@ -253,6 +275,7 @@ GameUI::~GameUI()
 	DeleteGO(m_timeFont);
 	DeleteGO(m_timerFrame);
 	DeleteGO(m_timerHedder);
+	DeleteGO(m_finishSprite);
 }
 
 bool GameUI::Start()
@@ -303,14 +326,32 @@ void GameUI::TimerFont()
 		m_timeFont->SetText(conversion.c_str());
 	}
 	if (m_timer->IsFinish() == true) {
-		m_timeFont->SetText(L"Finish");
+		/*m_timeFont->SetText(L"Finish");
 		m_timeFont->SetPosition(FINISH_FONT_POS);
-		m_timeFont->SetScale(FINISH_FONT_SCALE);
+		m_timeFont->SetScale(FINISH_FONT_SCALE);*/
+		//フェードイン
+		m_finishSprite->FadeIn(2.0f);
+		//縮小する処理
+		m_finishSpriteScale.x -= 0.1f;
+		m_finishSpriteScale.y -= 0.1f;
+		//原寸になったらその大きさで固定する
+		if (m_finishSpriteScale.x < 1.0f) {
+			m_finishSpriteScale.x = 1.0f;
+		}
+		if (m_finishSpriteScale.y < 1.0f) {
+			m_finishSpriteScale.y = 1.0f;
+		}
+
+		m_finishSprite->SetPosition(m_finishSpritePos);
+		m_finishSprite->SetScale(m_finishSpriteScale);
+
 	}
 	if (m_timer->IsTimerEnd() == true) {
 		m_timeFont->SetText(L"PUSH A BUTTON");
 		m_timeFont->SetPosition(TIME_FONT_POS);
 		m_timeFont->SetScale(TIME_FONT_SCALE);
+
+		m_finishSprite->FadeOut(1.0f);
 	}
 	
 	
