@@ -8,7 +8,7 @@ class Objects;
 class Timer;
 class GameDirector;
 class Effect;
-
+class Se;
 
 class Box : public IGameObject
 {
@@ -84,6 +84,8 @@ private:
 	Timer* m_timer = nullptr;
 	/// @brief ゲームディレクター
 	GameDirector* m_gameDirector = nullptr;
+	/// @brief SE
+	Se* m_se = nullptr;
 
 	enum enAnimationClips
 	{

@@ -10,7 +10,7 @@ namespace {
 	/// @brief ボールと接触する距離
 	const float COLLIDE_DISTANCE = 80.0f;
 	/// @brief 落下扱いになる高さ
-	const float FALLING_HEIGHT = -1000.0f;
+	const float FALLING_HEIGHT = -3000.0f;
 	/// @brief バーストエフェクトを再生する判定を行う高さ
 	const float BURST_HEIGHT = -500.0f;
 	/// @brief 1Pの初期位置
@@ -108,6 +108,7 @@ bool Player::Start()
 	m_lig = FindGO<Lighting>(LIGHTING_NAME);
 	m_plEffect = FindGO<PlayerEffect>(PLAYER_EFFECT_NAME);
 	m_ball = FindGO<Ball>(BALL_NAME);
+	m_se = FindGO<Se>(SE_NAME);
 
 	m_animationClips[enAnimation_Idle].Load("Assets/animData/idle.tka");
 	m_animationClips[enAnimation_Walk].Load("Assets/animData/walk.tka");
@@ -196,7 +197,7 @@ void Player::Move()
 		m_anim = enAnimation_Walk;
 	}
 
-	if (m_speedUp == true) {
+	if (m_speedUp == true && m_damage == false) {
 		m_moveVelocity += VELOCITY_ADDITION_AMOUNT;
 	}
 
@@ -251,7 +252,12 @@ void Player::Move()
 		m_burstFlag = true;
 
 		if (m_burstFlag == true && m_burstFlagPrevFrame == false) {
+			if (m_damage == true || m_breakGuard == true) {
+				m_plEffect->StopKnockOutEffect(m_myNumber);
+				m_se->StopStanSe(m_myNumber);
+			}
 			m_plEffect->PlayBurstEffect(m_myNumber);
+			m_se->PlayDefeatSe();
 		}
 	}
 
@@ -362,12 +368,15 @@ void Player::BallCollide()
 
 	if (m_breakGuard == true) {
 		m_plEffect->StopKnockOutEffect(m_myNumber);
+		m_se->StopStanSe(m_myNumber);
 	}
 	if (m_damage == false) {
 		m_plEffect->PlayKnockOutEffect(m_myNumber);
+		m_se->PlayStanSe(m_myNumber);
 	}
 
 	m_damage = true;
+	m_se->PlayWeakCollideSe();
 
 	/// @brief 攻撃してきたプレイヤーの番号を記憶する
 	m_haveAttackedPlayer = m_ball->GetPlayerInformation();
@@ -418,6 +427,7 @@ void Player::Guard()
 		m_plEffect->StopGuardEffect(m_myNumber);
 		m_plEffect->PlayGuardBreakEffect(m_myNumber);
 		m_plEffect->PlayKnockOutEffect(m_myNumber);
+		m_se->PlayStanSe(m_myNumber);
 
 		m_se->PlayBreakSe();
 	}
@@ -472,6 +482,7 @@ void Player::Guard()
 				m_breakGuard = true;
 
 				m_se->PlayBreakSe();
+				m_se->PlayStanSe(m_myNumber);
 
 				return;
 			}
@@ -501,13 +512,13 @@ void Player::ReSpawn() {
 	m_damageTime = FLOAT_0;
 	m_breakGuard = false;
 	m_guardDurability = 100.0f;
-	m_plEffect->StopKnockOutEffect(m_myNumber);
 	m_mutekiTime = MUTEKI_TIME;
 	m_lig->SetPointLightBlinking(m_myNumber, m_mutekiTime, 0.07f);
 	m_dieFlag = true;
 
 	//リスポーン時のエフェクトを再生
 	m_plEffect->PlayRespawnEffect(m_myNumber);
+	m_se->PlayReSpawnSe();
 	m_powerUp = false;
 	m_powerUpTime = FLOAT_0;
 
@@ -625,6 +636,7 @@ void Player::Update()
 		m_damageTime = FLOAT_0;
 		if (m_breakGuard == false) {
 			m_plEffect->StopKnockOutEffect(m_myNumber);
+			m_se->StopStanSe(m_myNumber);
 		}
 		if (m_breakGuard != true) {
 			m_plEffect->PlayRepairEffect(m_myNumber);
@@ -699,6 +711,7 @@ void Player::Update()
 		m_breakGuard = false;
 		if (m_damage == false) {
 			m_plEffect->StopKnockOutEffect(m_myNumber);
+			m_se->StopStanSe(m_myNumber);
 		}
 		m_plEffect->PlayShieldRepairEffect(m_myNumber);
 		m_se->PlayShieldRepairSe();
@@ -731,6 +744,9 @@ void Player::Update()
 			}
 		}
 	}
+	if (m_guard == true && !g_pad[m_myNumber]->IsPress(enButtonLB1)) {
+		m_se->PlayGuardEndSe();
+	}
 	/// @brief LB1を押している間ガード
 	if (g_pad[m_myNumber]->IsPress(enButtonLB1) && m_breakGuard == false && m_damage == false) {
 		m_guard = true;
@@ -754,6 +770,7 @@ void Player::Update()
 		m_timer->IsTimerExecution() == true) {
 		//m_guardBeginEffect.Play();
 		m_plEffect->PlayGuardBeginEffect(m_myNumber);
+		m_se->PlayGuardStartSe();
 	}
 
 	if (m_dieFlag == true) {

@@ -44,7 +44,7 @@ Box::Box() {
 	m_score = FindGO<Score>(SCORE_NAME);
 	m_objects = FindGO<Objects>(OBJECTS_NAME);
 	m_timer = FindGO<Timer>(TIMER_NAME);
-
+	m_se = FindGO<Se>(SE_NAME);
 	m_fall = FALL;
 }
 Box::~Box() {
@@ -90,8 +90,9 @@ void Box::Update() {
 		m_fallSpeed.y -= m_fall;
 	}
 	else {
-		if (m_ballDistance < BALL_DISTANCE /*&& !m_timer->IsCountDown()*/) {
+		if (m_ballDistance < BALL_DISTANCE && m_openFlag == false/*&& !m_timer->IsCountDown()*/) {
 			ballCollider();
+			m_se->PlayBoxCollideSe();
 		}
 	}
 	for (int plNum = 0; plNum < m_playerNum; plNum++) {
