@@ -17,6 +17,7 @@ private:
 	FontRender* m_selectFont[SELECT_COMMAND_NUM] = { nullptr };
 	FontRender* m_rankingFont[PLAYER_NUMBER] = { nullptr };
 	FontRender* m_playerNameFont[PLAYER_NUMBER] = { nullptr };
+	FontRender* m_scoreFont[PLAYER_NUMBER] = { nullptr };
 	bool m_playerFontSet[PLAYER_NUMBER] = { false };
 	bool m_moveFlag[PLAYER_NUMBER] = { false };
 	bool m_moveEndFlag = false;

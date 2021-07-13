@@ -5,13 +5,13 @@
 
 namespace {
 	/// @brief 開始時のタイマーの進む量
-	const float START_TIMER_AMOUNT_GO = 1.3f;
+	const float START_TIMER_AMOUNT_GO = 1.1f;
 	/// @brief タイマーの進む量
 	const float TIMER_AMOUNT_GO = 1.0f;
 	/// @brief タイマーの終了地点
 	const float TIMER_ZERO = 0.0f;
 	/// @brief カウントダウン時間
-	const float TIMER_COUNT_DOUN = 4.0f;
+	const float TIMER_COUNT_DOUN = 2.99999f;
 	
 	/// @brief ゲームが終了してからリザルトに移るまでの時間
 	const float FINISH_DISPLAY_TIME = 5.0f;

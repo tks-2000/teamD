@@ -195,7 +195,7 @@ void Se::PlayWeakCollideSe()
 {
 	CSoundSource* weakCollideSe = NewGO<CSoundSource>(0);
 	weakCollideSe->Init(WEAK_COLLIDE_SE_FILEPATH);
-	weakCollideSe->SetVolume(1.0f);
+	weakCollideSe->SetVolume(2.0f);
 	weakCollideSe->Play(false);
 }
 
@@ -203,7 +203,7 @@ void Se::PlayStrongCollideSe()
 {
 	CSoundSource* strongCollideSe = NewGO<CSoundSource>(0);
 	strongCollideSe->Init(STRONG_COLLIDE_SE_FILEPATH);
-	strongCollideSe->SetVolume(1.0f);
+	strongCollideSe->SetVolume(3.0f);
 	strongCollideSe->Play(false);
 }
 

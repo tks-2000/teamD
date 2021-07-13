@@ -82,6 +82,7 @@ namespace {
 
 	const float ITEM_POWERUP_TIME = 10.0f;
 	
+	const float STRONG_HIT = 20.0f;
 }
 
 Player::Player()
@@ -376,7 +377,12 @@ void Player::BallCollide()
 	}
 
 	m_damage = true;
-	m_se->PlayWeakCollideSe();
+	if (m_ball->GetVelocity() > STRONG_HIT) {
+		m_se->PlayStrongCollideSe();
+	}
+	else {
+		m_se->PlayWeakCollideSe();
+	}
 
 	/// @brief 攻撃してきたプレイヤーの番号を記憶する
 	m_haveAttackedPlayer = m_ball->GetPlayerInformation();
@@ -746,7 +752,7 @@ void Player::Update()
 			}
 		}
 	}
-	if (m_guard == true && !g_pad[m_myNumber]->IsPress(enButtonLB1)) {
+	if (m_guard == true && !g_pad[m_myNumber]->IsPress(enButtonLB1) && m_timer->IsTimerExecution() == true) {
 		m_se->PlayGuardEndSe();
 	}
 	/// @brief LB1を押している間ガード
