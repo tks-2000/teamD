@@ -4,6 +4,7 @@ class Lighting;
 class FontRender;
 class SkinModelRender;
 class GameDirector;
+class Se;
 
 const int PLAYER_NUM = 4;
 
@@ -41,9 +42,13 @@ private:
 	/// @brief プレイヤーの人数のフォント
 	FontRender* m_plNumFont = nullptr;
 
+	FontRender* m_pushStart = nullptr;
+
 	GameDirector* m_gameDirector = nullptr;
 
 	Lighting* m_lig = nullptr;
+
+	Se* m_se = nullptr;
 
 	bool m_endFlag = false;
 

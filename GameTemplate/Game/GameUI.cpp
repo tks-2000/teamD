@@ -13,10 +13,10 @@ namespace {
 	const Vector2 PL3_FONT_POS = { -600.0f,-200.0f };
 	const Vector2 PL4_FONT_POS = { 400.0f,-200.0f };
 
-	const Vector2 PL1_NUMFONT_POS = { -550.0f,250.0f};
-	const Vector2 PL2_NUMFONT_POS = { 500.0f,250.0f };
-	const Vector2 PL3_NUMFONT_POS = { -550.0f,-250.0f };
-	const Vector2 PL4_NUMFONT_POS = { 500.0f,-250.0f };
+	const Vector2 PL1_NUMFONT_POS = { -550.0f,255.0f};
+	const Vector2 PL2_NUMFONT_POS = { 500.0f,255.0f };
+	const Vector2 PL3_NUMFONT_POS = { -550.0f,-245.0f };
+	const Vector2 PL4_NUMFONT_POS = { 500.0f,-245.0f };
 
 	const Vector2 BALL_SPEED_POS = { 500.0f, -300.0f };
 
@@ -293,7 +293,14 @@ void GameUI::TimerFont()
 {
 	float time = FLOAT_0;
 	if (m_timer->IsCountDown() == true) {
-		time = m_timer->GetCountDownNum();
+		time = m_timer->GetCountDownNum() + 1.0f;
+		if ((int)time == 4) {
+			m_timeFont->SetColor({ 0.0f, 0.0f, 0.0f, 0.0f });
+		}
+		else
+		{
+			m_timeFont->SetColor({1.0f,1.0f,1.0f,1.0f});
+		}
 		std::wstring conversion;
 		int integerTime = time;
 		conversion = std::to_wstring(integerTime);
@@ -348,13 +355,65 @@ void GameUI::TimerFont()
 	}
 	if (m_timer->IsTimerEnd() == true) {
 		m_timeFont->SetText(L"PUSH A BUTTON");
-		m_timeFont->SetPosition(TIME_FONT_POS);
+		m_timeFont->SetPosition({-100.0f, -275.0f});
 		m_timeFont->SetScale(TIME_FONT_SCALE);
 
 		m_finishSprite->FadeOut(1.0f);
 	}
 	
 	
+}
+
+void GameUI::ScoreHider()
+{
+	if (m_timer->GetTimer() <= 30.0f && m_timer->GetTimer() != 0.0f) {
+		const wchar_t hidenScore[] = { L"????" };
+		for (int hide = 0; hide < m_playerNum; hide++)
+		{
+			m_playerNumFont[hide]->SetText(hidenScore);
+		}
+	}
+	if (m_timer->GetTimer() == 0.0f) {
+		for (int invScore = 0; invScore < m_playerNum; invScore++) {
+			m_playerNumFont[invScore]->SetColor({ 0.0f,0.0f,0.0f,0.0f });
+			m_fluctiationIndicater[invScore]->SetColor({ 0.0f,0.0f,0.0f,0.0f });
+		}
+	}
+}
+
+void GameUI::Playerhider()
+{
+	if (m_timer->IsFinish() == true)
+	{
+		for (int PHide = 0; PHide < m_playerNum; PHide++)
+		{
+			m_playerFont[PHide]->SetColor({ 0.0f,0.0f,0.0f,0.0f, });
+		}
+	}
+}
+
+void GameUI::GageHider()
+{
+	if (m_timer->GetTimer() == 0.0f)
+	{
+		for (int GHide = 0; GHide < m_playerNum; GHide++)
+		{
+			m_shieldGage[GHide]->SetColor({ 0.0f,0.0f,0.0f,0.0f });
+			m_staminaGage[GHide]->SetColor({ 0.0f,0.0f,0.0f,0.0f });
+			m_ShGageBase[GHide]->SetColor({ 0.0f,0.0f,0.0f,0.0f });
+			m_StGageBase[GHide]->SetColor({ 0.0f,0.0f,0.0f,0.0f });
+			m_ShGageBegin[GHide]->SetColor({ 0.0f,0.0f,0.0f,0.0f });
+			m_StGageBegin[GHide]->SetColor({ 0.0f,0.0f,0.0f,0.0f });
+			m_ShGageBody[GHide]->SetColor({ 0.0f,0.0f,0.0f,0.0f });
+			m_StGageBody[GHide]->SetColor({ 0.0f,0.0f,0.0f,0.0f });
+			m_ShGageFinal[GHide]->SetColor({ 0.0f,0.0f,0.0f,0.0f });
+			m_StGageFinal[GHide]->SetColor({ 0.0f,0.0f,0.0f,0.0f });
+			m_ShGageIcon[GHide]->SetColor({ 0.0f,0.0f,0.0f,0.0f });
+			m_StGageIcon[GHide]->SetColor({ 0.0f,0.0f,0.0f,0.0f });
+			m_LBbuttonIcon[GHide]->SetColor({ 0.0f,0.0f,0.0f,0.0f });
+			m_RBbuttonIcon[GHide]->SetColor({ 0.0f,0.0f,0.0f,0.0f });
+		}
+	}
 }
 
 void GameUI::Update()
@@ -430,6 +489,7 @@ void GameUI::Update()
 			}
 
 			oldScore[plFontNum] = NowScore[plFontNum];
+			GameUI::ScoreHider();
 	}
 
 
@@ -546,6 +606,8 @@ void GameUI::Update()
 	//	m_GuardDurability[plFontNum]->SetText(conv.c_str());
 	//}
 	TimerFont();
+	/*GameUI::*/Playerhider();
+	/*GameUI::*/GageHider();
 }
 void GameUI::AddScore(int num, int score) {
 	/// @brief PL‚ÌƒXƒRƒA‚ð‰ÁŽZ‚·‚é

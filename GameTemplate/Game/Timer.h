@@ -1,6 +1,8 @@
 #pragma once
 
 class GameDirector;
+class Se;
+class SceneChange;
 
 /// @brief ゲームの制限時間
 static const float TIME_LIMIT = 5.0f;
@@ -17,6 +19,8 @@ private:
 	float m_finishTimer = 0.0f;
 	/// @brief タイマーの終了状態
 	bool m_timerEnd = false;
+
+	bool m_countStart = false;
 	
 	/// @brief タイマーの状態の列挙型
 	enum enTimerStatus {
@@ -31,7 +35,9 @@ private:
 
 	GameDirector* m_gameDirector = nullptr;
 
+	Se* m_se = nullptr;
 
+	SceneChange* m_sceneChange = nullptr;
 	
 	void CountDown();
 	void TimerExecution();
