@@ -782,7 +782,7 @@ void Player::Update()
 	//パワーアップエフェクトの再生
 	if (m_powerUp == true) {
 		m_powerUpCounter += 1;
-		if (m_powerUpCounter % 25 == 1) {
+		if (m_powerUpCounter % 20 == 1) {
 			m_plEffect->PlayKickBuffEffect(m_myNumber);
 		}
 	}
