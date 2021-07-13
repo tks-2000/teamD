@@ -23,6 +23,7 @@ Item::~Item()
 bool Item::Start()
 {
 	m_gameDirector = FindGO<GameDirector>(GAME_DIRECTOR_NAME);
+	m_se = FindGO<Se>(SE_NAME);
 	m_objects = FindGO<Objects>(OBJECTS_NAME);
 	for (int plNum = 0; plNum < m_gameDirector->GetPlayerNum(); plNum++) {
 		m_player[plNum] = FindGO<Player>(PLAYER_NAME[plNum]);
@@ -56,6 +57,7 @@ void Item::Update()
 	for (int plNum = 0; plNum < m_gameDirector->GetPlayerNum(); plNum++) {
 		if (m_distance[plNum] < ITEM_GET_DISTANCE) {
 			m_objects->SetItemDelFlag(m_myNo);
+			m_se->PlayItemGetSe();
 			switch (m_itemState)
 			{
 			case enAttackUp: {

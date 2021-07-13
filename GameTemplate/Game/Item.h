@@ -2,6 +2,7 @@
 
 class SkinModelRender;
 class GameDirector;
+class Se;
 class Objects;
 class Player;
 
@@ -40,6 +41,7 @@ private:
 	int m_myNo = 4;
 	Player* m_player[PLAYER_NUM] = { nullptr };
 	GameDirector* m_gameDirector = nullptr;
+	Se* m_se = nullptr;
 	Objects* m_objects = nullptr;
 	enItemType m_itemState = enAttackUp;
 	bool m_newGoFlag = false;
