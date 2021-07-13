@@ -201,6 +201,14 @@
     <Media Include="Assets\sound\se\Stan.wav" />
     <Media Include="Assets\sound\se\StrongCollide.wav" />
     <Media Include="Assets\sound\se\WeakCollide.wav" />
+    <Media Include="Assets\sound\se\BoxOpen.wav" />
+    <Media Include="Assets\sound\se\Cheer.wav" />
+    <Media Include="Assets\sound\se\Ranking.wav" />
+    <Media Include="Assets\sound\se\SelectKey.wav" />
+    <Media Include="Assets\sound\se\StaminaOver.wav" />
+    <Media Include="Assets\sound\se\StaminaRecovery.wav" />
+    <Media Include="Assets\sound\se\CountDown.wav" />
+    <Media Include="Assets\sound\se\End.wav" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\modelData\bg\testmap_tex.DDS" />

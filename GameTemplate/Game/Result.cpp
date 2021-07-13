@@ -7,7 +7,8 @@ namespace {
 	const Vector2 PLAYER_FONT_START_POS[MAX_PLAYER_NUM] = { {700.0f,200.0f},{700.0f,100.0f},{700.0f,0.0f},{700.0f,-100.0f} };
 	const Vector2 PLAYER_FONT_POS[MAX_PLAYER_NUM] = { {-200.0f,200.0f},{-200.0f,100.0f},{-200.0f,0.0f},{-200.0f,-100.0f} };
 	const Vector2 RANKING_FONT_POS[MAX_PLAYER_NUM] = { {-250.0f,200.0f},{-250.0f,100.0f},{-250.0f,0.0f},{-250.0f,-100.0f} };
-	const Vector2 SELECT_FONT_POS[SELECT_COMMAND_NUM] = { {200.0f,0.0f},{200.0f,-100.0f} ,{200.0f,-200.0f} };
+	const Vector2 SELECT_FONT_POS[SELECT_COMMAND_NUM] = { {-500.0f,-200.0f},{-200.0f,-200.0f} ,{300.0f,-200.0f} };
+	const Vector2 SCORE_FONT_POS[MAX_PLAYER_NUM] = { {100.0f,200.0f},{100.0f,100.0f},{100.0f,0.0f},{100.0f,-100.0f} };
 	const int MAX_SELECT_NUM = 2;
 	const int MIN_SELECT_NUM = 0;
 	const Vector4 PLAYER_FONT_COLOR[MAX_PLAYER_NUM] = { {1.0f,0.0f,0.0f,1.0f},{0.0f,0.0f,1.0f,1.0f},{1.0f,1.0f,0.0f,1.0f},{0.0f,1.0f,0.0f,1.0f} };
@@ -93,6 +94,7 @@ Result::~Result()
 	for (int plNum = 0; plNum < m_gameDirector->GetPlayerNum(); plNum++) {
 		DeleteGO(m_rankingFont[plNum]);
 		DeleteGO(m_playerNameFont[plNum]);
+		DeleteGO(m_scoreFont[plNum]);
 	}
 	for (int selectNum = 0; selectNum < SELECT_COMMAND_NUM; selectNum++) {
 		DeleteGO(m_selectFont[selectNum]);
@@ -102,7 +104,7 @@ Result::~Result()
 
 bool Result::Start()
 {
-	
+	m_se = FindGO<Se>(SE_NAME);
 	return true;
 }
 
@@ -116,13 +118,17 @@ void Result::PlayerFontMove(int num)
 			for (int plNum = 0; plNum < m_gameDirector->GetPlayerNum(); plNum++) {
 				if (m_moveOrder[plNum] == m_moveOrder[num] - m_decrease) {
 					m_moveFlag[plNum] = true;
+					m_se->PlayRankingSe();
+					m_moveFlag[num] = false;
 					break;
 				}
 			}
 		}
 		else {
+			m_se->PlayRankingSe();
 			SelectCommandNewGO();
 			m_moveEndFlag = true;
+			m_se->PlayCheersSe();
 		}
 	}
 }
@@ -133,6 +139,13 @@ void Result::SelectCommandNewGO()
 		m_selectFont[selectNum] = NewGO<FontRender>(5);
 		m_selectFont[selectNum]->SetPosition(SELECT_FONT_POS[selectNum]);
 		m_selectFont[selectNum]->SetText(SELECT_COMMAND_FONT[selectNum]);
+	}
+	for (int plNum = 0; plNum < m_gameDirector->GetPlayerNum(); plNum++) {
+		m_scoreFont[plNum] = NewGO<FontRender>(5);
+		m_scoreFont[plNum]->SetPosition(SCORE_FONT_POS[m_moveOrder[plNum]]);
+		std::wstring conversion;
+	    conversion = std::to_wstring(m_score->GetScore(plNum));
+	    m_scoreFont[plNum]->SetText(conversion.c_str());
 	}
 	m_arrowFont = NewGO<FontRender>(5);
 	m_arrowFont->SetText(L"->");
@@ -170,27 +183,29 @@ void Result::Update()
 		}
 	}
 	else {
-		if (g_pad[0]->IsTrigger(enButtonDown)) {
+		if (g_pad[0]->IsTrigger(enButtonRight)) {
 			m_selectNum++;
 			if (m_selectNum > MAX_SELECT_NUM) {
 				m_selectNum = MIN_SELECT_NUM;
 			}
+			m_se->PlaySelectKeySe();
 		}
-		if (g_pad[0]->IsTrigger(enButtonUp)) {
+		if (g_pad[0]->IsTrigger(enButtonLeft)) {
 			m_selectNum--;
 			if (m_selectNum < MIN_SELECT_NUM) {
 				m_selectNum = MAX_SELECT_NUM;
 			}
+			m_se->PlaySelectKeySe();
 		}
 		Vector2 arrowPos = SELECT_FONT_POS[m_selectNum];
-		arrowPos.x -= 100.0f;
+		arrowPos.x -= 50.0f;
 		m_arrowFontPos = arrowPos;
 		for (int selectNum = 0; selectNum < SELECT_COMMAND_NUM; selectNum++) {
 			if (selectNum == m_selectNum) {
 				m_selectFont[selectNum]->SetColor({ 0.0f,1.0f,1.0f,1.0f });
 			}
 			else {
-				m_selectFont[selectNum]->SetColor({ 0.0f,0.0f,0.0f,1.0f });
+				m_selectFont[selectNum]->SetColor({ 0.0f,0.3f,0.3f,0.3f });
 			}
 		}
 		m_arrowFont->SetPosition(m_arrowFontPos);

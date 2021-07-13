@@ -24,6 +24,10 @@ public:
 	void PlaySelectKeySe();
 	//コマンド決定
 	void PlayPressKeySe();
+	//試合開始のカウント
+	void PlayCountDownSe();
+	//試合終了
+	void PlayEndSe();
 	//キック時
 	void PlayKickSe();
 	//強化時キック
@@ -54,6 +58,10 @@ public:
 	void PlayStanSe(int plNum);
 	//行動不能停止
 	void StopStanSe(int plNum) { m_stanSe[plNum]->Stop(); }
+	//スタミナ切れ
+	void PlayStaminaOverSe();
+	//スタミナ回復
+	void PlayStaminaRecoverySe();
 	//アイテム入手
 	void PlayItemGetSe();
 	//撃破
