@@ -75,7 +75,6 @@ void GameDirector::Update()
 	case enMainGame: {
 		if (m_game == nullptr && m_timer == nullptr) {
 			m_game = NewGO<Game>(PRIORITY_VERYLOW, GAME_NAME);
-			m_bgm->ChangeGameBgm();
 			m_timer = NewGO<Timer>(PRIORITY_VERYLOW, TIMER_NAME);
 		}
 		else {
@@ -102,9 +101,11 @@ void GameDirector::Update()
 			m_bgm->ChangeResultBgm();
 		}
 		else {
-			if (m_result->IsMoveEnd() == true && g_pad[0]->IsTrigger(enButtonA) && m_sceneChange->TransparencyChangeStart() == true) {
-				m_sceneChange->TransparencyChange(false);
-				m_se->PlayPressKeySe();
+			if (m_result->IsMoveEnd() == true) {
+				if (g_pad[0]->IsTrigger(enButtonA) && m_sceneChange->TransparencyChangeStart() == true) {
+					m_sceneChange->TransparencyChange(false);
+					m_se->PlayPressKeySe();
+				}
 			}
 			if (m_sceneChange->TransparencyChangeEnd() == true) {
 				m_gameState = enEnd;

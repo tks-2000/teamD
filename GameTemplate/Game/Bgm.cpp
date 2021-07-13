@@ -3,8 +3,9 @@
 
 namespace {
 	const wchar_t* TITLEBGM_FILEPATH = L"Assets/sound/bgm/title.wav";
-	const wchar_t* MENUBGM_FILEPATH = L"Assets/sound/bgm/bgm.wav";
-	const wchar_t* GAMEBGM_FILEPATH = L"Assets/sound/bgm/normalBGM.wav";
+	const wchar_t* MENUBGM_FILEPATH = L"Assets/sound/bgm/Menu.wav";
+	const wchar_t* GAMEBGM_FILEPATH = L"Assets/sound/bgm/MainBgm.wav";
+	const wchar_t* RESULTBGM_FILEPATH = L"Assets/sound/bgm/Result.wav";
 
 	const float BGM_VOLUME = 1.0f;
 }
@@ -54,8 +55,13 @@ void Bgm::Update()
 		}
 	}break;
 	case enResultBgm: {
-
+		if (m_bgm->IsPlaying() == false) {
+			m_bgm->Init(RESULTBGM_FILEPATH);
+			m_bgm->SetVolume(m_bgmVolume);
+			m_bgm->Play(true);
+		}
 	}break;
+
 	default:
 		break;
 	}
