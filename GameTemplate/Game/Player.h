@@ -11,6 +11,15 @@ class Effect;
 class GameUI;
 class Se;
 
+//自分のアイテムバフが今何に変わったかを伝えるための列挙体
+enum ItemBuffChange
+{
+	enItemBuff_Kick,
+	enItemBuff_Guard,
+	enItemBuff_Speed,
+	enItemBuff_Num
+};
+
 class Player : public IGameObject
 {
 public:
@@ -83,7 +92,14 @@ public:
 
 	void GuardPowerUp() { m_kickUp = false; m_guardUp = true; m_speedUp = false; m_itemPowerUp = true; m_itemPowerUpTime = 0.0f; }
 
-	void SpeedPowerUp() { m_kickUp = true; m_guardUp = false; m_speedUp = true; m_itemPowerUp = true; m_itemPowerUpTime = 0.0f; }
+	void SpeedPowerUp() { m_kickUp = false; m_guardUp = false; m_speedUp = true; m_itemPowerUp = true; m_itemPowerUpTime = 0.0f; }
+
+	/// @brief バフ状態の変化状況を記録,エフェクト用ファイルパスの変更
+	void SetItemChangeState();
+	ItemBuffChange m_itemBuffChageState;
+
+	/// @brief 現フレームのフラグ状態を記録
+	void RecordFlags();
 
 private:
 	/// @brief プレイヤーの番号
@@ -169,14 +185,19 @@ private:
 	
 	/// @brief キック強化フラグ
 	bool m_kickUp = false;
+	bool m_kickUpPrevFrame = false;
 	/// @brief ガード強化フラグ
 	bool m_guardUp = false;
+	bool m_guardUpPrevFrame = false;
 	/// @brief スピード強化フラグ
 	bool m_speedUp = false;
+	bool m_speedUpPrevFrame = false;
 
 	bool m_itemPowerUp = false;
 
 	float m_itemPowerUpTime = 0.0f;
+	/// @brief アイテムバフエフェクト再生用カウンター
+	int m_itemPowerUpCounter = 0;
 	/// @brief キャラクターコントローラー
 	CharacterController m_charaCon;
 	/// @brief ライティング

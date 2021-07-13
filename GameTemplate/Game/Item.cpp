@@ -6,6 +6,20 @@ namespace {
 	const float MIN_HEIGHT = 0.0f;
 	const float ITEM_GET_DISTANCE = 50.0f;
 	const float ITEM_VELOCITY = 50.0f;
+
+	//エフェクトのファイルパス
+	const char16_t* ITEMEFFECT_FILEPATH[PLAYER_NUM] = { 
+		{u"Assets/effect/itemAura_red.efk"},
+		{u"Assets/effect/itemAura_blue.efk"},
+		{u"Assets/effect/itemAura_yellow.efk"}
+	};
+	const Vector3 ITEMEFFECT_SCALE = { 8.0f,8.0f,8.0f };
+	//エフェクト発生高度のオフセット値
+	const float ITEMEFFECT_OFFSET_Y = 20.0f;
+	//エフェクト再生可能フラグを立てるための高度
+	const float ITEMEFFECT_PLAYHEIGHT = 10.0f;
+	//エフェクト再生周期(低いほど多く発生)
+	const int ITEMEFFECT_PLAYCYCLE = 6;
 }
 
 Item::Item()
@@ -22,6 +36,9 @@ Item::~Item()
 
 bool Item::Start()
 {
+	//存在エフェクトの初期化
+	m_itemBeingEffect.Init(ITEMEFFECT_FILEPATH[m_itemState]);
+
 	m_gameDirector = FindGO<GameDirector>(GAME_DIRECTOR_NAME);
 	m_se = FindGO<Se>(SE_NAME);
 	m_objects = FindGO<Objects>(OBJECTS_NAME);
@@ -49,6 +66,20 @@ void Item::ItemModelNewGO()
 	}break;
 	}
 	
+}
+
+void Item::PlayBeingEffect()
+{
+	Vector3 efcPos = Vector3::Zero;
+	efcPos = m_position;
+	efcPos.y = m_posHeight;
+	//efcPos.y += ITEMEFFECT_OFFSET_Y;
+
+	m_itemBeingEffect.Play();
+	m_itemBeingEffect.SetPosition(efcPos);
+	m_itemBeingEffect.SetScale(ITEMEFFECT_SCALE);
+	m_itemBeingEffect.Update();
+
 }
 
 void Item::Update()
@@ -102,6 +133,22 @@ void Item::Update()
 	if (m_newGoFlag == true) {
 		m_skinModelRender->SetPosition(modelPos);
 		m_skinModelRender->SetRotation(m_qRot);
+	}
+
+	if (m_position.y < ITEMEFFECT_PLAYHEIGHT) {
+		m_isValidEffectPlay = true;
+	}
+
+	//存在エフェクト再生処理
+	m_itemBeingCounter += 1;
+	if (m_itemBeingCounter > 60) {
+		m_itemBeingCounter = 0;
+	}
+	//再生可能になったら再生
+	if (m_isValidEffectPlay == true) {
+		if (m_itemBeingCounter % ITEMEFFECT_PLAYCYCLE == 1) {
+			PlayBeingEffect();
+		}
 	}
 }
 

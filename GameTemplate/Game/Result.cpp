@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Result.h"
 
-namespace{
+namespace {
 	const wchar_t* PLAYER[MAX_PLAYER_NUM] = { L"Player1",L"Player2" ,L"Player3" ,L"Player4" };
 	const wchar_t* SELECT_COMMAND_FONT[SELECT_COMMAND_NUM] = { L"Retry",L"PlayerSelect",L"Title" };
 	const Vector2 PLAYER_FONT_START_POS[MAX_PLAYER_NUM] = { {700.0f,200.0f},{700.0f,100.0f},{700.0f,0.0f},{700.0f,-100.0f} };
@@ -11,10 +11,39 @@ namespace{
 	const int MAX_SELECT_NUM = 2;
 	const int MIN_SELECT_NUM = 0;
 	const Vector4 PLAYER_FONT_COLOR[MAX_PLAYER_NUM] = { {1.0f,0.0f,0.0f,1.0f},{0.0f,0.0f,1.0f,1.0f},{1.0f,1.0f,0.0f,1.0f},{0.0f,1.0f,0.0f,1.0f} };
+
+	//紙吹雪エフェクトのファイルパス
+	const char16_t* KAMIFUBUKIEFFECT_FILEPATH = u"Assets/effect/kamifubuki.efk";
+	const char16_t* KAMIFUBUKIEFFECT_FALL_FILEPATH = u"Assets/effect/kamifubuki_fall.efk";
+
+	const Vector3 KAMIFUBUKIEFFECT_SCALE = {50.0f,50.0f,50.0f};
+	const Vector3 KAMIFUBUKIEFFECT_FALL_SCALE = {50.0f,50.0f,50.0f};
+
+	const Vector3 KAMIFUBUKIEFFECT_STARTPOS[2] = {
+		{1200.0f,-50.0f,-200.0f},
+		{-1200.0f,-50.0f,-200.0f}
+	};
+
+	const Vector3 KAMIFUBUKIEFFECT_FALL_STARTPOS = { 0.0f,-1000.0f,-400.0f };
+
+	const float KAMIFUBUKIEFFECT_ANGLE[2] = {
+		60.0f,
+		-60.0f
+	};
+
+
 }
 
 Result::Result()
 {
+	//紙吹雪エフェクトの初期化
+	for (int i = 0; i < 2; i++) {
+		m_kamifubukiEffect[i].Init(KAMIFUBUKIEFFECT_FILEPATH);
+	}
+	//紙吹雪エフェクト(落ちるタイプ)の初期化
+	m_kamifubukiFallEffect.Init(KAMIFUBUKIEFFECT_FALL_FILEPATH);
+
+
 	m_selectNum = 0;
 	m_gameDirector = FindGO<GameDirector>(GAME_DIRECTOR_NAME);
 	m_score = FindGO<Score>(SCORE_NAME);
@@ -116,6 +145,26 @@ void Result::Update()
 		for (int plNum = 0; plNum < m_gameDirector->GetPlayerNum(); plNum++) {
 			if (m_moveFlag[plNum] == true) {
 				PlayerFontMove(plNum);
+				//紙吹雪エフェクト再生処理
+				//リザルト画面で1位のプレイヤー名フォントが移動してきて止まったときに発動
+				if (m_moveEndFlag == true && m_kamifubukiEffectPlayFlag == false) {
+					for (int i = 0; i < 2; i++) {
+						m_kamifubukiEffectRotation[i].SetRotationDeg(Vector3::AxisZ, KAMIFUBUKIEFFECT_ANGLE[i]);
+
+						m_kamifubukiEffect[i].Play();
+						m_kamifubukiEffect[i].SetPosition(KAMIFUBUKIEFFECT_STARTPOS[i]);
+						m_kamifubukiEffect[i].SetRotation(m_kamifubukiEffectRotation[i]);
+						m_kamifubukiEffect[i].SetScale(KAMIFUBUKIEFFECT_SCALE);
+						m_kamifubukiEffect[i].Update();
+
+						m_kamifubukiEffectPlayFlag = true;
+					}
+					//落ちてくる紙吹雪エフェクトの再生処理
+					m_kamifubukiFallEffect.Play();
+					m_kamifubukiFallEffect.SetPosition(KAMIFUBUKIEFFECT_FALL_STARTPOS);
+					m_kamifubukiFallEffect.SetScale(KAMIFUBUKIEFFECT_FALL_SCALE);
+					m_kamifubukiFallEffect.Update();
+				}
 			}
 			m_playerNameFont[plNum]->SetPosition(m_plFontPos[plNum]);
 		}

@@ -9,11 +9,11 @@ namespace {
 	const int PL4 = 3;
 
 	const Vector2 PL1_FONT_POS = { -600.0f,300.0f };
-	const Vector2 PL2_FONT_POS = { 450.0f,300.0f };
+	const Vector2 PL2_FONT_POS = { 400.0f,300.0f };
 	const Vector2 PL3_FONT_POS = { -600.0f,-200.0f };
-	const Vector2 PL4_FONT_POS = { 450.0f,-200.0f };
+	const Vector2 PL4_FONT_POS = { 400.0f,-200.0f };
 
-	const Vector2 PL1_NUMFONT_POS = { -550.0f,250.0f };
+	const Vector2 PL1_NUMFONT_POS = { -550.0f,250.0f};
 	const Vector2 PL2_NUMFONT_POS = { 500.0f,250.0f };
 	const Vector2 PL3_NUMFONT_POS = { -550.0f,-250.0f };
 	const Vector2 PL4_NUMFONT_POS = { 500.0f,-250.0f };
@@ -26,7 +26,7 @@ namespace {
 	const Vector4 PL4_COLOR = { 0.0f, 1.0f, 0.0f, 0.5f };
 
 	const Vector2 GUARD_DURABILIYY[MAX_PLAYER_NUM] = { {-600.0f,200.0f},{400.0f,200.0f},{-600.0f,-300.0f},{400.0f,-300.0f} };
-	const float SCALE = 1.0f;
+	const float SCALE = 0.9f;
 
 	const Vector2 TIME_FONT_POS = { -150.0f,300.0f };
 	const float TIME_FONT_SCALE = 1.0f;
@@ -190,23 +190,35 @@ GameUI::GameUI()
 		m_RBbuttonIcon[alpha]->Init("Assets/sprite/RB_ButtonIcon.DDS", 40, 40);
 		m_RBbuttonIcon[alpha]->SetPosition(m_RBbuttonIPos[alpha]);
 		m_RBbuttonIcon[alpha]->SetPivot({ 1 - (256.0 / 512.0f), 1 - (152.0f / 512.0f) });
+
+		m_fluctiationIndicater[alpha] = NewGO<FontRender>(2);
+		m_fluctiationIndicater[alpha]->SetColor({ 0.0f, 0.0f, 0.0f, 0.0f });
+		m_fluctiationIndicater[alpha]->SetPosition(m_IndicaterPos[alpha]);
+		m_fluctiationIndicater[alpha]->SetScale(0.7f);
 	}
 	m_ballSpeedMeter = NewGO<SpriteRender>(4);
 	m_ballSpeedMeter->Init("Assets/sprite/SpeedMeter.DDS", 220, 220);
-	m_ballSpeedMeter->SetPosition({ 500.0f, 0.0f, 0.0f});
-	m_ballSpeedMeter->SetScale({ 0.75f,0.75f,0.75f });
+	m_ballSpeedMeter->SetPosition({ -100.0f, 280.0f, 0.0f});
+	m_ballSpeedMeter->SetScale({ 0.60f,0.60f,1.0f });
 
 	m_ballSpeedMeterPin = NewGO<SpriteRender>(5);
 	m_ballSpeedMeterPin->Init("Assets/sprite/SpeedMeterPin.DDS", 144, 144);
-	m_ballSpeedMeterPin->SetPosition({ 500, 0.0f, 0.0f });
+	m_ballSpeedMeterPin->SetPosition({ -100.0f, 280.0f, 0.0f });
 	m_ballSpeedMeterPin->SetPivot({1.0f - (256.0f / 512.0f), 1.0f - (156.0f / 512.0f)});
-	m_ballSpeedMeterPin->SetScale({ 0.75f,0.75f,0.75f });
+	m_ballSpeedMeterPin->SetScale({ 0.60f,0.60f,1.0f });
 
 	/*m_ballSpeed = NewGO<FontRender>(2);
 	m_ballSpeed->SetPosition(BALL_SPEED_POS);*/
 
 	m_timeFont = NewGO<FontRender>(2);
 	m_timeFont->SetPosition(TIME_FONT_POS);
+	m_timerFrame = NewGO<SpriteRender>(1);
+	m_timerFrame->Init("Assets/sprite/TimerFrame.DDS", 150, 150);
+	m_timerFrame->SetPosition({ 100.0f,260.0f , 0.0f });
+	m_timerHedder = NewGO<FontRender>(2);
+	m_timerHedder->SetPosition({ 55.0f,330.0f });
+	m_timerHedder->SetText(L"Time");
+	m_timerHedder->SetScale(0.6f);
 }
 
 GameUI::~GameUI()
@@ -233,11 +245,14 @@ GameUI::~GameUI()
 		DeleteGO(m_StGageFinal[bravo]);
 		DeleteGO(m_LBbuttonIcon[bravo]);
 		DeleteGO(m_RBbuttonIcon[bravo]);
+		DeleteGO(m_fluctiationIndicater[bravo]);
 	}
 	//DeleteGO(m_ballSpeed);
 	DeleteGO(m_ballSpeedMeter);
 	DeleteGO(m_ballSpeedMeterPin);
 	DeleteGO(m_timeFont);
+	DeleteGO(m_timerFrame);
+	DeleteGO(m_timerHedder);
 }
 
 bool GameUI::Start()
@@ -257,13 +272,33 @@ void GameUI::TimerFont()
 	if (m_timer->IsCountDown() == true) {
 		time = m_timer->GetCountDownNum();
 		std::wstring conversion;
-		conversion = std::to_wstring(time);
+		int integerTime = time;
+		conversion = std::to_wstring(integerTime);
 		m_timeFont->SetText(conversion.c_str());
+	}
+	if (m_timer->IsCountDown() == false && m_GoisGone == false)
+	{
+		if (m_Gone == false) {
+			m_Gone = true;
+			m_goSign = NewGO<FontRender>(6);
+		}
+		m_goSign->SetPosition({ -200.0f, 200.0f });
+		m_goSign->SetText(L"G O");
+		m_goSign->SetColor({ 1.0f, 0.0f, 0.0f, 1.0f });
+		
+			m_goSign->SetScale(8.0f);
+		if (goGoneWaiter >= 50) 
+		{
+			DeleteGO(m_goSign);
+			m_GoisGone = true;
+		}
+		goGoneWaiter++;
 	}
 	if (m_timer->IsTimerExecution() == true) {
 		time = m_timer->GetTimer();
+		int integerTime = time;
 		std::wstring conversion;
-		conversion = std::to_wstring(time);
+		conversion = std::to_wstring(integerTime);
 		m_timeFont->SetText(conversion.c_str());
 	}
 	if (m_timer->IsFinish() == true) {
@@ -288,10 +323,71 @@ void GameUI::Update()
 	//m_testNumFont->SetText(conversion.c_str());
 	for (int plFontNum = 0; plFontNum < m_playerNum; plFontNum++) {
 			/// @brief int型の数値を文字列に変換して出力
+			NowScore[plFontNum] = m_score->GetScore(plFontNum);
+			/// @brief 表示スコアと現在スコアの差の絶対値を変動値とする
+
+			if (NowScore[plFontNum] > viewScore[plFontNum]) {
+				if ((NowScore[plFontNum] - viewScore[plFontNum]) <= 3.0f) {
+					viewScore[plFontNum] = NowScore[plFontNum];
+				}
+				viewScore[plFontNum] += 3;
+			}
+			else if(NowScore[plFontNum] < viewScore[plFontNum])
+			{
+				if ((NowScore[plFontNum] - viewScore[plFontNum]) >= 3.0f) {
+					viewScore[plFontNum] = NowScore[plFontNum];
+				}
+				viewScore[plFontNum] -= 3;
+			}
+			else
+			{
+				viewScore[plFontNum] = NowScore[plFontNum];
+			}
+		
 			std::wstring conversion;
 			/// @brief PLのスコアの数値を入力
-			conversion = std::to_wstring(m_score->GetScore(plFontNum));
+			conversion = std::to_wstring((int)viewScore[plFontNum]);
 			m_playerNumFont[plFontNum]->SetText(conversion.c_str());
+			float fluctiationVal[4];
+			fluctiationVal[plFontNum] = NowScore[plFontNum] - oldScore[plFontNum];
+			std::wstring conversion2 = std::to_wstring((int)fluctiationVal[plFontNum]);
+
+			if (m_fluctiationIndicater[plFontNum]->GetOpacity() == 0.0f) {
+				m_fluctiationIndicater[plFontNum]->SetColor({ 0.0f,0.0f,0.0f,0.0f });
+			}
+
+			if (fluctiationVal[plFontNum] > 0)
+			{
+				//m_fluctiationScore[plFontNum] += fluctiationVal[plFontNum];
+				m_indicaterWaiter = 0;
+				std::wstring convIndi = std::to_wstring((int)fluctiationVal[plFontNum]);
+				convIndi += ('+');
+				m_fluctiationIndicater[plFontNum]->SetText(convIndi.c_str());
+				m_fluctiationIndicater[plFontNum]->FadeIn(2.0f);
+				m_fluctiationIndicater[plFontNum]->SetColor({ 1.0f, 0.0f, 0.0f, 0.0f });
+			}
+			else if (fluctiationVal[plFontNum] < 0)
+			{
+				//m_fluctiationScore[plFontNum] += fluctiationVal[plFontNum];
+				m_indicaterWaiter = 0;
+				std::wstring convIndi = std::to_wstring((int)fluctiationVal[plFontNum] * -1);
+				convIndi += ('-');
+
+				m_fluctiationIndicater[plFontNum]->SetText(convIndi.c_str());
+				m_fluctiationIndicater[plFontNum]->FadeIn(2.0f);
+				m_fluctiationIndicater[plFontNum]->SetColor({ 0.0f, 0.0f, 1.0f, 0.0f });
+			}
+			else
+			{
+				m_indicaterWaiter++;
+				if (m_indicaterWaiter >= 120) {
+					m_fluctiationIndicater[plFontNum]->FadeOut(2.0f);
+					//m_fluctiationIndicater[plFontNum]->SetColor({ 0.0f,0.0f,0.0f,0.0f });
+					m_fluctiationScore[plFontNum] = 0.0f;
+				}
+			}
+
+			oldScore[plFontNum] = NowScore[plFontNum];
 	}
 
 

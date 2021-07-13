@@ -79,11 +79,11 @@ void Objects::Update() {
 				m_reSpawnTime[Num] = ZeroF;
 				m_itemDelFlag[Num] = false;
 				m_boxOpenFlag[Num] = false;
+
 			}
 		}
 		if (m_delFlag[Num] == false && m_itemDelFlag[Num] == false) {
 			m_item[Num]->SetPosition(m_box[Num]->GetBoxPos());
 		}
-		
 	}
 }

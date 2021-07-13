@@ -17,6 +17,8 @@ namespace {
 
 	const Vector3 CAMERA_POS = { 0.0f,100.0f,-600.0f };
 
+	const char* SELECTMENU_BG_FILEPATH = "Assets/modelData/selectBg/selectbg.tkm";
+
 }
 
 Menu::Menu()
@@ -62,9 +64,9 @@ Menu::~Menu()
 bool Menu::Start()
 {
 	m_floor = NewGO<SkinModelRender>(0);
-	m_floor->Init("Assets/modelData/bg/floor.tkm");
-	m_floor->SetPosition({ 0.0f,0.0f,0.0f });
-	m_floorRot.SetRotationDegY(180.0f);
+	m_floor->Init(SELECTMENU_BG_FILEPATH);
+	m_floor->SetPosition({ 0.0f,-50.0f,800.0f });
+	m_floorRot.SetRotationDegY(0.0f);
 	m_floor->SetRotation(m_floorRot);
 
 	m_gameDirector = FindGO<GameDirector>(GAME_DIRECTOR_NAME);
