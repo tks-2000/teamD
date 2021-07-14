@@ -4,7 +4,7 @@
 namespace {
 	const Vector3 SCALE = { 1.0f,1.0f,1.0f };
 	const int MAX_OBJECTS_NUM = 4;
-	const Vector3 OBJECTS_POS[MAX_OBJECTS_NUM] = { {350.0f,400.0f,350.0f},{350.0f,400.0f,-350.0f},{-350.0f,400.0f,350.0f},{-350.0f,400.0f,-350.0f} };
+	const Vector3 OBJECTS_POS[MAX_OBJECTS_NUM] = { {0.0f,1000.0f,400.0f},{0.0f,1000.0f,-400.0f},{400.0f,1000.0f,0.0f},{-400.0f,1000.0f,0.0f} };
 	const float BALL_DISTANCE = 120.0f;
 	const float RESPAWN_TIME = 600.0f;
 }
@@ -26,6 +26,7 @@ Objects::~Objects() {
 }
 bool Objects::Start() {
 
+	m_se = FindGO<Se>(SE_NAME);
 	return true;
 }
 void Objects::SetObjects(int num) {
@@ -79,7 +80,7 @@ void Objects::Update() {
 				m_reSpawnTime[Num] = ZeroF;
 				m_itemDelFlag[Num] = false;
 				m_boxOpenFlag[Num] = false;
-
+				m_se->PlayFallSe();
 			}
 		}
 		if (m_delFlag[Num] == false && m_itemDelFlag[Num] == false) {

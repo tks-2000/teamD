@@ -33,11 +33,11 @@ namespace {
 	const float DAMAGE_FRICYION = 0.001f;
 	/// @brief ダメージを受けて復帰するのにかかる時間
 	const float DAMAGE_RETURN_TIME = 100.0f;
-
+	/// @brief 横方向に吹き飛ぶ勢い
 	const float BLOW_AWAY_RATE = 2.0f;
-
-	const float BLOW_AWAY_HEIGHT_RATE = 1.5f;
-
+	/// @brief 縦方向に吹き飛ぶ勢い
+	const float BLOW_AWAY_HEIGHT_RATE = 1.0f;
+	/// @brief アイテムを取ったときの吹き飛ぶ勢い
 	const float DECREASE_BLOW_AWAY_RATE = 1.0f;
 	/// @brief プレイヤーモデルの表示優先度
 	const int PRIORITY = 1;
@@ -59,19 +59,19 @@ namespace {
 	const float NORMAL_KICK_POWER = 1.5f;
 	/// @brief 強化状態のキック力
 	const float POWERFUL_KICK_POWER = 4.0f;
-
+	/// @brief アイテムを取ったときに増えるキック力
 	const float KICK_POWER_ADDITION_AMOUNT = 1.0f;
 	/// @brief 通常の移動速度
 	const float NORMAL_VELOCITY = 0.9f;
 	/// @brief ダッシュの移動速度
 	const float DASH_VELOCITY = 0.95f;
-
+	/// @brief アイテムを取ったときに増える速度
 	const float VELOCITY_ADDITION_AMOUNT = 0.02f;
 	/// @brief 通常のガード耐久値低下量
 	const float GUARD_DECREASE_VALUE = 0.3f;
 	/// @brief 強化状態のガード耐久値低下量
 	const float POWERFUIL_GUARD_DECREASE_VALUE = 0.15f;
-
+	/// @brief アイテムを取ったときのガード耐久値軽減率
 	const float GUARD_ADDITION_AMOUNT = 0.1f;
 	/// @brief スタミナの最大値
 	const float MAX_STANIMA = 6.0f;
@@ -79,9 +79,9 @@ namespace {
 	const float STAMINA_DECREASE_VALUE = 2.0f;
 	/// @brief 強化状態のスタミナ低下量
 	const float POWERFUIL_STAMINA_DECREASE_VALUE = 1.0f;
-
+	/// @brief アイテムによる強化時間
 	const float ITEM_POWERUP_TIME = 10.0f;
-	
+	/// @brief 勢いよく当たった扱いになる速度
 	const float STRONG_HIT = 20.0f;
 }
 
@@ -90,7 +90,7 @@ Player::Player()
 	//プレイヤーの初期状態を設定
 	m_moveVelocity = NORMAL_VELOCITY;
 	m_stamina = MAX_STANIMA;
-	m_kickPower = 5.0f;
+	m_kickPower = NORMAL_KICK_POWER;
 	m_gravity = 5.0f;
 	m_charaCon.Init(PLAYER_RADIUS, PLAYER_HEIGHT, m_position);
 }
@@ -363,33 +363,45 @@ void Player::BallCollide()
 		repulsiveForce *= m_ball->GetVelocity() * BLOW_AWAY_RATE;
 	}
 
+	
 	repulsiveForce.y = m_ball->GetVelocity() * BLOW_AWAY_HEIGHT_RATE;
-	m_moveSpeed = repulsiveForce * FLOAT_2;
-	m_ball->SetMoveDirection(repulsiveForce * FLOAT_MINUS_1);
 
-	if (m_breakGuard == true) {
-		m_plEffect->StopKnockOutEffect(m_myNumber);
-		m_se->StopStanSe(m_myNumber);
-	}
-	if (m_damage == false) {
-		m_plEffect->PlayKnockOutEffect(m_myNumber);
-		m_se->PlayStanSe(m_myNumber);
-	}
+	if (m_dieFlag == false) {
+		m_moveSpeed = repulsiveForce * FLOAT_2;
 
-	m_damage = true;
-	if (m_ball->GetVelocity() > STRONG_HIT) {
-		m_se->PlayStrongCollideSe();
+
+
+
+		if (m_breakGuard == true) {
+			m_plEffect->StopKnockOutEffect(m_myNumber);
+			m_se->StopStanSe(m_myNumber);
+		}
+		if (m_damage == false) {
+			m_plEffect->PlayKnockOutEffect(m_myNumber);
+			m_se->PlayStanSe(m_myNumber);
+		}
+
+
+		m_damage = true;
+		if (m_ball->GetVelocity() > STRONG_HIT) {
+			m_se->PlayStrongCollideSe();
+		}
+		else {
+			m_se->PlayWeakCollideSe();
+		}
+
+
+		/// @brief 攻撃してきたプレイヤーの番号を記憶する
+		m_haveAttackedPlayer = m_ball->GetPlayerInformation();
+
+		if (m_haveAttackedPlayer != m_myNumber && m_dieFlag == false) {
+			m_score->AddScore(m_haveAttackedPlayer);
+		}
 	}
 	else {
-		m_se->PlayWeakCollideSe();
+		m_se->PlayNoDamageCollideSe();
 	}
-
-	/// @brief 攻撃してきたプレイヤーの番号を記憶する
-	m_haveAttackedPlayer = m_ball->GetPlayerInformation();
-
-	if (m_haveAttackedPlayer != m_myNumber && m_dieFlag == false) {
-		m_score->AddScore(m_haveAttackedPlayer);
-	}
+	m_ball->SetMoveDirection(repulsiveForce * FLOAT_MINUS_1);
 }
 
 void Player::Guard()
@@ -472,6 +484,7 @@ void Player::Guard()
 			m_plEffect->PlayJustGuardEffect(m_myNumber);
 			m_se->PlayJustGuardSe();
 			m_powerUp = true;
+			m_powerUpTime = FLOAT_0;
 		}
 		else {
 			/// @brief ボールの勢いに応じて耐久値を減らす
@@ -527,6 +540,8 @@ void Player::ReSpawn() {
 	m_se->PlayReSpawnSe();
 	m_powerUp = false;
 	m_powerUpTime = FLOAT_0;
+	m_itemPowerUp = false;
+	m_itemPowerUpTime = FLOAT_0;
 
 }
 
@@ -733,7 +748,7 @@ void Player::Update()
 
 	/// @brief ボールとの距離が一定以下で吹き飛ぶ
 	if (m_breakGuard == true) {
-		if (m_ballDistance < GUARD_DISTANCE && m_dieFlag == false) {
+		if (m_ballDistance < GUARD_DISTANCE) {
 			BallCollide();
 			//ダメージエフェクト再生処理
 			//前フレームにダメージ状態でなく、現フレームでダメージ状態のとき
@@ -743,7 +758,7 @@ void Player::Update()
 		}
 	}
 	else {
-		if (m_ballDistance < COLLIDE_DISTANCE && m_dieFlag == false) {
+		if (m_ballDistance < COLLIDE_DISTANCE) {
 			BallCollide();
 			//ダメージエフェクト再生処理
 			//前フレームにダメージ状態でなく、現フレームでダメージ状態のとき

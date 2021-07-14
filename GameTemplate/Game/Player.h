@@ -40,9 +40,9 @@ public:
 
 	/// @brief プレイヤーの座標を入手
 	/// @return プレイヤーの座標
-	Vector3 GetPosition() { return m_position; }
+	Vector3& GetPosition() { return m_position; }
 
-	void SetMoveSpeed(Vector3 move) { m_moveSpeed = move; }
+	void SetMoveSpeed(const Vector3& move) { m_moveSpeed = move; }
 
 	/// @brief キック可能か判定
 	void IsKick();
@@ -56,7 +56,7 @@ public:
 	/// @brief ボールとの距離を計算
 	void BallDistanceCalculation();
 
-	Vector3 GetToBallVec() { return m_toBallVec; }
+	Vector3& GetToBallVec() { return m_toBallVec; }
 
 	/// @brief ボールとぶつかる処理
 	void BallCollide();
@@ -86,7 +86,7 @@ public:
 	}
 	/// @brief プレイヤーのリスポーン地点ゲッター
 	/// @return 
-	Vector3 GetRespawnPoint() { return m_startPos; }
+	Vector3& GetRespawnPoint() { return m_startPos; }
 
 	void KickPowerUp() { m_kickUp = true; m_guardUp = false; m_speedUp = false; m_itemPowerUp = true; m_itemPowerUpTime = 0.0f; }
 

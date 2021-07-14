@@ -4,7 +4,7 @@ class Ball;
 class GameDirector;
 class Box;
 class Item;
-
+class Se;
 
 class Objects : public IGameObject
 {
@@ -54,5 +54,7 @@ private:
 	Box* m_box[OBJECTS_NUMBER] = { nullptr };
 
 	Item* m_item[OBJECTS_NUMBER] = { nullptr };
+
+	Se* m_se = nullptr;
 };
 
