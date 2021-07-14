@@ -167,6 +167,7 @@ private:
 	/// @brief GOÉTÉCÉì
 	SpriteRender* m_goSign = nullptr;
 	bool m_Gone = false;
+	float m_GOScale = 10.0f;
 
 	int goGoneWaiter = 0;
 	bool m_GoisGone = false;
