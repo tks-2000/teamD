@@ -21,9 +21,6 @@ Game::Game()
 
 Game::~Game()
 {
-	//ゲームシーン中に発生している全てのエフェクトを停止
-	EffectEngine::GetInstance()->AllStop();
-
 	//DeleteGO(m_timer);
 	DeleteGO(m_gameCamera);
 	DeleteGO(m_backGround);

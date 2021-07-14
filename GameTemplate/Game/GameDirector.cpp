@@ -116,16 +116,21 @@ void GameDirector::Update()
 		{
 		case 0: {
 			m_gameState = enMainGame;
+			//ゲームシーン中に発生している全てのエフェクトを停止
+			EffectEngine::GetInstance()->AllStop();
 		}break;
 		case 1: {
 			m_gameState = enMenu;
+			EffectEngine::GetInstance()->AllStop();
 		}break;
 		case 2: {
 			m_gameState = enTitle;
+			EffectEngine::GetInstance()->AllStop();
 		}break;
 		default:
 			break;
 		}
+
 		DeleteGO(m_game);
 		m_game = nullptr;
 		DeleteGO(m_result);

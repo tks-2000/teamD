@@ -5,7 +5,7 @@ class Se;
 class SceneChange;
 
 /// @brief ƒQ[ƒ€‚Ì§ŒÀŠÔ
-static const float TIME_LIMIT = 5.0f;
+static const float TIME_LIMIT = 120.0f;
 
 class Timer : public IGameObject
 {
