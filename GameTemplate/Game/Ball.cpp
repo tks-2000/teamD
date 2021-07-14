@@ -205,6 +205,7 @@ void Ball::Update()
 
 	if (m_moveFlag == true) {
 		m_lig->SetPointLightColor(4,m_pointLigColor);
+		m_lig->SetPointLightRange(4, 1000.0f);
 		Move();
 		Rotation();
 		PlayTrackEffect();

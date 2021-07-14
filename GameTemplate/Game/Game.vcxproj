@@ -473,8 +473,12 @@
     <Image Include="Assets\sprite\UI_Gage.DDS" />
   </ItemGroup>
   <ItemGroup>
+    <Media Include="..\..\..\bgm\Result.wav" />
     <Media Include="Assets\sound\bgm\bgm.wav" />
+    <Media Include="Assets\sound\bgm\MainBgm.wav" />
+    <Media Include="Assets\sound\bgm\Menu.wav" />
     <Media Include="Assets\sound\bgm\normalBGM.wav" />
+    <Media Include="Assets\sound\bgm\Result.wav" />
     <Media Include="Assets\sound\bgm\title.wav" />
     <Media Include="Assets\sound\se\BoxCollide.wav" />
     <Media Include="Assets\sound\se\BoxOpen.wav" />

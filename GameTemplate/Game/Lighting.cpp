@@ -90,7 +90,7 @@ void Lighting::InitPointLight(int num)
 	m_light.pointLight[num].color.z = 0.0f;
 
 	//ポイントライトの影響範囲
-	m_light.pointLight[num].Range = 1000.0f;
+	m_light.pointLight[num].Range = 0.0f;
 }
 
 void Lighting::MovePointLight()

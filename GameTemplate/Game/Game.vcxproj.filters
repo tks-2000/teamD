@@ -209,6 +209,10 @@
     <Media Include="Assets\sound\se\StaminaRecovery.wav" />
     <Media Include="Assets\sound\se\CountDown.wav" />
     <Media Include="Assets\sound\se\End.wav" />
+    <Media Include="Assets\sound\bgm\MainBgm.wav" />
+    <Media Include="Assets\sound\bgm\Menu.wav" />
+    <Media Include="..\..\..\bgm\Result.wav" />
+    <Media Include="Assets\sound\bgm\Result.wav" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\modelData\bg\testmap_tex.DDS" />

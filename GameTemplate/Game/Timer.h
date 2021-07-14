@@ -1,6 +1,7 @@
 #pragma once
 
 class GameDirector;
+class Bgm;
 class Se;
 class SceneChange;
 
@@ -34,6 +35,8 @@ private:
 	enTimerStatus m_timerStatus = enCountDown;
 
 	GameDirector* m_gameDirector = nullptr;
+
+	Bgm* m_bgm = nullptr;
 
 	Se* m_se = nullptr;
 
