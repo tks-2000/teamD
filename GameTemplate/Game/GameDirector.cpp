@@ -57,7 +57,7 @@ void GameDirector::Update()
 			m_lighting->InitHemiSphereLight();
 		}
 		else {
-			if (g_pad[0]->IsTrigger(enButtonStart) && m_playerNum > 0 && m_sceneChange->TransparencyChangeStart() == true) {
+			if (g_pad[0]->IsTrigger(enButtonA) && m_playerNum > 0 && m_sceneChange->TransparencyChangeStart() == true) {
 				m_sceneChange->TransparencyChange(false);
 				m_se->PlayPressKeySe();
 				m_menu->End();
@@ -117,16 +117,21 @@ void GameDirector::Update()
 		{
 		case 0: {
 			m_gameState = enMainGame;
+			//ゲームシーン中に発生している全てのエフェクトを停止
+			EffectEngine::GetInstance()->AllStop();
 		}break;
 		case 1: {
 			m_gameState = enMenu;
+			EffectEngine::GetInstance()->AllStop();
 		}break;
 		case 2: {
 			m_gameState = enTitle;
+			EffectEngine::GetInstance()->AllStop();
 		}break;
 		default:
 			break;
 		}
+
 		DeleteGO(m_game);
 		m_game = nullptr;
 		DeleteGO(m_result);

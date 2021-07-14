@@ -486,9 +486,11 @@
     <Media Include="Assets\sound\se\CountDown.wav" />
     <Media Include="Assets\sound\se\Defeat.wav" />
     <Media Include="Assets\sound\se\End.wav" />
+    <Media Include="Assets\sound\se\Fall.wav" />
     <Media Include="Assets\sound\se\GuardEnd.wav" />
     <Media Include="Assets\sound\se\GuardStart.wav" />
     <Media Include="Assets\sound\se\ItemGet.wav" />
+    <Media Include="Assets\sound\se\NoDamageCollide.wav" />
     <Media Include="Assets\sound\se\press_key.wav" />
     <Media Include="Assets\sound\se\Ranking.wav" />
     <Media Include="Assets\sound\se\ReSpawn.wav" />

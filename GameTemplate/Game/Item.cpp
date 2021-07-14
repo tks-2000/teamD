@@ -4,8 +4,8 @@
 namespace {
 	const float MAX_HEIGHT = 50.0f;
 	const float MIN_HEIGHT = 0.0f;
-	const float ITEM_GET_DISTANCE = 50.0f;
-	const float ITEM_VELOCITY = 50.0f;
+	const float ITEM_GET_DISTANCE = 70.0f;
+	const float ITEM_VELOCITY = 20.0f;
 
 	//エフェクトのファイルパス
 	const char16_t* ITEMEFFECT_FILEPATH[PLAYER_NUM] = { 
@@ -86,43 +86,45 @@ void Item::Update()
 {
 	PlayerDistanceCalculation();
 	for (int plNum = 0; plNum < m_gameDirector->GetPlayerNum(); plNum++) {
-		if (m_distance[plNum] < ITEM_GET_DISTANCE) {
-			m_objects->SetItemDelFlag(m_myNo);
-			m_se->PlayItemGetSe();
-			switch (m_itemState)
-			{
-			case enAttackUp: {
-				m_player[plNum]->KickPowerUp();
-			}break;
-			case enGuardUp: {
-				m_player[plNum]->GuardPowerUp();
-			}break;
-			case enSpeedUp: {
-				m_player[plNum]->SpeedPowerUp();
-			}break;
-			default:
+		if (m_objects->IsBoxOpen(m_myNo) == true) {
+			if (m_moveChange == false) {
+				m_posHeight += g_gameTime->GetFrameDeltaTime() * ITEM_VELOCITY;
+			}
+			else {
+				m_posHeight -= g_gameTime->GetFrameDeltaTime() * ITEM_VELOCITY;
+			}
+			if (m_posHeight > MAX_HEIGHT) {
+				m_moveChange = true;
+			}
+
+			if (m_posHeight < MIN_HEIGHT) {
+				m_moveChange = false;
+			}
+
+			if (m_distance[plNum] < ITEM_GET_DISTANCE) {
+				m_objects->SetItemDelFlag(m_myNo);
+				m_se->PlayItemGetSe();
+				switch (m_itemState)
+				{
+				case enAttackUp: {
+					m_player[plNum]->KickPowerUp();
+				}break;
+				case enGuardUp: {
+					m_player[plNum]->GuardPowerUp();
+				}break;
+				case enSpeedUp: {
+					m_player[plNum]->SpeedPowerUp();
+				}break;
+				default:
+					break;
+				}
+				DeleteGO(this);
 				break;
 			}
-			DeleteGO(this);
-			break;
 		}
 	}
 
-	if (m_objects->IsBoxOpen(m_myNo) == true) {
-		if (m_moveChange == false) {
-			m_posHeight += g_gameTime->GetFrameDeltaTime() * ITEM_VELOCITY;
-		}
-		else {
-			m_posHeight -= g_gameTime->GetFrameDeltaTime() * ITEM_VELOCITY;
-		}
-		if (m_posHeight > MAX_HEIGHT) {
-			m_moveChange = true;
-		}
 
-		if (m_posHeight < MIN_HEIGHT) {
-			m_moveChange = false;
-		}
-	}
 
 	Vector3 modelPos = m_position;
 	modelPos.y += m_posHeight;

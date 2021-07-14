@@ -7,7 +7,7 @@ namespace {
 	/// @brief 人数のフォント位置
 	const Vector2 PLAYER_NUM_FONT_POS = { 0.0f,-200.0f };
 
-	const Vector2 PUSH_START_FONT_POS = { -200.0f,-300.0f };
+	const Vector2 PUSH_A_FONT_POS = { -150.0f,-300.0f };
 
 	const Vector3 PLAYER_MODEL_POS[MAX_PLAYER_NUM] = { {-200.0f,0.0f,200.0f},{200.0f,0.0f,200.0f},{-200.0f,0.0f,-200.0f},{200.0f,0.0f,-200.0f} };
 
@@ -31,8 +31,8 @@ Menu::Menu()
 	m_plFont->SetPosition(PLAYER_FONT_POS);
 	m_plFont->SetText(L"Player");
 	m_pushStart = NewGO<FontRender>(2);
-	m_pushStart->SetPosition(PUSH_START_FONT_POS);
-	m_pushStart->SetText(L"PUSH START BUTTON");
+	m_pushStart->SetPosition(PUSH_A_FONT_POS);
+	m_pushStart->SetText(L"PUSH A BUTTON");
 	m_pushStart->FadeOut(1.0f);
 	m_animationClips[enAnimation_Idle].Load("Assets/animData/idle.tka");
 	m_animationClips[enAnimation_clear].Load("Assets/animData/unitychan/clear.tka");

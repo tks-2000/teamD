@@ -105,6 +105,7 @@ void Box::Update() {
 
 			repulsiveForce *= m_fall * PLAYER_REPEL;
 			m_player[plNum]->SetMoveSpeed(repulsiveForce * PLAYER_REPEL);
+			m_se->PlayWeakCollideSe();
 
 		}
 	}

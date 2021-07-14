@@ -54,6 +54,16 @@ private:
 	/// @brief ボール速表示用画像その2
 	SpriteRender* m_ballSpeedMeterPin = nullptr;
 	float PinRot = -60.0f;
+	
+	/// @brief	フィニッシュ文字表示スプライト 
+	SpriteRender* m_finishSprite = nullptr;
+	/// @brief 座標
+	Vector3 m_finishSpritePos = Vector3::Zero;
+	/// @brief スケール
+	Vector3 m_finishSpriteScale = Vector3::Zero;
+	/// @brief カラー
+	Vector4 m_finishSpriteColor = { 1.0f,1.0f,1.0f,1.0f };
+
 
 	/// @brief ボールの速度
 	float m_ballVelocity = 0.0f;

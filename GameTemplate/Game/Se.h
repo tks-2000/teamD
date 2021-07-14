@@ -50,6 +50,8 @@ public:
 	void PlayWeakCollideSe();
 	//ボールに衝突(強)
 	void PlayStrongCollideSe();
+	//ボールに衝突(無敵)
+	void PlayNoDamageCollideSe();
 	//箱に衝突
 	void PlayBoxCollideSe();
 	//箱が開く
@@ -72,5 +74,7 @@ public:
 	void PlayRankingSe();
 	//歓声
 	void PlayCheersSe();
+	//箱の落下
+	void PlayFallSe();
 };
 

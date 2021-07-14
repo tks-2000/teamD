@@ -35,6 +35,8 @@ namespace {
 	const wchar_t* WEAK_COLLIDE_SE_FILEPATH = L"Assets/sound/se/WeakCollide.wav";
 	//Õ“Ë(‹­)
 	const wchar_t* STRONG_COLLIDE_SE_FILEPATH = L"Assets/sound/se/StrongCollide.wav";
+	//Õ“Ë(–³“G)
+	const wchar_t* NO_DAMAGE_COLLIDE_SE_FILEPATH = L"Assets/sound/se/NoDamageCollide.wav";
 	//Õ“Ë(” )
 	const wchar_t* BOX_COLLIDE_SE_FILEPATH = L"Assets/sound/se/BoxCollide.wav";
 	//” ‚ªŠJ‚­
@@ -55,6 +57,8 @@ namespace {
 	const wchar_t* RANKING_SE_FILEPATH = L"Assets/sound/se/Ranking.wav";
 	//Š½º
 	const wchar_t* CHEER_SE_FILEPATH = L"Assets/sound/se/Cheer.wav";
+	//” ‚Ì—Ž‰º
+	const wchar_t* FALL_SE_FILEPATH = L"Assets/sound/se/Fall.wav";
 
 }
 
@@ -207,6 +211,14 @@ void Se::PlayStrongCollideSe()
 	strongCollideSe->Play(false);
 }
 
+void Se::PlayNoDamageCollideSe()
+{
+	CSoundSource* NoDamageCollideSe = NewGO<CSoundSource>(0);
+	NoDamageCollideSe->Init(NO_DAMAGE_COLLIDE_SE_FILEPATH);
+	NoDamageCollideSe->SetVolume(3.0f);
+	NoDamageCollideSe->Play(false);
+}
+
 void Se::PlayBoxCollideSe()
 {
 	CSoundSource* boxCollideSe = NewGO<CSoundSource>(0);
@@ -283,4 +295,12 @@ void Se::PlayCheersSe()
 	CheersSe->Init(CHEER_SE_FILEPATH);
 	CheersSe->SetVolume(1.0f);
 	CheersSe->Play(false);
+}
+
+void Se::PlayFallSe()
+{
+	CSoundSource* fallSe = NewGO<CSoundSource>(0);
+	fallSe->Init(FALL_SE_FILEPATH);
+	fallSe->SetVolume(1.0f);
+	fallSe->Play(false);
 }
