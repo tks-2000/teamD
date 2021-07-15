@@ -456,6 +456,9 @@
     <Image Include="Assets\modelData\bg\testmap_tex.DDS" />
     <Image Include="Assets\modelData\sphere\sphere_tex.DDS" />
     <Image Include="Assets\modelData\sphere\sphere_tex_01.DDS" />
+    <Image Include="Assets\sprite\1.DDS" />
+    <Image Include="Assets\sprite\2.DDS" />
+    <Image Include="Assets\sprite\3.DDS" />
     <Image Include="Assets\sprite\BLACK.dds" />
     <Image Include="Assets\sprite\GageBody.DDS" />
     <Image Include="Assets\sprite\GageFinal.DDS" />

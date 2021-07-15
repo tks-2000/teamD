@@ -39,7 +39,8 @@ namespace {
 	const int FINISHSPRITE_HEIGHT = 512;
 	const int FINISHSPRITE_WIDTH = 512;
 	
-
+	/// @brief カウントダウンDDSの総数
+	const int COUNT_DOWN_DDS_NUM = 3;
 }
 
 GameUI::GameUI()
@@ -204,6 +205,30 @@ GameUI::GameUI()
 		m_fluctiationIndicater[alpha]->SetPosition(m_IndicaterPos[alpha]);
 		m_fluctiationIndicater[alpha]->SetScale(0.6f);
 	}
+	for (int foxT = 0; foxT < COUNT_DOWN_DDS_NUM; foxT++)
+	{
+		switch (foxT)
+		{
+		case 0:
+			m_countDDS[foxT] = NewGO<SpriteRender>(6);
+			m_countDDS[foxT]->Init("Assets/sprite/1.DDS", 256 * 1.5f, 256 * 1.5f);
+			m_countDDS[foxT]->SetColor({0.0f,0.0f,0.0f,0.0f});
+			m_countDDS[foxT]->SetPosition({ 0.0f,0.0f,0.0f });
+			break;
+		case 1:
+			m_countDDS[foxT] = NewGO<SpriteRender>(6);
+			m_countDDS[foxT]->Init("Assets/sprite/2.DDS", 256 * 1.2, 256 * 1.2);
+			m_countDDS[foxT]->SetColor({ 0.0f,0.0f,0.0f,0.0f });
+			m_countDDS[foxT]->SetPosition({ 0.0f,0.0f,0.0f });
+			break;
+		case 2:
+			m_countDDS[foxT] = NewGO<SpriteRender>(6);
+			m_countDDS[foxT]->Init("Assets/sprite/3.DDS", 256, 256 );
+			m_countDDS[foxT]->SetColor({ 0.0f,0.0f,0.0f,0.0f });
+			m_countDDS[foxT]->SetPosition({ 0.0f,0.0f,0.0f });
+			break;
+		}
+	}
 	m_ballSpeedMeter = NewGO<SpriteRender>(4);
 	m_ballSpeedMeter->Init("Assets/sprite/SpeedMeter.DDS", 220, 220);
 	m_ballSpeedMeter->SetPosition({ -100.0f, 280.0f, 0.0f});
@@ -269,6 +294,10 @@ GameUI::~GameUI()
 		DeleteGO(m_RBbuttonIcon[bravo]);
 		DeleteGO(m_fluctiationIndicater[bravo]);
 	}
+	for (int golf = 0; golf < COUNT_DOWN_DDS_NUM; golf++)
+	{
+		DeleteGO(m_countDDS[golf]);
+	}
 	//DeleteGO(m_ballSpeed);
 	DeleteGO(m_ballSpeedMeter);
 	DeleteGO(m_ballSpeedMeterPin);
@@ -292,7 +321,7 @@ bool GameUI::Start()
 void GameUI::TimerFont()
 {
 	float time = FLOAT_0;
-	if (m_timer->IsCountDown() == true) {
+	/*if (m_timer->IsCountDown() == true) {
 		time = m_timer->GetCountDownNum() + 1.0f;
 		if ((int)time == 4) {
 			m_timeFont->SetColor({ 0.0f, 0.0f, 0.0f, 0.0f });
@@ -307,7 +336,9 @@ void GameUI::TimerFont()
 		m_timeFont->SetText(conversion.c_str());
 		m_timeFont->SetScale(3.0f);
 		m_timeFont->SetPosition({ 0.0f,0.0f });
-	}
+
+
+	}*/
 	if (m_timer->IsCountDown() == false && m_GoisGone == false)
 	{
 		if (m_Gone == false) {
@@ -318,7 +349,7 @@ void GameUI::TimerFont()
 		m_goSign->Init("Assets/sprite/Go.DDS",512, 512);
 		m_goSign->SetColor({ 1.0f, 0.0f, 0.0f, 1.0f });
 		m_goSign->SetScale({ m_GOScale,m_GOScale ,0.0f });
-		m_GOScale -= 1.0f;
+		m_GOScale -= 1.2f;
 		if (m_GOScale <= 1.0f) {
 			m_GOScale = 1.0f;
 		}
@@ -423,6 +454,26 @@ void GameUI::GageHider()
 			m_breakAlertMassege[GHide]->SetColor({ 0.0f,0.0f,0.0f,0.0f });
 			m_tiredAlertMassege[GHide]->SetColor({ 0.0f,0.0f,0.0f,0.0f });
 		}
+	}
+}
+
+void GameUI::CountDown(int count)
+{
+	if (count >= 3 || count <= -1)
+	{
+		return;
+	}
+	if (m_countDDS[count + 1] != nullptr)
+	{
+		m_countDDS[count + 1]->SetColor({ 0.0f,0.0f,0.0f,0.0f });
+	}
+	if (count > 3 || count < 0) {
+		return;
+	}
+	m_countDDS[count]->SetColor({ 1.0f,1.0f,1.0f,1.0f });
+	if (m_Gone == true)
+	{
+		m_countDDS[count]->SetColor({ 0.0f,0.0f,0.0f,0.0f });
 	}
 }
 
@@ -621,6 +672,7 @@ void GameUI::Update()
 	TimerFont();
 	/*GameUI::*/Playerhider();
 	/*GameUI::*/GageHider();
+	CountDown((int)m_timer->GetCountDownNum());
 }
 void GameUI::AddScore(int num, int score) {
 	/// @brief PLのスコアを加算する

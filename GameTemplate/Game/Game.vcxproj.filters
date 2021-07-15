@@ -237,6 +237,9 @@
     <Image Include="Assets\sprite\RB_ButtonIcon.DDS" />
     <Image Include="Assets\sprite\TimerFrame.DDS" />
     <Image Include="Assets\sprite\GO.DDS" />
+    <Image Include="Assets\sprite\3.DDS" />
+    <Image Include="Assets\sprite\1.DDS" />
+    <Image Include="Assets\sprite\2.DDS" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\animData\unitychan\clear.tka" />
