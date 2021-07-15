@@ -52,8 +52,8 @@ namespace {
 	const Vector3 WHITE = { 2.0f,2.0f,2.0f };
 	const Vector3 COLORLESS = { 0.0f,0.0f,0.0f };
 
-	const Vector3 HEMISPHERE_LIGHT_SKYCOLOR_START = { 0.0f,0.0f,0.0f };
-	const Vector3 HEMISPHERE_LIGHT_SKYCOLOR_HALF = { 0.5f,0.3f,0.3f };
+	const Vector3 HEMISPHERE_LIGHT_SKYCOLOR_START = { 0.3f,0.3f,0.3f };
+	const Vector3 HEMISPHERE_LIGHT_SKYCOLOR_HALF = { 0.5f,0.1f,0.1f };
 	const Vector3 HEMISPHERE_LIGHT_SKYCOLOR_END = { -0.7f,-0.7f,0.1f };
 
 	const Vector3 HEMISPHERE_LIGHT_SKYCOLOR_SP_START = { -0.7f,-0.7f,-0.7f };

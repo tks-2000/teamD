@@ -33,7 +33,7 @@ bool GameDirector::Start()
 void GameDirector::CangeHemLigt()
 {
 	if (m_timer->GetTimer() > m_timer->GetHalfLimit()) {
-		float changeRate = (m_timer->GetHalfLimit() - m_timer->GetTimer()) / m_timer->GetHalfLimit();
+		float changeRate = (m_timer->GetHalfLimit() - (m_timer->GetTimer() - m_timer->GetHalfLimit())) / m_timer->GetHalfLimit();
 
 		if (changeRate > FLOAT_1) {
 			changeRate = FLOAT_1;
@@ -42,11 +42,11 @@ void GameDirector::CangeHemLigt()
 		changeRate *= changeRate;
 
 		Vector3 hemLigSkyColor = Vector3::Zero;
-		hemLigSkyColor.Lerp(changeRate,  m_hemLigCplorHalf,m_hemLigColorStart);
+		hemLigSkyColor.Lerp(changeRate, m_hemLigColorStart,m_hemLigCplorHalf);
 		m_lighting->SetHemiSphereLifhtSkyColor(hemLigSkyColor);
 	}
 	else {
-		float changeRate = (m_timer->GetHalfLimit() - (m_timer->GetTimer()+ m_timer->GetHalfLimit())) / m_timer->GetHalfLimit();
+		float changeRate = (m_timer->GetHalfLimit() - (m_timer->GetTimer()- m_timer->GetHalfLimit())) / m_timer->GetHalfLimit();
 		
 		if (changeRate > FLOAT_1) {
 			changeRate = FLOAT_1;
@@ -55,7 +55,7 @@ void GameDirector::CangeHemLigt()
 		changeRate *= changeRate;
 
 		Vector3 hemLigSkyColor = Vector3::Zero;
-		hemLigSkyColor.Lerp(changeRate,  m_hemLigColorEnd, m_hemLigCplorHalf);
+		hemLigSkyColor.Lerp(changeRate, m_hemLigCplorHalf, m_hemLigColorEnd);
 		m_lighting->SetHemiSphereLifhtSkyColor(hemLigSkyColor);
 	}
 }
