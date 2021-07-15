@@ -191,6 +191,13 @@ void Player::Move()
 		m_moveVelocity = DASH_VELOCITY;
 
 		m_stamina -= g_gameTime->GetFrameDeltaTime() * m_staminaDecreaseValue;
+		
+		//ダッシュエフェクト再生処理
+		m_dashCounter += DASHCOUNTER_ADDRATE;
+		if (m_dashCounter % DASHEFFECT_PLAYCYCLE == 1) {
+			m_plEffect->PlayDashEffect(m_myNumber);
+		}
+
 
 		m_anim = enAnimation_Run;
 	}
@@ -201,6 +208,9 @@ void Player::Move()
 			m_stamina = MAX_STANIMA;
 		}
 		m_anim = enAnimation_Walk;
+		
+		//ダッシュ中カウンタを0にする
+		m_dashCounter = 0;
 	}
 
 	if (m_speedUp == true && m_damage == false) {
@@ -686,17 +696,7 @@ void Player::Update()
 		m_se->PlayStaminaRecoverySe();
 	}
 
-	//ダッシュエフェクト再生処理
-	if (m_dash == true && g_pad[m_myNumber]->IsPress(enButtonRB1)) {
-		//ダッシュ状態でカウンタを増加
-		m_dashCounter += DASHCOUNTER_ADDRATE;
-		if (m_dashCounter %DASHEFFECT_PLAYCYCLE == 1) {
-			m_plEffect->PlayDashEffect(m_myNumber);
-		}
-	}
-	else {
-		m_dashCounter = 0;
-	}
+	
 
 	BallDistanceCalculation();
 	Move();
