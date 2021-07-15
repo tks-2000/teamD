@@ -14,13 +14,13 @@ namespace {
 	/// @brief バーストエフェクトを再生する判定を行う高さ
 	const float BURST_HEIGHT = -500.0f;
 	/// @brief 1Pの初期位置
-	const Vector3 PLAYER1_STARTPOS = { -500.0f,500.0f,500.0f };
+	const Vector3 PLAYER1_STARTPOS = { -400.0f,500.0f,400.0f };
 	/// @brief 2Pの初期位置
-	const Vector3 PLAYER2_STARTPOS = { 500.0f,500.0f,500.0f };
+	const Vector3 PLAYER2_STARTPOS = { 400.0f,500.0f,400.0f };
 	/// @brief 3Pの初期位置
-	const Vector3 PLAYER3_STARTPOS = { -500.0f,500.0f,-500.0f };
+	const Vector3 PLAYER3_STARTPOS = { -400.0f,500.0f,-400.0f };
 	/// @brief 4Pの初期位置
-	const Vector3 PLAYER4_STARTPOS = { 500.0f,500.0f,-500.0f };
+	const Vector3 PLAYER4_STARTPOS = { 400.0f,500.0f,-400.0f };
 	/// @brief ポイントライトの高さ
 	const float POINT_LIGHT_HEIGHT = 50.0f;
 	/// @brief プレイヤーの半径
@@ -858,9 +858,9 @@ void Player::Update()
 	/// @brief アニメーション
 	Animation();
 
-	if (g_pad[m_myNumber]->IsTrigger(enButtonStart)) {
-		ReSpawn();
-	}
+	//if (g_pad[m_myNumber]->IsTrigger(enButtonStart)) {
+	//	ReSpawn();
+	//}
 
 	//現フレームのフラグ状態を記録
 	RecordFlags();
