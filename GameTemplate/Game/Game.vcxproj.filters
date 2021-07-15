@@ -215,6 +215,7 @@
     <Media Include="Assets\sound\bgm\Result.wav" />
     <Media Include="Assets\sound\se\Fall.wav" />
     <Media Include="Assets\sound\se\NoDamageCollide.wav" />
+    <Media Include="Assets\sound\bgm\SpecialBgm.wav" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\modelData\bg\testmap_tex.DDS" />

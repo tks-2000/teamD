@@ -20,7 +20,7 @@ namespace {
 Timer::Timer()
 {
 	m_countDownNum = TIMER_COUNT_DOUN;
-	m_time = TIME_LIMIT;
+	
 	m_finishTimer = FINISH_DISPLAY_TIME;
 	m_timerEnd = false;
 	m_timerStatus = enCountDown;
@@ -38,7 +38,18 @@ Timer::~Timer()
 bool Timer::Start()
 {
 	m_gameDirector = FindGO<GameDirector>(GAME_DIRECTOR_NAME);
-	
+	switch (m_gameDirector->GetGameMode())
+	{
+	case GameDirector::enNormal: {
+		m_timeLimit = NORMAL_TIME_LIMIT;
+	}break;
+	case GameDirector::enSpecial: {
+		m_timeLimit = SPECIAL_TIME_LIMIT;
+	}break;
+	default:
+		break;
+	}
+	m_time = m_timeLimit;
 	return true;
 }
 

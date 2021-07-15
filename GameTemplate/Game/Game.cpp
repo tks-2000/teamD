@@ -14,7 +14,18 @@ Game::Game()
 	m_gameCamera = NewGO<GameCamera>(0,GAME_CAMERA_NAME);
 	m_backGround = NewGO<BackGround>(0,BACK_GROUND_NAME);
 	m_ball = NewGO<Ball>(0, BALL_NAME);
-	m_objects = NewGO<Objects>(0,OBJECTS_NAME);
+	switch (m_gameDirector->GetGameMode())
+	{
+	case GameDirector::enNormal: {
+		m_objects = NewGO<Objects>(0, OBJECTS_NAME);
+	}break;
+	case GameDirector::enSpecial: {
+
+	}break;
+	default:
+		break;
+	}
+	
 	m_ui = NewGO<GameUI>(0,GAME_UI_NAME);
 	m_score = NewGO<Score>(0, SCORE_NAME);
 }
@@ -27,7 +38,18 @@ Game::~Game()
 	DeleteGO(m_ball);
 	DeleteGO(m_ui);
 	DeleteGO(m_score);
-	DeleteGO(m_objects);
+	switch (m_gameDirector->GetGameMode())
+	{
+	case GameDirector::enNormal: {
+		DeleteGO(m_objects);
+	}break;
+	case GameDirector::enSpecial: {
+
+	}break;
+	default:
+		break;
+	}
+	
 	DeleteGO(m_sky);
 
 	for (int i = 0; i < m_playerNum; i++) {
@@ -42,7 +64,18 @@ bool Game::Start()
 	for (int i = 0; i < m_playerNum; i++) {
 		m_player[i]->SetPlayerNumber(i);
 	}
-	m_objects->SetObjects(4);
+	switch (m_gameDirector->GetGameMode())
+	{
+	case GameDirector::enNormal: {
+		m_objects->SetObjects(4);
+	}break;
+	case GameDirector::enSpecial: {
+
+	}break;
+	default:
+		break;
+	}
+	
 	m_sky = NewGO<Sky>(0, SKY_NAME);
 	return true;
 

@@ -20,6 +20,8 @@ private:
 	/// @brief BGM‚Ì‰¹—Ê
 	float m_bgmVolume = 0.0f;
 
+	const wchar_t* m_bgmFilePath = nullptr;
+
 public:
 	Bgm();
 	~Bgm();
@@ -34,5 +36,9 @@ public:
 	void ChangeGameBgm() { m_bgmStat = enGameBgm; m_bgm->Stop(); }
 	/// @brief ƒŠƒUƒ‹ƒg’†‚ÌBGM‚ð—¬‚·
 	void ChangeResultBgm() { m_bgmStat = enResultBgm; m_bgm->Stop(); }
+
+	void ChangeNormalBgm();
+
+	void ChangeSpecialBgm();
 };
 

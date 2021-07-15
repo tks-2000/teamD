@@ -2,7 +2,8 @@
 #include "GameDirector.h"
 
 namespace {
-
+	const Vector3 NORMAL_MENU_COLOR = { 0.3f,0.3f,0.3f };
+	const Vector3 SPECIAL_MENU_COLOR = { -0.3f,-0.7f,-0.3f };
 }
 
 GameDirector::GameDirector()
@@ -13,6 +14,7 @@ GameDirector::GameDirector()
 	m_sceneChange = NewGO<SceneChange>(PRIORITY_VERYLOW, SCENE_CHANGE_NAME);
 	m_playerNum = MIN_PLAYER_NUM;
 	m_gameState = enTitle;
+	m_gameMode = enNormal;
 }
 
 GameDirector::~GameDirector()
@@ -26,6 +28,36 @@ bool GameDirector::Start()
 {
 	m_sceneChange->TransparencyChange(true);
 	return true;
+}
+
+void GameDirector::CangeHemLigt()
+{
+	if (m_timer->GetTimer() > m_timer->GetHalfLimit()) {
+		float changeRate = (m_timer->GetHalfLimit() - m_timer->GetTimer()) / m_timer->GetHalfLimit();
+
+		if (changeRate > FLOAT_1) {
+			changeRate = FLOAT_1;
+		}
+
+		changeRate *= changeRate;
+
+		Vector3 hemLigSkyColor = Vector3::Zero;
+		hemLigSkyColor.Lerp(changeRate,  m_hemLigCplorHalf,m_hemLigColorStart);
+		m_lighting->SetHemiSphereLifhtSkyColor(hemLigSkyColor);
+	}
+	else {
+		float changeRate = (m_timer->GetHalfLimit() - (m_timer->GetTimer()+ m_timer->GetHalfLimit())) / m_timer->GetHalfLimit();
+		
+		if (changeRate > FLOAT_1) {
+			changeRate = FLOAT_1;
+		}
+
+		changeRate *= changeRate;
+
+		Vector3 hemLigSkyColor = Vector3::Zero;
+		hemLigSkyColor.Lerp(changeRate,  m_hemLigColorEnd, m_hemLigCplorHalf);
+		m_lighting->SetHemiSphereLifhtSkyColor(hemLigSkyColor);
+	}
 }
 
 void GameDirector::Update()
@@ -57,6 +89,25 @@ void GameDirector::Update()
 			m_lighting->InitHemiSphereLight();
 		}
 		else {
+			switch (m_gameMode)
+			{
+			case enNormal: {
+				m_hemLigColorStart = HEMISPHERE_LIGHT_SKYCOLOR_START;
+				m_hemLigCplorHalf = HEMISPHERE_LIGHT_SKYCOLOR_HALF;
+				m_hemLigColorEnd = HEMISPHERE_LIGHT_SKYCOLOR_END;
+				m_lighting->SetHemiSphereLifhtSkyColor(NORMAL_MENU_COLOR);
+				m_bgm->ChangeNormalBgm();
+			}break;
+			case enSpecial: {
+				m_hemLigColorStart = HEMISPHERE_LIGHT_SKYCOLOR_SP_START;
+				m_hemLigCplorHalf = HEMISPHERE_LIGHT_SKYCOLOR_SP_HALF;
+				m_hemLigColorEnd = HEMISPHERE_LIGHT_SKYCOLOR_SP_END;
+				m_lighting->SetHemiSphereLifhtSkyColor(SPECIAL_MENU_COLOR);
+				m_bgm->ChangeSpecialBgm();
+			}break;
+			default:
+				break;
+			}
 			if (g_pad[0]->IsTrigger(enButtonA) && m_playerNum > 0 && m_sceneChange->TransparencyChangeStart() == true) {
 				m_sceneChange->TransparencyChange(false);
 				m_se->PlayPressKeySe();
@@ -69,6 +120,7 @@ void GameDirector::Update()
 				m_sceneChange->TransparencyChange(true);
 				m_lighting->ResetSpotLight();
 				m_lighting->InitDirectionLight();
+				
 			}
 		}
 	}break;
@@ -78,18 +130,8 @@ void GameDirector::Update()
 			m_timer = NewGO<Timer>(PRIORITY_VERYLOW, TIMER_NAME);
 		}
 		else {
-			float changeRate = (TIME_LIMIT - m_timer->GetTimer()) / TIME_LIMIT;
-
-			if (changeRate > FLOAT_1) {
-				changeRate = FLOAT_1;
-			}
-
-			changeRate *= changeRate;
-
-			Vector3 hemLigSkyColor = Vector3::Zero;
-			hemLigSkyColor.Lerp(changeRate,HEMISPHERE_LIGHT_SKYCOLOR_START, HEMISPHERE_LIGHT_SKYCOLOR_END);
-			m_lighting->SetHemiSphereLifhtSkyColor(hemLigSkyColor);
-
+			
+			CangeHemLigt();
 			if (m_timer->IsTimerEnd() == true) {
 				m_gameState = enResult;
 			}
