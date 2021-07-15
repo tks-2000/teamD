@@ -46,7 +46,7 @@ void GameDirector::CangeHemLigt()
 		m_lighting->SetHemiSphereLifhtSkyColor(hemLigSkyColor);
 	}
 	else {
-		float changeRate = (m_timer->GetHalfLimit() - (m_timer->GetTimer()- m_timer->GetHalfLimit())) / m_timer->GetHalfLimit();
+		float changeRate = (m_timer->GetHalfLimit() - m_timer->GetTimer()) / m_timer->GetHalfLimit();
 		
 		if (changeRate > FLOAT_1) {
 			changeRate = FLOAT_1;

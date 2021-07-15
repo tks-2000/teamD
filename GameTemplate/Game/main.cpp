@@ -3,6 +3,7 @@
 #include "Game.h"
 #include "Title.h"
 #include "effect/Effect.h"
+#include "../../MiniEngine/time/Stopwatch.h"
 
 ///////////////////////////////////////////////////////////////////
 // ウィンドウプログラムのメイン関数。
@@ -26,6 +27,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	EffectEngine::CreateInstance();
 
+	Stopwatch stopwatch;
+
 	//NewGO<Title>(0, TITLE_NAME);
 	NewGO<GameDirector>(0, GAME_DIRECTOR_NAME);
 	
@@ -46,7 +49,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	while (DispatchWindowMessage())
 	{
 
-		
+		stopwatch.Start();
 
 		//if (g_pad[0]->IsTrigger(enButtonA)) {
 		//	//再生開始。
@@ -101,10 +104,20 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 		EffectEngine::GetInstance()->Draw();
 		
+
 		//////////////////////////////////////
 		//絵を描くコードを書くのはここまで！！！
 		//////////////////////////////////////
 		g_engine->EndFrame();
+
+		int restTime = 0;
+		do {
+			stopwatch.Stop();
+			restTime = 16 - (int)stopwatch.GetElapsedMillisecond();
+
+		}while(restTime > 0);
+		stopwatch.Stop();
+		g_gameTime->PushFrameDeltaTime((float)stopwatch.GetElapsed());
 	}
 	//ゲームオブジェクトマネージャーを削除。
 	GameObjectManager::DeleteInstance();
