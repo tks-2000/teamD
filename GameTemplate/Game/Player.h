@@ -122,6 +122,8 @@ private:
 	Vector3 m_moveSpeed = Vector3::Zero;
 	/// @brief ダッシュフラグ
 	bool m_dash = true;
+	/// @brief ダッシュ中のカウンタ
+	int m_dashCounter = 0;
 	/// @brief プレイヤーのスタミナ
 	float m_stamina = 0.0f;
 	/// @brief スタミナ低下量

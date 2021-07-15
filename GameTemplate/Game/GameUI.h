@@ -27,6 +27,8 @@ public:
 	void Playerhider();
 	/// @brief 妖怪ゲージカクシ
 	void GageHider();
+	/// @brief カウントダウンを別の関数としてオミット
+	void CountDown(int count);
 	//void ScoreIndicator(float addition, Vector3 Pos);
 
 private:
@@ -177,7 +179,9 @@ private:
 	/// @brief GOサイン
 	SpriteRender* m_goSign = nullptr;
 	bool m_Gone = false;
-	float m_GOScale = 10.0f;
+	float m_GOScale = 12.0f;
+	/// @brief カウントを描写
+	SpriteRender* m_countDDS[3] = { nullptr };
 
 	int goGoneWaiter = 0;
 	bool m_GoisGone = false;

@@ -43,24 +43,24 @@ namespace {
 
 	//行動不能エフェクトのファイルパス
 	const char16_t* KNOCKOUTEFFECT_FILEPATH = u"Assets/effect/knockout.efk";
-	//行動不能エフェクトのスケール
+	//行動不能エフェクトの拡大率
 	const Vector3 KNOCKOUTEFFECT_SCALE = { 15.0f,15.0f,15.0f };
 
 	//ジャストガードエフェクトのファイルパス
 	const char16_t* JUSTGUARDEFFECT_FILEPATH = u"Assets/effect/justguard.efk";
-	//ジャストガードエフェクトのスケール
+	//ジャストガードエフェクトの拡大率
 	const Vector3 JUSTGUARDEFFECT_SCALE = { 10.0f,10.0f,10.0f };
 
 	//強化エフェクトのファイルパス
 	const char16_t* KICKBUFFEFFECT_FILEPATH = u"Assets/effect/justguardBuff.efk";
-	//強化エフェクトのスケール
+	//強化エフェクトの拡大率
 	const Vector3 KICKBUFFEFFECT_SCALE = { 20.0f,20.0f,20.0f };
 	//強化エフェクトのy座標発生位置を決めるための定数
 	const float KICKBUFFEFFECT_POS_Y = 10.0f;
 
 	//ダメージ回復エフェクトのファイルパス
 	const char16_t* REPAIREFFECT_FILEPATH = u"Assets/effect/repair.efk";
-	//ダメージ回復エフェクトのスケール
+	//ダメージ回復エフェクトの拡大率
 	const Vector3 REPAIREFFECT_SCALE = { 10.0f,10.0f,10.0f };
 	
 	//ダメージエフェクトのファイルパス
@@ -93,7 +93,7 @@ namespace {
 	};
 	const Vector3 BURSTEFFECT_SCALE = { 8.0f,16.0f,8.0f };
 
-	// アイテムバフエフェクトのファイルパス
+	//アイテムバフエフェクトのファイルパス
 	const char16_t* ITEMBUFFEFFECT_FILEPATH[ITEM_NUMBER] = {
 		{u"Assets/effect/itembuff_attackup.efk"},
 		{u"Assets/effect/itembuff_guardup.efk"},
@@ -101,6 +101,13 @@ namespace {
 	};
 	const Vector3 ITEMBUFFEFFECT_SCALE = { 10.0f,10.0f,10.0f };
 	const float ITEMBUFFEFFECT_POS_Y = 20.0f;
+
+	//ダッシュエフェクトのファイルパス
+	const char16_t* DASHEFFECT_FILEPATH = { u"Assets/effect/dash.efk" };
+	//ダッシュエフェクトの拡大率
+	const Vector3 DASHEFFECT_SCALE = { 10.0f,10.0f,10.0f };
+	//ダッシュエフェクトのY座標
+	const float DASHEFFECT_POS_Y = 50.0f;
 
 }
 
@@ -132,8 +139,10 @@ PlayerEffect::PlayerEffect()
 		m_repairEffect[plNum].Init(REPAIREFFECT_FILEPATH);
 		//ダメージエフェクトを初期化
 		m_damageEffect[plNum].Init(DAMAGEEFFECT_FILEPATH);
-		// バフエフェクトを初期化
+		//バフエフェクトを初期化
 		m_itemBuffEffect[plNum].Init(ITEMBUFFEFFECT_FILEPATH[0]);
+		//ダッシュエフェクトを初期化
+		m_dashEffect[plNum].Init(DASHEFFECT_FILEPATH);
 
 		//以下、プレイヤー別(色分けされている)エフェクトの初期化
 		//リスポーン時のエフェクトを初期化
@@ -304,6 +313,7 @@ void PlayerEffect::RespawnEffectUpdate(int plNum)
 
 	Vector3 efcPos = m_player[plNum]->GetRespawnPoint();
 	efcPos.y -= RESPAWNEFFECT_POS_Y;
+	
 	m_respawnEffect[plNum].SetPosition(efcPos);
 	m_respawnEffect[plNum].SetScale(RESPAWNEFFECT_SCALE);
 	m_respawnEffect[plNum].Update();
@@ -313,10 +323,31 @@ void PlayerEffect::ItemBuffEffectUpdate(int plNum)
 {
 	Vector3 efcPos = m_player[plNum]->GetPosition();
 	efcPos.y += ITEMBUFFEFFECT_POS_Y;
+	
 	m_itemBuffEffect[plNum].SetPosition(efcPos);
 	m_itemBuffEffect[plNum].SetScale(ITEMBUFFEFFECT_SCALE);
 	m_itemBuffEffect[plNum].Update();
 }
+
+void PlayerEffect::DashEffectUpdate(int plNum)
+{
+	//プレイヤー座標を取得
+	Vector3 efcPos = m_player[plNum]->GetPosition();
+	//少し上方向にずらす
+	efcPos.y += DASHEFFECT_POS_Y;
+	//プレイヤーの向きを取得
+	Vector3 efcDir = m_player[plNum]->GetDirection();
+	//角度を決めるためのクォータニオンを設定
+	Quaternion efcRot = Quaternion::Identity;
+	//取得したプレイヤーの向きから角度を決定
+	efcRot.SetRotation(Vector3::AxisY,atan2(efcDir.x,efcDir.z) );
+
+	m_dashEffect[plNum].SetPosition(efcPos);
+	m_dashEffect[plNum].SetRotation(efcRot);
+	m_dashEffect[plNum].SetScale(DASHEFFECT_SCALE);
+	m_dashEffect[plNum].Update();
+}
+
 
 void PlayerEffect::ChangeItemBuffEffect(int plNum,ItemBuffChange buffNum)
 {
@@ -348,5 +379,6 @@ void PlayerEffect::Update()
 		RepairEffectUpdate(plNum);
 		RespawnEffectUpdate(plNum);
 		ItemBuffEffectUpdate(plNum);
+		DashEffectUpdate(plNum);
 	}
 }
