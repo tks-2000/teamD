@@ -42,6 +42,10 @@ public:
 	/// @return プレイヤーの座標
 	Vector3& GetPosition() { return m_position; }
 
+	/// @brief プレイヤーの向いている方向を入手
+	/// @return プレイヤーの向いている方向
+	Vector3& GetDirection() { return m_direction; }
+
 	void SetMoveSpeed(const Vector3& move) { m_moveSpeed = move; }
 
 	/// @brief キック可能か判定
