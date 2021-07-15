@@ -12,8 +12,12 @@ class Timer;
 
 class GameDirector : public IGameObject
 {
+public:
+	GameDirector();
+	~GameDirector();
+	bool Start();
+	void Update();
 
-private:
 	enum enGameStatus {
 		enTitle,
 		enMenu,
@@ -22,39 +26,10 @@ private:
 		enEnd,
 	};
 
-	enGameStatus m_gameState = enTitle;
-
-	bool m_delete = false;
-
-	int m_playerNum = 0;
-
-	Title* m_title = nullptr;
-
-	Menu* m_menu = nullptr;
-
-	Game* m_game = nullptr;
-
-	Result* m_result = nullptr;
-
-	Bgm* m_bgm = nullptr;
-
-	Se* m_se = nullptr;
-
-	Lighting* m_lighting = nullptr;
-
-	SceneChange* m_sceneChange = nullptr;
-
-	Timer* m_timer = nullptr;
-
-
-public:
-	GameDirector();
-	~GameDirector();
-	bool Start();
-	void Update();
-
-	
-	
+	enum enGameMode {
+		enNormal,
+		enSpecial
+	};
 
 	/// @brief プレイヤー人数を取得
 	/// @return プレイヤーの人数
@@ -89,5 +64,46 @@ public:
 
 	/// @brief メニューを終了させる
 	void MenuEnd() { DeleteGO(m_menu); m_menu = nullptr; }
+
+	void SetGameMode(enGameMode gameMode) { m_gameMode = gameMode; }
+
+	enGameMode GetGameMode() { return m_gameMode; }
+
+	void CangeHemLigt();
+
+private:
+	
+
+	enGameStatus m_gameState = enTitle;
+
+	enGameMode m_gameMode = enNormal;
+
+	bool m_delete = false;
+
+	int m_playerNum = 0;
+
+	Title* m_title = nullptr;
+
+	Menu* m_menu = nullptr;
+
+	Game* m_game = nullptr;
+
+	Result* m_result = nullptr;
+
+	Bgm* m_bgm = nullptr;
+
+	Se* m_se = nullptr;
+
+	Lighting* m_lighting = nullptr;
+
+	SceneChange* m_sceneChange = nullptr;
+
+	Timer* m_timer = nullptr;
+
+	Vector3 m_hemLigColorStart = Vector3::Zero;
+
+	Vector3 m_hemLigCplorHalf = Vector3::Zero;
+
+	Vector3 m_hemLigColorEnd = Vector3::Zero;
 };
 

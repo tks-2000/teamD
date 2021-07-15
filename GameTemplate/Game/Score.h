@@ -21,7 +21,10 @@ public:
 	void Update();
 
 	void AddScore(int plNum);
-	void DebuctionScore(int plNum);
+	void AddScore200(int plNum);
+	void AddScore500(int plNum);
+	void DeclineScore(int plNum);
+	void HalfScore(int plNum);
 	void RankingSurvey();
 
 	int GetScore(int plNum) { return m_score[plNum]; }

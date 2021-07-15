@@ -243,6 +243,8 @@ private:
 	//ジャストガードエフェクト
 	Effect m_justGuardEffect;
 
+	float m_reSpawnTime = 0.0f;
+
 	enum enAnimationClips
 	{
 		enAnimation_Idle,

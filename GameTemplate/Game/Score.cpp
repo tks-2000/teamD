@@ -4,7 +4,11 @@
 namespace {
 	const int SCORE_ZERO = 0;
 	const int SCORE_ADD_POINTS = 100;
+	const int SCORE_ADD_200 = 200;
+	const int SCORE_ADD_500 = 500;
+	const int SCORE_DECLINE_POINTS = 300;
 	const int SCORE_DEBUCTION_RATE = 2;
+	
 	//const Vector2 RANKING_FONT_POS[MAX_PLAYER_NUM] = { { -600.0f,150.0f },{ 600.0f,150.0f },{ -600.0f,-150.0f },{ 600.0f,-150.0f } };
 }
 
@@ -36,7 +40,25 @@ void Score::AddScore(int plNum)
 	m_score[plNum] += SCORE_ADD_POINTS;
 }
 
-void Score::DebuctionScore(int plNum)
+void Score::AddScore200(int plNum)
+{
+	m_score[plNum] += SCORE_ADD_200;
+}
+
+void Score::AddScore500(int plNum)
+{
+	m_score[plNum] += SCORE_ADD_500;
+}
+
+void Score::DeclineScore(int plNum)
+{
+	m_score[plNum] -= SCORE_DECLINE_POINTS;
+	if (m_score[plNum] < SCORE_ZERO) {
+		m_score[plNum] = SCORE_ZERO;
+	}
+}
+
+void Score::HalfScore(int plNum)
 {
 	m_score[plNum] /= SCORE_DEBUCTION_RATE;
 }

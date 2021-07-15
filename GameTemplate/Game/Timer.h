@@ -6,7 +6,8 @@ class Se;
 class SceneChange;
 
 /// @brief ゲームの制限時間
-static const float TIME_LIMIT = 120.0f;
+static const float NORMAL_TIME_LIMIT = 120.0f;
+static const float SPECIAL_TIME_LIMIT = 180.0f;
 
 class Timer : public IGameObject
 {
@@ -16,6 +17,8 @@ private:
 	float m_countDownNum = 0.0f;
 	/// @brief ゲームの制限時間
 	float m_time = 0.0f;
+
+	float m_timeLimit = 0.0f;
 	/// @brief ゲーム終了時にリザルトに遷移するまでの時間
 	float m_finishTimer = 0.0f;
 	/// @brief タイマーの終了状態
@@ -63,5 +66,9 @@ public:
 	/// @brief ゲームの残り時間を入手
 	/// @return タイマーの数値
 	float GetTimer() { return m_time; }
+
+	float GetTimeLimit() { return m_timeLimit; }
+
+	float GetHalfLimit() { return m_timeLimit / 2; }
 };
 

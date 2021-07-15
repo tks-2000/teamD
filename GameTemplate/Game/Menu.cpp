@@ -100,6 +100,18 @@ void Menu::Update()
 			}
 			m_se->PlaySelectKeySe();
 		}
+		if (m_gameDirector->GetGameMode() == GameDirector::enNormal) {
+			if (g_pad[0]->IsTrigger(enButtonX)) {
+				m_gameDirector->SetGameMode(GameDirector::enSpecial);
+			}
+		}
+		else {
+			if (g_pad[0]->IsTrigger(enButtonX)) {
+				m_gameDirector->SetGameMode(GameDirector::enNormal);
+			}
+		}
+		
+		
 
 		m_gameDirector->SetPlayerNum(m_playerNum);
 		std::wstring plNum;

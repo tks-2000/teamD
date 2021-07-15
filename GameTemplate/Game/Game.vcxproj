@@ -456,6 +456,9 @@
     <Image Include="Assets\modelData\bg\testmap_tex.DDS" />
     <Image Include="Assets\modelData\sphere\sphere_tex.DDS" />
     <Image Include="Assets\modelData\sphere\sphere_tex_01.DDS" />
+    <Image Include="Assets\sprite\1.DDS" />
+    <Image Include="Assets\sprite\2.DDS" />
+    <Image Include="Assets\sprite\3.DDS" />
     <Image Include="Assets\sprite\BLACK.dds" />
     <Image Include="Assets\sprite\GageBody.DDS" />
     <Image Include="Assets\sprite\GageFinal.DDS" />
@@ -479,6 +482,7 @@
     <Media Include="Assets\sound\bgm\Menu.wav" />
     <Media Include="Assets\sound\bgm\normalBGM.wav" />
     <Media Include="Assets\sound\bgm\Result.wav" />
+    <Media Include="Assets\sound\bgm\SpecialBgm.wav" />
     <Media Include="Assets\sound\bgm\title.wav" />
     <Media Include="Assets\sound\se\BoxCollide.wav" />
     <Media Include="Assets\sound\se\BoxOpen.wav" />

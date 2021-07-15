@@ -83,11 +83,16 @@ namespace {
 	const float ITEM_POWERUP_TIME = 10.0f;
 	/// @brief 勢いよく当たった扱いになる速度
 	const float STRONG_HIT = 20.0f;
+
+
+	const float RESPAWN_TIME = 5.0f;
+
 	
 	/// @brief ダッシュ中のカウンタの増加量
 	const int DASHCOUNTER_ADDRATE = 1;
 	/// @brief ダッシュ中エフェクトの再生周期
 	const int DASHEFFECT_PLAYCYCLE = 25;
+
 }
 
 Player::Player()
@@ -255,10 +260,12 @@ void Player::Move()
 	if (m_position.y < FALLING_HEIGHT) {
 
 		if (m_haveAttackedPlayer != m_myNumber) {
-			m_score->AddScore(m_haveAttackedPlayer);
+			m_score->AddScore500(m_haveAttackedPlayer);
+			m_score->DeclineScore(m_myNumber);
 		}
-		m_score->DebuctionScore(m_myNumber);
-
+		else {
+			m_score->HalfScore(m_myNumber);
+		}
 		
 		ReSpawn();
 	}
@@ -277,7 +284,16 @@ void Player::Move()
 		}
 	}
 
-
+	if (g_pad[m_myNumber]->IsPress(enButtonStart) && m_damage == false) {
+		m_reSpawnTime += g_gameTime->GetFrameDeltaTime();
+	}
+	else {
+		m_reSpawnTime = FLOAT_0;
+	}
+	if (m_reSpawnTime > RESPAWN_TIME) {
+		ReSpawn();
+		m_reSpawnTime = FLOAT_0;
+	}
 }
 
 void Player::Rotation()
@@ -410,7 +426,7 @@ void Player::BallCollide()
 		m_haveAttackedPlayer = m_ball->GetPlayerInformation();
 
 		if (m_haveAttackedPlayer != m_myNumber && m_dieFlag == false) {
-			m_score->AddScore(m_haveAttackedPlayer);
+			m_score->AddScore200(m_haveAttackedPlayer);
 		}
 	}
 	else {
@@ -552,6 +568,7 @@ void Player::ReSpawn() {
 
 	//リスポーン時のエフェクトを再生
 	m_plEffect->PlayRespawnEffect(m_myNumber);
+	m_plEffect->StopKnockOutEffect(m_myNumber);
 	m_se->PlayReSpawnSe();
 	m_powerUp = false;
 	m_powerUpTime = FLOAT_0;
