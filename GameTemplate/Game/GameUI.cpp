@@ -202,7 +202,7 @@ GameUI::GameUI()
 		m_fluctiationIndicater[alpha] = NewGO<FontRender>(2);
 		m_fluctiationIndicater[alpha]->SetColor({ 0.0f, 0.0f, 0.0f, 0.0f });
 		m_fluctiationIndicater[alpha]->SetPosition(m_IndicaterPos[alpha]);
-		m_fluctiationIndicater[alpha]->SetScale(0.7f);
+		m_fluctiationIndicater[alpha]->SetScale(0.6f);
 	}
 	m_ballSpeedMeter = NewGO<SpriteRender>(4);
 	m_ballSpeedMeter->Init("Assets/sprite/SpeedMeter.DDS", 220, 220);
@@ -305,7 +305,8 @@ void GameUI::TimerFont()
 		int integerTime = time;
 		conversion = std::to_wstring(integerTime);
 		m_timeFont->SetText(conversion.c_str());
-		//m_timeFont->SetPosition({ 0.0f,0.0f });
+		m_timeFont->SetScale(3.0f);
+		m_timeFont->SetPosition({ 0.0f,0.0f });
 	}
 	if (m_timer->IsCountDown() == false && m_GoisGone == false)
 	{
@@ -316,6 +317,11 @@ void GameUI::TimerFont()
 		m_goSign->SetPosition({ 0.0f, 0.0f, 0.0f });
 		m_goSign->Init("Assets/sprite/Go.DDS",512, 512);
 		m_goSign->SetColor({ 1.0f, 0.0f, 0.0f, 1.0f });
+		m_goSign->SetScale({ m_GOScale,m_GOScale ,0.0f });
+		m_GOScale -= 1.0f;
+		if (m_GOScale <= 1.0f) {
+			m_GOScale = 1.0f;
+		}
 		
 		//m_goSign->SetScale({ 2.0f, 2.0f, 0.0f });
 		if (goGoneWaiter >= 50) 
@@ -330,6 +336,8 @@ void GameUI::TimerFont()
 		int integerTime = time;
 		std::wstring conversion;
 		conversion = std::to_wstring(integerTime);
+		m_timeFont->SetScale(1.0f);
+		m_timeFont->SetPosition(TIME_FONT_POS);
 		m_timeFont->SetText(conversion.c_str());
 	}
 	if (m_timer->IsFinish() == true) {
@@ -367,7 +375,7 @@ void GameUI::TimerFont()
 void GameUI::ScoreHider()
 {
 	if (m_timer->GetTimer() <= 30.0f && m_timer->GetTimer() != 0.0f) {
-		const wchar_t hidenScore[] = { L"????" };
+		const wchar_t hidenScore[] = { L"****" };
 		for (int hide = 0; hide < m_playerNum; hide++)
 		{
 			m_playerNumFont[hide]->SetText(hidenScore);
@@ -412,6 +420,8 @@ void GameUI::GageHider()
 			m_StGageIcon[GHide]->SetColor({ 0.0f,0.0f,0.0f,0.0f });
 			m_LBbuttonIcon[GHide]->SetColor({ 0.0f,0.0f,0.0f,0.0f });
 			m_RBbuttonIcon[GHide]->SetColor({ 0.0f,0.0f,0.0f,0.0f });
+			m_breakAlertMassege[GHide]->SetColor({ 0.0f,0.0f,0.0f,0.0f });
+			m_tiredAlertMassege[GHide]->SetColor({ 0.0f,0.0f,0.0f,0.0f });
 		}
 	}
 }
@@ -477,6 +487,9 @@ void GameUI::Update()
 				m_fluctiationIndicater[plFontNum]->SetText(convIndi.c_str());
 				m_fluctiationIndicater[plFontNum]->FadeIn(2.0f);
 				m_fluctiationIndicater[plFontNum]->SetColor({ 0.0f, 0.0f, 1.0f, 0.0f });
+				if (m_timer->GetTimer() <= 30.0f) {
+					m_fluctiationIndicater[plFontNum]->SetText(L"***-");
+				}
 			}
 			else
 			{

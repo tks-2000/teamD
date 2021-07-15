@@ -6,9 +6,11 @@ namespace {
 	//キックエフェクトのファイルパス
 	const char16_t* KICKEFFECT_FILEPATH = u"Assets/effect/kick.efk";
 	//キックエフェクト発生位置を決める値。0に近いほどプレイヤー寄り
-	const float KICKEFFECT_POSITION_RATE = 0.8f;
+	const float KICKEFFECT_POSITION_RATE = 0.9f;
 	//キックエフェクトの拡大率
-	const Vector3 KICKEFFECT_SCALE = { 25.0f,25.0f,1.0f };
+	const Vector3 KICKEFFECT_SCALE = { 20.0f,20.0f,20.0f };
+	//キックエフェクトの発生高度
+	const float KICKEFFECT_POS_Y = 50.0f;
 
 	//ガードエフェクトファイルパス
 	const char16_t* GUARDEFFECT_FILEPATH = u"Assets/effect/shield.efk";
@@ -63,9 +65,9 @@ namespace {
 	
 	//ダメージエフェクトのファイルパス
 	const char16_t* DAMAGEEFFECT_FILEPATH = u"Assets/effect/damage.efk";
-	//最大の大きさ
-	const Vector3 DAMAGEEFFECT_SCALE_MIN = { 5.0f,5.0f,5.0f };
 	//最小の大きさ
+	const Vector3 DAMAGEEFFECT_SCALE_MIN = { 5.0f,5.0f,5.0f };
+	//最大の大きさ
 	const Vector3 DAMAGEEFFECT_SCALE_MAX = { 30.0f,30.0f,30.0f };
 	//大きさが最大となるボールスピードの上限
 	const float DAMAGEEFFECT_BALLSPEED_MAX = 60.0f;
@@ -80,7 +82,7 @@ namespace {
 		{u"Assets/effect/respawn_green.efk"}
 	};
 	const Vector3 RESPAWNEFFECT_SCALE = { 20.0f,20.0f,20.0f };
-	const float RESPAWNEFFECT_OFFSET_Y = 400.0f;
+	const float RESPAWNEFFECT_POS_Y = 400.0f;
 
 	//バーストエフェクトのファイルパス(プレイヤー別)
 	const char16_t* BURSTEFFECT_FILEPATH[PLAYER_NUMBER] = {
@@ -98,7 +100,7 @@ namespace {
 		{u"Assets/effect/itembuff_speedup.efk"}
 	};
 	const Vector3 ITEMBUFFEFFECT_SCALE = { 10.0f,10.0f,10.0f };
-	const float ITEMBUFFEFFECT_OFFSET_Y = 20.0f;
+	const float ITEMBUFFEFFECT_POS_Y = 20.0f;
 
 }
 
@@ -130,14 +132,15 @@ PlayerEffect::PlayerEffect()
 		m_repairEffect[plNum].Init(REPAIREFFECT_FILEPATH);
 		//ダメージエフェクトを初期化
 		m_damageEffect[plNum].Init(DAMAGEEFFECT_FILEPATH);
+		// バフエフェクトを初期化
+		m_itemBuffEffect[plNum].Init(ITEMBUFFEFFECT_FILEPATH[0]);
 
-		//プレイヤー別エフェクトの初期化
+		//以下、プレイヤー別(色分けされている)エフェクトの初期化
 		//リスポーン時のエフェクトを初期化
 		m_respawnEffect[plNum].Init(RESPAWNEFFECT_FILEPATH[plNum]);
 		//バーストエフェクトを初期化
 		m_burstEffect[plNum].Init(BURSTEFFECT_FILEPATH[plNum]);
-		/// バフエフェクトを初期化
-		m_itemBuffEffect[plNum].Init(ITEMBUFFEFFECT_FILEPATH[0]);
+		
 	}
 }
 
@@ -163,10 +166,18 @@ void PlayerEffect::PlayKickEffect(int plNum)
 {
 	/// @brief プレイヤーとボールの位置からエフェクトの再生位置と角度を決める 
 	Vector3 toBallDir = m_player[plNum]->GetToBallVec();
-	Quaternion efcRot = Quaternion::Identity;
-	efcRot.SetRotation(Vector3::AxisY, atan2(toBallDir.x, toBallDir.z));
+	//プレイヤーの向いている方向を取得
+	Vector3 plDir = m_player[plNum]->GetDirection();
+	//発生位置を決めるためのベクトル
 	Vector3 efcPos = Vector3::Zero;
+	//向きを決めるためのクォータニオン
+	Quaternion efcRot = Quaternion::Identity;
+	//プレイヤーの向いている方向からエフェクトの角度を設定する
+	efcRot.SetRotation(Vector3::AxisY, atan2(plDir.x, plDir.z));
+	//エフェクト発生位置をボールと自身の距離の間に設定する
 	efcPos.Lerp(KICKEFFECT_POSITION_RATE, m_player[plNum]->GetPosition(), m_ball->GetPosition());
+	//発生位置を少し上にずらす
+	efcPos.y += KICKEFFECT_POS_Y;
 
 	m_kickEffect[plNum].Play();
 	m_kickEffect[plNum].SetPosition(efcPos);
@@ -292,7 +303,7 @@ void PlayerEffect::RespawnEffectUpdate(int plNum)
 {
 
 	Vector3 efcPos = m_player[plNum]->GetRespawnPoint();
-	efcPos.y -= RESPAWNEFFECT_OFFSET_Y;
+	efcPos.y -= RESPAWNEFFECT_POS_Y;
 	m_respawnEffect[plNum].SetPosition(efcPos);
 	m_respawnEffect[plNum].SetScale(RESPAWNEFFECT_SCALE);
 	m_respawnEffect[plNum].Update();
@@ -301,7 +312,7 @@ void PlayerEffect::RespawnEffectUpdate(int plNum)
 void PlayerEffect::ItemBuffEffectUpdate(int plNum)
 {
 	Vector3 efcPos = m_player[plNum]->GetPosition();
-	efcPos.y += ITEMBUFFEFFECT_OFFSET_Y;
+	efcPos.y += ITEMBUFFEFFECT_POS_Y;
 	m_itemBuffEffect[plNum].SetPosition(efcPos);
 	m_itemBuffEffect[plNum].SetScale(ITEMBUFFEFFECT_SCALE);
 	m_itemBuffEffect[plNum].Update();
@@ -325,6 +336,7 @@ void PlayerEffect::ChangeItemBuffEffect(int plNum,ItemBuffChange buffNum)
 void PlayerEffect::Update()
 {
 	/// @brief 更新が必要なエフェクトをすべて更新する
+	//常にプレイヤーに追随してほしい、向きや大きさが変わってほしいなどのエフェクトはここで更新
 	for (int plNum = 0; plNum < m_gameDirector->GetPlayerNum(); plNum++) {
 		m_efcGuardPos[plNum] = m_player[plNum]->GetPosition();
 		m_efcGuardPos[plNum].y += GUARDEFFECT_POS_Y;
