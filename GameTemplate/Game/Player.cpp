@@ -83,6 +83,11 @@ namespace {
 	const float ITEM_POWERUP_TIME = 10.0f;
 	/// @brief 勢いよく当たった扱いになる速度
 	const float STRONG_HIT = 20.0f;
+	
+	/// @brief ダッシュ中のカウンタの増加量
+	const int DASHCOUNTER_ADDRATE = 1;
+	/// @brief ダッシュ中エフェクトの再生周期
+	const int DASHEFFECT_PLAYCYCLE = 25;
 }
 
 Player::Player()
@@ -679,6 +684,18 @@ void Player::Update()
 	if (m_dash == false && m_stamina >= MAX_STANIMA) {
 		m_dash = true;
 		m_se->PlayStaminaRecoverySe();
+	}
+
+	//ダッシュエフェクト再生処理
+	if (m_dash == true && g_pad[m_myNumber]->IsPress(enButtonRB1)) {
+		//ダッシュ状態でカウンタを増加
+		m_dashCounter += DASHCOUNTER_ADDRATE;
+		if (m_dashCounter %DASHEFFECT_PLAYCYCLE == 1) {
+			m_plEffect->PlayDashEffect(m_myNumber);
+		}
+	}
+	else {
+		m_dashCounter = 0;
 	}
 
 	BallDistanceCalculation();

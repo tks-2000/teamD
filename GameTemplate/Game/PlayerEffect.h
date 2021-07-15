@@ -41,6 +41,8 @@ private:
 	Effect m_burstEffect[PLAYER_NUMBER];
 	/// @brief アイテムバフエフェクト
 	Effect m_itemBuffEffect[PLAYER_NUMBER];
+	/// @brief ダッシュ中のエフェクト
+	Effect m_dashEffect[PLAYER_NUMBER];
 
 
 	GameDirector* m_gameDirector = nullptr;
@@ -81,6 +83,10 @@ private:
 	/// @brief アイテムバフエフェクトの更新
 	/// @param plNum 更新するプレイヤー番号
 	void ItemBuffEffectUpdate(int plNum);
+
+	/// @brief ダッシュエフェクトの更新
+	/// @param plNum 更新するプレイヤー番号
+	void DashEffectUpdate(int plNum);
 
 public:
 	
@@ -153,5 +159,10 @@ public:
 	
 	//ファイルパスの変更
 	void ChangeItemBuffEffect(int plNum, ItemBuffChange buffNum);
+	
+	/// @brief ダッシュ中のエフェクトを再生 
+	/// @param plNum 再生するプレイヤー番号
+	void PlayDashEffect(int plNum) { m_dashEffect[plNum].Play(); }
+
 };
 
