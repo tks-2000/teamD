@@ -20,6 +20,7 @@ Score::Score()
 		//m_rankingFont[plNum] = NewGO<FontRender>(4);
 		//m_rankingFont[plNum]->SetPosition(RANKING_FONT_POS[plNum]);
 	}
+	m_scoreCountStop = false;
 }
 
 Score::~Score()
@@ -37,17 +38,23 @@ bool Score::Start()
 
 void Score::AddScore(int plNum)
 {
-	m_score[plNum] += SCORE_ADD_POINTS;
+	if (m_scoreCountStop == false) {
+		m_score[plNum] += SCORE_ADD_POINTS;
+	}
 }
 
 void Score::AddScore200(int plNum)
 {
-	m_score[plNum] += SCORE_ADD_200;
+	if (m_scoreCountStop == false) {
+		m_score[plNum] += SCORE_ADD_200;
+	}
 }
 
 void Score::AddScore500(int plNum)
 {
-	m_score[plNum] += SCORE_ADD_500;
+	if (m_scoreCountStop == false) {
+		m_score[plNum] += SCORE_ADD_500;
+	}
 }
 
 void Score::DeclineScore(int plNum)

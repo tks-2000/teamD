@@ -117,6 +117,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 		}while(restTime > 0);
 		stopwatch.Stop();
+		
 		g_gameTime->PushFrameDeltaTime((float)stopwatch.GetElapsed());
 	}
 	//ゲームオブジェクトマネージャーを削除。

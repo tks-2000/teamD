@@ -48,7 +48,13 @@ void Lighting::Update()
 		}
 	}
 
-	RotationDirectionLight();
+	if (m_dirLigRotFlag == true) {
+		RotationDirectionLight();
+	}
+
+	if (m_dirLigFlickering == true) {
+		DirectionLightFlickering();
+	}
 }
 
 void Lighting::InitDirectionLight()
@@ -64,6 +70,8 @@ void Lighting::InitDirectionLight()
 	m_light.directionLight.color.x = 0.5f;
 	m_light.directionLight.color.y = 0.5f;
 	m_light.directionLight.color.z = 0.5f;
+	m_dirLigRotFlag = true;
+	m_dirLigFlickering = false;
 }
 
 void Lighting::RotationDirectionLight()
@@ -75,6 +83,41 @@ void Lighting::RotationDirectionLight()
 
 	
 	qRot.Apply(m_light.directionLight.direction);
+}
+
+void Lighting::SetDirectionLightFlickering(const Vector3& startColor, const Vector3 endColor, float speed)
+{
+	m_flickeringStartColor = startColor;
+	m_flickeringEndColor = endColor;
+	m_flickeringSpeed = speed;
+	m_dirLigFlickering = true;
+	m_flickerRate = 0.0f;
+	m_flickerState = true;
+}
+
+void Lighting::DirectionLightFlickering()
+{
+	if (m_flickerState == true) {
+		m_flickerRate += g_gameTime->GetFrameDeltaTime() * m_flickeringSpeed;
+		if (m_flickerRate > FLOAT_1) {
+			m_flickerRate = FLOAT_1;
+			m_flickerState = false;
+		}
+	}
+	else {
+		m_flickerRate -= g_gameTime->GetFrameDeltaTime() * m_flickeringSpeed;
+		if (m_flickerRate < FLOAT_0) {
+			m_flickerRate = FLOAT_0;
+			m_flickerState = true;
+		}
+	}
+
+	m_flickerRate;
+		
+	
+	m_flickeringColor.Lerp(m_flickerRate, m_flickeringStartColor, m_flickeringEndColor);
+
+	m_light.directionLight.color = m_flickeringColor;
 }
 
 void Lighting::InitPointLight(int num)

@@ -7,7 +7,7 @@ namespace {
 	/// @brief 開始時のタイマーの進む量
 	const float START_TIMER_AMOUNT_GO = 1.1f;
 	/// @brief タイマーの進む量
-	const float TIMER_AMOUNT_GO = 0.96f;
+	const float TIMER_AMOUNT_GO = 1.0f;
 	/// @brief タイマーの終了地点
 	const float TIMER_ZERO = 0.0f;
 	/// @brief カウントダウン時間

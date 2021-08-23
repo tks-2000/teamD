@@ -308,7 +308,10 @@
     <ClCompile Include="NameKey.cpp" />
     <ClCompile Include="Objects.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerAction.cpp" />
     <ClCompile Include="PlayerEffect.cpp" />
+    <ClCompile Include="PlayerMove.cpp" />
+    <ClCompile Include="PlayerReinforcement.cpp" />
     <ClCompile Include="Result.cpp" />
     <ClCompile Include="SceneChange.cpp" />
     <ClCompile Include="Score.cpp" />
@@ -412,7 +415,10 @@
     <ClInclude Include="NameKey.h" />
     <ClInclude Include="Objects.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerAction.h" />
     <ClInclude Include="PlayerEffect.h" />
+    <ClInclude Include="PlayerMove.h" />
+    <ClInclude Include="PlayerReinforcement.h" />
     <ClInclude Include="Result.h" />
     <ClInclude Include="SceneChange.h" />
     <ClInclude Include="Score.h" />

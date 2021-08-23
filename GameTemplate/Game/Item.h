@@ -6,6 +6,7 @@ class Se;
 class Objects;
 class Player;
 class Effect;
+class PlayerReinforcement;
 
 class Item : public IGameObject
 {
@@ -44,6 +45,7 @@ private:
 	SkinModelRender* m_skinModelRender = nullptr;
 	int m_myNo = 4;
 	Player* m_player[PLAYER_NUM] = { nullptr };
+	PlayerReinforcement* m_plReinforcement[PLAYER_NUM] = { nullptr };
 	GameDirector* m_gameDirector = nullptr;
 	Se* m_se = nullptr;
 	Objects* m_objects = nullptr;

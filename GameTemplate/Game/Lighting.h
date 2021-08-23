@@ -93,6 +93,10 @@ public:
 
 	void RotationDirectionLight();
 
+	void RotationStopDirectionLight() { m_dirLigRotFlag = false; }
+
+	void SetDirectionLightFlickering(const Vector3& startColor, const Vector3 endColor, float speed);
+
 	/// @brief ポイントライトの初期化
 	void InitPointLight(int num);
 
@@ -169,6 +173,23 @@ private:
 	/// @brief ライティング全てのデータ
 	Light m_light;
 
+	/// @brief ディレクションライト回転フラグ
+	bool m_dirLigRotFlag = false;
+
+	bool m_dirLigFlickering = false;
+
+	bool m_flickerState = false;
+
+	Vector3 m_flickeringColor = Vector3::Zero;
+
+	Vector3 m_flickeringStartColor = Vector3::Zero;
+
+	Vector3 m_flickeringEndColor = Vector3::Zero;
+
+	float m_flickeringSpeed = 0.0f;
+
+	float m_flickerRate = 0.0f;
+
 	/// @brief スポットライトの点滅フラグ
 	bool m_spLigBlink[SPOT_LIGHT_SUM] = { false };
 
@@ -208,6 +229,8 @@ private:
 	void SpotLightBlinking(int num);
 
 	void PointLightBlinking(int num);
+
+	void DirectionLightFlickering();
 };
 
 

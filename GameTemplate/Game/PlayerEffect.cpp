@@ -116,41 +116,37 @@ PlayerEffect::PlayerEffect()
 	/// @brief プレイヤーの人数を調べてその数だけエフェクトを用意する
 	m_gameDirector = FindGO<GameDirector>(GAME_DIRECTOR_NAME);
 
-	for (int plNum = 0; plNum < m_gameDirector->GetPlayerNum(); plNum++) {
-		//キック時のエフェクトを初期化
-		m_kickEffect[plNum].Init(KICKEFFECT_FILEPATH);
-		//ガード時のエフェクトを初期化
-		m_guardEffect[plNum].Init(GUARDEFFECT_FILEPATH);
-		//ガード予兆エフェクトを初期化
-		m_guardBeginEffect[plNum].Init(GUARDEFFECT_BEGIN_FILEPATH);
-		//ガード破壊のエフェクトを初期化
-		m_guardBreakEffect[plNum].Init(GUARDEFFECT_BREAK_FILEPATH);
-		//シールド回復のエフェクトを初期化
-		m_shieldRepairEffect[plNum].Init(GUARDEFFECT_REPAIR_FILEPATH);
-		//ガードヒットエフェクトを初期化
-		m_shieldHitEffect[plNum].Init(GUARDEFFECT_HIT_FILEPATH);
-		//行動不能エフェクトを初期化
-		m_knockOutEffect[plNum].Init(KNOCKOUTEFFECT_FILEPATH);
-		//ジャストガードエフェクトを初期化
-		m_justGuardEffect[plNum].Init(JUSTGUARDEFFECT_FILEPATH);
-		//強化エフェクトを初期化
-		m_kickBuffEffect[plNum].Init(KICKBUFFEFFECT_FILEPATH);
-		//ダメージ回復エフェクトを初期化
-		m_repairEffect[plNum].Init(REPAIREFFECT_FILEPATH);
-		//ダメージエフェクトを初期化
-		m_damageEffect[plNum].Init(DAMAGEEFFECT_FILEPATH);
-		//バフエフェクトを初期化
-		m_itemBuffEffect[plNum].Init(ITEMBUFFEFFECT_FILEPATH[0]);
-		//ダッシュエフェクトを初期化
-		m_dashEffect[plNum].Init(DASHEFFECT_FILEPATH);
 
-		//以下、プレイヤー別(色分けされている)エフェクトの初期化
-		//リスポーン時のエフェクトを初期化
-		m_respawnEffect[plNum].Init(RESPAWNEFFECT_FILEPATH[plNum]);
-		//バーストエフェクトを初期化
-		m_burstEffect[plNum].Init(BURSTEFFECT_FILEPATH[plNum]);
-		
-	}
+	//キック時のエフェクトを初期化
+	m_kickEffect.Init(KICKEFFECT_FILEPATH);
+	//ガード時のエフェクトを初期化
+	m_guardEffect.Init(GUARDEFFECT_FILEPATH);
+	//ガード予兆エフェクトを初期化
+	m_guardBeginEffect.Init(GUARDEFFECT_BEGIN_FILEPATH);
+	//ガード破壊のエフェクトを初期化
+	m_guardBreakEffect.Init(GUARDEFFECT_BREAK_FILEPATH);
+	//シールド回復のエフェクトを初期化
+	m_shieldRepairEffect.Init(GUARDEFFECT_REPAIR_FILEPATH);
+	//ガードヒットエフェクトを初期化
+	m_shieldHitEffect.Init(GUARDEFFECT_HIT_FILEPATH);
+	//行動不能エフェクトを初期化
+	m_knockOutEffect.Init(KNOCKOUTEFFECT_FILEPATH);
+	//ジャストガードエフェクトを初期化
+	m_justGuardEffect.Init(JUSTGUARDEFFECT_FILEPATH);
+	//強化エフェクトを初期化
+	m_kickBuffEffect.Init(KICKBUFFEFFECT_FILEPATH);
+	//ダメージ回復エフェクトを初期化
+	m_repairEffect.Init(REPAIREFFECT_FILEPATH);
+	//ダメージエフェクトを初期化
+	m_damageEffect.Init(DAMAGEEFFECT_FILEPATH);
+	//バフエフェクトを初期化
+	m_itemBuffEffect.Init(ITEMBUFFEFFECT_FILEPATH[0]);
+	//ダッシュエフェクトを初期化
+	m_dashEffect.Init(DASHEFFECT_FILEPATH);
+
+
+
+
 }
 
 PlayerEffect::~PlayerEffect()
@@ -161,9 +157,6 @@ PlayerEffect::~PlayerEffect()
 bool PlayerEffect::Start()
 {
 	/// @brief プレイヤーとボールの情報を入手する 
-	for (int plNum = 0; plNum < m_gameDirector->GetPlayerNum(); plNum++) {
-		m_player[plNum] = FindGO<Player>(PLAYER_NAME[plNum]);
-	}
 	m_ball = FindGO<Ball>(BALL_NAME);
 
 	
@@ -171,12 +164,23 @@ bool PlayerEffect::Start()
 	return true;
 }
 
-void PlayerEffect::PlayKickEffect(int plNum)
+void PlayerEffect::SetPlayerNumber(const int plNum)
+{
+	m_playerNum = plNum;
+	m_player = FindGO<Player>(PLAYER_NAME[plNum]);
+	//以下、プレイヤー別(色分けされている)エフェクトの初期化
+	//リスポーン時のエフェクトを初期化
+	m_respawnEffect.Init(RESPAWNEFFECT_FILEPATH[plNum]);
+	//バーストエフェクトを初期化
+	m_burstEffect.Init(BURSTEFFECT_FILEPATH[plNum]);
+}
+
+void PlayerEffect::PlayKickEffect()
 {
 	/// @brief プレイヤーとボールの位置からエフェクトの再生位置と角度を決める 
-	Vector3 toBallDir = m_player[plNum]->GetToBallVec();
+	Vector3 toBallDir = m_player->GetToBallVec();
 	//プレイヤーの向いている方向を取得
-	Vector3 plDir = m_player[plNum]->GetDirection();
+	Vector3 plDir = m_player->GetDirection();
 	//発生位置を決めるためのベクトル
 	Vector3 efcPos = Vector3::Zero;
 	//向きを決めるためのクォータニオン
@@ -184,53 +188,60 @@ void PlayerEffect::PlayKickEffect(int plNum)
 	//プレイヤーの向いている方向からエフェクトの角度を設定する
 	efcRot.SetRotation(Vector3::AxisY, atan2(plDir.x, plDir.z));
 	//エフェクト発生位置をボールと自身の距離の間に設定する
-	efcPos.Lerp(KICKEFFECT_POSITION_RATE, m_player[plNum]->GetPosition(), m_ball->GetPosition());
+	efcPos.Lerp(KICKEFFECT_POSITION_RATE, m_player->GetPosition(), m_ball->GetPosition());
 	//発生位置を少し上にずらす
 	efcPos.y += KICKEFFECT_POS_Y;
 
-	m_kickEffect[plNum].Play();
-	m_kickEffect[plNum].SetPosition(efcPos);
-	m_kickEffect[plNum].SetRotation(efcRot);
-	m_kickEffect[plNum].SetScale(KICKEFFECT_SCALE);
-	m_kickEffect[plNum].Update();
+	m_kickEffect.Play();
+	m_kickEffect.SetPosition(efcPos);
+	m_kickEffect.SetRotation(efcRot);
+	m_kickEffect.SetScale(KICKEFFECT_SCALE);
+	m_kickEffect.Update();
 }
 
-void PlayerEffect::PlayGuardBreakEffect(int plNum)
-{
-	m_guardBreakEffect[plNum].Play();
-	m_guardBreakEffect[plNum].SetPosition(m_efcGuardPos[plNum]);
-	m_guardBreakEffect[plNum].SetScale(GUARDEFFECT_BREAK_SCALE);
-	m_guardBreakEffect[plNum].Update();
+void PlayerEffect::PlayGuardEffect() {
+	m_guardEffectCouter += 1;
+	if (m_guardEffectCouter % 20 == 1) {
+		m_guardEffect.Play();
+	}
 }
 
-void PlayerEffect::PlayJustGuardEffect(int plNum)
+void PlayerEffect::PlayGuardBreakEffect()
 {
-	Vector3 efcPos = m_player[plNum]->GetPosition();
+	m_guardBreakEffect.Play();
+	m_guardBreakEffect.SetPosition(m_efcGuardPos);
+	m_guardBreakEffect.SetScale(GUARDEFFECT_BREAK_SCALE);
+	m_guardBreakEffect.Update();
+}
+
+void PlayerEffect::PlayJustGuardEffect()
+{
+	Vector3 efcPos = m_player->GetPosition();
 	efcPos.y += GUARDEFFECT_POS_Y;
-	m_justGuardEffect[plNum].Play();
-	m_justGuardEffect[plNum].SetPosition(efcPos);
-	m_justGuardEffect[plNum].SetScale(JUSTGUARDEFFECT_SCALE);
-	m_justGuardEffect[plNum].Update();
+	m_justGuardEffect.Play();
+	m_justGuardEffect.SetPosition(efcPos);
+	m_justGuardEffect.SetScale(JUSTGUARDEFFECT_SCALE);
+	m_justGuardEffect.Update();
 }
 
-void PlayerEffect::PlayShieldHitEffect(int plNum)
+void PlayerEffect::PlayShieldHitEffect()
 {
 	/// @brief プレイヤーとボールの位置からエフェクトの再生位置と角度を決める 
-	Vector3 toBallDir = m_player[plNum]->GetToBallVec();
+	Vector3 toBallDir = m_player->GetToBallVec();
 	Quaternion efcRot = Quaternion::Identity;
 	efcRot.SetRotation(Vector3::AxisY, atan2(toBallDir.x, toBallDir.z));
 	Vector3 efcPos = Vector3::Zero;
-	efcPos.Lerp(0.5f, m_player[plNum]->GetPosition(), m_ball->GetPosition());
+	efcPos.Lerp(0.5f, m_player->GetPosition(), m_ball->GetPosition());
 	efcPos.y += GUARDEFFECT_POS_Y;
 
-	m_shieldHitEffect[plNum].Play();
-	m_shieldHitEffect[plNum].SetPosition(efcPos);
-	m_shieldHitEffect[plNum].SetRotation(efcRot);
-	m_shieldHitEffect[plNum].SetScale(GUARDEFFECT_HIT_SCALE);
-	m_shieldHitEffect[plNum].Update();
+	m_shieldHitEffect.Play();
+	m_shieldHitEffect.SetPosition(efcPos);
+	m_shieldHitEffect.SetRotation(efcRot);
+	m_shieldHitEffect.SetScale(GUARDEFFECT_HIT_SCALE);
+	m_shieldHitEffect.Update();
 }
 
-void PlayerEffect::PlayDamageEffect(int plNum)
+void PlayerEffect::PlayDamageEffect()
 {
 	Vector3 efcScale = Vector3::Zero;
 
@@ -245,121 +256,145 @@ void PlayerEffect::PlayDamageEffect(int plNum)
 	//得られた割合から拡大率を線形補完
 	efcScale.Lerp(speedRate, DAMAGEEFFECT_SCALE_MIN, DAMAGEEFFECT_SCALE_MAX);
 
-	m_damageEffect[plNum].Play();
-	m_damageEffect[plNum].SetPosition(m_efcGuardPos[plNum]);
-	m_damageEffect[plNum].SetScale(efcScale);
-	m_damageEffect[plNum].Update();
+	m_damageEffect.Play();
+	m_damageEffect.SetPosition(m_efcGuardPos);
+	m_damageEffect.SetScale(efcScale);
+	m_damageEffect.Update();
 }
 
-void PlayerEffect::PlayBurstEffect(int plNum)
+void PlayerEffect::PlayBurstEffect()
 {
 	Vector3 efcPos = Vector3::Zero;
-	efcPos = m_player[plNum]->GetPosition();
+	efcPos = m_player->GetPosition();
 
-	m_burstEffect[plNum].Play();
-	m_burstEffect[plNum].SetPosition(efcPos);
-	m_burstEffect[plNum].SetScale(BURSTEFFECT_SCALE);
-	m_burstEffect[plNum].Update();
+	m_burstEffect.Play();
+	m_burstEffect.SetPosition(efcPos);
+	m_burstEffect.SetScale(BURSTEFFECT_SCALE);
+	m_burstEffect.Update();
 }
 
-void PlayerEffect::GuardBeginEffectUpdate(int plNum)
+void PlayerEffect::PlayKickBuffEffect()
 {
-	m_guardBeginEffect[plNum].SetPosition(m_efcGuardPos[plNum]);
-	m_guardBeginEffect[plNum].SetScale(GUARDEFFECT_BEGIN_SCALE);
-	m_guardBeginEffect[plNum].Update();
+	m_powerUpCounter += 1;
+	if (m_powerUpCounter % 20 == 0) {
+		m_kickBuffEffect.Play();
+	}
 }
 
-void PlayerEffect::GuardEffectUpdate(int plNum)
+void PlayerEffect::PlayItemBuffEffect()
 {
-	m_guardEffectPos[plNum] = m_efcGuardPos[plNum];
-	m_guardEffect[plNum].SetPosition(m_guardEffectPos[plNum]);
-	m_guardEffect[plNum].SetScale(GUARDEFFECT_SCALE);
-	m_guardEffect[plNum].Update();
+	m_itemPowerUpCounter += 1;
+	if (m_itemPowerUpCounter % 25 == 0) {
+		m_itemBuffEffect.Play();
+	}
 }
 
-void PlayerEffect::ShieldRepairEffectUpdate(int plNum)
+void PlayerEffect::PlayDashEffect()
 {
-	m_shieldRepairEffect[plNum].SetPosition(m_efcGuardPos[plNum]);
-	m_shieldRepairEffect[plNum].SetScale(GUARDEFFECT_REPAIR_SCALE);
-	m_shieldRepairEffect[plNum].Update();
+	m_dashCounter += 1;
+	if (m_dashCounter % 25 == 0) {
+		m_dashEffect.Play();
+	}
 }
 
-void PlayerEffect::KnockOutEffectUpdate(int plNum)
+void PlayerEffect::GuardBeginEffectUpdate()
 {
-	m_knockOutEffect[plNum].SetPosition(m_efcGuardPos[plNum]);
-	m_knockOutEffect[plNum].SetScale(KNOCKOUTEFFECT_SCALE);
-	m_knockOutEffect[plNum].Update();
+	m_guardBeginEffect.SetPosition(m_efcGuardPos);
+	m_guardBeginEffect.SetScale(GUARDEFFECT_BEGIN_SCALE);
+	m_guardBeginEffect.Update();
 }
 
-void PlayerEffect::KickBuffEffectUpdate(int plNum)
+void PlayerEffect::GuardEffectUpdate()
 {
-	Vector3 efcPos = m_player[plNum]->GetPosition();
+	m_guardEffectPos = m_efcGuardPos;
+	m_guardEffect.SetPosition(m_guardEffectPos);
+	m_guardEffect.SetScale(GUARDEFFECT_SCALE);
+	m_guardEffect.Update();
+}
+
+void PlayerEffect::ShieldRepairEffectUpdate()
+{
+	m_shieldRepairEffect.SetPosition(m_efcGuardPos);
+	m_shieldRepairEffect.SetScale(GUARDEFFECT_REPAIR_SCALE);
+	m_shieldRepairEffect.Update();
+}
+
+void PlayerEffect::KnockOutEffectUpdate()
+{
+	m_knockOutEffect.SetPosition(m_efcGuardPos);
+	m_knockOutEffect.SetScale(KNOCKOUTEFFECT_SCALE);
+	m_knockOutEffect.Update();
+}
+
+void PlayerEffect::KickBuffEffectUpdate()
+{
+	Vector3 efcPos = m_player->GetPosition();
 	efcPos.y += KICKBUFFEFFECT_POS_Y;
 
-	m_kickBuffEffect[plNum].SetPosition(efcPos);
-	m_kickBuffEffect[plNum].SetScale(KICKBUFFEFFECT_SCALE);
-	m_kickBuffEffect[plNum].Update();
+	m_kickBuffEffect.SetPosition(efcPos);
+	m_kickBuffEffect.SetScale(KICKBUFFEFFECT_SCALE);
+	m_kickBuffEffect.Update();
 }
 
-void PlayerEffect::RepairEffectUpdate(int plNum)
+void PlayerEffect::RepairEffectUpdate()
 {
-	m_repairEffect[plNum].SetPosition(m_efcGuardPos[plNum]);
-	m_repairEffect[plNum].SetScale(REPAIREFFECT_SCALE);
-	m_repairEffect[plNum].Update();
+	m_repairEffect.SetPosition(m_efcGuardPos);
+	m_repairEffect.SetScale(REPAIREFFECT_SCALE);
+	m_repairEffect.Update();
 }
 
-void PlayerEffect::RespawnEffectUpdate(int plNum)
+void PlayerEffect::RespawnEffectUpdate()
 {
 
-	Vector3 efcPos = m_player[plNum]->GetRespawnPoint();
+	Vector3 efcPos = m_player->GetRespawnPoint();
 	efcPos.y -= RESPAWNEFFECT_POS_Y;
 	
-	m_respawnEffect[plNum].SetPosition(efcPos);
-	m_respawnEffect[plNum].SetScale(RESPAWNEFFECT_SCALE);
-	m_respawnEffect[plNum].Update();
+	m_respawnEffect.SetPosition(efcPos);
+	m_respawnEffect.SetScale(RESPAWNEFFECT_SCALE);
+	m_respawnEffect.Update();
 }
 
-void PlayerEffect::ItemBuffEffectUpdate(int plNum)
+void PlayerEffect::ItemBuffEffectUpdate()
 {
-	Vector3 efcPos = m_player[plNum]->GetPosition();
+	Vector3 efcPos = m_player->GetPosition();
 	efcPos.y += ITEMBUFFEFFECT_POS_Y;
 	
-	m_itemBuffEffect[plNum].SetPosition(efcPos);
-	m_itemBuffEffect[plNum].SetScale(ITEMBUFFEFFECT_SCALE);
-	m_itemBuffEffect[plNum].Update();
+	m_itemBuffEffect.SetPosition(efcPos);
+	m_itemBuffEffect.SetScale(ITEMBUFFEFFECT_SCALE);
+	m_itemBuffEffect.Update();
 }
 
-void PlayerEffect::DashEffectUpdate(int plNum)
+void PlayerEffect::DashEffectUpdate()
 {
 	//プレイヤー座標を取得
-	Vector3 efcPos = m_player[plNum]->GetPosition();
+	Vector3 efcPos = m_player->GetPosition();
 	//少し上方向にずらす
 	efcPos.y += DASHEFFECT_POS_Y;
 	//プレイヤーの向きを取得
-	Vector3 efcDir = m_player[plNum]->GetDirection();
+	Vector3 efcDir = m_player->GetDirection();
 	//角度を決めるためのクォータニオンを設定
 	Quaternion efcRot = Quaternion::Identity;
 	//取得したプレイヤーの向きから角度を決定
 	efcRot.SetRotation(Vector3::AxisY,atan2(efcDir.x,efcDir.z) );
 
-	m_dashEffect[plNum].SetPosition(efcPos);
-	m_dashEffect[plNum].SetRotation(efcRot);
-	m_dashEffect[plNum].SetScale(DASHEFFECT_SCALE);
-	m_dashEffect[plNum].Update();
+	m_dashEffect.SetPosition(efcPos);
+	m_dashEffect.SetRotation(efcRot);
+	m_dashEffect.SetScale(DASHEFFECT_SCALE);
+	m_dashEffect.Update();
 }
 
 
-void PlayerEffect::ChangeItemBuffEffect(int plNum,ItemBuffChange buffNum)
+void PlayerEffect::ChangeItemBuffEffect(ItemBuffChange buffNum)
 {
 	switch (buffNum) {
 		case enItemBuff_Kick: {
-			m_itemBuffEffect[plNum].Init(ITEMBUFFEFFECT_FILEPATH[enItemBuff_Kick]);
+			m_itemBuffEffect.Init(ITEMBUFFEFFECT_FILEPATH[enItemBuff_Kick]);
 		}break;
 		case enItemBuff_Guard: {
-			m_itemBuffEffect[plNum].Init(ITEMBUFFEFFECT_FILEPATH[enItemBuff_Guard]);
+			m_itemBuffEffect.Init(ITEMBUFFEFFECT_FILEPATH[enItemBuff_Guard]);
 		}break;
 		case enItemBuff_Speed: {
-			m_itemBuffEffect[plNum].Init(ITEMBUFFEFFECT_FILEPATH[enItemBuff_Speed]);
+			m_itemBuffEffect.Init(ITEMBUFFEFFECT_FILEPATH[enItemBuff_Speed]);
 		}break;
 	}
 }
@@ -368,17 +403,17 @@ void PlayerEffect::Update()
 {
 	/// @brief 更新が必要なエフェクトをすべて更新する
 	//常にプレイヤーに追随してほしい、向きや大きさが変わってほしいなどのエフェクトはここで更新
-	for (int plNum = 0; plNum < m_gameDirector->GetPlayerNum(); plNum++) {
-		m_efcGuardPos[plNum] = m_player[plNum]->GetPosition();
-		m_efcGuardPos[plNum].y += GUARDEFFECT_POS_Y;
-		GuardBeginEffectUpdate(plNum);
-		GuardEffectUpdate(plNum);
-		ShieldRepairEffectUpdate(plNum);
-		KnockOutEffectUpdate(plNum);
-		KickBuffEffectUpdate(plNum);
-		RepairEffectUpdate(plNum);
-		RespawnEffectUpdate(plNum);
-		ItemBuffEffectUpdate(plNum);
-		DashEffectUpdate(plNum);
-	}
+
+	m_efcGuardPos = m_player->GetPosition();
+	m_efcGuardPos.y += GUARDEFFECT_POS_Y;
+	GuardBeginEffectUpdate();
+	GuardEffectUpdate();
+	ShieldRepairEffectUpdate();
+	KnockOutEffectUpdate();
+	KickBuffEffectUpdate();
+	RepairEffectUpdate();
+	RespawnEffectUpdate();
+	ItemBuffEffectUpdate();
+	DashEffectUpdate();
+
 }

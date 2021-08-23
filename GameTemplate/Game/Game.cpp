@@ -10,7 +10,7 @@ Game::Game()
 	for (int i = 0; i < m_playerNum; i++) {
 		m_player[i] = NewGO<Player>(0,PLAYER_NAME[i]);
 	}
-	m_playerEffect = NewGO<PlayerEffect>(0, PLAYER_EFFECT_NAME);
+	//m_playerEffect = NewGO<PlayerEffect>(0, PLAYER_EFFECT_NAME);
 	m_gameCamera = NewGO<GameCamera>(0,GAME_CAMERA_NAME);
 	m_backGround = NewGO<BackGround>(0,BACK_GROUND_NAME);
 	m_ball = NewGO<Ball>(0, BALL_NAME);
@@ -55,7 +55,7 @@ Game::~Game()
 	for (int i = 0; i < m_playerNum; i++) {
 		DeleteGO(m_player[i]);
 	}
-	DeleteGO(m_playerEffect);
+	//DeleteGO(m_playerEffect);
 }
 
 bool Game::Start()

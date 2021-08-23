@@ -2,6 +2,7 @@
 
 class FontRender;
 class GameDirector;
+class Result;
 
 class Score : public IGameObject
 {
@@ -13,6 +14,7 @@ private:
 
 	FontRender* m_rankingFont[PLAYER_NUMBER] = { nullptr };
 	GameDirector* m_gameDirector = nullptr;
+	bool m_scoreCountStop = false;
 
 public:
 	Score();
@@ -26,6 +28,7 @@ public:
 	void DeclineScore(int plNum);
 	void HalfScore(int plNum);
 	void RankingSurvey();
+	void ScoreCountStop() { m_scoreCountStop = true; }
 
 	int GetScore(int plNum) { return m_score[plNum]; }
 	int GetRanking(int plNum) { return m_ranking[plNum]; }

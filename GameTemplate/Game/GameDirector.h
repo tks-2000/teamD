@@ -100,10 +100,17 @@ private:
 
 	Timer* m_timer = nullptr;
 
-	Vector3 m_hemLigColorStart = Vector3::Zero;
+	Vector3 m_hemLigSkyColorStart = Vector3::Zero;
 
-	Vector3 m_hemLigCplorHalf = Vector3::Zero;
+	Vector3 m_hemLigSkyColorHalf = Vector3::Zero;
 
-	Vector3 m_hemLigColorEnd = Vector3::Zero;
+	Vector3 m_hemLigSkyColorEnd = Vector3::Zero;
+
+	Vector3 m_hemLigGroundColorStart = Vector3::Zero;
+
+	Vector3 m_hemLigGroundColorHalf = Vector3::Zero;
+
+	Vector3 m_hemLigGroundColorEnd = Vector3::Zero;
+
 };
 

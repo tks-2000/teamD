@@ -1,262 +1,881 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\..\ExEngine\effect\Effect.cpp" />
-    <ClCompile Include="..\..\ExEngine\effect\EffectEngine.cpp" />
-    <ClCompile Include="..\..\ExEngine\gameObject\Gameobjectmanager.cpp" />
-    <ClCompile Include="..\..\ExEngine\gameObject\IGameObject.cpp" />
-    <ClCompile Include="..\..\ExEngine\level2D\CaslFile.cpp" />
-    <ClCompile Include="..\..\ExEngine\level2D\Level2D.cpp" />
-    <ClCompile Include="..\..\ExEngine\level2D\MapChip2D.cpp" />
-    <ClCompile Include="..\..\ExEngine\physics\CapsuleCollider.cpp" />
-    <ClCompile Include="..\..\ExEngine\physics\CharacterController.cpp" />
-    <ClCompile Include="..\..\ExEngine\physics\MeshCollider.cpp" />
-    <ClCompile Include="..\..\ExEngine\physics\Physics.cpp" />
-    <ClCompile Include="..\..\ExEngine\physics\PhysicsStaticObject.cpp" />
-    <ClCompile Include="..\..\ExEngine\physics\RigidBody.cpp" />
-    <ClCompile Include="..\..\MiniEngine\Animation.cpp" />
-    <ClCompile Include="..\..\MiniEngine\AnimationClip.cpp" />
-    <ClCompile Include="..\..\MiniEngine\AnimationPlayController.cpp" />
-    <ClCompile Include="..\..\MiniEngine\Camera.cpp" />
-    <ClCompile Include="..\..\MiniEngine\ConstantBuffer.cpp" />
-    <ClCompile Include="..\..\MiniEngine\DescriptorHeap.cpp" />
-    <ClCompile Include="..\..\MiniEngine\font\Font.cpp" />
-    <ClCompile Include="..\..\MiniEngine\font\FontEngine.cpp" />
-    <ClCompile Include="..\..\MiniEngine\GPUBuffer.cpp" />
-    <ClCompile Include="..\..\MiniEngine\GraphicsEngine.cpp" />
-    <ClCompile Include="..\..\MiniEngine\HID\GamePad.cpp" />
-    <ClCompile Include="..\..\MiniEngine\IndexBuffer.cpp" />
-    <ClCompile Include="..\..\MiniEngine\Material.cpp" />
-    <ClCompile Include="..\..\MiniEngine\math\Matrix.cpp" />
-    <ClCompile Include="..\..\MiniEngine\math\Vector.cpp" />
-    <ClCompile Include="..\..\MiniEngine\MeshParts.cpp" />
-    <ClCompile Include="..\..\MiniEngine\Model.cpp" />
-    <ClCompile Include="..\..\MiniEngine\NullTextureMaps.cpp" />
-    <ClCompile Include="..\..\MiniEngine\PipelineState.cpp" />
-    <ClCompile Include="..\..\MiniEngine\raytracing\BLASBuffer.cpp" />
-    <ClCompile Include="..\..\MiniEngine\raytracing\RaytracingDescriptorHeaps.cpp" />
-    <ClCompile Include="..\..\MiniEngine\raytracing\RaytracingEngine.cpp" />
-    <ClCompile Include="..\..\MiniEngine\raytracing\RaytracingInstance.cpp" />
-    <ClCompile Include="..\..\MiniEngine\raytracing\RaytracingPSO.cpp" />
-    <ClCompile Include="..\..\MiniEngine\raytracing\RaytracingShaderTable.cpp" />
-    <ClCompile Include="..\..\MiniEngine\raytracing\RaytracingWorld.cpp" />
-    <ClCompile Include="..\..\MiniEngine\raytracing\TLASBuffer.cpp" />
-    <ClCompile Include="..\..\MiniEngine\RootSignature.cpp" />
-    <ClCompile Include="..\..\MiniEngine\RWStructuredBuffer.cpp" />
-    <ClCompile Include="..\..\MiniEngine\Shader.cpp" />
-    <ClCompile Include="..\..\MiniEngine\Skeleton.cpp" />
-    <ClCompile Include="..\..\MiniEngine\Sprite.cpp" />
-    <ClCompile Include="..\..\MiniEngine\StructuredBuffer.cpp" />
-    <ClCompile Include="..\..\MiniEngine\Texture.cpp" />
-    <ClCompile Include="..\..\MiniEngine\tkEngine.cpp" />
-    <ClCompile Include="..\..\MiniEngine\tkFile\TkaFile.cpp" />
-    <ClCompile Include="..\..\MiniEngine\tkFile\TkmFile.cpp" />
-    <ClCompile Include="..\..\MiniEngine\tkFile\TksFile.cpp" />
-    <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
-    <ClCompile Include="BackGround.cpp" />
-    <ClCompile Include="Ball.cpp" />
-    <ClCompile Include="Box.cpp" />
-    <ClCompile Include="FontRender.cpp" />
-    <ClCompile Include="Game.cpp" />
-    <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="GameDirector.cpp" />
-    <ClCompile Include="GameUI.cpp" />
-    <ClCompile Include="Lighting.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Menu.cpp" />
-    <ClCompile Include="NameKey.cpp" />
-    <ClCompile Include="Objects.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="PlayerEffect.cpp" />
-    <ClCompile Include="Result.cpp" />
-    <ClCompile Include="Score.cpp" />
-    <ClCompile Include="SkinModelRender.cpp" />
-    <ClCompile Include="Sky.cpp" />
-    <ClCompile Include="SoundEngine.cpp" />
-    <ClCompile Include="SoundPreCompile.cpp" />
-    <ClCompile Include="SoundSource.cpp" />
-    <ClCompile Include="SpriteRender.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="system\system.cpp" />
     <ClCompile Include="Timer.cpp" />
-    <ClCompile Include="Title.cpp" />
-    <ClCompile Include="Util.cpp" />
-    <ClCompile Include="WaveFile.cpp" />
-    <ClCompile Include="WaveFileBank.cpp" />
-    <ClCompile Include="Bgm.cpp" />
-    <ClCompile Include="Se.cpp" />
     <ClCompile Include="SceneChange.cpp" />
-    <ClCompile Include="TResourceBank2.cpp" />
-    <ClCompile Include="Item.cpp" />
+    <ClCompile Include="..\..\MiniEngine\Animation.cpp">
+      <Filter>Src\MiniEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MiniEngine\AnimationClip.cpp">
+      <Filter>Src\MiniEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MiniEngine\AnimationPlayController.cpp">
+      <Filter>Src\MiniEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MiniEngine\Camera.cpp">
+      <Filter>Src\MiniEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MiniEngine\ConstantBuffer.cpp">
+      <Filter>Src\MiniEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MiniEngine\DescriptorHeap.cpp">
+      <Filter>Src\MiniEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MiniEngine\GPUBuffer.cpp">
+      <Filter>Src\MiniEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MiniEngine\GraphicsEngine.cpp">
+      <Filter>Src\MiniEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MiniEngine\IndexBuffer.cpp">
+      <Filter>Src\MiniEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MiniEngine\Material.cpp">
+      <Filter>Src\MiniEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MiniEngine\MeshParts.cpp">
+      <Filter>Src\MiniEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MiniEngine\Model.cpp">
+      <Filter>Src\MiniEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MiniEngine\NullTextureMaps.cpp">
+      <Filter>Src\MiniEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MiniEngine\PipelineState.cpp">
+      <Filter>Src\MiniEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MiniEngine\RootSignature.cpp">
+      <Filter>Src\MiniEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MiniEngine\RWStructuredBuffer.cpp">
+      <Filter>Src\MiniEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MiniEngine\Shader.cpp">
+      <Filter>Src\MiniEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MiniEngine\Skeleton.cpp">
+      <Filter>Src\MiniEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MiniEngine\Sprite.cpp">
+      <Filter>Src\MiniEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MiniEngine\StructuredBuffer.cpp">
+      <Filter>Src\MiniEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MiniEngine\Texture.cpp">
+      <Filter>Src\MiniEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MiniEngine\tkEngine.cpp">
+      <Filter>Src\MiniEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp">
+      <Filter>Src\MiniEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MiniEngine\tkFile\TksFile.cpp">
+      <Filter>Src\MiniEngine\tkFile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MiniEngine\tkFile\TkmFile.cpp">
+      <Filter>Src\MiniEngine\tkFile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MiniEngine\tkFile\TkaFile.cpp">
+      <Filter>Src\MiniEngine\raytracing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MiniEngine\raytracing\TLASBuffer.cpp">
+      <Filter>Src\MiniEngine\raytracing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MiniEngine\raytracing\RaytracingWorld.cpp">
+      <Filter>Src\MiniEngine\raytracing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MiniEngine\raytracing\RaytracingShaderTable.cpp">
+      <Filter>Src\MiniEngine\raytracing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MiniEngine\raytracing\RaytracingPSO.cpp">
+      <Filter>Src\MiniEngine\raytracing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MiniEngine\raytracing\RaytracingInstance.cpp">
+      <Filter>Src\MiniEngine\raytracing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MiniEngine\raytracing\RaytracingEngine.cpp">
+      <Filter>Src\MiniEngine\raytracing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MiniEngine\raytracing\RaytracingDescriptorHeaps.cpp">
+      <Filter>Src\MiniEngine\raytracing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MiniEngine\raytracing\BLASBuffer.cpp">
+      <Filter>Src\MiniEngine\raytracing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MiniEngine\math\Vector.cpp">
+      <Filter>Src\MiniEngine\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MiniEngine\math\Matrix.cpp">
+      <Filter>Src\MiniEngine\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MiniEngine\font\Font.cpp">
+      <Filter>Src\MiniEngine\font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MiniEngine\font\FontEngine.cpp">
+      <Filter>Src\MiniEngine\font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\MiniEngine\HID\GamePad.cpp">
+      <Filter>Src\MiniEngine\HID</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ExEngine\effect\Effect.cpp">
+      <Filter>Src\ExEngine\effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ExEngine\effect\EffectEngine.cpp">
+      <Filter>Src\ExEngine\effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ExEngine\gameObject\Gameobjectmanager.cpp">
+      <Filter>Src\ExEngine\gameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ExEngine\gameObject\IGameObject.cpp">
+      <Filter>Src\ExEngine\gameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ExEngine\level2D\CaslFile.cpp">
+      <Filter>Src\ExEngine\level2D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ExEngine\level2D\Level2D.cpp">
+      <Filter>Src\ExEngine\level2D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ExEngine\level2D\MapChip2D.cpp">
+      <Filter>Src\ExEngine\level2D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ExEngine\physics\CapsuleCollider.cpp">
+      <Filter>Src\ExEngine\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ExEngine\physics\CharacterController.cpp">
+      <Filter>Src\ExEngine\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ExEngine\physics\MeshCollider.cpp">
+      <Filter>Src\ExEngine\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ExEngine\physics\Physics.cpp">
+      <Filter>Src\ExEngine\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ExEngine\physics\PhysicsStaticObject.cpp">
+      <Filter>Src\ExEngine\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ExEngine\physics\RigidBody.cpp">
+      <Filter>Src\ExEngine\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Src\InGame</Filter>
+    </ClCompile>
+    <ClCompile Include="GameCamera.cpp">
+      <Filter>Src\InGame</Filter>
+    </ClCompile>
+    <ClCompile Include="BackGround.cpp">
+      <Filter>Src\InGame</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects.cpp">
+      <Filter>Src\InGame</Filter>
+    </ClCompile>
+    <ClCompile Include="GameUI.cpp">
+      <Filter>Src\InGame</Filter>
+    </ClCompile>
+    <ClCompile Include="Score.cpp">
+      <Filter>Src\InGame</Filter>
+    </ClCompile>
+    <ClCompile Include="Sky.cpp">
+      <Filter>Src\InGame</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>Src\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Result.cpp">
+      <Filter>Src\Result</Filter>
+    </ClCompile>
+    <ClCompile Include="Title.cpp">
+      <Filter>Src\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="Box.cpp">
+      <Filter>Src\InGame</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>Src\InGame</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Src\InGame</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerAction.cpp">
+      <Filter>Src\InGame</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerEffect.cpp">
+      <Filter>Src\InGame</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerMove.cpp">
+      <Filter>Src\InGame</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerReinforcement.cpp">
+      <Filter>Src\InGame</Filter>
+    </ClCompile>
+    <ClCompile Include="Ball.cpp">
+      <Filter>Src\InGame</Filter>
+    </ClCompile>
+    <ClCompile Include="Lighting.cpp">
+      <Filter>Src\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="FontRender.cpp">
+      <Filter>Src\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="SkinModelRender.cpp">
+      <Filter>Src\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteRender.cpp">
+      <Filter>Src\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Bgm.cpp">
+      <Filter>Src\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="Se.cpp">
+      <Filter>Src\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundEngine.cpp">
+      <Filter>Src\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundPreCompile.cpp">
+      <Filter>Src\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundSource.cpp">
+      <Filter>Src\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="WaveFile.cpp">
+      <Filter>Src\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="WaveFileBank.cpp">
+      <Filter>Src\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="TResourceBank2.cpp">
+      <Filter>Src\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Util.cpp">
+      <Filter>Src\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="NameKey.cpp">
+      <Filter>Src\Util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\ExEngine\effect\Effect.h" />
-    <ClInclude Include="..\..\ExEngine\effect\EffectEngine.h" />
-    <ClInclude Include="..\..\ExEngine\ExEngine.h" />
-    <ClInclude Include="..\..\ExEngine\gameObject\GameObjectManager.h" />
-    <ClInclude Include="..\..\ExEngine\gameObject\IGameobject.h" />
-    <ClInclude Include="..\..\ExEngine\level2D\CaslFile.h" />
-    <ClInclude Include="..\..\ExEngine\level2D\Level2D.h" />
-    <ClInclude Include="..\..\ExEngine\level2D\MapChip2D.h" />
-    <ClInclude Include="..\..\ExEngine\physics\CapsuleCollider.h" />
-    <ClInclude Include="..\..\ExEngine\physics\CharacterController.h" />
-    <ClInclude Include="..\..\ExEngine\physics\ICollider.h" />
-    <ClInclude Include="..\..\ExEngine\physics\MeshCollider.h" />
-    <ClInclude Include="..\..\ExEngine\physics\Physics.h" />
-    <ClInclude Include="..\..\ExEngine\physics\PhysicsStaticObject.h" />
-    <ClInclude Include="..\..\ExEngine\physics\RigidBody.h" />
-    <ClInclude Include="..\..\MiniEngine\Animation.h" />
-    <ClInclude Include="..\..\MiniEngine\AnimationClip.h" />
-    <ClInclude Include="..\..\MiniEngine\AnimationPlayController.h" />
-    <ClInclude Include="..\..\MiniEngine\Camera.h" />
-    <ClInclude Include="..\..\MiniEngine\ConstantBuffer.h" />
-    <ClInclude Include="..\..\MiniEngine\debug\MyAssert.h" />
-    <ClInclude Include="..\..\MiniEngine\DescriptorHeap.h" />
-    <ClInclude Include="..\..\MiniEngine\DescriptorHeap_inline.h" />
-    <ClInclude Include="..\..\MiniEngine\font\Font.h" />
-    <ClInclude Include="..\..\MiniEngine\font\FontEngine.h" />
-    <ClInclude Include="..\..\MiniEngine\GPUBuffer.h" />
-    <ClInclude Include="..\..\MiniEngine\GraphicsEngine.h" />
-    <ClInclude Include="..\..\MiniEngine\HID\GamePad.h" />
-    <ClInclude Include="..\..\MiniEngine\IndexBuffer.h" />
-    <ClInclude Include="..\..\MiniEngine\Material.h" />
-    <ClInclude Include="..\..\MiniEngine\math\Math.h" />
-    <ClInclude Include="..\..\MiniEngine\math\Matrix.h" />
-    <ClInclude Include="..\..\MiniEngine\math\Vector.h" />
-    <ClInclude Include="..\..\MiniEngine\MeshParts.h" />
-    <ClInclude Include="..\..\MiniEngine\MiniEngine.h" />
-    <ClInclude Include="..\..\MiniEngine\Model.h" />
-    <ClInclude Include="..\..\MiniEngine\NullTextureMaps.h" />
-    <ClInclude Include="..\..\MiniEngine\PipelineState.h" />
-    <ClInclude Include="..\..\MiniEngine\raytracing\BLASBuffer.h" />
-    <ClInclude Include="..\..\MiniEngine\raytracing\Raytracing.h" />
-    <ClInclude Include="..\..\MiniEngine\raytracing\RaytracingDescriptorHeaps.h" />
-    <ClInclude Include="..\..\MiniEngine\raytracing\RaytracingEngine.h" />
-    <ClInclude Include="..\..\MiniEngine\raytracing\RaytracingInstance.h" />
-    <ClInclude Include="..\..\MiniEngine\raytracing\RaytracingPSO.h" />
-    <ClInclude Include="..\..\MiniEngine\raytracing\RaytracingShaderTable.h" />
-    <ClInclude Include="..\..\MiniEngine\raytracing\RaytracingWorld.h" />
-    <ClInclude Include="..\..\MiniEngine\raytracing\TLASBuffer.h" />
-    <ClInclude Include="..\..\MiniEngine\RenderContext.h" />
-    <ClInclude Include="..\..\MiniEngine\RenderContext_inline.h" />
-    <ClInclude Include="..\..\MiniEngine\RootSignature.h" />
-    <ClInclude Include="..\..\MiniEngine\RWStructuredBuffer.h" />
-    <ClInclude Include="..\..\MiniEngine\Shader.h" />
-    <ClInclude Include="..\..\MiniEngine\Skeleton.h" />
-    <ClInclude Include="..\..\MiniEngine\Sprite.h" />
-    <ClInclude Include="..\..\MiniEngine\StructuredBuffer.h" />
-    <ClInclude Include="..\..\MiniEngine\Texture.h" />
-    <ClInclude Include="..\..\MiniEngine\tkEngine.h" />
-    <ClInclude Include="..\..\MiniEngine\tkFile\TkaFile.h" />
-    <ClInclude Include="..\..\MiniEngine\tkFile\TkmFile.h" />
-    <ClInclude Include="..\..\MiniEngine\tkFile\TksFile.h" />
-    <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
-    <ClInclude Include="BackGround.h" />
-    <ClInclude Include="Ball.h" />
-    <ClInclude Include="Box.h" />
-    <ClInclude Include="FontRender.h" />
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="GameCamera.h" />
     <ClInclude Include="GameDirector.h" />
-    <ClInclude Include="GameUI.h" />
-    <ClInclude Include="Lighting.h" />
-    <ClInclude Include="Menu.h" />
-    <ClInclude Include="NameKey.h" />
-    <ClInclude Include="Objects.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="PlayerEffect.h" />
-    <ClInclude Include="Result.h" />
-    <ClInclude Include="Score.h" />
-    <ClInclude Include="SkinModelRender.h" />
-    <ClInclude Include="Sky.h" />
-    <ClInclude Include="SoundEngine.h" />
-    <ClInclude Include="SoundPreCompile.h" />
-    <ClInclude Include="SoundSource.h" />
-    <ClInclude Include="SpriteRender.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
     <ClInclude Include="Timer.h" />
-    <ClInclude Include="Title.h" />
-    <ClInclude Include="Util.h" />
-    <ClInclude Include="WaveFile.h" />
-    <ClInclude Include="WaveFileBank.h" />
-    <ClInclude Include="Bgm.h" />
-    <ClInclude Include="Se.h" />
     <ClInclude Include="SceneChange.h" />
-    <ClInclude Include="TResourceBank.h" />
-    <ClInclude Include="TResourceBank2.h" />
-    <ClInclude Include="Item.h" />
+    <ClInclude Include="..\..\MiniEngine\Animation.h">
+      <Filter>Src\MiniEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\AnimationClip.h">
+      <Filter>Src\MiniEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\AnimationPlayController.h">
+      <Filter>Src\MiniEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\Camera.h">
+      <Filter>Src\MiniEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\ConstantBuffer.h">
+      <Filter>Src\MiniEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\DescriptorHeap.h">
+      <Filter>Src\MiniEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\DescriptorHeap_inline.h">
+      <Filter>Src\MiniEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\GPUBuffer.h">
+      <Filter>Src\MiniEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\GraphicsEngine.h">
+      <Filter>Src\MiniEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\IndexBuffer.h">
+      <Filter>Src\MiniEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\Material.h">
+      <Filter>Src\MiniEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\MeshParts.h">
+      <Filter>Src\MiniEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\MiniEngine.h">
+      <Filter>Src\MiniEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\Model.h">
+      <Filter>Src\MiniEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\NullTextureMaps.h">
+      <Filter>Src\MiniEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\PipelineState.h">
+      <Filter>Src\MiniEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\RenderContext_inline.h">
+      <Filter>Src\MiniEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\RootSignature.h">
+      <Filter>Src\MiniEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\RWStructuredBuffer.h">
+      <Filter>Src\MiniEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\Shader.h">
+      <Filter>Src\MiniEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\Skeleton.h">
+      <Filter>Src\MiniEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\Sprite.h">
+      <Filter>Src\MiniEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\StructuredBuffer.h">
+      <Filter>Src\MiniEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\Texture.h">
+      <Filter>Src\MiniEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\tkEngine.h">
+      <Filter>Src\MiniEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="TResourceBank.h">
+      <Filter>Src\MiniEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\VertexBuffer.h">
+      <Filter>Src\MiniEngine\tkFile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\tkFile\TksFile.h">
+      <Filter>Src\MiniEngine\tkFile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\tkFile\TkmFile.h">
+      <Filter>Src\MiniEngine\tkFile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\tkFile\TkaFile.h">
+      <Filter>Src\MiniEngine\tkFile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\raytracing\TLASBuffer.h">
+      <Filter>Src\MiniEngine\raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\raytracing\RaytracingWorld.h">
+      <Filter>Src\MiniEngine\raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\raytracing\RaytracingShaderTable.h">
+      <Filter>Src\MiniEngine\raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\raytracing\RaytracingPSO.h">
+      <Filter>Src\MiniEngine\raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\raytracing\RaytracingInstance.h">
+      <Filter>Src\MiniEngine\raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\raytracing\RaytracingEngine.h">
+      <Filter>Src\MiniEngine\raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\raytracing\RaytracingDescriptorHeaps.h">
+      <Filter>Src\MiniEngine\raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\raytracing\Raytracing.h">
+      <Filter>Src\MiniEngine\raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\raytracing\BLASBuffer.h">
+      <Filter>Src\MiniEngine\raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\math\Vector.h">
+      <Filter>Src\MiniEngine\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\math\Matrix.h">
+      <Filter>Src\MiniEngine\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\math\Math.h">
+      <Filter>Src\MiniEngine\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\font\Font.h">
+      <Filter>Src\MiniEngine\font</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\font\FontEngine.h">
+      <Filter>Src\MiniEngine\font</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\debug\MyAssert.h">
+      <Filter>Src\MiniEngine\dbg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\HID\GamePad.h">
+      <Filter>Src\MiniEngine\HID</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MiniEngine\RenderContext.h">
+      <Filter>Src\MiniEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ExEngine\ExEngine.h">
+      <Filter>Src\ExEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ExEngine\effect\Effect.h">
+      <Filter>Src\ExEngine\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ExEngine\effect\EffectEngine.h">
+      <Filter>Src\ExEngine\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ExEngine\gameObject\GameObjectManager.h">
+      <Filter>Src\ExEngine\gameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ExEngine\gameObject\IGameobject.h">
+      <Filter>Src\ExEngine\gameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ExEngine\level2D\CaslFile.h">
+      <Filter>Src\ExEngine\level2D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ExEngine\level2D\Level2D.h">
+      <Filter>Src\ExEngine\level2D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ExEngine\level2D\MapChip2D.h">
+      <Filter>Src\ExEngine\level2D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ExEngine\physics\CapsuleCollider.h">
+      <Filter>Src\ExEngine\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ExEngine\physics\CharacterController.h">
+      <Filter>Src\ExEngine\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ExEngine\physics\ICollider.h">
+      <Filter>Src\ExEngine\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ExEngine\physics\MeshCollider.h">
+      <Filter>Src\ExEngine\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ExEngine\physics\Physics.h">
+      <Filter>Src\ExEngine\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ExEngine\physics\PhysicsStaticObject.h">
+      <Filter>Src\ExEngine\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ExEngine\physics\RigidBody.h">
+      <Filter>Src\ExEngine\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Src\InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="GameCamera.h">
+      <Filter>Src\InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="BackGround.h">
+      <Filter>Src\InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects.h">
+      <Filter>Src\InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="GameUI.h">
+      <Filter>Src\InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="Score.h">
+      <Filter>Src\InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="Sky.h">
+      <Filter>Src\InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>Src\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Result.h">
+      <Filter>Src\Result</Filter>
+    </ClInclude>
+    <ClInclude Include="Title.h">
+      <Filter>Src\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="Box.h">
+      <Filter>Src\InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>Src\InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Src\InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerAction.h">
+      <Filter>Src\InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerEffect.h">
+      <Filter>Src\InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerMove.h">
+      <Filter>Src\InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerReinforcement.h">
+      <Filter>Src\InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="Ball.h">
+      <Filter>Src\InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="Lighting.h">
+      <Filter>Src\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="FontRender.h">
+      <Filter>Src\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="SkinModelRender.h">
+      <Filter>Src\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteRender.h">
+      <Filter>Src\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Bgm.h">
+      <Filter>Src\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Se.h">
+      <Filter>Src\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundEngine.h">
+      <Filter>Src\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundPreCompile.h">
+      <Filter>Src\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundSource.h">
+      <Filter>Src\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="WaveFile.h">
+      <Filter>Src\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="WaveFileBank.h">
+      <Filter>Src\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="TResourceBank2.h">
+      <Filter>Src\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Util.h">
+      <Filter>Src\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="NameKey.h">
+      <Filter>Src\Util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Media Include="Assets\sound\bgm\normalBGM.wav" />
-    <Media Include="Assets\sound\bgm\bgm.wav" />
-    <Media Include="Assets\sound\bgm\title.wav" />
-    <Media Include="Assets\sound\se\press_key.wav" />
-    <Media Include="Assets\sound\se\BoxCollide.wav" />
-    <Media Include="Assets\sound\se\Defeat.wav" />
-    <Media Include="Assets\sound\se\GuardEnd.wav" />
-    <Media Include="Assets\sound\se\GuardStart.wav" />
-    <Media Include="Assets\sound\se\ItemGet.wav" />
-    <Media Include="Assets\sound\se\ReSpawn.wav" />
-    <Media Include="Assets\sound\se\Stan.wav" />
-    <Media Include="Assets\sound\se\StrongCollide.wav" />
-    <Media Include="Assets\sound\se\WeakCollide.wav" />
-    <Media Include="Assets\sound\se\BoxOpen.wav" />
-    <Media Include="Assets\sound\se\Cheer.wav" />
-    <Media Include="Assets\sound\se\Ranking.wav" />
-    <Media Include="Assets\sound\se\SelectKey.wav" />
-    <Media Include="Assets\sound\se\StaminaOver.wav" />
-    <Media Include="Assets\sound\se\StaminaRecovery.wav" />
-    <Media Include="Assets\sound\se\CountDown.wav" />
-    <Media Include="Assets\sound\se\End.wav" />
-    <Media Include="Assets\sound\bgm\MainBgm.wav" />
-    <Media Include="Assets\sound\bgm\Menu.wav" />
-    <Media Include="..\..\..\bgm\Result.wav" />
-    <Media Include="Assets\sound\bgm\Result.wav" />
-    <Media Include="Assets\sound\se\Fall.wav" />
-    <Media Include="Assets\sound\se\NoDamageCollide.wav" />
-    <Media Include="Assets\sound\bgm\SpecialBgm.wav" />
+    <Media Include="Assets\sound\bgm\bgm.wav">
+      <Filter>Assets\sound\bgm</Filter>
+    </Media>
+    <Media Include="Assets\sound\bgm\MainBgm.wav">
+      <Filter>Assets\sound\bgm</Filter>
+    </Media>
+    <Media Include="Assets\sound\bgm\Menu.wav">
+      <Filter>Assets\sound\bgm</Filter>
+    </Media>
+    <Media Include="Assets\sound\bgm\normalBGM.wav">
+      <Filter>Assets\sound\bgm</Filter>
+    </Media>
+    <Media Include="Assets\sound\bgm\Result.wav">
+      <Filter>Assets\sound\bgm</Filter>
+    </Media>
+    <Media Include="..\..\..\bgm\Result.wav">
+      <Filter>Assets\sound\bgm</Filter>
+    </Media>
+    <Media Include="Assets\sound\bgm\SpecialBgm.wav">
+      <Filter>Assets\sound\bgm</Filter>
+    </Media>
+    <Media Include="Assets\sound\bgm\title.wav">
+      <Filter>Assets\sound\bgm</Filter>
+    </Media>
+    <Media Include="Assets\sound\se\BoxCollide.wav">
+      <Filter>Assets\sound\se</Filter>
+    </Media>
+    <Media Include="Assets\sound\se\BoxOpen.wav">
+      <Filter>Assets\sound\se</Filter>
+    </Media>
+    <Media Include="Assets\sound\se\Cheer.wav">
+      <Filter>Assets\sound\se</Filter>
+    </Media>
+    <Media Include="Assets\sound\se\CountDown.wav">
+      <Filter>Assets\sound\se</Filter>
+    </Media>
+    <Media Include="Assets\sound\se\Defeat.wav">
+      <Filter>Assets\sound\se</Filter>
+    </Media>
+    <Media Include="Assets\sound\se\End.wav">
+      <Filter>Assets\sound\se</Filter>
+    </Media>
+    <Media Include="Assets\sound\se\Fall.wav">
+      <Filter>Assets\sound\se</Filter>
+    </Media>
+    <Media Include="Assets\sound\se\GuardEnd.wav">
+      <Filter>Assets\sound\se</Filter>
+    </Media>
+    <Media Include="Assets\sound\se\GuardStart.wav">
+      <Filter>Assets\sound\se</Filter>
+    </Media>
+    <Media Include="Assets\sound\se\ItemGet.wav">
+      <Filter>Assets\sound\se</Filter>
+    </Media>
+    <Media Include="Assets\sound\se\NoDamageCollide.wav">
+      <Filter>Assets\sound\se</Filter>
+    </Media>
+    <Media Include="Assets\sound\se\press_key.wav">
+      <Filter>Assets\sound\se</Filter>
+    </Media>
+    <Media Include="Assets\sound\se\Ranking.wav">
+      <Filter>Assets\sound\se</Filter>
+    </Media>
+    <Media Include="Assets\sound\se\ReSpawn.wav">
+      <Filter>Assets\sound\se</Filter>
+    </Media>
+    <Media Include="Assets\sound\se\SelectKey.wav">
+      <Filter>Assets\sound\se</Filter>
+    </Media>
+    <Media Include="Assets\sound\se\StaminaOver.wav">
+      <Filter>Assets\sound\se</Filter>
+    </Media>
+    <Media Include="Assets\sound\se\StaminaRecovery.wav">
+      <Filter>Assets\sound\se</Filter>
+    </Media>
+    <Media Include="Assets\sound\se\Stan.wav">
+      <Filter>Assets\sound\se</Filter>
+    </Media>
+    <Media Include="Assets\sound\se\StrongCollide.wav">
+      <Filter>Assets\sound\se</Filter>
+    </Media>
+    <Media Include="Assets\sound\se\WeakCollide.wav">
+      <Filter>Assets\sound\se</Filter>
+    </Media>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Assets\modelData\bg\testmap_tex.DDS" />
-    <Image Include="Assets\modelData\sphere\sphere_tex.DDS" />
-    <Image Include="Assets\modelData\sphere\sphere_tex_01.DDS" />
-    <Image Include="Assets\sprite\GageBody.DDS" />
-    <Image Include="Assets\sprite\GageFinal.DDS" />
-    <Image Include="Assets\sprite\GageStart.DDS" />
-    <Image Include="Assets\sprite\Shield_Icon.DDS" />
-    <Image Include="Assets\sprite\SpeedMeter.DDS" />
-    <Image Include="Assets\sprite\SpeedMeterPin.DDS" />
-    <Image Include="Assets\sprite\Sprint_Icon.DDS" />
-    <Image Include="Assets\sprite\title.dds" />
-    <Image Include="Assets\sprite\title.png" />
-    <Image Include="Assets\sprite\UI_Gage.DDS" />
-    <Image Include="Assets\sprite\BLACK.dds" />
-    <Image Include="Assets\modelData\bg\Stainless-Steel-HairLine.DDS" />
-    <Image Include="Assets\modelData\bg\floor_tex_1.DDS" />
-    <Image Include="Assets\sprite\LB_ButtonIcon.DDS" />
-    <Image Include="Assets\sprite\RB_ButtonIcon.DDS" />
-    <Image Include="Assets\sprite\TimerFrame.DDS" />
-    <Image Include="Assets\sprite\GO.DDS" />
-    <Image Include="Assets\sprite\3.DDS" />
-    <Image Include="Assets\sprite\1.DDS" />
-    <Image Include="Assets\sprite\2.DDS" />
+    <Image Include="Assets\modelData\bg\floor_tex_1.DDS">
+      <Filter>Assets\modelData</Filter>
+    </Image>
+    <Image Include="Assets\modelData\bg\testmap_tex.DDS">
+      <Filter>Assets\modelData\bg</Filter>
+    </Image>
+    <Image Include="Assets\modelData\sphere\sphere_tex_01.DDS">
+      <Filter>Assets\modelData\sphere</Filter>
+    </Image>
+    <Image Include="Assets\modelData\sphere\sphere_tex.DDS">
+      <Filter>Assets\modelData\sphere</Filter>
+    </Image>
+    <Image Include="Assets\sprite\1.DDS">
+      <Filter>Assets\sprite</Filter>
+    </Image>
+    <Image Include="Assets\sprite\2.DDS">
+      <Filter>Assets\sprite</Filter>
+    </Image>
+    <Image Include="Assets\sprite\3.DDS">
+      <Filter>Assets\sprite</Filter>
+    </Image>
+    <Image Include="Assets\sprite\BLACK.dds">
+      <Filter>Assets\sprite</Filter>
+    </Image>
+    <Image Include="Assets\sprite\GageBody.DDS">
+      <Filter>Assets\sprite</Filter>
+    </Image>
+    <Image Include="Assets\sprite\GageFinal.DDS">
+      <Filter>Assets\sprite</Filter>
+    </Image>
+    <Image Include="Assets\sprite\GageStart.DDS">
+      <Filter>Assets\sprite</Filter>
+    </Image>
+    <Image Include="Assets\sprite\GO.DDS">
+      <Filter>Assets\sprite</Filter>
+    </Image>
+    <Image Include="Assets\sprite\LB_ButtonIcon.DDS">
+      <Filter>Assets\sprite</Filter>
+    </Image>
+    <Image Include="Assets\sprite\RB_ButtonIcon.DDS">
+      <Filter>Assets\sprite</Filter>
+    </Image>
+    <Image Include="Assets\sprite\Shield_Icon.DDS">
+      <Filter>Assets\sprite</Filter>
+    </Image>
+    <Image Include="Assets\sprite\SpeedMeter.DDS">
+      <Filter>Assets\sprite</Filter>
+    </Image>
+    <Image Include="Assets\sprite\SpeedMeterPin.DDS">
+      <Filter>Assets\sprite</Filter>
+    </Image>
+    <Image Include="Assets\sprite\Sprint_Icon.DDS">
+      <Filter>Assets\sprite</Filter>
+    </Image>
+    <Image Include="Assets\sprite\TimerFrame.DDS">
+      <Filter>Assets\sprite</Filter>
+    </Image>
+    <Image Include="Assets\sprite\title.dds">
+      <Filter>Assets\sprite</Filter>
+    </Image>
+    <Image Include="Assets\sprite\title.png">
+      <Filter>Assets\sprite</Filter>
+    </Image>
+    <Image Include="Assets\sprite\UI_Gage.DDS">
+      <Filter>Assets\sprite</Filter>
+    </Image>
+    <Image Include="Assets\modelData\bg\Stainless-Steel-HairLine.DDS">
+      <Filter>Assets\modelData\bg</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\animData\unitychan\clear.tka" />
-    <None Include="Assets\animData\unitychan\damage.tka" />
-    <None Include="Assets\animData\unitychan\idle.tka" />
-    <None Include="Assets\animData\unitychan\jump.tka" />
-    <None Include="Assets\animData\unitychan\KneelDown.tka" />
-    <None Include="Assets\animData\unitychan\run.tka" />
-    <None Include="Assets\animData\unitychan\slash.tka" />
-    <None Include="Assets\animData\unitychan\walk.tka" />
-    <None Include="Assets\effect\kick.efk" />
-    <None Include="Assets\modelData\bg\testmap.tkm" />
-    <None Include="Assets\modelData\bg\testmap_s.tkm" />
-    <None Include="Assets\modelData\object\box.tkm" />
-    <None Include="Assets\modelData\sphere\sphere.tkm" />
-    <None Include="Assets\modelData\bg\stage_2.tkm" />
-    <None Include="Assets\modelData\bg\floor.tkm" />
+    <None Include="Assets\animData\unitychan\idle.tka">
+      <Filter>Assets\animData</Filter>
+    </None>
+    <None Include="Assets\modelData\bg\floor.tkm">
+      <Filter>Assets\modelData</Filter>
+    </None>
+    <None Include="Assets\modelData\bg\testmap.tkm">
+      <Filter>Assets\modelData\bg</Filter>
+    </None>
+    <None Include="Assets\modelData\bg\testmap_s.tkm">
+      <Filter>Assets\modelData\bg</Filter>
+    </None>
+    <None Include="Assets\modelData\object\box.tkm">
+      <Filter>Assets\modelData\object</Filter>
+    </None>
+    <None Include="Assets\modelData\sphere\sphere.tkm">
+      <Filter>Assets\modelData\sphere</Filter>
+    </None>
+    <None Include="Assets\animData\unitychan\walk.tka">
+      <Filter>Assets\animData</Filter>
+    </None>
+    <None Include="Assets\animData\unitychan\jump.tka">
+      <Filter>Assets\animData\unitychan</Filter>
+    </None>
+    <None Include="Assets\animData\unitychan\KneelDown.tka">
+      <Filter>Assets\animData\unitychan</Filter>
+    </None>
+    <None Include="Assets\animData\unitychan\run.tka">
+      <Filter>Assets\animData\unitychan</Filter>
+    </None>
+    <None Include="Assets\animData\unitychan\slash.tka">
+      <Filter>Assets\animData\unitychan</Filter>
+    </None>
+    <None Include="Assets\effect\kick.efk">
+      <Filter>Assets\effect</Filter>
+    </None>
+    <None Include="Assets\animData\unitychan\clear.tka">
+      <Filter>Assets\animData\unitychan</Filter>
+    </None>
+    <None Include="Assets\animData\unitychan\damage.tka">
+      <Filter>Assets\animData\unitychan</Filter>
+    </None>
+    <None Include="Assets\modelData\bg\stage_2.tkm">
+      <Filter>Assets\modelData\bg</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Assets">
+      <UniqueIdentifier>{68ec8244-315a-46f9-8619-b46f4c2e5235}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src">
+      <UniqueIdentifier>{3393f123-c5f4-4aff-8d46-1df26e2294ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\animData">
+      <UniqueIdentifier>{0ba7cc6e-7395-4511-8fd6-67a20c2a9616}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\effect">
+      <UniqueIdentifier>{51404312-54a4-4a7f-9f2e-a23165fba978}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\font">
+      <UniqueIdentifier>{5a7ab073-f881-4818-a369-8a62846dddd1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\Image">
+      <UniqueIdentifier>{17a09047-d205-47b5-88dc-023974bddb5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\modelData">
+      <UniqueIdentifier>{2f1b2be2-d34b-4a6a-85fa-a3c4bb793409}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\sound">
+      <UniqueIdentifier>{776f97c5-9b76-43f9-8dd8-e58542e14a94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\shader">
+      <UniqueIdentifier>{a88dc54a-cf8d-43d7-a92f-eaa98683001c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\sprite">
+      <UniqueIdentifier>{470fa182-3d28-445a-bcc3-c2d254ef00be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\modelData\bg">
+      <UniqueIdentifier>{e0a976bb-e7f4-49fc-89d9-80dd7974e6c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\modelData\item">
+      <UniqueIdentifier>{838067d6-5fad-4a67-92ca-54a3b93c4b75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\modelData\object">
+      <UniqueIdentifier>{5eccffde-2ca5-446b-959f-1b026b870c1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\modelData\preset">
+      <UniqueIdentifier>{175f44a2-ba56-4e76-8f00-086ca06cdbde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\modelData\selectBg">
+      <UniqueIdentifier>{b7b1dd39-d701-4122-a3df-5ddbe291a460}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\modelData\sphere">
+      <UniqueIdentifier>{a1b3bcca-68e6-4f27-9ea9-1a191e0c1aac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\sound\se">
+      <UniqueIdentifier>{592ab1d7-a814-44ad-9662-500e42dc1f6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\sound\bgm">
+      <UniqueIdentifier>{b8b994c5-e9a6-4b41-8cba-5bb72154363a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\animData\box">
+      <UniqueIdentifier>{88fd5049-cf69-41bc-b43d-d43b1c468ff0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\animData\unitychan">
+      <UniqueIdentifier>{4c8a1e8d-1c6b-4c62-9424-f8e3c90270b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\MiniEngine">
+      <UniqueIdentifier>{9e331cff-100a-465e-b9a3-0cb3541aaa41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\ExEngine">
+      <UniqueIdentifier>{5f80805b-b7c8-4e7a-b81c-e99498c46424}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\MiniEngine\dbg">
+      <UniqueIdentifier>{e4d63cfe-e0b5-4791-86de-a3d487d077b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\MiniEngine\font">
+      <UniqueIdentifier>{98ad8e50-497e-49dd-8a82-5d09731dba3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\MiniEngine\HID">
+      <UniqueIdentifier>{11171ef9-5a43-467d-acdc-c429f13cf793}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\MiniEngine\math">
+      <UniqueIdentifier>{d3c4e427-51b9-49b0-95c0-ecaefa69ce67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\MiniEngine\time">
+      <UniqueIdentifier>{6ede834d-07c6-4e7c-a8ac-6fe089fe12b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\MiniEngine\tkFile">
+      <UniqueIdentifier>{188fdfa6-a2f2-4855-ac25-6f16e1b1cdc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\MiniEngine\util">
+      <UniqueIdentifier>{1b77501a-46f6-4e6c-9652-f72a24557394}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\MiniEngine\raytracing">
+      <UniqueIdentifier>{f48720cd-7c09-467d-864d-8953e3c1e89e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\ExEngine\effect">
+      <UniqueIdentifier>{47f69c9d-6d5d-4803-a910-fe0c879bc509}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\ExEngine\gameObject">
+      <UniqueIdentifier>{25bb9fc1-5319-4d0a-ac28-b2ebf2c4ab9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\ExEngine\level2D">
+      <UniqueIdentifier>{69809914-189f-4e28-a2f7-f276bd4d9926}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\ExEngine\physics">
+      <UniqueIdentifier>{0c6bf8c4-8d6c-400d-adaa-05c29f073c59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Title">
+      <UniqueIdentifier>{89cf62a9-0069-43bb-978c-7cf26cb49116}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\InGame">
+      <UniqueIdentifier>{9c8f64d5-6a5e-4842-a1ed-0b0fe1ebd807}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Result">
+      <UniqueIdentifier>{89e825ea-b0fd-49dc-8a7f-058643442f17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Menu">
+      <UniqueIdentifier>{058b2439-326d-41b4-b5cc-5ddde2a5ea67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Graphics">
+      <UniqueIdentifier>{0ccd35ea-cd46-49eb-81da-f03f88231d3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Sound">
+      <UniqueIdentifier>{8815c055-c440-4f97-b9fb-fa94c0cd528a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Util">
+      <UniqueIdentifier>{aa4b08af-a2ab-4a8b-9f36-90e70c7cacda}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

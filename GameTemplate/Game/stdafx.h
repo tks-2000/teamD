@@ -20,7 +20,10 @@
 #include "SpriteRender.h"
 #include "FontRender.h"
 #include "Player.h"
+#include "PlayerAction.h"
 #include "PlayerEffect.h"
+#include "PlayerMove.h"
+#include "PlayerReinforcement.h"
 #include "GameCamera.h"
 #include "BackGround.h"
 #include "Ball.h"
@@ -56,9 +59,17 @@ namespace {
 	const Vector3 HEMISPHERE_LIGHT_SKYCOLOR_HALF = { 0.5f,0.1f,0.1f };
 	const Vector3 HEMISPHERE_LIGHT_SKYCOLOR_END = { -0.7f,-0.7f,0.1f };
 
-	const Vector3 HEMISPHERE_LIGHT_SKYCOLOR_SP_START = { -0.7f,-0.7f,-0.7f };
-	const Vector3 HEMISPHERE_LIGHT_SKYCOLOR_SP_HALF = { -0.1f,-0.5f,-0.5f };
-	const Vector3 HEMISPHERE_LIGHT_SKYCOLOR_SP_END = { -0.1f,-0.5f,-0.1f };
+	const Vector3 HEMISPHERE_LIGHT_GROUNDCOLOR_START = { 0.3f,0.3f,0.3f };
+	const Vector3 HEMISPHERE_LIGHT_GROUNDCOLOR_HALF = { 0.5f,0.1f,0.1f };
+	const Vector3 HEMISPHERE_LIGHT_GROUNDCOLOR_END = { -0.7f,-0.7f,0.1f };
+
+	const Vector3 HEMISPHERE_LIGHT_SKYCOLOR_SP_START = { 0.1f,-0.7f,0.1f };
+	const Vector3 HEMISPHERE_LIGHT_SKYCOLOR_SP_HALF = { -0.5f,-0.5f,-0.5f };
+	const Vector3 HEMISPHERE_LIGHT_SKYCOLOR_SP_END = { -0.1f,-0.5f,-0.5f };
+
+	const Vector3 HEMISPHERE_LIGHT_GROUNDCOLOR_SP_START = { -0.5f,-1.0f,-0.5f };
+	const Vector3 HEMISPHERE_LIGHT_GROUNDCOLOR_SP_HALF = { -2.0f,-2.0f,-2.0f };
+	const Vector3 HEMISPHERE_LIGHT_GROUNDCOLOR_SP_END = { 0.7f,-0.7f,-0.7f };
 
 	const int PRIORITY_VERYLOW = 0;
 	const int PRIORITY_LOW = 1;
@@ -76,7 +87,10 @@ namespace {
 	const char* SCORE_NAME = "Score";
 	const char* LIGHTING_NAME = "Lighting";
 	const char* PLAYER_NAME[MAX_PLAYER_NUM] = { "Player1","Player2","Player3","Player4" };
-	const char* PLAYER_EFFECT_NAME = "PlayerEffect";
+	const char* PLAYER_ACTION_NAME[MAX_PLAYER_NUM] = { "PlayerAction1","PlayerAction2","PlayerAction3","PlayerAction4" };
+	const char* PLAYER_EFFECT_NAME[MAX_PLAYER_NUM] = { "PlayerEffect1","PlayerEffect2" ,"PlayerEffect3" ,"PlayerEffect4" };
+	const char* PLAYER_MOVE_NAME[MAX_PLAYER_NUM] = { "PlayerMove1","PlayerMove2","PlayerMove3","PlayerMove4" };
+	const char* PLAYER_REINFORCEMENT_NAME[MAX_PLAYER_NUM] = { "PlayerReinforcement1","PlayerReinforcement2","PlayerReinforcement3","PlayerReinforcement4" };
 	const char* GAME_CAMERA_NAME = "GameCamera";
 	const char* BACK_GROUND_NAME = "BackGround";
 	const char* BALL_NAME = "Ball";

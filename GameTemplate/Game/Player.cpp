@@ -7,6 +7,8 @@ namespace {
 	const float KICK_POSSIBLE_DISTANCE = 200.0f;
 	/// @brief ガード可能な距離
 	const float GUARD_DISTANCE = 90.0f;
+	/// @brief 最大シールド耐久値
+	const float MAX_GUARD_DURABILITY = 100.0f;
 	/// @brief ボールと接触する距離
 	const float COLLIDE_DISTANCE = 80.0f;
 	/// @brief 落下扱いになる高さ
@@ -81,13 +83,10 @@ namespace {
 	const float POWERFUIL_STAMINA_DECREASE_VALUE = 1.0f;
 	/// @brief アイテムによる強化時間
 	const float ITEM_POWERUP_TIME = 10.0f;
-	/// @brief 勢いよく当たった扱いになる速度
+	/// @brief 勢いよく当たった扱いになるボールの速度
 	const float STRONG_HIT = 20.0f;
-
-
+	/// @brief リスポーンコマンドを押し続けて発動するまでの時間
 	const float RESPAWN_TIME = 5.0f;
-
-	
 	/// @brief ダッシュ中のカウンタの増加量
 	const int DASHCOUNTER_ADDRATE = 1;
 	/// @brief ダッシュ中エフェクトの再生周期
@@ -97,6 +96,8 @@ namespace {
 
 Player::Player()
 {
+	
+
 	//プレイヤーの初期状態を設定
 	m_moveVelocity = NORMAL_VELOCITY;
 	m_stamina = MAX_STANIMA;
@@ -109,6 +110,7 @@ Player::~Player()
 {
 	//プレイヤーモデルを削除
 	DeleteGO(m_skinModelRender);
+	DeleteGO(m_plEffect);
 }
 
 bool Player::Start()
@@ -117,7 +119,7 @@ bool Player::Start()
 	m_timer = FindGO<Timer>(TIMER_NAME);
 	m_score = FindGO<Score>(SCORE_NAME);
 	m_lig = FindGO<Lighting>(LIGHTING_NAME);
-	m_plEffect = FindGO<PlayerEffect>(PLAYER_EFFECT_NAME);
+	//m_plEffect = FindGO<PlayerEffect>(PLAYER_EFFECT_NAME);
 	m_ball = FindGO<Ball>(BALL_NAME);
 	m_se = FindGO<Se>(SE_NAME);
 
@@ -147,22 +149,22 @@ void Player::SetPlayerNumber(int num)
 	m_myNumber = num;
 	switch (num)
 	{
-	case 0: {
-		m_playerColor = RED;
-		m_startPos = PLAYER1_STARTPOS;
+	case enPlayer1: {
+		m_playerColor = RED;			//プレイヤーのカラーを赤にする。
+		m_startPos = PLAYER1_STARTPOS;	//プレイヤーの座標を初期値にする。
 		m_skinModelRender->InitA(UNITYCHAN_MULTI_FILEPATH[num], "Assets/modelData/unityChan.tks", enModelUpAxisY, m_animationClips, enAnimation_Num,false);
 	}break;
-	case 1: {
+	case enPlayer2: {
 		m_playerColor = BLUE;
 		m_startPos = PLAYER2_STARTPOS;
 		m_skinModelRender->InitA(UNITYCHAN_MULTI_FILEPATH[num], "Assets/modelData/unityChan.tks", enModelUpAxisY, m_animationClips, enAnimation_Num,false);
 	}break;
-	case 2: {
+	case enPlayer3: {
 		m_playerColor = YELLOW;
 		m_startPos = PLAYER3_STARTPOS;
 		m_skinModelRender->InitA(UNITYCHAN_MULTI_FILEPATH[num], "Assets/modelData/unityChan.tks", enModelUpAxisY, m_animationClips, enAnimation_Num,false);
 	}break;
-	case 3: {
+	case enPlayer4: {
 		m_playerColor = GREEN;
 		m_startPos = PLAYER4_STARTPOS;
 		m_skinModelRender->InitA(UNITYCHAN_MULTI_FILEPATH[num], "Assets/modelData/unityChan.tks", enModelUpAxisY, m_animationClips, enAnimation_Num,false);
@@ -174,14 +176,23 @@ void Player::SetPlayerNumber(int num)
 	m_lig->SetPointLightColor(m_myNumber, m_playerColor);
 	m_lig->SetPointLightRange(m_myNumber, 500.0f);
 
-	
+	m_plAction = NewGO<PlayerAction>(PRIORITY_VERYLOW, PLAYER_ACTION_NAME[m_myNumber]);
+	m_plEffect = NewGO<PlayerEffect>(PRIORITY_VERYLOW, PLAYER_EFFECT_NAME[m_myNumber]);
+	m_plMove = NewGO<PlayerMove>(PRIORITY_VERYLOW, PLAYER_MOVE_NAME[m_myNumber]);
+	m_plReinforcement = NewGO<PlayerReinforcement>(PRIORITY_VERYLOW, PLAYER_REINFORCEMENT_NAME[m_myNumber]);
+
+	m_plAction->SetPlayerNumber(m_myNumber);
+	m_plEffect->SetPlayerNumber(m_myNumber);
+	m_plMove->SetPlayerNumber(m_myNumber);
+	m_plReinforcement->SetPlayerNumber(m_myNumber);
+
 	m_skinModelRender->PlayAnimation(enAnimation_Idle, 1.0f);
 
 }
 
 void Player::Move()
 {
-	/// @brief スティック入力でカメラ方向に移動
+	// スティック入力でカメラ方向に移動
 	m_moveSpeed += g_camera3D->GetRight() * m_Lstickx;
 	m_moveSpeed += g_camera3D->GetForward() * m_Lsticky;
 
@@ -198,17 +209,16 @@ void Player::Move()
 		m_stamina -= g_gameTime->GetFrameDeltaTime() * m_staminaDecreaseValue;
 		
 		//ダッシュエフェクト再生処理
-		m_dashCounter += DASHCOUNTER_ADDRATE;
-		if (m_dashCounter % DASHEFFECT_PLAYCYCLE == 1) {
-			m_plEffect->PlayDashEffect(m_myNumber);
-		}
-
+		
+		
+			m_plEffect->PlayDashEffect();
+		
 
 		m_anim = enAnimation_Run;
 	}
 	else {
 		m_moveVelocity = NORMAL_VELOCITY;
-		m_stamina += g_gameTime->GetFrameDeltaTime() * FLOAT_1;
+		m_stamina += g_gameTime->GetFrameDeltaTime();
 		if (m_stamina > MAX_STANIMA) {
 			m_stamina = MAX_STANIMA;
 		}
@@ -224,7 +234,7 @@ void Player::Move()
 
 	m_moveSpeed *= m_moveVelocity;
 
-	/// @brief 重力を加える
+	///  重力を加える
 	if (m_damage == true) {
 		m_moveSpeed.y -= m_gravity / 2.0f;
 	}
@@ -242,71 +252,34 @@ void Player::Move()
 	/// @brief 移動速度に摩擦力を加える
 	m_moveSpeed -= m_moveSpeed * m_friction;
 
-	if (m_damage == false && m_guard == false && m_breakGuard == false && m_moveSpeed.x != FLOAT_0 || m_moveSpeed.z != FLOAT_0) {
+	if (m_damage == false && m_guard == false && m_breakGuard == false && m_moveSpeed.x != 0.0f || m_moveSpeed.z != 0.0f) {
 		m_direction = m_moveSpeed;
-		m_direction.y = FLOAT_0;
+		m_direction.y = 0.0f;
 		m_direction.Normalize();
 	}
 
 	Vector3 moveSpeedXZ = m_moveSpeed;
-	moveSpeedXZ.y = FLOAT_0;
+	moveSpeedXZ.y = 0.0f;
 	/// @brief 移動速度が一定以下で止まる
 	if (moveSpeedXZ.LengthSq() < 0.1f) {
-		m_moveSpeed.x = FLOAT_0;
-		m_moveSpeed.z = FLOAT_0;
+		m_moveSpeed.x = 0.0f;
+		m_moveSpeed.z = 0.0f;
 	}
 
-	/// @brief プレイヤーが落下したらリスポーンする
-	if (m_position.y < FALLING_HEIGHT) {
-
-		if (m_haveAttackedPlayer != m_myNumber) {
-			m_score->AddScore500(m_haveAttackedPlayer);
-			m_score->DeclineScore(m_myNumber);
-		}
-		else {
-			m_score->HalfScore(m_myNumber);
-		}
-		
-		ReSpawn();
-	}
-
-	/// @brief バースト処理
-	if (m_position.y < BURST_HEIGHT) {
-		m_burstFlag = true;
-
-		if (m_burstFlag == true && m_burstFlagPrevFrame == false) {
-			if (m_damage == true || m_breakGuard == true) {
-				m_plEffect->StopKnockOutEffect(m_myNumber);
-				m_se->StopStanSe(m_myNumber);
-			}
-			m_plEffect->PlayBurstEffect(m_myNumber);
-			m_se->PlayDefeatSe();
-		}
-	}
-
-	if (g_pad[m_myNumber]->IsPress(enButtonStart) && m_damage == false) {
-		m_reSpawnTime += g_gameTime->GetFrameDeltaTime();
-	}
-	else {
-		m_reSpawnTime = FLOAT_0;
-	}
-	if (m_reSpawnTime > RESPAWN_TIME) {
-		ReSpawn();
-		m_reSpawnTime = FLOAT_0;
-	}
+	
 }
 
 void Player::Rotation()
 {
 	/// @brief ダメージ中、ガード中、動いていないときは回転しない
-	if (m_damage == true || m_guard == true || m_breakGuard == true || m_moveSpeed.x == FLOAT_0 && m_moveSpeed.z == FLOAT_0) {
+	if (m_damage == true || m_guard == true || m_breakGuard == true || m_moveSpeed.x == 0.0f && m_moveSpeed.z == 0.0f) {
 		m_anim = enAnimation_Idle;
 		return;
 	}
 	m_qRot.SetRotation(Vector3::AxisY, atan2(m_direction.x, m_direction.z));
 }
 
-void Player::IsKick()
+void Player::CheckKick() 
 {
 	/// @brief ボールとの距離が一定以下の時のみ判定
 	if (m_ballDistance < KICK_POSSIBLE_DISTANCE) {
@@ -359,7 +332,7 @@ void Player::KickBall()
 
 }
 
-bool Player::IsDash()
+bool Player::IsDash() const
 {
 	if (m_dash == true && m_guard == false && g_pad[m_myNumber]->IsPress(enButtonRB1)) {
 		if (m_Lstickx != FLOAT_0 || m_Lsticky != FLOAT_0) {
@@ -400,18 +373,14 @@ void Player::BallCollide()
 	if (m_dieFlag == false) {
 		m_moveSpeed = repulsiveForce * FLOAT_2;
 
-
-
-
 		if (m_breakGuard == true) {
-			m_plEffect->StopKnockOutEffect(m_myNumber);
+			m_plEffect->StopKnockOutEffect();
 			m_se->StopStanSe(m_myNumber);
 		}
 		if (m_damage == false) {
-			m_plEffect->PlayKnockOutEffect(m_myNumber);
+			m_plEffect->PlayKnockOutEffect();
 			m_se->PlayStanSe(m_myNumber);
 		}
-
 
 		m_damage = true;
 		if (m_ball->GetVelocity() > STRONG_HIT) {
@@ -420,7 +389,6 @@ void Player::BallCollide()
 		else {
 			m_se->PlayWeakCollideSe();
 		}
-
 
 		/// @brief 攻撃してきたプレイヤーの番号を記憶する
 		m_haveAttackedPlayer = m_ball->GetPlayerInformation();
@@ -438,8 +406,8 @@ void Player::BallCollide()
 void Player::Guard()
 {
 	/// @brief ガード中は移動速度を下げる
-	m_moveSpeed.x /= FLOAT_2;
-	m_moveSpeed.z /= FLOAT_2;
+	m_moveSpeed.x /= 2.0f;
+	m_moveSpeed.z /= 2.0f;
 
 	/// @brief ガード中は耐久値(guardDurability)が減り続ける
 	if (m_powerUp == true) {
@@ -459,23 +427,23 @@ void Player::Guard()
 		//カウンターに値を加算
 	m_guardEffectCouter += 1;
 	//規定フレーム毎にエフェクトを発生
-	if (m_guardEffectCouter % 20 == 1 &&
+	/*if (m_guardEffectCouter % 20 == 1 &&
 		m_breakGuard == false &&
-		m_damage == false) {
-		m_plEffect->PlayGuardEffect(m_myNumber);
-	}
+		m_damage == false) {*/
+		m_plEffect->PlayGuardEffect();
+	//}
 
 	/// @brief ジャストガード判定時間を進める
-	m_justGuardTime += g_gameTime->GetFrameDeltaTime() * FLOAT_01;
+	m_justGuardTime += g_gameTime->GetFrameDeltaTime() * 0.1f;
 
 	/// @brief ガード耐久値が無くなったら
 	if (m_guardDurability <= 0.0f) {
 		/// @brief ガードブレイクする
 		m_guardDurability = 0.0f;
 		m_breakGuard = true;
-		m_plEffect->StopGuardEffect(m_myNumber);
-		m_plEffect->PlayGuardBreakEffect(m_myNumber);
-		m_plEffect->PlayKnockOutEffect(m_myNumber);
+		m_plEffect->StopGuardEffect();
+		m_plEffect->PlayGuardBreakEffect();
+		m_plEffect->PlayKnockOutEffect();
 		m_se->PlayStanSe(m_myNumber);
 
 		m_se->PlayBreakSe();
@@ -492,7 +460,7 @@ void Player::Guard()
 		if (m_shieldHit == false) {
 
 			//ガードヒットエフェクトの発生
-			m_plEffect->PlayShieldHitEffect(m_myNumber);
+			m_plEffect->PlayShieldHitEffect();
 			
 			//ガードヒットseの再生処理
 			float takeDamage = m_ball->GetVelocity() * 3.0f;
@@ -509,13 +477,13 @@ void Player::Guard()
 		}
 		/// @brief ジャストガード判定時間内ならジャストガード発動
 		if (m_justGuardTime < POSSIBLE_JUST_GUARD_TIME) {
-			m_ball->SetVelocity(FLOAT_0);
+			m_ball->SetVelocity(0.0f);
 
 			/// @brief ジャストガードエフェクトの再生
-			m_plEffect->PlayJustGuardEffect(m_myNumber);
+			m_plEffect->PlayJustGuardEffect();
 			m_se->PlayJustGuardSe();
 			m_powerUp = true;
-			m_powerUpTime = FLOAT_0;
+			m_powerUpTime = 0.0f;
 		}
 		else {
 			/// @brief ボールの勢いに応じて耐久値を減らす
@@ -525,9 +493,9 @@ void Player::Guard()
 			if (m_guardDurability <= 0.0f)
 			{
 				/// @brief ガードエフェクトを消してガードブレイクエフェクトを再生する
-				m_plEffect->StopGuardEffect(m_myNumber);
-				m_plEffect->PlayGuardBreakEffect(m_myNumber);
-				m_plEffect->PlayKnockOutEffect(m_myNumber);
+				m_plEffect->StopGuardEffect();
+				m_plEffect->PlayGuardBreakEffect();
+				m_plEffect->PlayKnockOutEffect();
 				m_guardDurability = 0.0f;
 				m_breakGuard = true;
 
@@ -538,13 +506,13 @@ void Player::Guard()
 			}
 
 			/// @brief ボールの勢いに応じてノックバックする。
-			Vector3 repulsiveForce = m_toBallVec * FLOAT_MINUS_1;
+			Vector3 repulsiveForce = m_toBallVec * -1.0f;
 			repulsiveForce.Normalize();
 			repulsiveForce *= m_ball->GetVelocity();
-			repulsiveForce.y = m_ball->GetVelocity() * FLOAT_01;
+			repulsiveForce.y = m_ball->GetVelocity() * 0.1f;
 			m_moveSpeed += repulsiveForce;
-			m_ball->SetVelocity(m_ball->GetVelocity() / FLOAT_2);
-			m_ball->SetMoveDirection(repulsiveForce * FLOAT_MINUS_1);
+			m_ball->SetVelocity(m_ball->GetVelocity() / 2.0f);
+			m_ball->SetMoveDirection(repulsiveForce * -1.0f);
 		}
 
 	}
@@ -559,21 +527,21 @@ void Player::ReSpawn() {
 	m_position = m_startPos;
 	m_charaCon.SetPosition(m_position);
 	m_damage = false;
-	m_damageTime = FLOAT_0;
+	m_damageTime = 0.0f;
 	m_breakGuard = false;
-	m_guardDurability = 100.0f;
+	m_guardDurability = MAX_GUARD_DURABILITY;
 	m_mutekiTime = MUTEKI_TIME;
 	m_lig->SetPointLightBlinking(m_myNumber, m_mutekiTime, 0.07f);
 	m_dieFlag = true;
 
 	//リスポーン時のエフェクトを再生
-	m_plEffect->PlayRespawnEffect(m_myNumber);
-	m_plEffect->StopKnockOutEffect(m_myNumber);
+	m_plEffect->PlayRespawnEffect();
+	m_plEffect->StopKnockOutEffect();
 	m_se->PlayReSpawnSe();
 	m_powerUp = false;
-	m_powerUpTime = FLOAT_0;
+	m_powerUpTime = 0.0f;
 	m_itemPowerUp = false;
-	m_itemPowerUpTime = FLOAT_0;
+	m_itemPowerUpTime = 0.0f;
 
 }
 
@@ -618,15 +586,15 @@ void Player::SetItemChangeState()
 	//各フラグが1つでも前フレームと変化していたら処理に移行
 	if (m_kickUp == true && m_kickUpPrevFrame == false) {
 		m_itemBuffChageState = enItemBuff_Kick;
-		m_plEffect->ChangeItemBuffEffect(m_myNumber, m_itemBuffChageState);
+		m_plEffect->ChangeItemBuffEffect(m_itemBuffChageState);
 	}
 	if (m_guardUp == true && m_guardUpPrevFrame == false) {
 		m_itemBuffChageState = enItemBuff_Guard;
-		m_plEffect->ChangeItemBuffEffect(m_myNumber, m_itemBuffChageState);
+		m_plEffect->ChangeItemBuffEffect(m_itemBuffChageState);
 	}
 	if (m_speedUp == true && m_speedUpPrevFrame == false) {
 		m_itemBuffChageState = enItemBuff_Speed;
-		m_plEffect->ChangeItemBuffEffect(m_myNumber, m_itemBuffChageState);
+		m_plEffect->ChangeItemBuffEffect(m_itemBuffChageState);
 	}
 
 }
@@ -662,48 +630,46 @@ void Player::Update()
 	if (m_kickUp == true ||
 		m_guardUp == true ||
 		m_speedUp == true) {
-		
-		m_itemPowerUpCounter += 1;
-		if (m_itemPowerUpCounter % 25 == 1) {
-			m_plEffect->PlayItemBuffEffect(m_myNumber);
-		}
-	}
 
+		
+		m_plEffect->PlayItemBuffEffect();
+		
+	}
 
 	/// @brief スティック入力を受け取る
 	m_Lstickx = g_pad[m_myNumber]->GetLStickXF();
 	m_Lsticky = g_pad[m_myNumber]->GetLStickYF();
 
 	if (m_timer->IsTimerExecution() == false) {
-		m_Lstickx = FLOAT_0;
-		m_Lsticky = FLOAT_0;
+		m_Lstickx = 0.0f;
+		m_Lsticky = 0.0f;
 	}
 
 	/// @brief ダメージ中はスティック入力を受け付けない
 	if (m_damage == true) {
-		m_Lstickx = FLOAT_0;
-		m_Lsticky = FLOAT_0;
-		m_damageTime += FLOAT_1;
+		m_Lstickx = 0.0f;
+		m_Lsticky = 0.0f;
+		m_damageTime += 1.0f;
 	}
 	if (m_damageTime > DAMAGE_RETURN_TIME) {
-		m_damageTime = FLOAT_0;
+		m_damageTime = 0.0f;
 		if (m_breakGuard == false) {
-			m_plEffect->StopKnockOutEffect(m_myNumber);
+			m_plEffect->StopKnockOutEffect();
 			m_se->StopStanSe(m_myNumber);
 		}
 		if (m_breakGuard != true) {
-			m_plEffect->PlayRepairEffect(m_myNumber);
+			m_plEffect->PlayRepairEffect();
 		}
 		m_damage = false;
 	}
 
 	if (m_breakGuard == true)
 	{
-		m_Lstickx = FLOAT_0;
-		m_Lsticky = FLOAT_0;
+		m_Lstickx = 0.0f;
+		m_Lsticky = 0.0f;
 	}
 
-	if (m_stamina < FLOAT_0) {
+	if (m_stamina < 0.0f) {
 		m_dash = false;
 		m_se->PlayStaminaOverSe();
 	}
@@ -713,12 +679,10 @@ void Player::Update()
 		m_se->PlayStaminaRecoverySe();
 	}
 
-	
-
 	BallDistanceCalculation();
-	Move();
+	//Move();
 	Rotation();
-	IsKick();
+	CheckKick();
 
 	/// @brief キッククールタイム
 	if (m_kickCooling == true)
@@ -729,8 +693,6 @@ void Player::Update()
 			m_kickCooler = 0;
 		}
 	}
-
-	
 
 	/// @brief キックの不可避分岐
 	if (m_damage == true || m_guard == true || m_breakGuard == true || m_kickCooling == true)
@@ -747,7 +709,7 @@ void Player::Update()
 		if (g_pad[m_myNumber]->IsTrigger(enButtonA)) {
 
 			
-			m_plEffect->PlayKickEffect(m_myNumber);
+			m_plEffect->PlayKickEffect();
 			m_se->PlayKickSe();
 
 			KickBall();
@@ -763,21 +725,21 @@ void Player::Update()
 		m_justGuardTime = 0.0f;
 	}
 	/// @brief 再展開可能まで
-	if (m_guardDurability >= 100.0f && m_breakGuard == true)
+	if (m_guardDurability >= MAX_GUARD_DURABILITY && m_breakGuard == true)
 	{
 		m_breakGuard = false;
 		if (m_damage == false) {
-			m_plEffect->StopKnockOutEffect(m_myNumber);
+			m_plEffect->StopKnockOutEffect();
 			m_se->StopStanSe(m_myNumber);
 		}
-		m_plEffect->PlayShieldRepairEffect(m_myNumber);
+		m_plEffect->PlayShieldRepairEffect();
 		m_se->PlayShieldRepairSe();
 
 	}
 	/// @brief ガード耐久値を100より上にならないようにする奴
-	if (m_guardDurability >= 100.0f)
+	if (m_guardDurability >= MAX_GUARD_DURABILITY)
 	{
-		m_guardDurability = 100.0f;
+		m_guardDurability = MAX_GUARD_DURABILITY;
 	}
 
 	/// @brief ボールとの距離が一定以下で吹き飛ぶ
@@ -787,7 +749,7 @@ void Player::Update()
 			//ダメージエフェクト再生処理
 			//前フレームにダメージ状態でなく、現フレームでダメージ状態のとき
 			if (m_damagePrevFrame == false && m_damage == true) {
-				m_plEffect->PlayDamageEffect(m_myNumber);
+				m_plEffect->PlayDamageEffect();
 			}
 		}
 	}
@@ -797,7 +759,7 @@ void Player::Update()
 			//ダメージエフェクト再生処理
 			//前フレームにダメージ状態でなく、現フレームでダメージ状態のとき
 			if (m_damagePrevFrame == false && m_damage == true) {
-				m_plEffect->PlayDamageEffect(m_myNumber);
+				m_plEffect->PlayDamageEffect();
 			}
 		}
 	}
@@ -826,7 +788,7 @@ void Player::Update()
 		m_damage == false &&
 		m_timer->IsTimerExecution() == true) {
 		//m_guardBeginEffect.Play();
-		m_plEffect->PlayGuardBeginEffect(m_myNumber);
+		m_plEffect->PlayGuardBeginEffect();
 		m_se->PlayGuardStartSe();
 	}
 
@@ -836,10 +798,9 @@ void Player::Update()
 
 	//パワーアップエフェクトの再生
 	if (m_powerUp == true) {
-		m_powerUpCounter += 1;
-		if (m_powerUpCounter % 20 == 1) {
-			m_plEffect->PlayKickBuffEffect(m_myNumber);
-		}
+
+		m_plEffect->PlayKickBuffEffect();
+
 	}
 	else {
 		m_powerUpCounter = 0.0f;
@@ -866,7 +827,7 @@ void Player::Update()
 	m_lig->SetSpotLightDirection(m_myNumber, dir);*/
 
 	/// @brief キャラクターコントローラーで座標を決める
-	m_position = m_charaCon.Execute(m_moveSpeed, FLOAT_1);
+	//m_position = m_charaCon.Execute(m_moveSpeed, 1.0f);
 
 	/// @brief モデルに座標と回転を伝える
 	m_skinModelRender->SetPosition(m_position);
@@ -881,12 +842,55 @@ void Player::Update()
 
 	//現フレームのフラグ状態を記録
 	RecordFlags();
+	/// @brief プレイヤーが落下したらリスポーンする
+	if (m_position.y < FALLING_HEIGHT) {
+
+		if (m_haveAttackedPlayer != m_myNumber) {
+			m_score->AddScore500(m_haveAttackedPlayer);
+			m_score->DeclineScore(m_myNumber);
+		}
+		else {
+			m_score->HalfScore(m_myNumber);
+		}
+
+		ReSpawn();
+	}
+
+	/// @brief バースト処理
+	if (m_position.y < BURST_HEIGHT) {
+		m_burstFlag = true;
+
+		if (m_burstFlag == true && m_burstFlagPrevFrame == false) {
+			if (m_damage == true || m_breakGuard == true) {
+				m_plEffect->StopKnockOutEffect();
+				m_se->StopStanSe(m_myNumber);
+			}
+			m_plEffect->PlayBurstEffect();
+			m_se->PlayDefeatSe();
+		}
+	}
+
+	if (g_pad[m_myNumber]->IsPress(enButtonStart) && m_damage == false) {
+		m_reSpawnTime += g_gameTime->GetFrameDeltaTime();
+	}
+	else {
+		m_reSpawnTime = FLOAT_0;
+	}
+	if (m_reSpawnTime > RESPAWN_TIME) {
+		ReSpawn();
+		m_reSpawnTime = FLOAT_0;
+	}
 }
 
 void Player::BallDistanceCalculation()
 {
 	m_toBallVec = m_ball->GetPosition() - m_position;
 	m_ballDistance = m_toBallVec.Length();
-	m_toBallVec.y = FLOAT_0;
+	ToBallVectorCalculation();
+}
+
+void Player::ToBallVectorCalculation()
+{
+	m_toBallVec.y = 0.0f;
 	m_toBallVec.Normalize();
 }

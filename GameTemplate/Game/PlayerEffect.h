@@ -7,86 +7,96 @@ class Effect;
 class PlayerEffect : public IGameObject
 {
 private:
+	/// @brief プレイヤーの番号
+	int m_playerNum = 0;
 	//エフェクト関連//
 	/// @brief ボールをキックした時のエフェクト
-	Effect m_kickEffect[PLAYER_NUMBER];
+	Effect m_kickEffect;
 	/// @brief ガード時のエフェクト
-	Effect m_guardEffect[PLAYER_NUMBER];
-	Vector3 m_guardEffectPos[PLAYER_NUMBER] = { Vector3::Zero,Vector3::Zero,Vector3::Zero,Vector3::Zero };
+	Effect m_guardEffect;
+
+	Vector3 m_guardEffectPos =  Vector3::Zero;
 	//ガードエフェクトを一定間隔で発生させるためのカウンター
 	int m_guardEffectCouter = 0;
 	/// @brief ガード発生の予兆エフェクト
-	Effect m_guardBeginEffect[PLAYER_NUMBER];
+	Effect m_guardBeginEffect;
 	/// @brief ガードブレイクエフェクト
-	Effect m_guardBreakEffect[PLAYER_NUMBER];
+	Effect m_guardBreakEffect;
 	/// @brief シールド回復エフェクト
-	Effect m_shieldRepairEffect[PLAYER_NUMBER];
+	Effect m_shieldRepairEffect;
 	/// @brief シールドヒットエフェクト
-	Effect m_shieldHitEffect[PLAYER_NUMBER];
+	Effect m_shieldHitEffect;
 	/// @brief ガードヒットエフェクトを一定間隔で発生させるためのカウンター
 	int m_shieldHitEffectCounter = 0;
 	//行動不能時エフェクト(ピヨり)
-	Effect m_knockOutEffect[PLAYER_NUMBER];
+	Effect m_knockOutEffect;
 	//ジャストガードエフェクト
-	Effect m_justGuardEffect[PLAYER_NUMBER];
+	Effect m_justGuardEffect;
 	/// @brief ジャストガード時のプレイヤー強化エフェクト
-	Effect m_kickBuffEffect[PLAYER_NUMBER];
+	Effect m_kickBuffEffect;
+	/// @brief パワーアップ中のカウンター
+	int m_powerUpCounter = 0;
 	/// @brief ダメージからの回復エフェクト
-	Effect m_repairEffect[PLAYER_NUMBER];
+	Effect m_repairEffect;
 	/// @brief リスポーン時のエフェクト
-	Effect m_respawnEffect[PLAYER_NUMBER];
+	Effect m_respawnEffect;
 	/// @brief ダメージエフェクト
-	Effect m_damageEffect[PLAYER_NUMBER];
+	Effect m_damageEffect;
 	/// @brief バースト時のエフェクト
-	Effect m_burstEffect[PLAYER_NUMBER];
+	Effect m_burstEffect;
 	/// @brief アイテムバフエフェクト
-	Effect m_itemBuffEffect[PLAYER_NUMBER];
+	Effect m_itemBuffEffect;
+	/// @brief アイテムバフエフェクト再生用カウンター
+	int m_itemPowerUpCounter = 0;
 	/// @brief ダッシュ中のエフェクト
-	Effect m_dashEffect[PLAYER_NUMBER];
+	Effect m_dashEffect;
+	/// @brief ダッシュ中のカウンタ
+	int m_dashCounter =  0;
 
 
 	GameDirector* m_gameDirector = nullptr;
-	Player* m_player[PLAYER_NUMBER] = { nullptr };
+	Player* m_player =  nullptr;
 	Ball* m_ball = nullptr;
 
+	
 	/// @brief ガード系エフェクトの共通座標
-	Vector3 m_efcGuardPos[PLAYER_NUMBER] = { { Vector3::Zero },{ Vector3::Zero },{ Vector3::Zero },{ Vector3::Zero } };
+	Vector3 m_efcGuardPos = Vector3::Zero;
 
 	/// @brief ガード予兆エフェクトの更新
 	/// @param plNum 更新するプレイヤー番号
-	void GuardBeginEffectUpdate(int plNum);
+	void GuardBeginEffectUpdate();
 
 	/// @brief ガードエフェクトの更新
 	/// @param plnum 更新するプレイヤー番号
-	void GuardEffectUpdate(int plNum);
+	void GuardEffectUpdate();
 
 	/// @brief シールド回復エフェクトの更新
 	/// @param plNum 更新するプレイヤー番号
-	void ShieldRepairEffectUpdate(int plNum);
+	void ShieldRepairEffectUpdate();
 
 	/// @brief 行動不能エフェクトの更新
 	/// @param plNum 更新するプレイヤー番号
-	void KnockOutEffectUpdate(int plNum);
+	void KnockOutEffectUpdate();
 
 	/// @brief 強化エフェクトの更新
 	/// @param plNum 更新するプレイヤー番号
-	void KickBuffEffectUpdate(int plNum);
+	void KickBuffEffectUpdate();
 
 	/// @brief ダメージ回復エフェクトの更新
 	/// @param plNum 更新するプレイヤー番号
-	void RepairEffectUpdate(int plNum);
+	void RepairEffectUpdate();
 
 	/// @brief リスポーン時のエフェクトの更新
 	/// @param plNum 更新するプレイヤー番号
-	void RespawnEffectUpdate(int plNum);
+	void RespawnEffectUpdate();
 
 	/// @brief アイテムバフエフェクトの更新
 	/// @param plNum 更新するプレイヤー番号
-	void ItemBuffEffectUpdate(int plNum);
+	void ItemBuffEffectUpdate();
 
 	/// @brief ダッシュエフェクトの更新
 	/// @param plNum 更新するプレイヤー番号
-	void DashEffectUpdate(int plNum);
+	void DashEffectUpdate();
 
 public:
 	
@@ -94,75 +104,80 @@ public:
 	~PlayerEffect();
 	bool Start();
 	void Update();
+
+	/// @brief プレイヤーの番号を設定
+	/// @param plNum 設定するプレイヤー番号
+	void SetPlayerNumber(const int plNum);
+
 	/// @brief キックエフェクトを再生
 	/// @param plnum 再生するプレイヤー番号
-	void PlayKickEffect(int plNum);
+	void PlayKickEffect();
 
 	/// @brief ガード予兆エフェクトを再生
 	/// @param plNum 再生するプレイヤー番号
-	void PlayGuardBeginEffect(int plNum) { m_guardBeginEffect[plNum].Play(); }
+	void PlayGuardBeginEffect() { m_guardBeginEffect.Play(); }
 	
 
 	/// @brief ガードエフェクトを再生
 	/// @param plnum 再生するプレイヤー番号
-	void PlayGuardEffect(int plNum) { m_guardEffect[plNum].Play(); }
+	void PlayGuardEffect();
 	/// @brief ガードエフェクトを停止
 	/// @param plnum 停止するプレイヤー番号
-	void StopGuardEffect(int plNum) { m_guardEffect[plNum].Stop(); }
+	void StopGuardEffect() { m_guardEffect.Stop(); }
 	
 	/// @brief ガードブレイクエフェクトを再生
 	/// @param plNum 再生するプレイヤー番号
-	void PlayGuardBreakEffect(int plNum);
+	void PlayGuardBreakEffect();
 
 	/// @brief ジャストガードエフェクトを再生
 	/// @param plNum 再生するプレイヤー番号
-	void PlayJustGuardEffect(int plNum);
+	void PlayJustGuardEffect();
 
 	/// @brief シールドヒットエフェクトを再生
 	/// @param plNum 再生するプレイヤー番号
-	void PlayShieldHitEffect(int plNum);
+	void PlayShieldHitEffect();
 
 	/// @brief ダメージエフェクトを再生
 	/// @param plNum 
-	void PlayDamageEffect(int plNum);
+	void PlayDamageEffect();
 
 	/// @brief バーストエフェクトを再生
-	void PlayBurstEffect(int plNum);
+	void PlayBurstEffect();
 
 	/// @brief シールド回復エフェクトの再生
 	/// @param plNum 再生するプレイヤー番号
-	void PlayShieldRepairEffect(int plNum) { m_shieldRepairEffect[plNum].Play(); }
+	void PlayShieldRepairEffect() { m_shieldRepairEffect.Play(); }
 
 	/// @brief 行動不能エフェクトを再生
 	/// @param plNum 再生するプレイヤー番号
-	void PlayKnockOutEffect(int plNum) { m_knockOutEffect[plNum].Play(); }
+	void PlayKnockOutEffect() { m_knockOutEffect.Play(); }
 
 	/// @brief 行動不能エフェクトを停止
 	/// @param plNum 停止するプレイヤー番号
-	void StopKnockOutEffect(int plNum) { m_knockOutEffect[plNum].Stop(); }
+	void StopKnockOutEffect() { m_knockOutEffect.Stop(); }
 	
 	/// @brief プレイヤー強化エフェクトを再生
 	/// @param plNum 再生するプレイヤー番号
-	void PlayKickBuffEffect(int plNum) { m_kickBuffEffect[plNum].Play(); }
+	void PlayKickBuffEffect();
 
 	/// @brief ダメージからの回復エフェクトを再生
 	/// @param plNum 再生するプレイヤー番号
-	void PlayRepairEffect(int plNum) { m_repairEffect[plNum].Play(); }
+	void PlayRepairEffect() { m_repairEffect.Play(); }
 	
 	/// @brief リスポーン時のエフェクトを再生
 	/// @param plNum 再生するプレイヤー番号
-	void PlayRespawnEffect(int plNum) { m_respawnEffect[plNum].Play(); }
+	void PlayRespawnEffect() { m_respawnEffect.Play(); }
 
 	/// @brief アイテムバフエフェクトを再生
 	/// @param plNum 再生するプレイヤー番号
-	void PlayItemBuffEffect(int plNum) { m_itemBuffEffect[plNum].Play(); }
+	void PlayItemBuffEffect();
 	
 	//ファイルパスの変更
-	void ChangeItemBuffEffect(int plNum, ItemBuffChange buffNum);
+	void ChangeItemBuffEffect(ItemBuffChange buffNum);
 	
 	/// @brief ダッシュ中のエフェクトを再生 
 	/// @param plNum 再生するプレイヤー番号
-	void PlayDashEffect(int plNum) { m_dashEffect[plNum].Play(); }
+	void PlayDashEffect();
 
 };
 

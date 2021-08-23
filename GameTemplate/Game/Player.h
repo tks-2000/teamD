@@ -6,7 +6,10 @@ class Score;
 class Lighting;
 class SkinModelRender;
 class Ball;
+class PlayerAction;
 class PlayerEffect;
+class PlayerMove;
+class PlayerReinforcement;
 class Effect;
 class GameUI;
 class Se;
@@ -20,16 +23,34 @@ enum ItemBuffChange
 	enItemBuff_Num
 };
 
+enum enPlayerNumber
+{
+	enPlayer1,
+	enPlayer2,
+	enPlayer3,
+	enPlayer4,
+	enPlayerNum
+};
+
+enum enAnimationClips
+{
+	enAnimation_Idle,
+	enAnimation_Walk,
+	enAnimation_Run,
+	enAnimation_Num
+};
+
+/// @brief プレイヤークラス。
 class Player : public IGameObject
 {
 public:
 	Player();
 	~Player();
-	bool Start();
-	void Update();
+	bool Start()override;
+	void Update()override;
 
-	/// @brief プレイヤーが何番かを設定
-	/// @param num プレイヤー番号
+	/// @brief 自分が何Pかを設定
+	/// @param num 設定するプレイヤー番号
 	void SetPlayerNumber(int num);
 
 	/// @brief 移動の処理
@@ -39,28 +60,50 @@ public:
 	void Rotation();
 
 	/// @brief プレイヤーの座標を入手
-	/// @return プレイヤーの座標
-	Vector3& GetPosition() { return m_position; }
+	/// @return プレイヤーの座標のconst参照
+	const Vector3& GetPosition() const { return m_position; }
+
+	/// @brief プレイヤーの座標を設定
+	/// @param pos プレイヤーに設定する座標
+	void SetPosition(const Vector3& pos) { m_position = pos; }
 
 	/// @brief プレイヤーの向いている方向を入手
-	/// @return プレイヤーの向いている方向
-	Vector3& GetDirection() { return m_direction; }
+	/// @return プレイヤーの向いている方向のconst参照
+	const Vector3& GetDirection() const { return m_direction; }
 
+	/// @brief プレイヤーの方向を設定
+	/// @param dir プレイヤーに設定する方向
+	void SetDirection(const Vector3& dir) { m_direction = dir; }
+
+	/// @brief プレイヤーの移動速度を入手
+	/// @return プレイヤーの移動速度のconst参照
+	const Vector3& GetMoveSpeed() const { return m_moveSpeed; }
+
+	/// @brief プレイヤーの移動速度を設定
+	/// @param move プレイヤーに設定する移動速度
 	void SetMoveSpeed(const Vector3& move) { m_moveSpeed = move; }
 
+	/// @brief 回転を設定
+	/// @param qRot 設定するクォータニオン
+	void SetQrot(const Quaternion& qRot) { m_qRot = qRot; }
 	/// @brief キック可能か判定
-	void IsKick();
+	void CheckKick() ;
 
 	/// @brief ボールを蹴る処理
 	void KickBall();
 
 	/// @brief ダッシュ可能か判定
-	bool IsDash();
+	bool IsDash() const;
+
+	/// @brief ボールに向かうベクトルを計算
+	void ToBallVectorCalculation();
 
 	/// @brief ボールとの距離を計算
 	void BallDistanceCalculation();
 
-	Vector3& GetToBallVec() { return m_toBallVec; }
+	/// @brief ボールに向かうベクトルを取得。
+	/// @return ボールに向かうベクトルのconst参照。
+	const Vector3& GetToBallVec() const { return m_toBallVec; }
 
 	/// @brief ボールとぶつかる処理
 	void BallCollide();
@@ -68,29 +111,38 @@ public:
 	/// @brief ガードの処理
 	void Guard();
 
-	float GetGuardDurability() { return m_guardDurability; }
+	/// @brief ガード耐久値を取得
+	/// @return ガード耐久値
+	float GetGuardDurability() const { return m_guardDurability; }
 
 	/// @brief リスポーンの処理
 	void ReSpawn();
 	/// @brief リスポーン時の無敵時間の処理
 	void Muteki();
 	/// @brief スタミナ値ゲッター
-	float GetStamina() { return m_stamina; }
+	float GetStamina() const { return m_stamina; }
 	/// @brief ダッシュフラグゲッター
-	bool GetDashFlg() { return m_dash; }
+	bool GetDashFlg() const { return m_dash; }
 
+	/// @brief アニメーションを進める関数。
 	void Animation();
 
-	bool GetGuardFlag() {
+	/// @brief 再生するアニメーションを設定
+	/// @param anim 再生するアニメーションの列挙型
+	void SetAnimation(const enAnimationClips& anim) { m_anim = anim; }
+
+	/// @brief ガードフラグを取得。
+	/// @return ガードフラグ。trueならガード中。
+	bool GetGuardFlag() const{
 		return m_guard;
 	}
 	/// @brief ガード状態ゲッター
-	bool GetGuardBreak() {
+	bool GetGuardBreak() const{
 		return m_breakGuard;
 	}
 	/// @brief プレイヤーのリスポーン地点ゲッター
-	/// @return 
-	Vector3& GetRespawnPoint() { return m_startPos; }
+	/// @return リスポーン地点のconst参照。
+	const Vector3& GetRespawnPoint()const { return m_startPos; }
 
 	void KickPowerUp() { m_kickUp = true; m_guardUp = false; m_speedUp = false; m_itemPowerUp = true; m_itemPowerUpTime = 0.0f; }
 
@@ -100,12 +152,27 @@ public:
 
 	/// @brief バフ状態の変化状況を記録,エフェクト用ファイルパスの変更
 	void SetItemChangeState();
-	ItemBuffChange m_itemBuffChageState;
+	
+	/// @brief プレイヤーがダメージ中か？
+	/// @return trueでダメージ中 falseでダメージ中ではない
+	bool IsDamage() const { return m_damage; }
+
+	/// @brief プレイヤーをダメージ状態に変更
+	void SetDamage() { m_damage = true; }
+
+	/// @brief プレイヤーからボールに伸びるベクトルを入手
+	/// @return プレイヤーからボールに伸びるベクトルのconst参照
+	const Vector3& GetToBallVector() const { return m_toBallVec; }
 
 	/// @brief 現フレームのフラグ状態を記録
 	void RecordFlags();
 
+	/// @brief キャラクターコントローラーに移動速度を設定
+	/// @param moveSpeed 設定する移動速度
+	void SetCharaCon(Vector3& moveSpeed) { m_position = m_charaCon.Execute(moveSpeed,1.0f); }
 private:
+	/// @brief 自分のアイテムによる強化状態
+	ItemBuffChange m_itemBuffChageState = enItemBuff_Kick;
 	/// @brief プレイヤーの番号
 	int m_myNumber = 0;
 	/// @brief 自分に攻撃してきたプレイヤーの番号
@@ -245,14 +312,6 @@ private:
 
 	float m_reSpawnTime = 0.0f;
 
-	enum enAnimationClips
-	{
-		enAnimation_Idle,
-		enAnimation_Walk,
-		enAnimation_Run,
-		enAnimation_Num
-	};
-
 	enAnimationClips m_anim = enAnimation_Idle;
 
 	AnimationClip m_animationClips[enAnimation_Num];
@@ -269,7 +328,16 @@ private:
 	//SE
 	Se* m_se = nullptr;
 
+	/// @brief プレイヤーのアクション
+	PlayerAction* m_plAction = nullptr;
+
 	/// @brief プレイヤーのエフェクト
 	PlayerEffect* m_plEffect = nullptr;
+
+	/// @brief プレイヤーの移動
+	PlayerMove* m_plMove = nullptr;
+
+	/// @brief プレイヤーの強化
+	PlayerReinforcement* m_plReinforcement = nullptr;
 };
 

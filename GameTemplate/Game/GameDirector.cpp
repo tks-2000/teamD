@@ -4,6 +4,10 @@
 namespace {
 	const Vector3 NORMAL_MENU_COLOR = { 0.3f,0.3f,0.3f };
 	const Vector3 SPECIAL_MENU_COLOR = { -0.3f,-0.7f,-0.3f };
+	const Vector3 DIR_LIG_DIR = { 0.0f,1.0f,0.0f };
+	const Vector3 DIR_LIG_START_COLOR = { 0.5f,0.5f,0.5f };
+	const Vector3 DIR_LIG_END_COLOR = { 0.1f,0.1f,0.1f };
+	const float DIR_LIG_FLICKERING_SPEED = 0.25f;
 }
 
 GameDirector::GameDirector()
@@ -42,8 +46,11 @@ void GameDirector::CangeHemLigt()
 		changeRate *= changeRate;
 
 		Vector3 hemLigSkyColor = Vector3::Zero;
-		hemLigSkyColor.Lerp(changeRate, m_hemLigColorStart,m_hemLigCplorHalf);
+		hemLigSkyColor.Lerp(changeRate, m_hemLigSkyColorStart,m_hemLigSkyColorHalf);
+		Vector3 hemLigGroundColor = Vector3::Zero;
+		hemLigGroundColor.Lerp(changeRate, m_hemLigGroundColorStart, m_hemLigGroundColorHalf);
 		m_lighting->SetHemiSphereLifhtSkyColor(hemLigSkyColor);
+		m_lighting->SetHemiSphereLifhtGroundColor(hemLigGroundColor);
 	}
 	else {
 		float changeRate = (m_timer->GetHalfLimit() - m_timer->GetTimer()) / m_timer->GetHalfLimit();
@@ -55,8 +62,11 @@ void GameDirector::CangeHemLigt()
 		changeRate *= changeRate;
 
 		Vector3 hemLigSkyColor = Vector3::Zero;
-		hemLigSkyColor.Lerp(changeRate, m_hemLigCplorHalf, m_hemLigColorEnd);
+		hemLigSkyColor.Lerp(changeRate, m_hemLigSkyColorHalf, m_hemLigSkyColorEnd);
+		Vector3 hemLigGroundColor = Vector3::Zero;
+		hemLigGroundColor.Lerp(changeRate, m_hemLigGroundColorHalf, m_hemLigGroundColorEnd);
 		m_lighting->SetHemiSphereLifhtSkyColor(hemLigSkyColor);
+		m_lighting->SetHemiSphereLifhtGroundColor(hemLigGroundColor);
 	}
 }
 
@@ -92,17 +102,25 @@ void GameDirector::Update()
 			switch (m_gameMode)
 			{
 			case enNormal: {
-				m_hemLigColorStart = HEMISPHERE_LIGHT_SKYCOLOR_START;
-				m_hemLigCplorHalf = HEMISPHERE_LIGHT_SKYCOLOR_HALF;
-				m_hemLigColorEnd = HEMISPHERE_LIGHT_SKYCOLOR_END;
+				m_hemLigSkyColorStart = HEMISPHERE_LIGHT_SKYCOLOR_START;
+				m_hemLigSkyColorHalf = HEMISPHERE_LIGHT_SKYCOLOR_HALF;
+				m_hemLigSkyColorEnd = HEMISPHERE_LIGHT_SKYCOLOR_END;
+				m_hemLigGroundColorStart = HEMISPHERE_LIGHT_GROUNDCOLOR_START;
+				m_hemLigGroundColorHalf = HEMISPHERE_LIGHT_GROUNDCOLOR_HALF;
+				m_hemLigGroundColorEnd = HEMISPHERE_LIGHT_GROUNDCOLOR_END;
 				m_lighting->SetHemiSphereLifhtSkyColor(NORMAL_MENU_COLOR);
+				m_lighting->SetHemiSphereLifhtGroundColor(NORMAL_MENU_COLOR);
 				m_bgm->ChangeNormalBgm();
 			}break;
 			case enSpecial: {
-				m_hemLigColorStart = HEMISPHERE_LIGHT_SKYCOLOR_SP_START;
-				m_hemLigCplorHalf = HEMISPHERE_LIGHT_SKYCOLOR_SP_HALF;
-				m_hemLigColorEnd = HEMISPHERE_LIGHT_SKYCOLOR_SP_END;
+				m_hemLigSkyColorStart = HEMISPHERE_LIGHT_SKYCOLOR_SP_START;
+				m_hemLigSkyColorHalf = HEMISPHERE_LIGHT_SKYCOLOR_SP_HALF;
+				m_hemLigSkyColorEnd = HEMISPHERE_LIGHT_SKYCOLOR_SP_END;
+				m_hemLigGroundColorStart = HEMISPHERE_LIGHT_GROUNDCOLOR_SP_START;
+				m_hemLigGroundColorHalf = HEMISPHERE_LIGHT_GROUNDCOLOR_SP_HALF;
+				m_hemLigGroundColorEnd = HEMISPHERE_LIGHT_GROUNDCOLOR_SP_END;
 				m_lighting->SetHemiSphereLifhtSkyColor(SPECIAL_MENU_COLOR);
+				m_lighting->SetHemiSphereLifhtGroundColor(SPECIAL_MENU_COLOR);
 				m_bgm->ChangeSpecialBgm();
 			}break;
 			default:
@@ -119,8 +137,19 @@ void GameDirector::Update()
 				m_menu = nullptr;
 				m_sceneChange->TransparencyChange(true);
 				m_lighting->ResetSpotLight();
-				m_lighting->InitDirectionLight();
-				
+				switch (m_gameMode)
+				{
+				case enNormal: {
+					m_lighting->InitDirectionLight();
+				}break;
+				case enSpecial: {
+					m_lighting->RotationStopDirectionLight();
+					m_lighting->SetDirectionLightDirection(g_camera3D->GetPosition());
+					m_lighting->SetDirectionLightFlickering(DIR_LIG_START_COLOR, DIR_LIG_END_COLOR, DIR_LIG_FLICKERING_SPEED);
+				}break;
+				default:
+					break;
+				}
 			}
 		}
 	}break;
@@ -181,6 +210,7 @@ void GameDirector::Update()
 		DeleteGO(m_timer);
 		m_timer = nullptr;
 		m_lighting->ResetPointLight();
+		m_lighting->InitDirectionLight();
 		m_sceneChange->TransparencyChange(true);
 	}break;
 	}

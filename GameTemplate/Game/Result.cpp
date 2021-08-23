@@ -105,6 +105,7 @@ Result::~Result()
 bool Result::Start()
 {
 	m_se = FindGO<Se>(SE_NAME);
+	m_score->ScoreCountStop();
 	return true;
 }
 
