@@ -3,7 +3,9 @@
 class Player;
 class PlayerAction;
 class PlayerReinforcement;
+class Ball;
 class Se;
+class Score;
 
 /// @brief プレイヤーの移動を制御するクラス
 class PlayerMove : public IGameObject
@@ -34,15 +36,6 @@ public:
 	/// @return trueでダッシュしている falseでダッシュしていない
 	bool IsDash() const;
 
-	/// @brief 歩行の処理
-	void Walk();
-
-	/// @brief ダッシュの処理
-	void Dash();
-
-	/// @brief スタミナ回復の処理
-	void StaminaRecovery();
-
 private:
 	/// @brief プレイヤーの番号
 	int m_playerNum = 0;
@@ -72,6 +65,12 @@ private:
 	Vector3 m_startPos = Vector3::Zero;
 	/// @brief リスポーンボタンを押している時間
 	float m_reSpawnTime = 0.0f;
+	/// @brief プレイヤーからボールへのベクトル
+	Vector3 m_toBallVec = Vector3::Zero;
+	/// @brief ボールとの距離
+	float m_ballDistance = 0.0f;
+	/// @brief プレイヤーが吹き飛ぶ勢い
+	float m_blowAwayRate = 0.0f;
 	/// @brief プレイヤー
 	Player* m_player = nullptr;
 	/// @brief プレイヤーアクション
@@ -82,6 +81,10 @@ private:
 	PlayerReinforcement* m_plReinforcement = nullptr;
 	/// @brief サウンドエフェクト
 	Se* m_se = nullptr;
+	/// @brief ボール
+	Ball* m_ball = nullptr;
+	/// @brief スコア
+	Score* m_score = nullptr;
 	/// @brief 準備完了フラグ
 	bool m_setUp = false;
 
@@ -94,19 +97,28 @@ private:
 	/// @brief 状態によって変化するパラメーターを決定する関数
 	void DetermineParameters();
 
-	/// @brief ダッシュ可能か調べる関数
-	void CheckDash();
+	/// @brief 歩行の処理
+	void Walk();
 
-	/// @brief 移動速度を調べる関数
-	void CheckMoveSpeed();
+	/// @brief ダッシュの処理
+	void Dash();
+
+	/// @brief スタミナ回復の処理
+	void StaminaRecovery();
+
+	/// @brief スタミナを管理する関数
+	void StaminaManagement();
+
+	/// @brief ボールに向かうベクトルを計算
+	void ToBallVectorCalculation();
+
+	/// @brief ボールとの距離を計算
+	void BallDistanceCalculation();
+
+	/// @brief ボールとぶつかる処理
+	void BallCollide();
 
 	/// @brief プレイヤーの移動を停止
 	void MoveStop() { m_moveSpeed.x = 0.0f; m_moveSpeed.z = 0.0f; }
-
-	/// @brief リスポーンのカウントを進める関数
-	void ReSpawnCountAdd();
-
-	/// @brief リスポーンの処理
-	void ReSpawn();
 };
 

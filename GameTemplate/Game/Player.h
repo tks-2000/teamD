@@ -170,6 +170,18 @@ public:
 	/// @brief キャラクターコントローラーに移動速度を設定
 	/// @param moveSpeed 設定する移動速度
 	void SetCharaCon(Vector3& moveSpeed) { m_position = m_charaCon.Execute(moveSpeed,1.0f); }
+
+	/// @brief プレイヤーが死亡して無敵時間中か？
+	/// @return trueなら死亡 falseなら生存
+	bool IsDie() const { return m_dieFlag; }
+
+	/// @brief 最後に攻撃してきたプレイヤーの番号を入手
+	/// @return 最後に攻撃してきたプレイヤーの番号
+	int GetHaveAttackedPlayer() { return m_haveAttackedPlayer; }
+
+	/// @brief 最後に攻撃してきたプレイヤーを設定
+	/// @param num 最後に攻撃してきたプレイヤーの番号
+	void SetHaveAttackedPlayer(const int num) { m_haveAttackedPlayer = num; }
 private:
 	/// @brief 自分のアイテムによる強化状態
 	ItemBuffChange m_itemBuffChageState = enItemBuff_Kick;
@@ -271,6 +283,8 @@ private:
 	float m_itemPowerUpTime = 0.0f;
 	/// @brief アイテムバフエフェクト再生用カウンター
 	int m_itemPowerUpCounter = 0;
+	/// @brief 準備完了フラグ
+	bool m_setUp = false;
 	/// @brief キャラクターコントローラー
 	CharacterController m_charaCon;
 	/// @brief ライティング

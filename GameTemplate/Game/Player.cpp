@@ -99,6 +99,7 @@ Player::Player()
 	
 
 	//プレイヤーの初期状態を設定
+	m_setUp = false;
 	m_moveVelocity = NORMAL_VELOCITY;
 	m_stamina = MAX_STANIMA;
 	m_kickPower = NORMAL_KICK_POWER;
@@ -176,18 +177,18 @@ void Player::SetPlayerNumber(int num)
 	m_lig->SetPointLightColor(m_myNumber, m_playerColor);
 	m_lig->SetPointLightRange(m_myNumber, 500.0f);
 
-	m_plAction = NewGO<PlayerAction>(PRIORITY_VERYLOW, PLAYER_ACTION_NAME[m_myNumber]);
+	//m_plAction = NewGO<PlayerAction>(PRIORITY_VERYLOW, PLAYER_ACTION_NAME[m_myNumber]);
 	m_plEffect = NewGO<PlayerEffect>(PRIORITY_VERYLOW, PLAYER_EFFECT_NAME[m_myNumber]);
-	m_plMove = NewGO<PlayerMove>(PRIORITY_VERYLOW, PLAYER_MOVE_NAME[m_myNumber]);
-	m_plReinforcement = NewGO<PlayerReinforcement>(PRIORITY_VERYLOW, PLAYER_REINFORCEMENT_NAME[m_myNumber]);
+	//m_plMove = NewGO<PlayerMove>(PRIORITY_VERYLOW, PLAYER_MOVE_NAME[m_myNumber]);
+	//m_plReinforcement = NewGO<PlayerReinforcement>(PRIORITY_VERYLOW, PLAYER_REINFORCEMENT_NAME[m_myNumber]);
 
-	m_plAction->SetPlayerNumber(m_myNumber);
+	//m_plAction->SetPlayerNumber(m_myNumber);
 	m_plEffect->SetPlayerNumber(m_myNumber);
-	m_plMove->SetPlayerNumber(m_myNumber);
-	m_plReinforcement->SetPlayerNumber(m_myNumber);
+	//m_plMove->SetPlayerNumber(m_myNumber);
+	//m_plReinforcement->SetPlayerNumber(m_myNumber);
 
 	m_skinModelRender->PlayAnimation(enAnimation_Idle, 1.0f);
-
+	m_setUp = true;
 }
 
 void Player::Move()
@@ -517,13 +518,13 @@ void Player::Guard()
 
 	}
 	else {
-		/// @brief 接触していない
+		//接触していない
 		m_shieldHit = false;
 	}
 }
 
 void Player::ReSpawn() {
-	/// @brief スタート位置にリスポーンさせる
+	//スタート位置にリスポーンさせる
 	m_position = m_startPos;
 	m_charaCon.SetPosition(m_position);
 	m_damage = false;
@@ -548,7 +549,7 @@ void Player::ReSpawn() {
 void Player::Muteki()
 {
 	m_mutekiTime -= g_gameTime->GetFrameDeltaTime();
-	/// @brief リスポーン時に少しの間ボールに当たらなくなる
+	//リスポーン時に少しの間ボールに当たらなくなる
 	if (m_mutekiTime <= TIME_ZERO) {
 		m_dieFlag = false;
 		m_burstFlag = false;
@@ -623,6 +624,9 @@ void Player::RecordFlags()
 
 void Player::Update()
 {
+	if (m_setUp == false) {
+		return;
+	}
 	//アイテムを取ったら自身のバフ状況を変更
 	SetItemChangeState();
 	
@@ -636,7 +640,7 @@ void Player::Update()
 		
 	}
 
-	/// @brief スティック入力を受け取る
+	///スティック入力を受け取る
 	m_Lstickx = g_pad[m_myNumber]->GetLStickXF();
 	m_Lsticky = g_pad[m_myNumber]->GetLStickYF();
 
@@ -645,7 +649,7 @@ void Player::Update()
 		m_Lsticky = 0.0f;
 	}
 
-	/// @brief ダメージ中はスティック入力を受け付けない
+	//ダメージ中はスティック入力を受け付けない
 	if (m_damage == true) {
 		m_Lstickx = 0.0f;
 		m_Lsticky = 0.0f;
@@ -680,7 +684,7 @@ void Player::Update()
 	}
 
 	BallDistanceCalculation();
-	//Move();
+	Move();
 	Rotation();
 	CheckKick();
 
@@ -818,7 +822,7 @@ void Player::Update()
 		m_itemPowerUp = false;
 	}
 
-	/// @brief 自分に当たるスポットライトの位置と方向を設定
+	//自分のポイントライトの位置と方向を設定
 	Vector3 pos = m_position;
 	pos.y = POINT_LIGHT_HEIGHT;
 	m_lig->SetPointLighitPos(m_myNumber, pos);
@@ -826,23 +830,21 @@ void Player::Update()
 	/*Vector3 dir = m_position - m_lig->GetSpotLightPos(m_myNumber);
 	m_lig->SetSpotLightDirection(m_myNumber, dir);*/
 
-	/// @brief キャラクターコントローラーで座標を決める
-	//m_position = m_charaCon.Execute(m_moveSpeed, 1.0f);
+	//キャラクターコントローラーで座標を決める
+	m_position = m_charaCon.Execute(m_moveSpeed, 1.0f);
 
+	
+	
 	/// @brief モデルに座標と回転を伝える
 	m_skinModelRender->SetPosition(m_position);
 	m_skinModelRender->SetRotation(m_qRot);
 
-	/// @brief アニメーション
+	//アニメーション
 	Animation();
-
-	//if (g_pad[m_myNumber]->IsTrigger(enButtonStart)) {
-	//	ReSpawn();
-	//}
 
 	//現フレームのフラグ状態を記録
 	RecordFlags();
-	/// @brief プレイヤーが落下したらリスポーンする
+	//プレイヤーが落下したらリスポーンする
 	if (m_position.y < FALLING_HEIGHT) {
 
 		if (m_haveAttackedPlayer != m_myNumber) {
@@ -856,7 +858,7 @@ void Player::Update()
 		ReSpawn();
 	}
 
-	/// @brief バースト処理
+	//バースト処理
 	if (m_position.y < BURST_HEIGHT) {
 		m_burstFlag = true;
 

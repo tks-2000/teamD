@@ -6,6 +6,8 @@ namespace {
 	const float NORMAL_VELOCITY = 0.9f;
 	/// @brief ダッシュの移動速度
 	const float DASH_VELOCITY = 0.95f;
+	/// @brief ボールに接触する判定
+	const float COLLIDE_RATE = 0.0f;
 	/// @brief 通常時の摩擦力
 	const float NORMAL_FRICTION = 0.01f;
 	/// @brief ダメージ中の摩擦力
@@ -32,8 +34,6 @@ namespace {
 	const float POWERFUIL_STAMINA_DECREASE_VALUE = 1.0f;
 	/// @brief 勢いよく当たった扱いになるボールの速度
 	const float STRONG_HIT = 20.0f;
-	/// @brief リスポーンコマンドを押し続けて発動するまでの時間
-	const float RESPAWN_TIME = 5.0f;
 }
 
 PlayerMove::PlayerMove()
@@ -49,6 +49,8 @@ PlayerMove::~PlayerMove()
 bool PlayerMove::Start()
 {
 	m_se = FindGO<Se>(SE_NAME);
+	m_ball = FindGO<Ball>(BALL_NAME);
+	m_stamina = MAX_STANIMA;
 	return true;
 }
 
@@ -68,6 +70,7 @@ void PlayerMove::Move()
 	m_moveSpeed += g_camera3D->GetRight() * m_Lstickx;
 	m_moveSpeed += g_camera3D->GetForward() * m_Lsticky;
 
+	//自分の状態によって移動に使うパラメーターを決定
 	DetermineParameters();
 
 	//ダッシュ時
@@ -79,16 +82,23 @@ void PlayerMove::Move()
 	else {
 		//歩行を実行
 		Walk();
+		if (m_stamina < MAX_STANIMA) {
+			//スタミナを回復する
+			StaminaRecovery();
+		}
 	}
+
+	//スタミナの状態を調べる
+	StaminaManagement();
 
 	//速度を加算する
 	m_moveVelocity += m_addVelocity;
 	//移動速度を設定
 	m_moveSpeed *= m_moveVelocity;
-	//移動速度に応じた摩擦力を加える
-	m_moveSpeed -= m_moveSpeed * m_friction;
 	//重力を加える
 	m_moveSpeed.y -= m_gravity;
+	//移動速度に応じた摩擦力を加える
+	m_moveSpeed -= m_moveSpeed * m_friction;
 
 	//Y方向の移動速度を除いた移動速度を取得
 	Vector3 moveSpeedXZ = m_moveSpeed;
@@ -97,7 +107,7 @@ void PlayerMove::Move()
 	if (moveSpeedXZ.LengthSq() < 0.1f) {
 		MoveStop();
 	}
-	m_player->SetMoveSpeed(m_moveSpeed);
+	//m_player->SetMoveSpeed(m_moveSpeed);
 	m_player->SetCharaCon(m_moveSpeed);
 }
 
@@ -127,6 +137,17 @@ void PlayerMove::DetermineParameters()
 		m_staminaDecreaseValue = STAMINA_DECREASE_VALUE;
 	}
 
+	//プレイヤーが防御強化状態だったら…
+	if (m_plReinforcement->IsDefenseUp() == true) {
+		//吹き飛ぶ勢いを防御強化状態中の勢いにする
+		m_blowAwayRate = DECREASE_BLOW_AWAY_RATE;
+	}
+	//プレイヤーが防御強化状態でない場合…
+	else {
+		//吹き飛ぶ勢いを通常時の勢いにする
+		m_blowAwayRate = BLOW_AWAY_RATE;
+	}
+
 	//プレイヤーが速度強化状態だったら…
 	if (m_plReinforcement->IsSpeedUp() == true && m_player->IsDamage() == false) {
 		//加算する速度を設定する
@@ -136,6 +157,100 @@ void PlayerMove::DetermineParameters()
 	else {
 		//加算する速度を０にする
 		m_addVelocity = 0.0f;
+	}
+}
+
+void PlayerMove::ToBallVectorCalculation()
+{
+	//ボールの座標から自分の座標を引いて自分からボールに向かって伸びるベクトルを計算する
+	m_toBallVec = m_ball->GetPosition() - m_player->GetPosition();
+	//ボールとの距離もここで計算する
+	BallDistanceCalculation();
+	//縦方向を消す
+	m_toBallVec.y = 0.0f;
+	//正規化する
+	m_toBallVec.Normalize();
+	
+}
+
+void PlayerMove::BallDistanceCalculation()
+{
+	//ボールに向かって伸びるベクトルから長さを取得する
+	m_ballDistance = m_toBallVec.Length();
+}
+
+void PlayerMove::BallCollide()
+{
+	//ボールへのベクトルとボールの向きで当たる角度を決める
+	float matchRate = Dot(m_ball->GetMoveDirection(), m_toBallVec);
+	//ボールが動いていない・プレイヤーがガード中・接触判定でない場合…
+	if (m_ball->IsMove() == false || m_plAction->IsGuard() == true || matchRate > COLLIDE_RATE) {
+		//処理を終了する
+		return;
+	}
+
+	//ボールと自分の位置から吹き飛ばされる方向を決める
+	Vector3 repulsiveForce = m_player->GetPosition() - m_ball->GetPosition();
+	//縦方向の成分を消す
+	repulsiveForce.y = 0.0f;
+	//正規化して方向ベクトルにする
+	repulsiveForce.Normalize();
+	//ボールの移動方向を吹き飛ぶ方向と逆向きに設定する
+	m_ball->SetMoveDirection(repulsiveForce * -1.0f);
+
+	//プレイヤーが死亡時の無敵時間中の場合…
+	if (m_player->IsDie() == true) {
+		//ダメージを受けなかったときのSEを鳴らす
+		m_se->PlayNoDamageCollideSe();
+		//処理を終了する
+		return;
+	}
+
+	//吹き飛ぶ勢いを乗算して移動量を決める
+	repulsiveForce *= m_ball->GetVelocity() * m_blowAwayRate;
+
+	//縦方向は別に計算する
+	repulsiveForce.y = m_ball->GetVelocity() * BLOW_AWAY_HEIGHT_RATE;
+
+	//移動速度に吹き飛ぶ勢いを設定する
+	m_moveSpeed = repulsiveForce * 2.0f;
+
+	//ガードブレイク中の場合…
+	if (m_plAction->IsGuardBreak() == true) {
+		//行動不能エフェクトを消す
+		m_plEffect->StopKnockOutEffect();
+		//行動不能SEも消す
+		m_se->StopStanSe(m_playerNum);
+	}
+	//ダメージ中でない場合…
+	if (m_player->IsDamage() == false) {
+		//行動不能エフェクトを再生
+		m_plEffect->PlayKnockOutEffect();
+		//行動不能SEを鳴らす
+		m_se->PlayStanSe(m_playerNum);
+	}
+
+	//プレイヤーをダメージ中に設定する
+	m_player->SetDamage();
+
+	//ボールの速度が強く当たった扱いのになる速度を超えていたら…
+	if (m_ball->GetVelocity() > STRONG_HIT) {
+		//強く当たったSEを鳴らす
+		m_se->PlayStrongCollideSe();
+	}
+	//ボールの速度が強く当たった扱いのになる速度を超えていなかったら…
+	else {
+		//弱く当たったSEを鳴らす
+		m_se->PlayWeakCollideSe();
+	}
+	
+	//攻撃してきたプレイヤーの番号を記憶する
+	m_player->SetHaveAttackedPlayer(m_ball->GetPlayerInformation());
+
+	//攻撃してきたプレイヤーが自分ではない場合…
+	if (m_player->GetHaveAttackedPlayer() != m_playerNum) {
+		//攻撃してきたプレイヤーにスコアを加算する
+		m_score->AddScore200(m_player->GetHaveAttackedPlayer());
 	}
 }
 
@@ -163,30 +278,25 @@ void PlayerMove::Dash()
 
 void PlayerMove::StaminaRecovery()
 {
+	//スタミナ最大値だったら…
+	if (m_stamina == MAX_STANIMA) {
+		//終了する
+		return;
+	}
 	//スタミナを回復する
 	m_stamina += g_gameTime->GetFrameDeltaTime();
 	//スタミナが最大値を超えたら…
 	if (m_stamina > MAX_STANIMA) {
+		//ダッシュ不可だったら…
+		if (m_dash == false) {
+			//スタミナ回復のSEを鳴らす
+			m_se->PlayStaminaRecoverySe();
+			//ダッシュを可能にする
+			m_dash = true;
+		}
 		//スタミナを最大値に設定
 		m_stamina = MAX_STANIMA;
 	}
-}
-
-void PlayerMove::ReSpawnCountAdd()
-{
-	//リスポーン時間を加算
-	m_reSpawnTime += g_gameTime->GetFrameDeltaTime();
-	//リスポーン可能な時間を超えたら…
-	if (m_reSpawnTime > RESPAWN_TIME) {
-		//プレイヤーをリスポーンさせる
-		m_player->ReSpawn();
-		m_reSpawnTime = 0.0f;
-	}
-}
-
-void PlayerMove::ReSpawn()
-{
-
 }
 
 void PlayerMove::Rotation()
@@ -204,16 +314,18 @@ void PlayerMove::Rotation()
 
 void PlayerMove::Update()
 {
+	//扱うデータの準備が終わるまでは実行しない
 	if (m_setUp == false) {
 		return;
 	}
 	m_Lstickx = g_pad[m_playerNum]->GetLStickXF();
 	m_Lsticky = g_pad[m_playerNum]->GetLStickYF();
+	ToBallVectorCalculation();
 	Move();
 	Rotation();
 }
 
-void PlayerMove::CheckDash()
+void PlayerMove::StaminaManagement()
 {
 	//スタミナが無くなったら…
 	if (m_stamina < 0.0f) {
@@ -222,26 +334,26 @@ void PlayerMove::CheckDash()
 		//スタミナ切れのSEを鳴らす
 		m_se->PlayStaminaOverSe();
 	}
-	//スタミナが最大値を超えたら…
-	if (m_stamina > MAX_STANIMA) {
-		//ダッシュを可能にする
-		m_dash = true;
-		//スタミナ回復のSEを鳴らす
-		m_se->PlayStaminaRecoverySe();
-	}
 }
 
 bool PlayerMove::IsDash()const
 {
+	//ダッシュ可能でガードしていないときにRB1が押されていたら…
 	if (m_dash == true && m_plAction->IsGuard() == false && g_pad[m_playerNum]->IsPress(enButtonRB1)) {
-		if (m_Lstickx != FLOAT_0 || m_Lsticky != FLOAT_0) {
+		//スティック入力があったら…
+		if (m_Lstickx != 0.0f || m_Lsticky != 0.0f) {
+			//ダッシュしている
 			return true;
 		}
+		//スティック入力が無かったら…
 		else {
+			//ダッシュしていない
 			return false;
 		}
 	}
+	//ダッシュ不可能・ガード中・RB1が押されていない場合
 	else {
+		//ダッシュしていない
 		return false;
 	}
 }
