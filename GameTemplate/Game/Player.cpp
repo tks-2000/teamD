@@ -70,7 +70,7 @@ namespace {
 	/// @brief アイテムを取ったときに増える速度
 	const float VELOCITY_ADDITION_AMOUNT = 0.02f;
 	/// @brief 通常のガード耐久値低下量
-	const float GUARD_DECREASE_VALUE = 0.3f;
+	const float NORMAL_GUARD_DECREASE_VALUE = 0.3f;
 	/// @brief 強化状態のガード耐久値低下量
 	const float POWERFUIL_GUARD_DECREASE_VALUE = 0.15f;
 	/// @brief アイテムを取ったときのガード耐久値軽減率
@@ -177,15 +177,17 @@ void Player::SetPlayerNumber(int num)
 	m_lig->SetPointLightColor(m_myNumber, m_playerColor);
 	m_lig->SetPointLightRange(m_myNumber, 500.0f);
 
-	//m_plAction = NewGO<PlayerAction>(PRIORITY_VERYLOW, PLAYER_ACTION_NAME[m_myNumber]);
+	m_plAction = NewGO<PlayerAction>(PRIORITY_VERYLOW, PLAYER_ACTION_NAME[m_myNumber]);
+	m_plCollide = NewGO<PlayerCollide>(PRIORITY_VERYLOW, PLAYER_COLLID_NAME[m_myNumber]);
 	m_plEffect = NewGO<PlayerEffect>(PRIORITY_VERYLOW, PLAYER_EFFECT_NAME[m_myNumber]);
-	//m_plMove = NewGO<PlayerMove>(PRIORITY_VERYLOW, PLAYER_MOVE_NAME[m_myNumber]);
-	//m_plReinforcement = NewGO<PlayerReinforcement>(PRIORITY_VERYLOW, PLAYER_REINFORCEMENT_NAME[m_myNumber]);
+	m_plMove = NewGO<PlayerMove>(PRIORITY_VERYLOW, PLAYER_MOVE_NAME[m_myNumber]);
+	m_plReinforcement = NewGO<PlayerReinforcement>(PRIORITY_VERYLOW, PLAYER_REINFORCEMENT_NAME[m_myNumber]);
 
-	//m_plAction->SetPlayerNumber(m_myNumber);
+	m_plAction->SetPlayerNumber(m_myNumber);
+	m_plCollide->SetPlayerNumber(m_myNumber);
 	m_plEffect->SetPlayerNumber(m_myNumber);
-	//m_plMove->SetPlayerNumber(m_myNumber);
-	//m_plReinforcement->SetPlayerNumber(m_myNumber);
+	m_plMove->SetPlayerNumber(m_myNumber);
+	m_plReinforcement->SetPlayerNumber(m_myNumber);
 
 	m_skinModelRender->PlayAnimation(enAnimation_Idle, 1.0f);
 	m_setUp = true;
@@ -329,8 +331,6 @@ void Player::KickBall()
 	if (m_powerUp) {
 		m_se->PlayPoweredKickSe();
 	}
-
-
 }
 
 bool Player::IsDash() const
@@ -415,7 +415,7 @@ void Player::Guard()
 		m_guradDecreaseValue = POWERFUIL_GUARD_DECREASE_VALUE;
 	}
 	else {
-		m_guradDecreaseValue = GUARD_DECREASE_VALUE;
+		m_guradDecreaseValue = NORMAL_GUARD_DECREASE_VALUE;
 	}
 
 	if (m_guardUp == true) {
@@ -684,8 +684,8 @@ void Player::Update()
 	}
 
 	BallDistanceCalculation();
-	Move();
-	Rotation();
+	//Move();
+	//Rotation();
 	CheckKick();
 
 	/// @brief キッククールタイム
@@ -713,10 +713,10 @@ void Player::Update()
 		if (g_pad[m_myNumber]->IsTrigger(enButtonA)) {
 
 			
-			m_plEffect->PlayKickEffect();
-			m_se->PlayKickSe();
+			//m_plEffect->PlayKickEffect();
+			//m_se->PlayKickSe();
 
-			KickBall();
+			//KickBall();
 		}
 	}
 
@@ -749,7 +749,7 @@ void Player::Update()
 	/// @brief ボールとの距離が一定以下で吹き飛ぶ
 	if (m_breakGuard == true) {
 		if (m_ballDistance < GUARD_DISTANCE) {
-			BallCollide();
+			//BallCollide();
 			//ダメージエフェクト再生処理
 			//前フレームにダメージ状態でなく、現フレームでダメージ状態のとき
 			if (m_damagePrevFrame == false && m_damage == true) {
@@ -759,7 +759,7 @@ void Player::Update()
 	}
 	else {
 		if (m_ballDistance < COLLIDE_DISTANCE) {
-			BallCollide();
+			//BallCollide();
 			//ダメージエフェクト再生処理
 			//前フレームにダメージ状態でなく、現フレームでダメージ状態のとき
 			if (m_damagePrevFrame == false && m_damage == true) {
@@ -772,18 +772,18 @@ void Player::Update()
 	}
 	/// @brief LB1を押している間ガード
 	if (g_pad[m_myNumber]->IsPress(enButtonLB1) && m_breakGuard == false && m_damage == false) {
-		m_guard = true;
+		//m_guard = true;
 	}
 	else {
-		m_guard = false;
-		m_guardEffectCouter = 0;
+		//m_guard = false;
+		//m_guardEffectCouter = 0;
 	}
 
 	/// @brief ガード可能ならガードの処理
 	if (m_guard == true && m_breakGuard == false && m_timer->IsTimerExecution() == true) {
 
 
-		Guard();
+		//Guard();
 	}
 
 	//ボタン押下時かつガードブレイクしていないときに実行
@@ -792,8 +792,8 @@ void Player::Update()
 		m_damage == false &&
 		m_timer->IsTimerExecution() == true) {
 		//m_guardBeginEffect.Play();
-		m_plEffect->PlayGuardBeginEffect();
-		m_se->PlayGuardStartSe();
+		//m_plEffect->PlayGuardBeginEffect();
+		//m_se->PlayGuardStartSe();
 	}
 
 	if (m_dieFlag == true) {

@@ -8,6 +8,8 @@ namespace {
 	const float DASH_VELOCITY = 0.95f;
 	/// @brief ボールに接触する判定
 	const float COLLIDE_RATE = 0.0f;
+	/// @brief ボールに接触する距離
+	const float COLLIDE_DISTANCE = 80.0f;
 	/// @brief 通常時の摩擦力
 	const float NORMAL_FRICTION = 0.01f;
 	/// @brief ダメージ中の摩擦力
@@ -48,8 +50,11 @@ PlayerMove::~PlayerMove()
 
 bool PlayerMove::Start()
 {
-	m_se = FindGO<Se>(SE_NAME);
+	//使用するデータを持って来る
 	m_ball = FindGO<Ball>(BALL_NAME);
+	m_se = FindGO<Se>(SE_NAME);
+	m_timer = FindGO<Timer>(TIMER_NAME);
+	//スタミナの初期値は最大に
 	m_stamina = MAX_STANIMA;
 	return true;
 }
@@ -62,6 +67,20 @@ void PlayerMove::SetPlayerNumber(const int plNum)
 	m_plEffect = FindGO<PlayerEffect>(PLAYER_EFFECT_NAME[m_playerNum]);
 	m_plReinforcement = FindGO<PlayerReinforcement>(PLAYER_REINFORCEMENT_NAME[m_playerNum]);
 	m_setUp = true;
+}
+
+bool PlayerMove::IsCanMove()
+{
+	//タイマーがゲーム進行中でない・ダメージ中・ガードブレイク中の場合
+	if (m_timer->IsTimerExecution() == false || m_player->IsDamage() == true || m_plAction->IsGuardBreak() == true) {
+		//移動できない
+		return false;
+	}
+	//それ以外では…
+	else {
+		//移動できる
+		return true;
+	}
 }
 
 void PlayerMove::Move()
@@ -82,10 +101,8 @@ void PlayerMove::Move()
 	else {
 		//歩行を実行
 		Walk();
-		if (m_stamina < MAX_STANIMA) {
-			//スタミナを回復する
-			StaminaRecovery();
-		}
+		//スタミナを回復する
+		StaminaRecovery();
 	}
 
 	//スタミナの状態を調べる
@@ -107,8 +124,7 @@ void PlayerMove::Move()
 	if (moveSpeedXZ.LengthSq() < 0.1f) {
 		MoveStop();
 	}
-	//m_player->SetMoveSpeed(m_moveSpeed);
-	m_player->SetCharaCon(m_moveSpeed);
+	
 }
 
 void PlayerMove::DetermineParameters()
@@ -286,7 +302,7 @@ void PlayerMove::StaminaRecovery()
 	//スタミナを回復する
 	m_stamina += g_gameTime->GetFrameDeltaTime();
 	//スタミナが最大値を超えたら…
-	if (m_stamina > MAX_STANIMA) {
+	if (m_stamina >= MAX_STANIMA) {
 		//ダッシュ不可だったら…
 		if (m_dash == false) {
 			//スタミナ回復のSEを鳴らす
@@ -301,15 +317,29 @@ void PlayerMove::StaminaRecovery()
 
 void PlayerMove::Rotation()
 {
-	//移動速度で方向を決める
-	if (m_player->IsDamage() == false && m_plAction->IsGuard() == false && m_plAction->IsGuardBreak() == false) {
-		if (m_moveSpeed.x != 0.0f || m_moveSpeed.z != 0.0f) {
-			m_direction = m_moveSpeed;
-			m_direction.y = 0.0f;
-			m_direction.Normalize();
-			m_player->SetDirection(m_direction);
-		}
+	//ダメージ中・ガード中・ガードブレイク中は回転を行わない
+	if (m_player->IsDamage() == true || m_plAction->IsGuard() == true || m_plAction->IsGuardBreak() == true) {
+		//待機アニメーションを再生
+		m_player->SetAnimation(enAnimation_Idle);
+		return;
 	}
+	//動いていないときも回転を行わない
+	if (m_moveSpeed.x == 0.0f && m_moveSpeed.z == 0.0f) {
+		//待機アニメーションを再生
+		m_player->SetAnimation(enAnimation_Idle);
+		return;
+	}
+
+	//移動速度で方向を決める
+	m_direction = m_moveSpeed;
+	//縦方向の要素を消す
+	m_direction.y = 0.0f;
+	//正規化して方向ベクトルにする
+	m_direction.Normalize();
+	//プレイヤーに方向を渡す
+	m_player->SetDirection(m_direction);
+	//方向から回転を求める
+	m_qRot.SetRotation(Vector3::AxisY, atan2(m_direction.x, m_direction.z));
 }
 
 void PlayerMove::Update()
@@ -318,11 +348,32 @@ void PlayerMove::Update()
 	if (m_setUp == false) {
 		return;
 	}
+	
+	//スティック入力を受け取る
 	m_Lstickx = g_pad[m_playerNum]->GetLStickXF();
 	m_Lsticky = g_pad[m_playerNum]->GetLStickYF();
+
+	//移動できないとき…
+	if (IsCanMove() == false) {
+		//スティック入力を受け付けない
+		m_Lstickx = 0.0f;
+		m_Lsticky = 0.0f;
+	}
+
+	//ボールとの距離計算・移動・回転を行う
 	ToBallVectorCalculation();
 	Move();
 	Rotation();
+
+	//ボールとの距離が接触判定まで近づいたら…
+	if (m_ballDistance < COLLIDE_DISTANCE) {
+		//ボールとぶつかる処理を行う
+		//BallCollide();
+	}
+
+	//移動と回転を伝える
+	m_player->SetCharaCon(m_moveSpeed);
+	m_player->SetQrot(m_qRot);
 }
 
 void PlayerMove::StaminaManagement()

@@ -259,6 +259,9 @@
     <ClCompile Include="NameKey.cpp">
       <Filter>Src\Util</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerCollide.cpp">
+      <Filter>Src\InGame</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameDirector.h" />
@@ -547,6 +550,9 @@
     </ClInclude>
     <ClInclude Include="NameKey.h">
       <Filter>Src\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerCollide.h">
+      <Filter>Src\InGame</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

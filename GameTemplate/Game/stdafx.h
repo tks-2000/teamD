@@ -21,6 +21,7 @@
 #include "FontRender.h"
 #include "Player.h"
 #include "PlayerAction.h"
+#include "PlayerCollide.h"
 #include "PlayerEffect.h"
 #include "PlayerMove.h"
 #include "PlayerReinforcement.h"
@@ -88,6 +89,7 @@ namespace {
 	const char* LIGHTING_NAME = "Lighting";
 	const char* PLAYER_NAME[MAX_PLAYER_NUM] = { "Player1","Player2","Player3","Player4" };
 	const char* PLAYER_ACTION_NAME[MAX_PLAYER_NUM] = { "PlayerAction1","PlayerAction2","PlayerAction3","PlayerAction4" };
+	const char* PLAYER_COLLID_NAME[MAX_PLAYER_NUM] = { "PlayerCollide1","PlayerCollide2","PlayerCollide3","PlayerCollide4" };
 	const char* PLAYER_EFFECT_NAME[MAX_PLAYER_NUM] = { "PlayerEffect1","PlayerEffect2" ,"PlayerEffect3" ,"PlayerEffect4" };
 	const char* PLAYER_MOVE_NAME[MAX_PLAYER_NUM] = { "PlayerMove1","PlayerMove2","PlayerMove3","PlayerMove4" };
 	const char* PLAYER_REINFORCEMENT_NAME[MAX_PLAYER_NUM] = { "PlayerReinforcement1","PlayerReinforcement2","PlayerReinforcement3","PlayerReinforcement4" };

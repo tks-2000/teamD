@@ -309,6 +309,7 @@
     <ClCompile Include="Objects.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerAction.cpp" />
+    <ClCompile Include="PlayerCollide.cpp" />
     <ClCompile Include="PlayerEffect.cpp" />
     <ClCompile Include="PlayerMove.cpp" />
     <ClCompile Include="PlayerReinforcement.cpp" />
@@ -416,6 +417,7 @@
     <ClInclude Include="Objects.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerAction.h" />
+    <ClInclude Include="PlayerCollide.h" />
     <ClInclude Include="PlayerEffect.h" />
     <ClInclude Include="PlayerMove.h" />
     <ClInclude Include="PlayerReinforcement.h" />

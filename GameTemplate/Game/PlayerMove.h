@@ -6,6 +6,7 @@ class PlayerReinforcement;
 class Ball;
 class Se;
 class Score;
+class Timer;
 
 /// @brief プレイヤーの移動を制御するクラス
 class PlayerMove : public IGameObject
@@ -19,6 +20,10 @@ public:
 	/// @brief プレイヤーの番号を設定
 	/// @param plNum 設定するプレイヤー番号
 	void SetPlayerNumber(const int plNum);
+
+	/// @brief 移動可能か？
+	/// @return trueなら可能　falseなら不可能
+	bool IsCanMove();
 
 	/// @brief プレイヤーの向いている方向を入手
 	/// @return プレイヤーの向いている方向
@@ -37,6 +42,8 @@ public:
 	bool IsDash() const;
 
 private:
+	/// @brief 準備完了フラグ
+	bool m_setUp = false;
 	/// @brief プレイヤーの番号
 	int m_playerNum = 0;
 	/// @brief Lスティックの横入力
@@ -61,10 +68,8 @@ private:
 	float m_staminaDecreaseValue = 0.0f;
 	/// @brief プレイヤーの向いている方向
 	Vector3 m_direction = Vector3::Zero;
-	/// @brief プレイヤーのスタート時の座標
-	Vector3 m_startPos = Vector3::Zero;
-	/// @brief リスポーンボタンを押している時間
-	float m_reSpawnTime = 0.0f;
+	/// @brief プレイヤーの回転
+	Quaternion m_qRot = Quaternion::Identity;
 	/// @brief プレイヤーからボールへのベクトル
 	Vector3 m_toBallVec = Vector3::Zero;
 	/// @brief ボールとの距離
@@ -85,8 +90,9 @@ private:
 	Ball* m_ball = nullptr;
 	/// @brief スコア
 	Score* m_score = nullptr;
-	/// @brief 準備完了フラグ
-	bool m_setUp = false;
+	/// @brief タイマー
+	Timer* m_timer = nullptr;
+	
 
 	/// @brief 移動
 	void Move();

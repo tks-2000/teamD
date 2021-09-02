@@ -7,6 +7,7 @@ class Lighting;
 class SkinModelRender;
 class Ball;
 class PlayerAction;
+class PlayerCollide;
 class PlayerEffect;
 class PlayerMove;
 class PlayerReinforcement;
@@ -182,6 +183,10 @@ public:
 	/// @brief 最後に攻撃してきたプレイヤーを設定
 	/// @param num 最後に攻撃してきたプレイヤーの番号
 	void SetHaveAttackedPlayer(const int num) { m_haveAttackedPlayer = num; }
+
+	/// @brief プレイヤーに設定しているライトのカラーを入手
+	/// @return プレイヤーに設定しているライトのカラーの参照
+	const Vector3& GetPlayerColor() const { return m_playerColor; }
 private:
 	/// @brief 自分のアイテムによる強化状態
 	ItemBuffChange m_itemBuffChageState = enItemBuff_Kick;
@@ -191,7 +196,7 @@ private:
 	int m_haveAttackedPlayer = 4;
 	/// @brief プレイヤーの座標
 	Vector3 m_position = Vector3::Zero;
-	/// @brief プレイやーの回転
+	/// @brief プレイヤーの回転
 	Quaternion m_qRot = Quaternion::Identity;
 	/// @brief プレイヤーの拡大率
 	Vector3 m_scale = Vector3::One;
@@ -335,22 +340,18 @@ private:
 
 	/// @brief スコア
 	Score* m_score = nullptr;
-
 	/// @brief ゲームUI
 	GameUI* m_ui = nullptr;
-
 	//SE
 	Se* m_se = nullptr;
-
 	/// @brief プレイヤーのアクション
 	PlayerAction* m_plAction = nullptr;
-
+	/// @brief プレイヤーの接触
+	PlayerCollide* m_plCollide = nullptr;
 	/// @brief プレイヤーのエフェクト
 	PlayerEffect* m_plEffect = nullptr;
-
 	/// @brief プレイヤーの移動
 	PlayerMove* m_plMove = nullptr;
-
 	/// @brief プレイヤーの強化
 	PlayerReinforcement* m_plReinforcement = nullptr;
 };
