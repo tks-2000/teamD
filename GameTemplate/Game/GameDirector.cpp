@@ -126,7 +126,7 @@ void GameDirector::Update()
 			default:
 				break;
 			}
-			if (g_pad[0]->IsTrigger(enButtonA) && m_playerNum > 0 && m_sceneChange->TransparencyChangeStart() == true) {
+			if (g_pad[0]->IsTrigger(enButtonA) && m_playerNum > 1 && m_sceneChange->TransparencyChangeStart() == true) {
 				m_sceneChange->TransparencyChange(false);
 				m_se->PlayPressKeySe();
 				m_menu->End();

@@ -118,7 +118,7 @@ void Menu::Update()
 		plNum = std::to_wstring(m_playerNum);
 		m_plNumFont->SetText(plNum.c_str());
 	}
-	if (m_playerNum != 0) {
+	if (m_playerNum > 1) {
 		m_pushStart->SetColor({1.0f,1.0f,1.0f,1.0f});
 	}
 	else {
