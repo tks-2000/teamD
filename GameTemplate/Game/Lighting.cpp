@@ -55,6 +55,8 @@ void Lighting::Update()
 	if (m_dirLigFlickering == true) {
 		DirectionLightFlickering();
 	}
+
+	m_light.eyePos = g_camera3D->GetPosition();
 }
 
 void Lighting::InitDirectionLight()

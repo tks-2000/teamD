@@ -31,6 +31,7 @@ PlayerCollide::~PlayerCollide()
 bool PlayerCollide::Start()
 {
 	m_ball = FindGO<Ball>(BALL_NAME);
+	m_score = FindGO<Score>(SCORE_NAME);
 	m_se = FindGO<Se>(SE_NAME);
 	return true;
 }
@@ -148,6 +149,9 @@ void PlayerCollide::BallCollide()
 	//移動速度に吹き飛ぶ勢いを設定する
 	m_plMove->SetMoveSpeed(repulsiveForce * 2.0f);
 
+	//ダメージエフェクトを再生
+	m_plEffect->PlayDamageEffect();
+
 	//ガードブレイク中の場合…
 	if (m_plAction->IsGuardBreak() == true) {
 		//行動不能エフェクトを消す
@@ -209,7 +213,7 @@ void PlayerCollide::GuardCollide()
 		//SEを鳴らす
 		m_se->PlayJustGuardSe();
 		//プレイヤーを強化状態に変更
-		m_plReinforcement->ChangePowerUp();
+		m_plReinforcement->ChangeSelfPowerUp();
 	}
 	//ジャストガード判定にならなかったら…
 	else {

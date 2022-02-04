@@ -78,5 +78,10 @@ private:
 	Ball* m_ball = nullptr;
 	/// @brief スコア
 	Score* m_score = nullptr;
+
+	/// @brief アイテムの数
+	enum {ITEM_NUM = 4};
+
+	
 };
 

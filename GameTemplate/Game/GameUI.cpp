@@ -314,6 +314,8 @@ bool GameUI::Start()
 	m_ball = FindGO<Ball>(BALL_NAME);
 	for (int plFontNum = 0; plFontNum < m_playerNum; plFontNum++) {
 		m_player[plFontNum] = FindGO<Player>(PLAYER_NAME[plFontNum]);
+		m_plAction[plFontNum] = FindGO<PlayerAction>(PLAYER_ACTION_NAME[plFontNum]);
+		m_plMove[plFontNum] = FindGO<PlayerMove>(PLAYER_MOVE_NAME[plFontNum]);
 	}
 	return true;
 }

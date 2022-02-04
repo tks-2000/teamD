@@ -87,20 +87,6 @@ public:
 	/// @brief 回転を設定
 	/// @param qRot 設定するクォータニオン
 	void SetQrot(const Quaternion& qRot) { m_qRot = qRot; }
-	/// @brief キック可能か判定
-	void CheckKick() ;
-
-	/// @brief ボールを蹴る処理
-	void KickBall();
-
-	/// @brief ダッシュ可能か判定
-	bool IsDash() const;
-
-	/// @brief ボールに向かうベクトルを計算
-	void ToBallVectorCalculation();
-
-	/// @brief ボールとの距離を計算
-	void BallDistanceCalculation();
 
 	/// @brief ボールに向かうベクトルを取得。
 	/// @return ボールに向かうベクトルのconst参照。
@@ -187,6 +173,10 @@ public:
 	/// @brief プレイヤーに設定しているライトのカラーを入手
 	/// @return プレイヤーに設定しているライトのカラーの参照
 	const Vector3& GetPlayerColor() const { return m_playerColor; }
+
+	/// @brief 準備完了しているか？
+	/// @return trueで準備完了 falseで準備未完了
+	const bool IsSetUp() const { return m_setUp; }
 private:
 	/// @brief 自分のアイテムによる強化状態
 	ItemBuffChange m_itemBuffChageState = enItemBuff_Kick;

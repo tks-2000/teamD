@@ -23,7 +23,11 @@ public:
 
 	/// @brief 移動可能か？
 	/// @return trueなら可能　falseなら不可能
-	bool IsCanMove();
+	bool IsCanMove() const;
+
+	/// @brief ダッシュしているか判定
+	/// @return trueでダッシュしている falseでダッシュしていない
+	bool IsDash() const;
 
 	/// @brief プレイヤーの向いている方向を入手
 	/// @return プレイヤーの向いている方向
@@ -37,9 +41,9 @@ public:
 	/// @param move プレイヤーに設定する移動速度
 	void SetMoveSpeed(const Vector3& move) { m_moveSpeed = move; }
 
-	/// @brief ダッシュしているか判定
-	/// @return trueでダッシュしている falseでダッシュしていない
-	bool IsDash() const;
+	/// @brief プレイヤーのスタミナを入手
+	/// @return プレイヤーのスタミナ
+	const float GetStamina() const { return m_stamina; }
 
 private:
 	/// @brief 準備完了フラグ
@@ -76,6 +80,7 @@ private:
 	float m_ballDistance = 0.0f;
 	/// @brief プレイヤーが吹き飛ぶ勢い
 	float m_blowAwayRate = 0.0f;
+
 	/// @brief プレイヤー
 	Player* m_player = nullptr;
 	/// @brief プレイヤーアクション
@@ -93,15 +98,11 @@ private:
 	/// @brief タイマー
 	Timer* m_timer = nullptr;
 	
+	/// @brief 状態によって変化するパラメーターを決定する関数
+	void DetermineParameters();
 
 	/// @brief 移動
 	void Move();
-
-	/// @brief 回転
-	void Rotation();
-
-	/// @brief 状態によって変化するパラメーターを決定する関数
-	void DetermineParameters();
 
 	/// @brief 歩行の処理
 	void Walk();
@@ -115,14 +116,8 @@ private:
 	/// @brief スタミナを管理する関数
 	void StaminaManagement();
 
-	/// @brief ボールに向かうベクトルを計算
-	void ToBallVectorCalculation();
-
-	/// @brief ボールとの距離を計算
-	void BallDistanceCalculation();
-
-	/// @brief ボールとぶつかる処理
-	void BallCollide();
+	/// @brief 回転
+	void Rotation();
 
 	/// @brief プレイヤーの移動を停止
 	void MoveStop() { m_moveSpeed.x = 0.0f; m_moveSpeed.z = 0.0f; }

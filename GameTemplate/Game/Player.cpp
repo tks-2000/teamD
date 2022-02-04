@@ -2,15 +2,6 @@
 #include "Player.h"
 
 namespace {
-
-	/// @brief キック可能な距離
-	const float KICK_POSSIBLE_DISTANCE = 200.0f;
-	/// @brief ガード可能な距離
-	const float GUARD_DISTANCE = 90.0f;
-	/// @brief 最大シールド耐久値
-	const float MAX_GUARD_DURABILITY = 100.0f;
-	/// @brief ボールと接触する距離
-	const float COLLIDE_DISTANCE = 80.0f;
 	/// @brief 落下扱いになる高さ
 	const float FALLING_HEIGHT = -3000.0f;
 	/// @brief バーストエフェクトを再生する判定を行う高さ
@@ -29,18 +20,8 @@ namespace {
 	const float PLAYER_RADIUS = 20.0f;
 	/// @brief プレイヤーの高さ
 	const float PLAYER_HEIGHT = 50.0f;
-	/// @brief 通常時の摩擦力
-	const float NORMAL_FRICTION = 0.01f;
-	/// @brief ダメージ中の摩擦力
-	const float DAMAGE_FRICYION = 0.001f;
 	/// @brief ダメージを受けて復帰するのにかかる時間
 	const float DAMAGE_RETURN_TIME = 100.0f;
-	/// @brief 横方向に吹き飛ぶ勢い
-	const float BLOW_AWAY_RATE = 2.0f;
-	/// @brief 縦方向に吹き飛ぶ勢い
-	const float BLOW_AWAY_HEIGHT_RATE = 1.0f;
-	/// @brief アイテムを取ったときの吹き飛ぶ勢い
-	const float DECREASE_BLOW_AWAY_RATE = 1.0f;
 	/// @brief プレイヤーモデルの表示優先度
 	const int PRIORITY = 1;
 	/// @brief プレイヤーのリスポーン時の無敵時間
@@ -53,45 +34,13 @@ namespace {
 	const int SCORE_PULL = -100;
 	/// @brief キックのクールタイム
 	const int KICK_COOLTIME = 20;
-	/// @brief ジャストガード可能な時間
-	const float POSSIBLE_JUST_GUARD_TIME = 0.01f;
-	/// @brief ジャストガード発動時の強化時間
-	const float POWERUP_TIME = 10.0f;
-	/// @brief 通常のキック力
-	const float NORMAL_KICK_POWER = 1.5f;
-	/// @brief 強化状態のキック力
-	const float POWERFUL_KICK_POWER = 4.0f;
-	/// @brief アイテムを取ったときに増えるキック力
-	const float KICK_POWER_ADDITION_AMOUNT = 1.0f;
-	/// @brief 通常の移動速度
-	const float NORMAL_VELOCITY = 0.9f;
-	/// @brief ダッシュの移動速度
-	const float DASH_VELOCITY = 0.95f;
-	/// @brief アイテムを取ったときに増える速度
-	const float VELOCITY_ADDITION_AMOUNT = 0.02f;
-	/// @brief 通常のガード耐久値低下量
-	const float NORMAL_GUARD_DECREASE_VALUE = 0.3f;
-	/// @brief 強化状態のガード耐久値低下量
-	const float POWERFUIL_GUARD_DECREASE_VALUE = 0.15f;
-	/// @brief アイテムを取ったときのガード耐久値軽減率
-	const float GUARD_ADDITION_AMOUNT = 0.1f;
-	/// @brief スタミナの最大値
-	const float MAX_STANIMA = 6.0f;
-	/// @brief 通常のスタミナ低下量
-	const float STAMINA_DECREASE_VALUE = 2.0f;
-	/// @brief 強化状態のスタミナ低下量
-	const float POWERFUIL_STAMINA_DECREASE_VALUE = 1.0f;
+	
 	/// @brief アイテムによる強化時間
 	const float ITEM_POWERUP_TIME = 10.0f;
 	/// @brief 勢いよく当たった扱いになるボールの速度
 	const float STRONG_HIT = 20.0f;
 	/// @brief リスポーンコマンドを押し続けて発動するまでの時間
 	const float RESPAWN_TIME = 5.0f;
-	/// @brief ダッシュ中のカウンタの増加量
-	const int DASHCOUNTER_ADDRATE = 1;
-	/// @brief ダッシュ中エフェクトの再生周期
-	const int DASHEFFECT_PLAYCYCLE = 25;
-
 }
 
 Player::Player()
@@ -100,9 +49,6 @@ Player::Player()
 
 	//プレイヤーの初期状態を設定
 	m_setUp = false;
-	m_moveVelocity = NORMAL_VELOCITY;
-	m_stamina = MAX_STANIMA;
-	m_kickPower = NORMAL_KICK_POWER;
 	m_gravity = 5.0f;
 	m_charaCon.Init(PLAYER_RADIUS, PLAYER_HEIGHT, m_position);
 }
@@ -111,7 +57,13 @@ Player::~Player()
 {
 	//プレイヤーモデルを削除
 	DeleteGO(m_skinModelRender);
-	DeleteGO(m_plEffect);
+	if (m_setUp == true) {
+		DeleteGO(m_plAction);
+		DeleteGO(m_plCollide);
+		DeleteGO(m_plEffect);
+		DeleteGO(m_plMove);
+		DeleteGO(m_plReinforcement);
+	}
 }
 
 bool Player::Start()
@@ -193,336 +145,6 @@ void Player::SetPlayerNumber(int num)
 	m_setUp = true;
 }
 
-void Player::Move()
-{
-	// スティック入力でカメラ方向に移動
-	m_moveSpeed += g_camera3D->GetRight() * m_Lstickx;
-	m_moveSpeed += g_camera3D->GetForward() * m_Lsticky;
-
-	if (m_powerUp == true) {
-		m_staminaDecreaseValue = POWERFUIL_STAMINA_DECREASE_VALUE;
-	}
-	else {
-		m_staminaDecreaseValue = STAMINA_DECREASE_VALUE;
-	}
-
-	if (IsDash() == true) {
-		m_moveVelocity = DASH_VELOCITY;
-
-		m_stamina -= g_gameTime->GetFrameDeltaTime() * m_staminaDecreaseValue;
-		
-		//ダッシュエフェクト再生処理
-		
-		
-			m_plEffect->PlayDashEffect();
-		
-
-		m_anim = enAnimation_Run;
-	}
-	else {
-		m_moveVelocity = NORMAL_VELOCITY;
-		m_stamina += g_gameTime->GetFrameDeltaTime();
-		if (m_stamina > MAX_STANIMA) {
-			m_stamina = MAX_STANIMA;
-		}
-		m_anim = enAnimation_Walk;
-		
-		//ダッシュ中カウンタを0にする
-		m_dashCounter = 0;
-	}
-
-	if (m_speedUp == true && m_damage == false) {
-		m_moveVelocity += VELOCITY_ADDITION_AMOUNT;
-	}
-
-	m_moveSpeed *= m_moveVelocity;
-
-	///  重力を加える
-	if (m_damage == true) {
-		m_moveSpeed.y -= m_gravity / 2.0f;
-	}
-	else {
-		m_moveSpeed.y -= m_gravity;
-	}
-
-	/// @brief ダメージ中かどうかで摩擦力を変える
-	if (m_damage == false) {
-		m_friction = NORMAL_FRICTION;
-	}
-	else {
-		m_friction = DAMAGE_FRICYION;
-	}
-	/// @brief 移動速度に摩擦力を加える
-	m_moveSpeed -= m_moveSpeed * m_friction;
-
-	if (m_damage == false && m_guard == false && m_breakGuard == false && m_moveSpeed.x != 0.0f || m_moveSpeed.z != 0.0f) {
-		m_direction = m_moveSpeed;
-		m_direction.y = 0.0f;
-		m_direction.Normalize();
-	}
-
-	Vector3 moveSpeedXZ = m_moveSpeed;
-	moveSpeedXZ.y = 0.0f;
-	/// @brief 移動速度が一定以下で止まる
-	if (moveSpeedXZ.LengthSq() < 0.1f) {
-		m_moveSpeed.x = 0.0f;
-		m_moveSpeed.z = 0.0f;
-	}
-
-	
-}
-
-void Player::Rotation()
-{
-	/// @brief ダメージ中、ガード中、動いていないときは回転しない
-	if (m_damage == true || m_guard == true || m_breakGuard == true || m_moveSpeed.x == 0.0f && m_moveSpeed.z == 0.0f) {
-		m_anim = enAnimation_Idle;
-		return;
-	}
-	m_qRot.SetRotation(Vector3::AxisY, atan2(m_direction.x, m_direction.z));
-}
-
-void Player::CheckKick() 
-{
-	/// @brief ボールとの距離が一定以下の時のみ判定
-	if (m_ballDistance < KICK_POSSIBLE_DISTANCE) {
-		/// @brief プレイヤーの向きとボールへのベクトルの内積で蹴れる角度を制限
-		float matchRate = Dot(m_direction, m_toBallVec);
-		if (matchRate > 0.0f) {
-			m_kickFlag = true;
-		}
-		else {
-			m_kickFlag = false;
-		}
-	}
-	else {
-		m_kickFlag = false;
-	}
-
-	if (m_powerUp == true) {
-		m_kickPower = POWERFUL_KICK_POWER;
-		m_powerUpTime += g_gameTime->GetFrameDeltaTime() * FLOAT_1;
-	}
-	else
-	{
-		m_powerUpTime = FLOAT_0;
-		m_kickPower = NORMAL_KICK_POWER;
-	}
-	if (m_powerUpTime > POWERUP_TIME) {
-		m_powerUp = false;
-	}
-	if (m_kickUp == true) {
-		m_kickPower += KICK_POWER_ADDITION_AMOUNT;
-	}
-}
-
-void Player::KickBall()
-{
-	/// @brief ボールにキック方向とキック力を伝えて動かす
-	m_ball->SetMoveDirection(m_direction);
-	m_ball->Acceleration(m_kickPower);
-	/// @brief ボールに蹴ったプレイヤーの色と数字を伝える
-	m_ball->SetBallLightColor(m_playerColor);
-	m_ball->SetPlayerInformation(m_myNumber);
-
-	m_ball->MoveStart();
-
-	//キック時、強化状態のとき
-	if (m_powerUp) {
-		m_se->PlayPoweredKickSe();
-	}
-}
-
-bool Player::IsDash() const
-{
-	if (m_dash == true && m_guard == false && g_pad[m_myNumber]->IsPress(enButtonRB1)) {
-		if (m_Lstickx != FLOAT_0 || m_Lsticky != FLOAT_0) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-	else {
-		return false;
-	}
-}
-
-void Player::BallCollide()
-{
-	/// @brief ボールへのベクトルとボールの向きで当たる角度を決める
-	float matchRate = Dot(m_ball->GetMoveDirection(), m_toBallVec);
-	if (m_ball->IsMove() == false || m_guard == true || matchRate > 0.0f) {
-		return;
-	}
-
-	/// @brief ボールと自分の位置から吹き飛ばされる方向を決める
-	Vector3 repulsiveForce = m_position - m_ball->GetPosition();
-	repulsiveForce.y = FLOAT_0;
-	repulsiveForce.Normalize();
-
-	if (m_guardUp == true) {
-		repulsiveForce *= m_ball->GetVelocity() * DECREASE_BLOW_AWAY_RATE;
-	}
-	else {
-		repulsiveForce *= m_ball->GetVelocity() * BLOW_AWAY_RATE;
-	}
-
-	
-	repulsiveForce.y = m_ball->GetVelocity() * BLOW_AWAY_HEIGHT_RATE;
-
-	if (m_dieFlag == false) {
-		m_moveSpeed = repulsiveForce * FLOAT_2;
-
-		if (m_breakGuard == true) {
-			m_plEffect->StopKnockOutEffect();
-			m_se->StopStanSe(m_myNumber);
-		}
-		if (m_damage == false) {
-			m_plEffect->PlayKnockOutEffect();
-			m_se->PlayStanSe(m_myNumber);
-		}
-
-		m_damage = true;
-		if (m_ball->GetVelocity() > STRONG_HIT) {
-			m_se->PlayStrongCollideSe();
-		}
-		else {
-			m_se->PlayWeakCollideSe();
-		}
-
-		/// @brief 攻撃してきたプレイヤーの番号を記憶する
-		m_haveAttackedPlayer = m_ball->GetPlayerInformation();
-
-		if (m_haveAttackedPlayer != m_myNumber && m_dieFlag == false) {
-			m_score->AddScore200(m_haveAttackedPlayer);
-		}
-	}
-	else {
-		m_se->PlayNoDamageCollideSe();
-	}
-	m_ball->SetMoveDirection(repulsiveForce * FLOAT_MINUS_1);
-}
-
-void Player::Guard()
-{
-	/// @brief ガード中は移動速度を下げる
-	m_moveSpeed.x /= 2.0f;
-	m_moveSpeed.z /= 2.0f;
-
-	/// @brief ガード中は耐久値(guardDurability)が減り続ける
-	if (m_powerUp == true) {
-		m_guradDecreaseValue = POWERFUIL_GUARD_DECREASE_VALUE;
-	}
-	else {
-		m_guradDecreaseValue = NORMAL_GUARD_DECREASE_VALUE;
-	}
-
-	if (m_guardUp == true) {
-		m_guradDecreaseValue -= GUARD_ADDITION_AMOUNT;
-	}
-
-	m_guardDurability -= m_guradDecreaseValue;
-
-	//シールドエフェクト発生処理//
-		//カウンターに値を加算
-	m_guardEffectCouter += 1;
-	//規定フレーム毎にエフェクトを発生
-	/*if (m_guardEffectCouter % 20 == 1 &&
-		m_breakGuard == false &&
-		m_damage == false) {*/
-		m_plEffect->PlayGuardEffect();
-	//}
-
-	/// @brief ジャストガード判定時間を進める
-	m_justGuardTime += g_gameTime->GetFrameDeltaTime() * 0.1f;
-
-	/// @brief ガード耐久値が無くなったら
-	if (m_guardDurability <= 0.0f) {
-		/// @brief ガードブレイクする
-		m_guardDurability = 0.0f;
-		m_breakGuard = true;
-		m_plEffect->StopGuardEffect();
-		m_plEffect->PlayGuardBreakEffect();
-		m_plEffect->PlayKnockOutEffect();
-		m_se->PlayStanSe(m_myNumber);
-
-		m_se->PlayBreakSe();
-	}
-
-	/// @brief ボールが動いていなければガード判定を行わない
-	if (m_ball->IsMove() == false) {
-		return;
-	}
-
-	/// @brief 接触したら
-	if (m_ballDistance < GUARD_DISTANCE) {
-		/// @brief 一度も接触していない場合
-		if (m_shieldHit == false) {
-
-			//ガードヒットエフェクトの発生
-			m_plEffect->PlayShieldHitEffect();
-			
-			//ガードヒットseの再生処理
-			float takeDamage = m_ball->GetVelocity() * 3.0f;
-			
-			if (m_guardDurability <= takeDamage) {
-				m_se->PlayBreakSe();
-			}
-			else {
-				m_se->PlayShieldHitSe();
-			}
-			
-			m_shieldHit = true;
-
-		}
-		/// @brief ジャストガード判定時間内ならジャストガード発動
-		if (m_justGuardTime < POSSIBLE_JUST_GUARD_TIME) {
-			m_ball->SetVelocity(0.0f);
-
-			/// @brief ジャストガードエフェクトの再生
-			m_plEffect->PlayJustGuardEffect();
-			m_se->PlayJustGuardSe();
-			m_powerUp = true;
-			m_powerUpTime = 0.0f;
-		}
-		else {
-			/// @brief ボールの勢いに応じて耐久値を減らす
-			float shieldDamage = m_ball->GetVelocity() * m_guradDecreaseValue * 10.0f;
-			m_guardDurability -= shieldDamage;
-			/// @brief ガードブレイクした場合
-			if (m_guardDurability <= 0.0f)
-			{
-				/// @brief ガードエフェクトを消してガードブレイクエフェクトを再生する
-				m_plEffect->StopGuardEffect();
-				m_plEffect->PlayGuardBreakEffect();
-				m_plEffect->PlayKnockOutEffect();
-				m_guardDurability = 0.0f;
-				m_breakGuard = true;
-
-				m_se->PlayBreakSe();
-				m_se->PlayStanSe(m_myNumber);
-
-				return;
-			}
-
-			/// @brief ボールの勢いに応じてノックバックする。
-			Vector3 repulsiveForce = m_toBallVec * -1.0f;
-			repulsiveForce.Normalize();
-			repulsiveForce *= m_ball->GetVelocity();
-			repulsiveForce.y = m_ball->GetVelocity() * 0.1f;
-			m_moveSpeed += repulsiveForce;
-			m_ball->SetVelocity(m_ball->GetVelocity() / 2.0f);
-			m_ball->SetMoveDirection(repulsiveForce * -1.0f);
-		}
-
-	}
-	else {
-		//接触していない
-		m_shieldHit = false;
-	}
-}
-
 void Player::ReSpawn() {
 	//スタート位置にリスポーンさせる
 	m_position = m_startPos;
@@ -530,7 +152,6 @@ void Player::ReSpawn() {
 	m_damage = false;
 	m_damageTime = 0.0f;
 	m_breakGuard = false;
-	m_guardDurability = MAX_GUARD_DURABILITY;
 	m_mutekiTime = MUTEKI_TIME;
 	m_lig->SetPointLightBlinking(m_myNumber, m_mutekiTime, 0.07f);
 	m_dieFlag = true;
@@ -539,10 +160,7 @@ void Player::ReSpawn() {
 	m_plEffect->PlayRespawnEffect();
 	m_plEffect->StopKnockOutEffect();
 	m_se->PlayReSpawnSe();
-	m_powerUp = false;
-	m_powerUpTime = 0.0f;
-	m_itemPowerUp = false;
-	m_itemPowerUpTime = 0.0f;
+	m_plReinforcement->ReinforcementRelease();
 
 }
 
@@ -640,14 +258,9 @@ void Player::Update()
 		
 	}
 
-	///スティック入力を受け取る
-	m_Lstickx = g_pad[m_myNumber]->GetLStickXF();
-	m_Lsticky = g_pad[m_myNumber]->GetLStickYF();
-
-	if (m_timer->IsTimerExecution() == false) {
-		m_Lstickx = 0.0f;
-		m_Lsticky = 0.0f;
-	}
+	m_stamina = m_plMove->GetStamina();
+	m_guardDurability = m_plAction->GetGuardDurability();
+	
 
 	//ダメージ中はスティック入力を受け付けない
 	if (m_damage == true) {
@@ -673,21 +286,6 @@ void Player::Update()
 		m_Lsticky = 0.0f;
 	}
 
-	if (m_stamina < 0.0f) {
-		m_dash = false;
-		m_se->PlayStaminaOverSe();
-	}
-
-	if (m_dash == false && m_stamina >= MAX_STANIMA) {
-		m_dash = true;
-		m_se->PlayStaminaRecoverySe();
-	}
-
-	BallDistanceCalculation();
-	//Move();
-	//Rotation();
-	CheckKick();
-
 	/// @brief キッククールタイム
 	if (m_kickCooling == true)
 	{
@@ -698,103 +296,6 @@ void Player::Update()
 		}
 	}
 
-	/// @brief キックの不可避分岐
-	if (m_damage == true || m_guard == true || m_breakGuard == true || m_kickCooling == true)
-	{
-		//キック不可
-		m_readyKick = false;
-	}
-	else {
-		//キック可
-		m_readyKick = true;
-	}
-
-	if (m_kickFlag == true && m_readyKick == true && m_timer->IsTimerExecution() == true) {
-		if (g_pad[m_myNumber]->IsTrigger(enButtonA)) {
-
-			
-			//m_plEffect->PlayKickEffect();
-			//m_se->PlayKickSe();
-
-			//KickBall();
-		}
-	}
-
-	if (g_pad[m_myNumber]->IsTrigger(enButtonA)) {
-		m_kickCooling = true;
-	}
-	/// @brief 非ガード時、ガード耐久値を回復
-	if (m_guard == false) {
-		m_guardDurability += 0.3f;
-		m_justGuardTime = 0.0f;
-	}
-	/// @brief 再展開可能まで
-	if (m_guardDurability >= MAX_GUARD_DURABILITY && m_breakGuard == true)
-	{
-		m_breakGuard = false;
-		if (m_damage == false) {
-			m_plEffect->StopKnockOutEffect();
-			m_se->StopStanSe(m_myNumber);
-		}
-		m_plEffect->PlayShieldRepairEffect();
-		m_se->PlayShieldRepairSe();
-
-	}
-	/// @brief ガード耐久値を100より上にならないようにする奴
-	if (m_guardDurability >= MAX_GUARD_DURABILITY)
-	{
-		m_guardDurability = MAX_GUARD_DURABILITY;
-	}
-
-	/// @brief ボールとの距離が一定以下で吹き飛ぶ
-	if (m_breakGuard == true) {
-		if (m_ballDistance < GUARD_DISTANCE) {
-			//BallCollide();
-			//ダメージエフェクト再生処理
-			//前フレームにダメージ状態でなく、現フレームでダメージ状態のとき
-			if (m_damagePrevFrame == false && m_damage == true) {
-				m_plEffect->PlayDamageEffect();
-			}
-		}
-	}
-	else {
-		if (m_ballDistance < COLLIDE_DISTANCE) {
-			//BallCollide();
-			//ダメージエフェクト再生処理
-			//前フレームにダメージ状態でなく、現フレームでダメージ状態のとき
-			if (m_damagePrevFrame == false && m_damage == true) {
-				m_plEffect->PlayDamageEffect();
-			}
-		}
-	}
-	if (m_guard == true && !g_pad[m_myNumber]->IsPress(enButtonLB1) && m_timer->IsTimerExecution() == true) {
-		m_se->PlayGuardEndSe();
-	}
-	/// @brief LB1を押している間ガード
-	if (g_pad[m_myNumber]->IsPress(enButtonLB1) && m_breakGuard == false && m_damage == false) {
-		//m_guard = true;
-	}
-	else {
-		//m_guard = false;
-		//m_guardEffectCouter = 0;
-	}
-
-	/// @brief ガード可能ならガードの処理
-	if (m_guard == true && m_breakGuard == false && m_timer->IsTimerExecution() == true) {
-
-
-		//Guard();
-	}
-
-	//ボタン押下時かつガードブレイクしていないときに実行
-	if (g_pad[m_myNumber]->IsTrigger(enButtonLB1) &&
-		m_breakGuard == false &&
-		m_damage == false &&
-		m_timer->IsTimerExecution() == true) {
-		//m_guardBeginEffect.Play();
-		//m_plEffect->PlayGuardBeginEffect();
-		//m_se->PlayGuardStartSe();
-	}
 
 	if (m_dieFlag == true) {
 		Muteki();
@@ -831,7 +332,7 @@ void Player::Update()
 	m_lig->SetSpotLightDirection(m_myNumber, dir);*/
 
 	//キャラクターコントローラーで座標を決める
-	m_position = m_charaCon.Execute(m_moveSpeed, 1.0f);
+	//m_position = m_charaCon.Execute(m_moveSpeed, 1.0f);
 
 	
 	
@@ -882,17 +383,4 @@ void Player::Update()
 		ReSpawn();
 		m_reSpawnTime = FLOAT_0;
 	}
-}
-
-void Player::BallDistanceCalculation()
-{
-	m_toBallVec = m_ball->GetPosition() - m_position;
-	m_ballDistance = m_toBallVec.Length();
-	ToBallVectorCalculation();
-}
-
-void Player::ToBallVectorCalculation()
-{
-	m_toBallVec.y = 0.0f;
-	m_toBallVec.Normalize();
 }

@@ -33,7 +33,7 @@ public:
 
 	/// @brief ガード耐久値を低下させる
 	/// @param damage ガード耐久値に与えるダメージ量
-	void SetGuardDamage(const float damage) { m_guardDurability - damage; }
+	void SetGuardDamage(const float damage) { m_guardDurability -= damage; }
 
 	/// @brief ガード耐久値低下量を取得する
 	/// @return ガード耐久値低下量
@@ -82,30 +82,13 @@ private:
 	float m_guardTime = 0.0f;
 	/// @brief ガード中の移動速度
 	Vector3 m_guardMoveSpeed = Vector3::Zero;
-
-	/// @brief プレイヤーからボールへのベクトル
-	Vector3 m_toBallVec = Vector3::Zero;
-	/// @brief ボールとの距離
-	float m_ballDistance = 0.0f;
-
 	/// @brief キック力
 	float m_kickPower = 0.0f;
-
 	/// @brief プレイヤーの吹き飛ぶ勢い
 	float m_blowAwayRate = 0.0f;
 
-
-	/// @brief 状態によって変化するパラメーターを決定する関数
-	void DetermineParameters();
-
-	/// @brief ガードの処理
-	void Guard();
-
-	/// @brief ガード耐久値回復の処理
-	void GuardDecreaseRecovery();
-
-	/// @brief キックの処理
-	void Kick();
+	bool m_kickCooling = false;
+	int m_kickKankaku = 0;
 
 	/// @brief プレイヤー
 	Player* m_player = nullptr;
@@ -125,5 +108,17 @@ private:
 	Se* m_se = nullptr;
 	/// @brief スコア
 	Score* m_score = nullptr;
+
+	/// @brief 状態によって変化するパラメーターを決定する関数
+	void DetermineParameters();
+
+	/// @brief ガードの処理
+	void Guard();
+
+	/// @brief ガード耐久値回復の処理
+	void GuardDecreaseRecovery();
+
+	/// @brief キックの処理
+	void Kick();
 };
 

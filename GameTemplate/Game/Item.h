@@ -8,6 +8,14 @@ class Player;
 class Effect;
 class PlayerReinforcement;
 
+
+enum enItemType {
+	enAttackUp,
+	enGuardUp,
+	enVelocityUp,
+	enItemNum
+};
+
 class Item : public IGameObject
 {
 public:
@@ -19,23 +27,23 @@ public:
 	void SetPosition(const Vector3& pos) { m_position = pos; }
 	void SetNumber(int num) { m_myNo = num; }
 
-	
+	/// @brief アイテムの座標を取得
+	/// @return アイテムの座標の参照
+	const Vector3& GetPosition() const { return m_position; }
 
 	void PlayerDistanceCalculation();
-	
+
 	//存在エフェクトの再生
 	void PlayBeingEffect();
 
-	enum enItemType {
-		enAttackUp,
-		enGuardUp,
-		enSpeedUp,
-		enItemNum
-	};
+
 
 	void SetItem(enItemType itemType) { m_itemState = itemType; ItemModelNewGO(); m_newGoFlag = true; }
 
 private:
+
+	bool m_setUp = false;
+	bool m_getData = false;
 	Vector3 m_position = Vector3::Zero;
 	float m_posHeight = 0.0f;
 	Vector3 m_toPos[PLAYER_NUM] = { Vector3::Zero ,Vector3::Zero ,Vector3::Zero ,Vector3::Zero };
@@ -45,7 +53,9 @@ private:
 	SkinModelRender* m_skinModelRender = nullptr;
 	int m_myNo = 4;
 	Player* m_player[PLAYER_NUM] = { nullptr };
+
 	PlayerReinforcement* m_plReinforcement[PLAYER_NUM] = { nullptr };
+
 	GameDirector* m_gameDirector = nullptr;
 	Se* m_se = nullptr;
 	Objects* m_objects = nullptr;

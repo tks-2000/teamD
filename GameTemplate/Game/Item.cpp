@@ -24,9 +24,11 @@ namespace {
 
 Item::Item()
 {
-	m_angle = FLOAT_0;
+	m_angle = 0.0f;
 	m_newGoFlag = false;
-	
+	m_setUp = false;
+	m_getData = false;
+	m_posHeight = 0.0f;
 }
 
 Item::~Item()
@@ -45,6 +47,8 @@ bool Item::Start()
 	for (int plNum = 0; plNum < m_gameDirector->GetPlayerNum(); plNum++) {
 		m_player[plNum] = FindGO<Player>(PLAYER_NAME[plNum]);
 	}
+
+	m_setUp = true;
 	return true;
 }
 
@@ -65,7 +69,7 @@ void Item::ItemModelNewGO()
 		m_skinModelRender->Init("Assets/modelData/item/item_speedup.tkm");
 	}break;
 	}
-	
+	m_skinModelRender->SetPosition(m_position);
 }
 
 void Item::PlayBeingEffect()
@@ -84,6 +88,25 @@ void Item::PlayBeingEffect()
 
 void Item::Update()
 {
+	
+
+	if (m_setUp == false) {
+		return;
+	}
+
+	for (int plNum = 0; plNum < m_gameDirector->GetPlayerNum(); plNum++) {
+		if (m_player[plNum]->IsSetUp() == false) {
+			return;
+		}
+	}
+	if (m_getData == false) {
+		for (int plNum = 0; plNum < m_gameDirector->GetPlayerNum(); plNum++) {
+			m_plReinforcement[plNum] = FindGO<PlayerReinforcement>(PLAYER_REINFORCEMENT_NAME[plNum]);
+		}
+		m_getData = true;
+		return;
+	}
+
 	PlayerDistanceCalculation();
 	for (int plNum = 0; plNum < m_gameDirector->GetPlayerNum(); plNum++) {
 		if (m_objects->IsBoxOpen(m_myNo) == true) {
@@ -107,13 +130,16 @@ void Item::Update()
 				switch (m_itemState)
 				{
 				case enAttackUp: {
-					m_player[plNum]->KickPowerUp();
+					//m_player[plNum]->KickPowerUp();
+					m_plReinforcement[plNum]->ChangeKickPowerUp();
 				}break;
 				case enGuardUp: {
-					m_player[plNum]->GuardPowerUp();
+					//m_player[plNum]->GuardPowerUp();
+					m_plReinforcement[plNum]->ChangeDefenseUp();
 				}break;
-				case enSpeedUp: {
-					m_player[plNum]->SpeedPowerUp();
+				case enVelocityUp: {
+					//m_player[plNum]->SpeedPowerUp();
+					m_plReinforcement[plNum]->ChangeSpeedUp();
 				}break;
 				default:
 					break;
@@ -147,11 +173,11 @@ void Item::Update()
 		m_itemBeingCounter = 0;
 	}
 	//çƒê∂â¬î\Ç…Ç»Ç¡ÇΩÇÁçƒê∂
-	if (m_isValidEffectPlay == true) {
+	//if (m_isValidEffectPlay == true) {
 		if (m_itemBeingCounter % ITEMEFFECT_PLAYCYCLE == 1) {
 			PlayBeingEffect();
 		}
-	}
+	//}
 }
 
 void Item::PlayerDistanceCalculation()

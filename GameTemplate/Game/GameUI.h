@@ -5,6 +5,8 @@ class GameDirector;
 class Timer;
 class Score;
 class Player;
+class PlayerAction;
+class PlayerMove;
 class Ball;
 class SpriteRender;
 
@@ -183,11 +185,16 @@ private:
 	/// @brief ƒJƒEƒ“ƒg‚ð•`ŽÊ
 	SpriteRender* m_countDDS[3] = { nullptr };
 
+	bool m_isInitd = false;
 	int goGoneWaiter = 0;
 	bool m_GoisGone = false;
 
 	Timer* m_timer = nullptr;
 
 	Score* m_score = nullptr;
+
+	PlayerAction* m_plAction[PLAYER_NUMBER] = { nullptr };
+
+	PlayerMove* m_plMove[PLAYER_NUMBER] = { nullptr };
 };
 

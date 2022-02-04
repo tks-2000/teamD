@@ -40,6 +40,7 @@ Box::Box() {
 	m_ball = FindGO<Ball>(BALL_NAME);
 	for (int plNum = 0; plNum < m_playerNum; plNum++) {
 		m_player[plNum] = FindGO<Player>(PLAYER_NAME[plNum]);
+		m_plMove[plNum] = FindGO<PlayerMove>(PLAYER_MOVE_NAME[plNum]);
 	}
 	m_score = FindGO<Score>(SCORE_NAME);
 	m_objects = FindGO<Objects>(OBJECTS_NAME);
@@ -98,13 +99,13 @@ void Box::Update() {
 	}
 	for (int plNum = 0; plNum < m_playerNum; plNum++) {
 		if (m_position.y > BOX_FALL_YPOS && m_playerDistance[plNum] < PLAYER_DISTANCE) {
-			/// @brief ボールと自分の位置から吹き飛ばされる方向を決める
+			//自分の位置から吹き飛ばされる方向を決める
 			Vector3 repulsiveForce = m_player[plNum]->GetPosition() - m_position;
 			repulsiveForce.y = FLOAT_0;
 			repulsiveForce.Normalize();
 
 			repulsiveForce *= m_fall * PLAYER_REPEL;
-			m_player[plNum]->SetMoveSpeed(repulsiveForce * PLAYER_REPEL);
+			m_plMove[plNum]->SetMoveSpeed(repulsiveForce * PLAYER_REPEL);
 			m_se->PlayWeakCollideSe();
 
 		}

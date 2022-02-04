@@ -145,6 +145,15 @@ bool PlayerAction::IsCanKick()
 	//プレイヤーの向きとプレイヤーからボールに向かうベクトルの内積を計算
 	float matchRate = Dot(m_plMove->GetDirection(), m_plCollide->GetToBallVector());
 
+	if (m_kickCooling == true) {
+		m_kickKankaku += 1;
+		if (m_kickKankaku == 20) {
+			m_kickCooling = false;
+			m_kickKankaku = 0;
+		}
+		return false;
+	}
+
 	//・プレイヤーがダメージ状態でない
 	//・プレイヤーがガード中でない
 	//・プレイヤーとボールとの距離がキック可能範囲以下
@@ -167,7 +176,7 @@ bool PlayerAction::IsCanKick()
 void PlayerAction::DetermineParameters()
 {
 	//プレイヤーが強化状態なら…
-	if (m_plReinforcement->IsPowerUp() == true) {
+	if (m_plReinforcement->IsSelfPowerUp() == true) {
 		//ガード耐久値回復量を強化状態の物に設定
 		m_guardRecoveryValue = POWERFUIL_GUARD_RECOVERY_VALUE;
 		//キック力を強化状態の物に設定
@@ -294,7 +303,7 @@ void PlayerAction::Kick()
 	m_ball->MoveStart();
 
 	//プレイヤーが強化状態なら…
-	if (m_plReinforcement->IsPowerUp() == true) {
+	if (m_plReinforcement->IsSelfPowerUp() == true) {
 		//強化状態のキックSEを鳴らす
 		m_se->PlayPoweredKickSe();
 	}
@@ -303,6 +312,8 @@ void PlayerAction::Kick()
 		//通常のキックSEを鳴らす
 		m_se->PlayKickSe();
 	}
+
+	m_kickCooling = true;
 
 	//キックエフェクトを再生
 	m_plEffect->PlayKickEffect();

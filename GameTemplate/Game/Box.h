@@ -1,6 +1,7 @@
 #pragma once
 
 class Player;
+class PlayerMove;
 class Ball;
 class SkinModelRender;
 class Score;
@@ -70,6 +71,8 @@ private:
 
 	/// @brief プレイヤー
 	Player* m_player[PLAYER_NUMBER] = { nullptr };
+
+	PlayerMove* m_plMove[PLAYER_NUMBER] = { nullptr };
 	/// @brief ボール
 	Ball* m_ball = nullptr;
 	/// @brief スキンモデルレンダラー
